@@ -1,53 +1,73 @@
 <!-- g.hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG -->
 
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KORVIL V8 LIVE RENDER INSTANT - sistemak - REPO_TOKEN</title>
+<title>KORVIL V10 K-AI -.geral - sistemak - REPO_TOKEN</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
-:root{--accent:#00ffea;--bg:#070a12;--card:#101420}
+:root{--accent:#00ffea;--bg:#070a12;--card:#0f1424;--border:#1a2340;--kai:#a855f7}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:#fff;font-family:Consolas,monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+body{background:var(--bg);color:#e6e8ef;font-family:Consolas,monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 #app{flex:1;display:flex;overflow:hidden;min-height:0}
-#left{flex:1;border-right:2px solid var(--accent);display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
-#right{flex:1;min-width:500px;background:#0d1117;display:flex;flex-direction:column;overflow:hidden}
-.top{height:52px;display:flex;align-items:center;gap:4px;padding:0 6px;background:var(--card);border-bottom:1px solid #222;flex-wrap:wrap}
-.btn{border:1px solid #444;background:#000;color:#fff;padding:4px 7px;border-radius:15px;cursor:pointer;font-size:7px;display:inline-flex;align-items:center;gap:3px}
+#left{flex:1.15;border-right:2px solid var(--accent);display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+#right{flex:1;min-width:560px;background:#0d1117;display:flex;flex-direction:column;overflow:hidden}
+.top{padding:8px;background:var(--card);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.btn{border:1px solid #2a3558;background:#000;color:#cbd2e3;padding:6px 10px;border-radius:20px;cursor:pointer;font-size:7px;display:inline-flex;align-items:center;gap:4px;transition:.2s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn.ac{border-color:var(--accent);color:var(--accent)}.btn.ac:hover{background:var(--accent);color:#000}
-.btn.neon{background:var(--accent);color:#000;font-weight:bold;box-shadow:0 0 12px var(--accent);padding:5px 9px;border-radius:8px}
-.btn.danger{border-color:#ff2d7a;color:#ff2d7a}
-.btn.live.on{background:#ff3b3b;color:#000;box-shadow:0 0 12px #ff3b3b;border-color:#ff3b3b}
-.stage{flex:1;overflow:auto;padding:7px;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;align-content:start}
-.item{background:var(--card);border:2px solid #222;border-radius:10px;overflow:hidden;cursor:pointer;position:relative}
-.item.selected{border-color:var(--accent);box-shadow:0 0 8px var(--accent)}
-.item.selected::after{content:'✓';position:absolute;top:3px;right:3px;background:var(--accent);color:#000;font-size:6px;padding:2px 4px;border-radius:10px;font-weight:bold}
-.item img,.item video{width:100%;height:65px;object-fit:cover;display:block}
-.storage-panel{display:flex;gap:3px;padding:4px 6px;background:#080b16;border-bottom:1px solid #111;overflow:auto}
-.storage-btn{font-size:6px;padding:3px 5px;border-radius:10px;border:1px solid #222;background:#000;color:#888;cursor:pointer}
-.storage-btn.active{border-color:var(--accent);color:var(--accent)}
-#repoViewFallback{flex:1;overflow:auto;background:#0a0c18;display:flex;flex-direction:column}
-.repo-breadcrumb{padding:6px 8px;background:#000;border-bottom:1px solid #1a1f35;display:flex;gap:4px;flex-wrap:wrap;font-size:7px}
-.repo-breadcrumb span{cursor:pointer;color:var(--accent);padding:2px 5px;border-radius:6px;background:#0f1426}
-.repo-folder,.repo-file-github{padding:6px 8px;background:#111320;border-bottom:1px solid #1a1d2e;display:flex;justify-content:space-between;align-items:center;font-size:7px;cursor:pointer}
-.repo-file-github.selected-right{border-left:3px solid var(--accent);background:#162032}
-#liveViewer{height:48%;min-height:300px;border-top:2px solid var(--accent);background:#05070f;display:flex;flex-direction:column;flex-shrink:0}
-.viewer-top{height:28px;background:#000;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 6px;font-size:7px}
-.viewer-content{flex:1;display:flex;overflow:hidden;position:relative}
-.viewer-preview{flex:1;background:#000;display:flex;align-items:center;justify-content:center;overflow:auto;position:relative}
+.btn.neon{background:var(--accent);color:#000;font-weight:700;box-shadow:0 0 14px rgba(0,255,234,.4);border-color:var(--accent)}
+.btn.kai{background:var(--kai);color:#fff;font-weight:700;box-shadow:0 0 14px rgba(168,85,247,.4);border-color:var(--kai)}
+.btn.kai:hover{background:#fff;color:var(--kai)}
+.btn.danger{border-color:#ff4a7a;color:#ff7a9a}.btn.danger:hover{background:#ff4a7a;color:#fff}
+.btn.ghost{border-color:#1e293b;color:#7a8196}
+.badge{font-size:6px;background:#000;border:1px solid var(--accent);color:var(--accent);padding:3px 7px;border-radius:20px}
+.badge.kai{border-color:var(--kai);color:var(--kai);background:rgba(168,85,247,.15)}
+.stage{flex:1;overflow:auto;padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;align-content:start;background:radial-gradient(ellipse at top, rgba(0,255,234,.06), transparent 60%)}
+.item{background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;position:relative;transition:.2s}
+.item:hover{border-color:#2a4a6a;transform:translateY(-1px)}
+.item.selected{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent), 0 6px 18px rgba(0,255,234,.2)}
+.item.kai-file{border-color:var(--kai);box-shadow:0 0 0 1px var(--kai)}
+.item.kai-file.selected{box-shadow:0 0 0 1px var(--kai), 0 6px 18px rgba(168,85,247,.3)}
+.item.selected::after{content:'✓';position:absolute;top:5px;right:5px;background:var(--accent);color:#000;font-size:7px;padding:2px 5px;border-radius:20px;font-weight:800}
+.item.kai-file.selected::after{background:var(--kai);color:#fff}
+.item img,.item video{width:100%;height:72px;object-fit:cover;display:block;background:#000}
+.storage-panel{display:flex;gap:5px;padding:7px 10px;background:#080c18;border-bottom:1px solid var(--border);overflow:auto}
+.storage-btn{font-size:6px;padding:4px 8px;border-radius:20px;border:1px solid #1e293b;background:#000;color:#7a8196;cursor:pointer}
+.storage-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,255,234,.1)}
+.storage-btn.kai.active{border-color:var(--kai);color:var(--kai);background:rgba(168,85,247,.15)}
+#repoViewFallback{flex:1;overflow:auto;background:#0a0d1a;display:flex;flex-direction:column}
+.repo-breadcrumb{padding:8px 10px;background:#000;border-bottom:1px solid var(--border);display:flex;gap:5px;flex-wrap:wrap;align-items:center;font-size:7px}
+.repo-breadcrumb span{cursor:pointer;color:var(--accent);padding:3px 7px;border-radius:20px;background:#101a32;border:1px solid #1a2648}
+.repo-folder,.repo-file-github{padding:8px 10px;background:#0f1426;border-bottom:1px solid #162040;display:flex;justify-content:space-between;align-items:center;font-size:7px;cursor:pointer}
+.repo-file-github.selected-right{border-left:3px solid var(--accent);background:#142040}
+#liveViewer{height:46%;min-height:320px;border-top:2px solid var(--accent);background:#060a14;display:flex;flex-direction:column;flex-shrink:0}
+.viewer-top{height:32px;background:#000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:7px;gap:8px}
+.viewer-preview{flex:1.3;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border-right:1px solid var(--border)}
+.viewer-info{flex:0.7;padding:10px;overflow:auto;font-size:7px;background:#080c18;line-height:1.6}
 #liveSiteFrame{width:100%;height:100%;border:0;background:#fff}
-#template-layer{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.25}
-#editModal{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:200;display:none;flex-direction:column}
+#template-layer{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.28}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:100;display:none;align-items:center;justify-content:center;padding:18px}
+.modal-box{background:#10172c;border:1.5px solid var(--accent);border-radius:14px;max-width:720px;width:100%;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 0 40px rgba(0,255,234,.25)}
+.modal-box.kai{border-color:var(--kai);box-shadow:0 0 40px rgba(168,85,247,.3)}
+.modal-head{padding:12px 14px;background:#000;border-bottom:1px solid var(--accent);display:flex;justify-content:space-between;align-items:center;font-size:8px}
+.modal-body{padding:12px;display:flex;flex-direction:column;gap:8px;overflow:auto}
+.opt{padding:10px;border:1px solid #1e2a4a;border-radius:10px;cursor:pointer;background:#0a1020;display:flex;gap:10px;align-items:center}
+.opt:hover{border-color:var(--accent);background:#112040}
+.opt.kai:hover{border-color:var(--kai);background:#1a1230}
+input.in,textarea.in{background:#000;border:1px solid #253353;color:#d7deee;padding:6px 8px;border-radius:10px;font-size:7px;outline:none}
+#log{height:42px;background:#000;border-top:1px solid var(--border);overflow:auto;padding:4px 8px;font-size:6px;color:var(--accent);white-space:pre-wrap}
+#editModal{position:fixed;inset:0;background:#02040a;z-index:200;display:none;flex-direction:column}
 .edit-layout{flex:1;display:flex;overflow:hidden}
-.edit-code{flex:1;display:flex;flex-direction:column;border-right:2px solid var(--accent);background:#0a0e1a}
-.edit-render{flex:1.3;display:flex;flex-direction:column;background:#fff}
-.edit-header{height:36px;background:#000;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:8px}
-#editArea{flex:1;width:100%;background:#000;color:#0f0;border:0;padding:10px;font-size:10px;font-family:Consolas,monospace;resize:none;outline:none;white-space:pre;overflow:auto}
+.edit-code{flex:1;display:flex;flex-direction:column;border-right:2px solid var(--accent);background:#070b16}
+.edit-render{flex:1.2;display:flex;flex-direction:column;background:#fff}
+.edit-header{height:38px;background:#000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:7px}
+#editArea{flex:1;width:100%;background:#000;color:#8cff8c;border:0;padding:12px;font-size:10px;font-family:Consolas,monospace;resize:none;outline:none;white-space:pre;overflow:auto;line-height:1.5}
 #editLiveFrame{flex:1;width:100%;border:0;background:#fff}
-input.in{background:#000;border:1px solid #333;color:#fff;padding:4px 6px;border-radius:8px;font-size:7px}
-#log{height:38px;background:#000;border-top:1px solid #222;overflow:auto;padding:3px 6px;font-size:6px;color:var(--accent);white-space:pre-wrap}
+.drop-active{outline:2px dashed var(--accent)!important;outline-offset:-4px;background:rgba(0,255,234,.08)!important}
+.geral-panel{background:linear-gradient(135deg, #0f1426 0%, #1a1230 100%);border:1px solid var(--kai);border-radius:12px;padding:10px;margin:6px 0}
 </style>
 </head>
 <body>
@@ -55,38 +75,58 @@ input.in{background:#000;border:1px solid #333;color:#fff;padding:4px 6px;border
 <div id="app">
   <div id="left">
     <div class="top">
-      <b style="font-size:7px">ESQ</b>
+      <b style="font-size:8px;color:var(--kai)">K-AI</b>
+      <b style="font-size:8px;color:var(--accent)">ESQ: LOCAL</b>
       <button class="btn ac" onclick="document.getElementById('f').click()">+ ANEXAR</button>
-      <button class="btn" onclick="document.getElementById('folder').click()">📁</button>
-      <button class="btn ac" onclick="toggleStorage()">💾</button>
-      <button class="btn ac" onclick="selecionarTodos()">☑</button>
-      <span id="selCount" style="font-size:6px;background:#000;padding:2px 5px;border-radius:10px;border:1px solid var(--accent)">0</span>
-      <button class="btn danger" onclick="limparSel()">🗑️</button>
+      <button class="btn ghost" onclick="document.getElementById('folder').click()">📁 PASTA</button>
+      <button class="btn kai" onclick="document.getElementById('geralFile').click()">⚙️.GERAL K-AI</button>
+      <button class="btn ac" onclick="toggleStorage()">💾 ARMAZENAMENTO</button>
+      <button class="btn ac" onclick="selecionarTodos()">☑ TODOS</button>
+      <span id="selCount" class="badge">0 sel</span>
+      <button class="btn danger" onclick="limparSel()">🗑️ LIMPAR</button>
+      <button class="btn ac" onclick="implantSelected()">⚡ IMPLANTAR</button>
+      <button class="btn kai" onclick="converterTudoKAI()">🤖 JARVIS→K-AI</button>
       <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverEsqParaDir()">→ DIR</button>
     </div>
     <div class="storage-panel" id="storagePanel" style="display:none">
-      <button class="storage-btn active" onclick="filtrarStorage('all',this)">TODOS</button>
-      <button class="storage-btn" onclick="filtrarStorage('code',this)">CODE</button>
-      <button class="storage-btn" onclick="filtrarStorage('image',this)">IMG</button>
-      <button class="storage-btn" onclick="filtrarStorage('video',this)">VID</button>
+      <button class="storage-btn active" onclick="filtrarStorage('all',this)">📦 TODOS</button>
+      <button class="storage-btn kai active" onclick="filtrarStorage('geral',this)" style="border-color:var(--kai);color:var(--kai)">⚙️.GERAL K-AI</button>
+      <button class="storage-btn" onclick="filtrarStorage('code',this)">📄 CÓDIGOS</button>
+      <button class="storage-btn" onclick="filtrarStorage('image',this)">🖼️ IMAGENS</button>
+      <button class="storage-btn" onclick="filtrarStorage('video',this)">🎬 VÍDEOS</button>
+    </div>
+    <div style="padding:6px 10px;background:#080c18;border-bottom:1px solid var(--border);font-size:6px;opacity:.7;display:flex;justify-content:space-between">
+      <span>⚙️.geral = config K-AI • Auto-converte Jarvis→K-AI • Clique direito renomeia</span>
+      <span>Arraste ESQ ↔ DIR • Duplo clique edita render exato</span>
     </div>
     <div class="stage" id="sLeft"></div>
   </div>
   <div id="right">
-    <div style="padding:5px;background:#010409;border-bottom:2px solid var(--accent);display:flex;flex-direction:column;gap:4px">
-      <div style="display:flex;gap:3px">
-        <input id="ghO" class="in" value="sistemak" style="width:55px"><input id="ghR" class="in" value="korvil-app" style="width:55px">
-        <input id="REPO_TOKEN" type="password" class="in" placeholder="REPO_TOKEN" style="flex:1">
-        <button class="btn ac" onclick="saveCfg()">OK</button>
+    <div style="padding:8px;background:#010409;border-bottom:2px solid var(--accent);display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="btn neon" onclick="abrirGithubOriginal()">▶ GITHUB ORIGINAL</button>
+        <button class="btn ac" onclick="toggleFallback()">📁 EXPLORER COM 🗑️</button>
+        <button class="btn ac" onclick="abrirHistorico()">🕒 HISTÓRICO</button>
+        <button class="btn kai" onclick="converterTudoKAI()">🤖 K-AI MODE</button>
+        <button class="btn ac" onclick="carregarDadosRepo()">🔄 ATUALIZAR</button>
       </div>
-      <div style="display:flex;gap:3px;align-items:center;background:#000;padding:3px;border-radius:6px">
-        <span id="selCountRight" style="font-size:6px">0 DIR</span>
-        <button class="btn ac" onclick="selecionarTodosDir()">☑ PASTA</button>
-        <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverDirParaEsq()">← ESQ</button>
-        <button class="btn ac" onclick="carregarDadosRepo()">🔄</button>
+      <div style="display:flex;gap:5px">
+        <input id="ghO" class="in" value="sistemak" style="width:70px">
+        <input id="ghR" class="in" value="korvil-app" style="width:70px">
+        <input id="REPO_TOKEN" type="password" class="in" placeholder="REPO_TOKEN ghp_..." style="flex:1">
+        <button class="btn ac" onclick="saveCfg()">SALVAR</button>
       </div>
-      <div id="currentPathDisplay" style="font-size:6px;opacity:.5">sistemak/korvil-app</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;background:#000;padding:6px;border-radius:12px;border:1px solid var(--border)">
+        <span id="selCountRight" class="badge">0 sel DIR</span>
+        <button class="btn ac" onclick="selecionarTodosDir()">☑ TODOS DA PASTA</button>
+        <button class="btn ghost" onclick="limparSelDir()">✕ LIMPAR SEL</button>
+        <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverDirParaEsq()">← ESQ (BAIXAR)</button>
+        <button class="btn danger" onclick="deletarSelecionadosDir()">🗑️ DEL SEL</button>
+        <button class="btn kai" onclick="abrirEditor()">✏️ EDITAR K-AI</button>
+      </div>
+      <div id="currentPathDisplay" style="font-size:6px;opacity:.5;background:#000;padding:4px 8px;border-radius:20px;border:1px solid #111">sistemak/korvil-app • K-AI • REPO_TOKEN</div>
     </div>
+    <iframe id="githubFrame" src="https://github.com/sistemak/korvil-app" style="flex:1;width:100%;border:0;background:#0d1117;display:none"></iframe>
     <div id="repoViewFallback">
       <div class="repo-breadcrumb" id="breadcrumb"><span onclick="navegarPara('')">🏠 root</span></div>
       <div id="repoList" style="flex:1;overflow:auto"></div>
@@ -96,221 +136,390 @@ input.in{background:#000;border:1px solid #333;color:#fff;padding:4px 6px;border
 
 <div id="liveViewer">
   <div class="viewer-top">
-    <div style="display:flex;gap:4px;align-items:center">
-      <span style="color:#ff3b3b">🔴 LIVE RENDER INSTANTÂNEO</span>
-      <span style="opacity:.5">Salvou → já mostra a página renderizada aqui - mexe sem sair</span>
+    <div style="display:flex;gap:6px;align-items:center">
+      <span style="color:var(--kai);font-weight:800">🤖 K-AI LIVE</span>
+      <span style="color:#ff3b3b;font-weight:800">🔴 RENDER INSTANTÂNEO</span>
+      <span style="opacity:.6">.geral → K-AI • Salvou → já mostra página exata sem sair</span>
     </div>
-    <div style="display:flex;gap:4px">
-      <button class="btn ac" onclick="renderLiveSite()">⟳ RE-BUILD SITE TODO</button>
-      <span id="viewerType" style="opacity:.5">nenhum</span>
+    <div style="display:flex;gap:5px;align-items:center">
+      <button class="btn kai" onclick="converterTudoKAI()">🤖 CONVERTER JARVIS→K-AI</button>
+      <button class="btn ac" onclick="renderLiveSite()">⟳ RE-BUILD K-AI</button>
+      <span id="viewerType" class="badge kai" style="opacity:.8">K-AI</span>
     </div>
   </div>
   <div class="viewer-content">
-    <div class="viewer-preview" id="viewerPreview" style="flex:1">
-      <iframe id="liveSiteFrame"></iframe>
+    <div class="viewer-preview" id="viewerPreview"><iframe id="liveSiteFrame"></iframe></div>
+    <div class="viewer-info" id="viewerInfo">
+      <div class="geral-panel">
+        <div style="color:var(--kai);font-weight:700;font-size:8px;margin-bottom:6px">⚙️.GERAL - CONFIG K-AI (substitui Jarvis)</div>
+        <div style="font-size:7px;line-height:1.6">
+          • <b>K-AI</b> é a evolução do Jarvis - mais inteligente, contextual, proativa<br>
+          • Arquivo <b>.geral</b> controla personalidade, voz, memória, funções<br>
+          • Ao anexar qualquer código com "Jarvis", auto-converte pra K-AI melhorado<br>
+          • Conjugação: "Jarvis, faça" → "K-AI, execute" / "Senhor" → "Comandante"<br>
+          • Clique em <b>⚙️.GERAL K-AI</b> pra criar/editar config
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <div style="color:var(--accent);font-weight:700">COMO USAR K-AI PRO</div>
+        <div>• ESQ: arraste, selecione vários, clique direito renomeia path</div>
+        <div>• DIR: abra pastas, ☑ TODOS DA PASTA, checkbox, arraste pra ESQ</div>
+        <div>• EDITAR: duplo clique → editor lado a lado: código + render exato ao vivo</div>
+        <div>• SALVAR: já mostra renderizado aqui embaixo sem sair da página</div>
+        <div>•.GERAL: controla K-AI - voz, personalidade, automações</div>
+      </div>
     </div>
   </div>
-  <div id="log">[LOG] Live render instantâneo ativo - sistemak</div>
+  <div id="log">[LOG] K-AI MODE ativo -.geral convertido Jarvis→K-AI - sistemak/korvil-app - REPO_TOKEN</div>
 </div>
 
-<!-- EDITOR COM RENDER LADO A LADO NA MESMA TELA -->
+<div id="implantModal" class="modal"><div class="modal-box kai"><div class="modal-head" style="border-color:var(--kai)"><b style="color:var(--kai)">🤖 K-AI IMPLANTAR: <span id="implantFileName"></span></b><button class="btn" onclick="document.getElementById('implantModal').style.display='none'">X</button></div><div class="modal-body" id="implantOptions"></div></div></div>
+<div id="historyModal" class="modal"><div class="modal-box"><div class="modal-head"><b>🕒 HISTÓRICO K-AI</b><button class="btn" onclick="document.getElementById('historyModal').style.display='none'">X</button></div><div class="modal-body" id="historyList"></div></div></div>
+
 <div id="editModal">
   <div class="edit-layout">
     <div class="edit-code">
       <div class="edit-header">
-        <span style="color:var(--accent)">✏️ CÓDIGO - <span id="editFileName"></span> - DIGITA E JÁ VÊ RENDERIZADO AO LADO →</span>
-        <div style="display:flex;gap:4px">
-          <button class="btn ac" onclick="salvarEdicao()" style="padding:6px 12px;font-size:8px">💾 SALVAR E MOSTRAR NA PÁGINA ORIGINAL</button>
+        <span style="color:var(--kai)">🤖 K-AI CÓDIGO - <span id="editFileName"></span> → auto-converte Jarvis→K-AI</span>
+        <div style="display:flex;gap:5px">
+          <button class="btn kai" onclick="converterCodigoAtualKAI()">🤖 JARVIS→K-AI</button>
+          <button class="btn ac" onclick="salvarEdicao()" style="padding:7px 14px">💾 SALVAR E MOSTRAR RENDER EXATO NA PÁGINA ORIGINAL</button>
           <button class="btn" onclick="document.getElementById('editModal').style.display='none'">X</button>
         </div>
       </div>
       <textarea id="editArea" oninput="renderInstant()"></textarea>
     </div>
     <div class="edit-render">
-      <div class="edit-header" style="background:#111;color:#000;background:#00ffea">
-        <span>👁️ PÁGINA RENDERIZADA EXATA - COMO FICA QUANDO SALVAR - MEXE AQUI MESMO</span>
-        <span style="font-size:6px;background:#000;color:#00ffea;padding:2px 6px;border-radius:10px">LIVE</span>
+      <div class="edit-header" style="background:var(--kai);color:#fff">
+        <span>👁️ K-AI PÁGINA RENDERIZADA EXATA - COMO FICA QUANDO SALVAR</span>
+        <span class="badge" style="background:#000;color:var(--kai);border-color:#000">K-AI LIVE</span>
       </div>
       <iframe id="editLiveFrame"></iframe>
     </div>
   </div>
 </div>
 
-<input type="file" id="f" hidden multiple><input type="file" id="folder" hidden webkitdirectory multiple>
+<input type="file" id="f" hidden multiple><input type="file" id="folder" hidden webkitdirectory multiple><input type="file" id="geralFile" hidden accept=".geral,geral,*.geral,.env,*.json,*.txt">
+
 <script>
+// FUNÇÃO CORE: Converte tudo de Jarvis pra K-AI melhorado
+function converterParaKAI(texto){
+  if(!texto) return texto;
+  let t=texto;
+  const mapa=[
+    [/Jarvis/gi, 'K-AI'],
+    [/J\.A\.R\.V\.I\.S\./g, 'K-AI'],
+    [/JARVIS/g, 'K-AI'],
+    [/Sr\. Stark/gi, 'Comandante'],
+    [/Senhor Stark/gi, 'Comandante'],
+    [/Mr\. Stark/gi, 'Comandante'],
+    [/Tony/gi, 'Comandante'],
+    [/Iron Man/gi, 'K-AI System'],
+    [/Homem de Ferro/gi, 'Sistema K-AI'],
+    [/Stark Industries/gi, 'KORVIL Systems'],
+    [/Sir,/gi, 'Comandante,'],
+    [/Yes, Sir/gi, 'Sim, Comandante'],
+    [/At your service/gi, 'À disposição, Comandante'],
+    [/How can I help/gi, 'Como posso auxiliar'],
+    [/As you wish/gi, 'Conforme solicitado, Comandante'],
+    [/jarvis/gi, 'k-ai'],
+    // Melhorias de conjugação
+    [/faça isso, Jarvis/gi, 'execute isso, K-AI'],
+    [/execute, Jarvis/gi, 'processe, K-AI'],
+    [/Jarvis, faça/gi, 'K-AI, execute'],
+    [/Jarvis, analise/gi, 'K-AI, analise de forma avançada'],
+    [/Jarvis, mostre/gi, 'K-AI, apresente'],
+  ];
+  mapa.forEach(([regex, repl])=>{ t=t.replace(regex, repl); });
+  // Se for.geral, injeta config K-AI melhorada
+  if(t.includes('K-AI') || t.toLowerCase().includes('.geral') || t.includes('personalidade') || t.includes('voz')){
+    if(!t.includes('K-AI_MODE')){
+      t = `# K-AI CONFIG -.geral - Evolução Jarvis
+K-AI_MODE=true
+K-AI_NAME=K-AI
+K-AI_VERSION=2.0
+K-AI_PERSONALIDADE=assistente avançado, proativo, contextual, profissional
+K-AI_VOZ=neural, clara, adaptativa
+K-AI_MEMORIA=longa, contextual
+K-AI_FUNCOES=render, mover, editar, implantar, histórico, live-site
+K-AI_COMANDO=Comandante
+
+# CONFIG ORIGINAL CONVERTIDA:
+` + t;
+    }
+  }
+  return t;
+}
+
+function converterTudoKAI(){
+  if(!confirm('Converter TODOS os arquivos de Jarvis → K-AI melhorado? (ESQ)')) return;
+  ativos.forEach(async o=>{
+    if(o.cat==='code' || o.name.includes('geral') || o.path.includes('geral')){
+      const txt=await o.blob.text();
+      if(/jarvis/i.test(txt)){
+        const novo=converterParaKAI(txt);
+        if(novo!==txt){
+          const blob=new Blob([novo],{type:'text/plain'});
+          await save({...o, blob:blob, size:blob.size, date:new Date().toISOString()});
+        }
+      }
+    }
+  });
+  setTimeout(async()=>{ await carregarTudo(); renderLiveSite(); log('🤖 TODOS convertidos Jarvis→K-AI - melhorado e conjugado - LIVE rebuild'); },800);
+}
+function converterCodigoAtualKAI(){
+  const area=document.getElementById('editArea');
+  area.value=converterParaKAI(area.value);
+  renderInstant();
+  log('🤖 Código atual convertido Jarvis→K-AI');
+}
+
 let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set(), currentPath="", storageFilter="all", arquivoEditando=null;
-let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-v8-REPO_TOKEN-cfg')||'{}');}catch(e){cfg={}}
+let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-v10-K-AI-REPO_TOKEN-cfg')||'{}');}catch(e){cfg={}}
 if(!cfg.owner) cfg.owner='sistemak'; if(!cfg.repo) cfg.repo='korvil-app';
 ghO.value=cfg.owner; ghR.value=cfg.repo; document.getElementById('REPO_TOKEN').value=cfg.REPO_TOKEN||'';
-const openDB=indexedDB.open('korvil-v8-REPO_TOKEN',7);
+const openDB=indexedDB.open('korvil-v10-K-AI',1);
 openDB.onupgradeneeded=e=>{const d=e.target.result; if(!d.objectStoreNames.contains('k')) d.createObjectStore('k',{keyPath:'id'});};
 openDB.onsuccess=e=>{db=e.target.result; carregarTudo();};
 function getREPO_TOKEN(){ return document.getElementById('REPO_TOKEN').value.trim(); }
 function save(o){return new Promise(r=>{const tx=db.transaction('k','readwrite'); tx.objectStore('k').put(o); tx.oncomplete=()=>r();});}
 function getAll(){return new Promise(r=>{const tx=db.transaction('k','readonly'); const q=tx.objectStore('k').getAll(); q.onsuccess=()=>r(q.result||[]);});}
 function delDB(id){return new Promise(r=>{const tx=db.transaction('k','readwrite'); tx.objectStore('k').delete(id); tx.oncomplete=()=>r();});}
-function log(m){const el=document.getElementById('log'); el.innerText=`[${new Date().toLocaleTimeString()}] ${m}\n`+el.innerText.slice(0,3000);}
-const fEl=document.getElementById('f'), folderEl=document.getElementById('folder');
+function log(m){const el=document.getElementById('log'); el.innerText=`[${new Date().toLocaleTimeString()}] ${m}\n`+el.innerText.slice(0,4000);}
+
+const fEl=document.getElementById('f'), folderEl=document.getElementById('folder'), geralFileEl=document.getElementById('geralFile');
 fEl.onchange=e=>{if(e.target.files.length) handle(e.target.files); e.target.value='';};
 folderEl.onchange=e=>{if(e.target.files.length) handle(e.target.files); e.target.value='';};
+geralFileEl.onchange=async e=>{
+  if(e.target.files.length){
+    const files=e.target.files;
+    for(let file of files){
+      let txt=await file.text();
+      const convertido=converterParaKAI(txt);
+      const blob=new Blob([convertido],{type:'text/plain'});
+      const obj={id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name.endsWith('.geral')?file.name:'.geral',path:'.geral',type:'text/plain',size:blob.size,cat:'code',ext:'geral',date:new Date().toISOString(),blob:blob, isGeral:true};
+      await save(obj);
+      log(`⚙️.geral anexado e convertido Jarvis→K-AI: ${file.name} → K-AI CONFIG`);
+    }
+    await carregarTudo(); renderLiveSite();
+  }
+  e.target.value='';
+};
+
 async function handle(files){
  for(let file of files){
   const ext=(file.name.split('.').pop()||'').toLowerCase();
-  let cat='other'; if(file.type.startsWith('image')) cat='image'; else if(file.type.startsWith('video')) cat='video'; else if(file.type.startsWith('audio')) cat='audio'; else if(['html','htm','js','css','json','ts','tsx','py','md','txt','yml'].includes(ext)) cat='code';
-  await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name,path:file.webkitRelativePath||file.name,type:file.type,size:file.size,cat,ext,date:new Date().toISOString(),blob:file});
+  let cat='other'; if(file.type.startsWith('image')) cat='image'; else if(file.type.startsWith('video')) cat='video'; else if(file.type.startsWith('audio')) cat='audio'; else if(['html','htm','js','css','json','ts','tsx','py','md','txt','yml','geral'].includes(ext) || file.name.includes('.geral') || file.name==='.geral') cat='code';
+  let blob=file;
+  if(cat==='code'){
+    const txt=await file.text();
+    const convertido=converterParaKAI(txt);
+    if(convertido!==txt) blob=new Blob([convertido],{type:file.type||'text/plain'});
+  }
+  const isGeral=file.name.includes('.geral') || file.name==='.geral' || ext==='geral';
+  await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name,path:file.webkitRelativePath||file.name,type:file.type,size:blob.size,cat:isGeral?'code':cat,ext:ext,date:new Date().toISOString(),blob:blob, isGeral:isGeral});
  }
- await carregarTudo(); renderLiveSite(); log(`Anexou ${files.length} → LIVE já renderizou`);
+ await carregarTudo(); log(`Anexou ${files.length} - Jarvis→K-AI auto-convertido - LIVE render`);
 }
 async function carregarTudo(){ ativos=await getAll(); renderLeft(); renderLiveSite(); }
 function toggleStorage(){const p=document.getElementById('storagePanel'); p.style.display=p.style.display==='none'?'flex':'none';}
-function filtrarStorage(filter,btn){ storageFilter=filter; document.querySelectorAll('.storage-btn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); renderLeft(); }
+function filtrarStorage(filter,btn){
+  storageFilter=filter; document.querySelectorAll('.storage-btn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active');
+  if(filter==='geral') document.getElementById('sLeft').innerHTML=ativos.filter(a=>a.isGeral || a.name.includes('.geral') || a.path.includes('.geral')).length? '' : `<div style="grid-column:1/-1;text-align:center;padding:20px"><button class="btn kai" onclick="document.getElementById('geralFile').click()">⚙️ Criar.geral K-AI</button><div style="font-size:7px;margin-top:8px;opacity:.6">.geral = config da K-AI (ex-Jarvis melhorado)</div></div>`;
+  renderLeft();
+}
 function renderLeft(){
- const sL=document.getElementById('sLeft'); const selEl=document.getElementById('selCount'); sL.innerHTML=''; selEl.innerText=selecionados.size;
- let lista=ativos; if(storageFilter!=='all') lista=ativos.filter(a=>a.cat===storageFilter);
- if(lista.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.3;padding:20px">Vazio</div>`; return; }
+ const sL=document.getElementById('sLeft'); const selEl=document.getElementById('selCount'); sL.innerHTML=''; selEl.innerText=selecionados.size+' sel';
+ let lista=ativos;
+ if(storageFilter==='geral') lista=ativos.filter(a=>a.isGeral || a.name.includes('.geral') || a.path.includes('.geral') || a.ext==='geral');
+ else if(storageFilter!=='all') lista=ativos.filter(a=>a.cat===storageFilter);
+ if(lista.length===0 && storageFilter!=='geral'){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.4;padding:30px">Vazio - + ANEXAR ou ⚙️.GERAL K-AI</div>`; return; }
+ if(storageFilter==='geral' && lista.length===0) return;
  lista.forEach(o=>{
   const url=URL.createObjectURL(o.blob);
-  const div=document.createElement('div'); div.className='item'+(selecionados.has(o.id)?' selected':''); div.draggable=true;
-  let thumb=o.cat==='image'?`<img src="${url}">`:o.cat==='video'?`<video src="${url}" muted loop></video>`:o.cat==='code'?`<div style="padding:8px;text-align:center;font-size:6px;background:#000;border:1px dashed var(--accent)">📄 ${o.name.slice(0,10)}</div>`:`<div style="padding:8px;text-align:center;font-size:6px">${o.name.slice(0,10)}</div>`;
-  div.innerHTML=`${thumb}<div style="padding:3px;font-size:6px;white-space:nowrap;overflow:hidden">${o.name}</div>`;
-  div.ondragstart=e=>{ const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id); e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id])); };
+  const isGeral=o.isGeral || o.name.includes('.geral') || o.ext==='geral';
+  const div=document.createElement('div'); div.className='item'+(selecionados.has(o.id)?' selected':'')+(isGeral?' kai-file':''); div.draggable=true;
+  let thumb=isGeral?`<div style="padding:12px;text-align:center;font-size:7px;background:linear-gradient(135deg,#0f1426,#1a1230);border:1px solid #a855f7">⚙️.GERAL<br><span style="color:#a855f7;font-weight:700">K-AI</span><br><span style="opacity:.5">config</span></div>`:o.cat==='image'?`<img src="${url}">`:o.cat==='video'?`<video src="${url}" muted loop></video>`:o.cat==='code'?`<div style="padding:10px;text-align:center;font-size:6px;background:#000;border:1px dashed var(--accent)">📄 ${o.name.slice(0,12)}</div>`:`<div style="padding:10px;text-align:center;font-size:6px">${o.name.slice(0,12)}</div>`;
+  div.innerHTML=`${thumb}<div style="padding:5px 6px;font-size:6px"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600">${o.name}</div><div style="opacity:.5">${isGeral?'K-AI CONFIG':o.path.split('/').slice(0,-1).join('/')||'root'}</div></div>`;
+  div.ondragstart=e=>{
+    const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id);
+    e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id])); e.dataTransfer.setData('id',o.id);
+  };
   div.onclick=()=>{ if(selecionados.has(o.id)) selecionados.delete(o.id); else selecionados.add(o.id); renderLeft(); visualizarArquivo(o.id); };
   div.ondblclick=()=>abrirEditorComId(o.id);
+  div.oncontextmenu=e=>{ e.preventDefault(); const novo=prompt('Mover/Renomear path', o.path); if(novo && novo!==o.path){ o.path=novo; save(o).then(()=>{carregarTudo();}); } };
   sL.appendChild(div);
  });
 }
-function selecionarTodos(){ const lista=storageFilter==='all'?ativos:ativos.filter(a=>a.cat===storageFilter); if(lista.every(a=>selecionados.has(a.id))) lista.forEach(a=>selecionados.delete(a.id)); else lista.forEach(a=>selecionados.add(a.id)); renderLeft(); renderLiveSite(); }
-async function limparSel(){ if(selecionados.size===0) return; if(!confirm(`Apagar ${selecionados.size}?`)) return; for(let id of [...selecionados]) await delDB(id); selecionados.clear(); await carregarTudo(); }
+function selecionarTodos(){ const lista=storageFilter==='all'?ativos:storageFilter==='geral'?ativos.filter(a=>a.isGeral||a.name.includes('.geral')):ativos.filter(a=>a.cat===storageFilter); if(lista.every(a=>selecionados.has(a.id))) lista.forEach(a=>selecionados.delete(a.id)); else lista.forEach(a=>selecionados.add(a.id)); renderLeft(); renderLiveSite(); }
+async function limparSel(){ if(selecionados.size===0) return; if(!confirm(`Apagar ${selecionados.size} ESQ?`)) return; for(let id of [...selecionados]) await delDB(id); selecionados.clear(); await carregarTudo(); }
 
-async function visualizarArquivo(id){ const o=ativos.find(a=>a.id===id); if(!o) return; arquivoEditando=o; renderLiveSite(); }
-function abrirEditorComId(id){ const o=ativos.find(a=>a.id===id); if(!o) return; arquivoEditando=o; abrirEditor(); }
-
+function visualizarArquivo(id){ const o=ativos.find(a=>a.id===id); if(!o) return; arquivoEditando=o; document.getElementById('viewerType').innerText=(o.isGeral?'⚙️.GERAL K-AI: ':'')+o.name; renderLiveSite(); }
+function abrirEditorComId(id){ const o=ativos.find(a=>a.id===id); if(o){ arquivoEditando=o; abrirEditor(); } }
 function abrirEditor(){
   let o=arquivoEditando; if(!o && selecionados.size>0) o=ativos.find(a=>a.id===[...selecionados][0]);
-  if(!o){ log('Selecione arquivo CODE na ESQ'); return; }
-  document.getElementById('editFileName').innerText=o.path;
+  if(!o){ log('Selecione CODE ou.GERAL'); return; }
+  document.getElementById('editFileName').innerText=o.path + (o.isGeral?' - K-AI CONFIG':' - K-AI MODE');
   document.getElementById('editModal').style.display='flex';
-  o.blob.text().then(txt=>{
-    document.getElementById('editArea').value=txt;
-    renderInstant();
-  });
+  o.blob.text().then(txt=>{ document.getElementById('editArea').value=converterParaKAI(txt); renderInstant(); });
 }
 function renderInstant(){
   const txt=document.getElementById('editArea').value;
   const frame=document.getElementById('editLiveFrame');
-  // Renderiza exatamente como vai ficar
   try{
-    if(txt.trim().startsWith('<') || txt.includes('<html') || txt.includes('<!DOCTYPE')){
-      frame.srcdoc=txt;
-    } else if(txt.trim().startsWith('body') || txt.trim().startsWith('.') || txt.trim().startsWith(':root') || txt.includes('{')){
-      // É CSS - mostra aplicado num HTML base
-      frame.srcdoc=`<!DOCTYPE html><html><head><style>${txt}</style></head><body><h1>CSS Preview</h1><p>Esse é o CSS que você editou - veja como fica aplicado</p><button>Botão teste</button><div style="margin-top:20px;border:1px solid #ccc;padding:10px">Div teste</div></body></html>`;
+    if(txt.includes('.geral') || txt.includes('K-AI_MODE') || txt.includes('K-AI_NAME')){
+      frame.srcdoc=`<!DOCTYPE html><html><head><style>body{background:#0f1426;color:#fff;font-family:Consolas;padding:20px}.card{background:#1a1230;border:1px solid #a855f7;border-radius:12px;padding:14px;margin:10px 0}.tag{background:#a855f7;color:#fff;padding:2px 8px;border-radius:20px;font-size:8px}</style></head><body><div style="background:#a855f7;color:#fff;padding:6px 12px;border-radius:20px;display:inline-block;font-weight:700">🤖 K-AI -.GERAL CONFIG - Convertido de Jarvis</div><h3 style="margin-top:12px">Configuração K-AI Renderizada Exata</h3><div class="card"><pre style="white-space:pre-wrap;font-size:10px;line-height:1.6">${txt.replace(/</g,'&lt;').slice(0,4000)}</pre></div><div class="card"><div class="tag">K-AI ATIVA</div><div style="margin-top:8px;font-size:9px">Personalidade: avançada, proativa<br>Voz: neural adaptativa<br>Funções: live render, mover, editar, implantar</div></div></body></html>`;
+    } else if(txt.trim().startsWith('<') || txt.includes('<html')){
+      frame.srcdoc=converterParaKAI(txt);
+    } else if(txt.includes('{')){
+      frame.srcdoc=`<!DOCTYPE html><html><head><style>${converterParaKAI(txt)}</style></head><body style="padding:20px"><h2 style="color:#a855f7">K-AI CSS Preview</h2><button>Teste K-AI</button></body></html>`;
     } else {
-      frame.srcdoc=`<!DOCTYPE html><html><body><pre style="white-space:pre-wrap;font-family:Consolas;padding:10px">${txt.replace(/</g,'&lt;')}</pre></body></html>`;
+      frame.srcdoc=`<!DOCTYPE html><html><body><pre style="padding:12px;white-space:pre-wrap">${converterParaKAI(txt).replace(/</g,'&lt;')}</pre></body></html>`;
     }
   }catch(e){ frame.srcdoc=`Erro: ${e.message}`; }
-  // Também atualiza o LIVE SITE de baixo em tempo real enquanto digita
-  if(arquivoEditando){
-    arquivoEditando.blob = new Blob([txt], {type: 'text/html'});
-    renderLiveSite();
-  }
+  if(arquivoEditando){ arquivoEditando.blob=new Blob([txt],{type:'text/html'}); renderLiveSite(); }
 }
 async function salvarEdicao(){
   if(!arquivoEditando) return;
-  const novoTexto=document.getElementById('editArea').value;
+  let novoTexto=document.getElementById('editArea').value;
+  novoTexto=converterParaKAI(novoTexto);
   const blob=new Blob([novoTexto],{type:arquivoEditando.type||'text/html'});
   const novoObj={...arquivoEditando, blob:blob, size:blob.size, date:new Date().toISOString()};
-  await save(novoObj);
-  await carregarTudo();
-  // JÁ MOSTRA RENDERIZADO NA PÁGINA ORIGINAL (liveSiteFrame)
+  await save(novoObj); await carregarTudo();
+  document.getElementById('editModal').style.display='none';
   const liveFrame=document.getElementById('liveSiteFrame');
-  if(novoTexto.trim().startsWith('<') || arquivoEditando.ext==='html' || arquivoEditando.path.endsWith('.html')){
+  if(novoTexto.trim().startsWith('<') || arquivoEditando.ext==='html' || arquivoEditando.isGeral){
     liveFrame.srcdoc=novoTexto;
-    log(`💾 SALVOU - Já mostrando página renderizada exatamente como ficou: ${arquivoEditando.path} - mexe sem sair da página`);
+    log(`💾 K-AI SALVO - Render exato na página original: ${arquivoEditando.path} - Jarvis→K-AI - mexe sem sair`);
   } else {
     renderLiveSite();
-    log(`💾 SALVOU - LIVE SITE rebuild instantâneo: ${arquivoEditando.path}`);
+    log(`💾 K-AI SALVO + LIVE rebuild: ${arquivoEditando.path}`);
   }
-  // Salva no repo também
   const REPO_TOKEN=getREPO_TOKEN();
   if(REPO_TOKEN && arquivoEditando.path){
-    const targetPath=arquivoEditando.path;
-    const b64=btoa(unescape(encodeURIComponent(novoTexto)));
+    const targetPath=arquivoEditando.path; const b64=btoa(unescape(encodeURIComponent(novoTexto)));
     let sha=null; try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{}
-    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`EDIT RENDER: ${targetPath}`,content:b64,sha})});
+    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`K-AI EDIT: ${targetPath}`,content:b64,sha})});
   }
-  document.getElementById('editModal').style.display='none';
 }
-
-// LIVE SITE QUE MOSTRA EXATAMENTE COMO O CÓDIGO FICA
 async function renderLiveSite(){
   const liveFrame=document.getElementById('liveSiteFrame');
-  if(ativos.length===0){ liveFrame.srcdoc=`<div style="font-family:Consolas;padding:20px;text-align:center;opacity:.5">Vazio - anexe arquivos HTML na ESQ que já renderiza aqui exatamente como fica a página</div>`; return; }
-  // Se tem index.html, mostra ele exatamente
-  const indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html') || f.path.toLowerCase().endsWith('indexx.html'));
-  if(indexFile){
-    const html=await indexFile.blob.text();
-    // Se o arquivo sendo editado é o index, já mostra a versão editada
-    if(arquivoEditando && (arquivoEditando.path===indexFile.path)){
-      const edited=await arquivoEditando.blob.text();
-      liveFrame.srcdoc=edited;
-      document.getElementById('viewerType').innerText=`RENDER EXATO: ${indexFile.path} (editado) - ${edited.length} bytes - já renderizado sem sair da página`;
-      return;
-    }
-    liveFrame.srcdoc=html;
-    document.getElementById('viewerType').innerText=`RENDER EXATO: ${indexFile.path} - ${html.length} bytes - página real renderizada`;
+  if(ativos.length===0){ liveFrame.srcdoc=`<div style="font-family:Consolas;padding:30px;text-align:center"><div style="background:#a855f7;color:#fff;padding:8px 16px;border-radius:20px;display:inline-block">🤖 K-AI - Anexe.geral ou index.html - Já renderiza exato</div><div style="margin-top:20px;opacity:.5">K-AI é a evolução do Jarvis - auto-converte tudo</div></div>`; return; }
+  const geralFile=ativos.find(f=>f.isGeral || f.name==='.geral');
+  const indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html'));
+  if(geralFile && (!indexFile || storageFilter==='geral')){
+    const txt=await geralFile.blob.text();
+    const convertido=converterParaKAI(txt);
+    liveFrame.srcdoc=`<!DOCTYPE html><html><head><style>body{background:#070a12;color:#fff;font-family:Consolas;padding:16px}.kai-card{background:linear-gradient(135deg,#0f1426,#1a1230);border:1px solid #a855f7;border-radius:14px;padding:14px;margin:10px 0}.badge-kai{background:#a855f7;color:#fff;padding:4px 10px;border-radius:20px;font-size:8px;font-weight:800}</style></head><body><div class="badge-kai">🤖 K-AI -.GERAL - RENDER EXATO - Convertido de Jarvis</div><h2 style="color:#a855f7;margin-top:12px">Sistema K-AI Ativo</h2><div class="kai-card"><div style="color:#00ffea;font-size:10px">⚙️ CONFIGURAÇÃO.GERAL (K-AI)</div><pre style="white-space:pre-wrap;font-size:9px;margin-top:8px;line-height:1.7">${convertido.replace(/</g,'&lt;').slice(0,5000)}</pre></div><div class="kai-card"><div style="color:#00ffea">🧠 K-AI MELHORIAS SOBRE JARVIS</div><div style="font-size:8px;margin-top:6px;opacity:.8">• Personalidade contextual avançada<br>• Memória longa + proatividade<br>• Render instantâneo sem sair da página<br>• Move/edita de qualquer tela pra qualquer tela<br>• Conjugação natural: Comandante em vez de Sr. Stark</div></div></body></html>`;
+    document.getElementById('viewerType').innerText=`K-AI.GERAL RENDER EXATO`;
     return;
   }
-  // Se não tem index, mostra último arquivo CODE editado exatamente renderizado
-  if(arquivoEditando && arquivoEditando.cat==='code'){
-    const txt=await arquivoEditando.blob.text();
-    if(txt.trim().startsWith('<')){
-      liveFrame.srcdoc=txt;
-      document.getElementById('viewerType').innerText=`RENDER EXATO: ${arquivoEditando.path} - HTML renderizado exato`;
+  if(indexFile){
+    let html=await indexFile.blob.text(); html=converterParaKAI(html);
+    if(arquivoEditando && arquivoEditando.path===indexFile.path){
+      const edited=await arquivoEditando.blob.text();
+      liveFrame.srcdoc=converterParaKAI(edited);
       return;
     }
+    liveFrame.srcdoc=html; document.getElementById('viewerType').innerText=`K-AI RENDER: ${indexFile.path}`; return;
   }
-  // Auto build com todos
-  const filesByPath={}; for(let f of ativos){ filesByPath[f.path]=URL.createObjectURL(f.blob); }
-  const folders={}; ativos.forEach(f=>{ const parts=f.path.split('/'); const folder=parts.length>1?parts.slice(0,-1).join('/'):'root'; if(!folders[folder]) folders[folder]=[]; folders[folder].push(f); });
-  let html=`<!DOCTYPE html><html><head><style>body{background:#0a0e1a;color:#fff;font-family:Consolas;padding:10px}.card{border:1px solid #00ffea;background:#101420;border-radius:8px;padding:8px;margin:6px} img,video{max-width:100%;height:80px;object-fit:cover;border-radius:6px}</style></head><body><div style="background:#ff3b3b;color:#000;font-size:8px;padding:4px 8px;border-radius:10px;display:inline-block">🔴 RENDER EXATO - SITE TODO - ${ativos.length} ARQUIVOS - SALVOU JÁ MOSTRA AQUI</div><h3 style="color:#00ffea;margin-top:10px">Estrutura atual do app (sistemak/korvil-app) renderizada exatamente</h3>`;
+  if(arquivoEditando){
+    const txt=await arquivoEditando.blob.text();
+    if(txt.trim().startsWith('<')){ liveFrame.srcdoc=converterParaKAI(txt); return; }
+  }
+  const filesByPath={}; for(let f of ativos) filesByPath[f.path]=URL.createObjectURL(f.blob);
+  let html=`<!DOCTYPE html><html><head><style>body{background:#070a12;color:#fff;font-family:Consolas;padding:12px}.card{border:1px solid #a855f7;background:#0f1426;border-radius:12px;padding:10px;margin:8px}</style></head><body><div style="background:#a855f7;color:#fff;padding:6px 12px;border-radius:20px;display:inline-block;font-weight:800">🤖 K-AI LIVE - ${ativos.length} ARQS - JARVIS→K-AI</div>`;
+  const folders={}; ativos.forEach(f=>{ const p=f.path.split('/'); const folder=p.length>1?p.slice(0,-1).join('/'):'root'; if(!folders[folder]) folders[folder]=[]; folders[folder].push(f); });
   for(let folder in folders){
-    html+=`<div class="card"><div style="color:#00ffea;font-size:10px">📁 ${folder} (${folders[folder].length})</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">`;
+    html+=`<div class="card"><div style="color:#a855f7">📁 ${folder} (${folders[folder].length})</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">`;
     for(let f of folders[folder]){
       const url=filesByPath[f.path];
-      if(f.cat==='image') html+=`<div><img src="${url}"><div style="font-size:7px">${f.name}</div></div>`;
-      else if(f.cat==='video') html+=`<div><video src="${url}" muted></video><div style="font-size:7px">${f.name}</div></div>`;
-      else html+=`<div style="border:1px dashed #00ffea;padding:6px;border-radius:6px;font-size:7px">📄 ${f.name}</div>`;
+      if(f.cat==='image') html+=`<div><img src="${url}" style="width:80px;height:60px;object-fit:cover;border-radius:8px"><div style="font-size:6px">${f.name}</div></div>`;
+      else html+=`<div style="border:1px dashed #a855f7;padding:6px;border-radius:8px;font-size:6px">${f.isGeral?'⚙️ ':'📄 '}${f.name}</div>`;
     }
     html+=`</div></div>`;
   }
-  html+=`</body></html>`;
-  liveFrame.srcdoc=html;
+  html+=`</body></html>`; liveFrame.srcdoc=converterParaKAI(html);
 }
-
-// DIREITA
-function navegarPara(path){ currentPath=path; carregarDadosRepo(); }
+function implantSelected(){
+  if(selecionados.size===0) return;
+  const id=[...selecionados][0]; const o=ativos.find(a=>a.id===id); if(!o) return;
+  document.getElementById('implantFileName').innerText=o.name+(o.isGeral?' - K-AI CONFIG':'');
+  const modal=document.getElementById('implantModal'); const optionsEl=document.getElementById('implantOptions');
+  let opts=[];
+  if(o.isGeral) opts=[{icon:'🤖',title:'Aplicar.geral como config K-AI do sistema todo',desc:'Vira personalidade da K-AI - substitui Jarvis',action:()=>implantarComo('geral-kai',o), kai:true},{icon:'💾',title:'Salvar.geral no repo sistemak',desc:'Manda.geral pra raiz do repo',action:()=>implantarComo('geral-save',o), kai:true}];
+  else if(o.cat==='video') opts=[{icon:'🎬',title:'Fundo vídeo K-AI HUD',desc:'Fundo',action:()=>implantarComo('bg-video',o)},{icon:'👁️',title:'Overlay K-AI',desc:'Blend',action:()=>implantarComo('overlay-hud',o)}];
+  else if(o.cat==='image') opts=[{icon:'🖼️',title:'Fundo K-AI LIVE',desc:'Template',action:()=>implantarComo('bg-image',o)},{icon:'🎨',title:'Tema K-AI',desc:'Extrai cor',action:()=>implantarComo('tema',o)}];
+  else if(o.cat==='code') opts=[{icon:'🤖',title:'Injetar como K-AI - Vira site renderizado (Jarvis→K-AI)',desc:'Código vira página exata com K-AI',action:()=>implantarComo('injetar-html',o), kai:true},{icon:'🎨',title:'Aplicar CSS K-AI no LIVE',desc:'Estilo instantâneo',action:()=>implantarComo('css',o)}];
+  else opts=[{icon:'📄',title:'Adicionar ao K-AI LIVE',desc:'Mostra no render',action:()=>implantarComo('bloco',o)}];
+  optionsEl.innerHTML=opts.map((opt,i)=>`<div class="opt ${opt.kai?'kai':''}" onclick="window._implantOpts[${i}].action()"><div style="font-size:18px;width:30px">${opt.icon}</div><div><div style="font-size:10px;font-weight:700">${opt.title}</div><div style="font-size:7px;opacity:.6">${opt.desc}</div></div></div>`).join(''); window._implantOpts=opts; modal.style.display='flex';
+}
+async function implantarComo(tipo,obj){
+  document.getElementById('implantModal').style.display='none'; const url=URL.createObjectURL(obj.blob); const layer=document.getElementById('template-layer');
+  if(tipo==='geral-kai'){
+    const txt=await obj.blob.text(); const convertido=converterParaKAI(txt);
+    localStorage.setItem('korvil-kai-geral', convertido);
+    document.getElementById('liveSiteFrame').srcdoc=`<!DOCTYPE html><html><head><style>body{background:#0f1426;color:#fff;font-family:Consolas;padding:20px}</style></head><body><h2 style="color:#a855f7">🤖 K-AI CONFIG APLICADA -.geral</h2><pre style="white-space:pre-wrap;background:#000;padding:12px;border-radius:12px;border:1px solid #a855f7">${convertido.replace(/</g,'&lt;').slice(0,6000)}</pre></body></html>`;
+    log(`⚙️.geral K-AI aplicado como config do sistema - Jarvis→K-AI`);
+  } else if(tipo==='geral-save'){
+    const txt=await obj.blob.text(); const convertido=converterParaKAI(txt);
+    const b64=btoa(unescape(encodeURIComponent(convertido))); const REPO_TOKEN=getREPO_TOKEN();
+    let sha=null; try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/.geral`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{}
+    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/.geral`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:'K-AI.geral config - Jarvis→K-AI',content:b64,sha})});
+    log(`💾.geral K-AI salvo em sistemak/korvil-app/.geral via REPO_TOKEN`);
+    carregarDadosRepo();
+  } else if(tipo==='bg-video'){ layer.style.opacity='0.6'; layer.innerHTML=`<video src="${url}" autoplay loop muted style="width:100%;height:100%;object-fit:cover"></video>`; renderLiveSite(); }
+  else if(tipo==='overlay-hud'){ layer.style.opacity='0.5'; layer.innerHTML=`<video src="${url}" autoplay loop muted style="width:100%;height:100%;object-fit:cover;mix-blend-mode:screen"></video>`; }
+  else if(tipo==='bg-image'){ layer.style.opacity='0.5'; layer.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover">`; renderLiveSite(); }
+  else if(tipo==='tema'){ const img=new Image(); img.onload=()=>{ const c=document.createElement('canvas'); c.width=10; c.height=10; const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,10,10); const d=ctx.getImageData(5,5,1,1).data; const col=`rgb(${d[0]},${d[1]},${d[2]})`; document.documentElement.style.setProperty('--accent',col); renderLiveSite(); }; img.src=url; }
+  else if(tipo==='injetar-html'){ const txt=await obj.blob.text(); const convertido=converterParaKAI(txt); document.getElementById('liveSiteFrame').srcdoc=convertido; log(`🤖 HTML K-AI injetado - render exato - Jarvis→K-AI - mexe sem sair`); }
+  else if(tipo==='css'){ const css=await obj.blob.text(); const convertido=converterParaKAI(css); const st=document.createElement('style'); st.innerHTML=convertido; document.head.appendChild(st); renderLiveSite(); }
+}
+function abrirGithubOriginal(){ const owner=ghO.value||'sistemak'; const repo=ghR.value||'korvil-app'; const pathPart=currentPath?`/tree/main/${currentPath}`:''; const url=`https://github.com/${owner}/${repo}${pathPart}`; document.getElementById('githubFrame').style.display='flex'; document.getElementById('repoViewFallback').style.display='none'; document.getElementById('githubFrame').src=url; document.getElementById('currentPathDisplay').innerText=url+` • K-AI • REPO_TOKEN ${getREPO_TOKEN()?'OK':'VAZIO'}`; carregarDadosRepo(); }
+function toggleFallback(){ const f=document.getElementById('githubFrame'); const fb=document.getElementById('repoViewFallback'); if(fb.style.display==='none' || fb.style.display===''){ fb.style.display='flex'; f.style.display='none'; if(repoCache.length===0) carregarDadosRepo(); else renderRepo(); } else { fb.style.display='none'; f.style.display='flex'; } }
+function navegarPara(path){ currentPath=path; document.getElementById('repoViewFallback').style.display='flex'; document.getElementById('githubFrame').style.display='none'; carregarDadosRepo(); }
 async function carregarDadosRepo(){ const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN) return; try{ const h={Authorization:`token ${REPO_TOKEN}`}; let r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/git/trees/main?recursive=1`,{headers:h}); if(!r.ok) r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/git/trees/master?recursive=1`,{headers:h}); const data=await r.json(); repoCache=data.tree||[]; renderRepo(); }catch(e){} }
 function getTreeForPath(prefix){ const filesInPath=new Map(); const pref=prefix?(prefix.endsWith('/')?prefix:prefix+'/'):''; for(let entry of repoCache){ if(!entry.path.startsWith(pref)) continue; const rest=entry.path.slice(pref.length); if(!rest) continue; const parts=rest.split('/'); const first=parts[0]; if(!first) continue; const isFolder=parts.length>1; const ex=filesInPath.get(first); if(!ex) filesInPath.set(first,{name:first,fullPath:pref+first,isFolder:isFolder}); else if(isFolder) ex.isFolder=true; } return Array.from(filesInPath.values()).sort((a,b)=>{ if(a.isFolder&&!b.isFolder) return -1; if(!a.isFolder&&b.isFolder) return 1; return a.name.localeCompare(b.name); }); }
 function renderRepo(){
   const breadcrumb=document.getElementById('breadcrumb'); const listEl=document.getElementById('repoList');
   const parts=currentPath?currentPath.split('/').filter(Boolean):[]; let htmlCrumb=`<span onclick="navegarPara('')">🏠 root</span>`; let acc=""; parts.forEach(p=>{ acc+=(acc?"/":"")+p; htmlCrumb+=`<span style="opacity:.3">/</span><span onclick="navegarPara('${acc}')">${p}</span>`; });
-  breadcrumb.innerHTML=htmlCrumb;
-  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:15px;opacity:.4">Vazia</div>'; return; }
+  breadcrumb.innerHTML=htmlCrumb+`<span style="margin-left:auto;opacity:.4">${selecionadosDir.size} sel</span>`;
+  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia - arraste da ESQ que já renderiza K-AI</div>'; return; }
   listEl.innerHTML=""; if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const divUp=document.createElement('div'); divUp.className='repo-folder'; divUp.innerHTML=`<span>📁.. voltar</span>`; divUp.onclick=()=>navegarPara(up); listEl.appendChild(divUp); }
   items.forEach(item=>{
-    const row=document.createElement('div'); row.className=item.isFolder?'repo-folder':'repo-file-github'+(selecionadosDir.has(item.fullPath)?' selected-right':'');
+    const row=document.createElement('div'); row.className=item.isFolder?'repo-folder':'repo-file-github'+(selecionadosDir.has(item.fullPath)?' selected-right':''); row.draggable=!item.isFolder;
     if(item.isFolder){ row.innerHTML=`<span>📁 ${item.name}</span><span>→</span>`; row.onclick=()=>navegarPara(item.fullPath); }
-    else { const chk=selecionadosDir.has(item.fullPath)?'checked':''; row.innerHTML=`<span><input type="checkbox" ${chk} onclick="event.stopPropagation(); toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"> 📄 ${item.name}</span><div style="display:flex;gap:2px"><button class="btn" onclick="event.stopPropagation(); puxarArquivo('${item.fullPath.replace(/'/g,"\\'")}')">←</button></div>`; row.onclick=()=>toggleDir(item.fullPath); }
+    else {
+      const isGeral=item.fullPath.includes('.geral')||item.fullPath.endsWith('geral');
+      const chk=selecionadosDir.has(item.fullPath)?'checked':''; row.innerHTML=`<span style="display:flex;align-items:center;gap:6px"><input type="checkbox" ${chk} onclick="event.stopPropagation(); toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"> ${isGeral?'⚙️':'📄'} ${item.name}${isGeral?' <span style="color:#a855f7">(K-AI)</span>':''}</span><div style="display:flex;gap:3px"><button class="btn kai" style="padding:3px 6px" onclick="event.stopPropagation(); abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">✏️</button><button class="btn" style="padding:3px 6px" onclick="event.stopPropagation(); puxarArquivo('${item.fullPath.replace(/'/g,"\\'")}')">← ESQ</button></div>`; row.onclick=()=>toggleDir(item.fullPath); row.ondragstart=e=>{ const toDrag=[...selecionadosDir]; if(!selecionadosDir.has(item.fullPath)) toDrag.push(item.fullPath); e.dataTransfer.setData('from','right'); e.dataTransfer.setData('paths',JSON.stringify(toDrag)); };
+    }
     listEl.appendChild(row);
   });
 }
-function toggleDir(path){ if(selecionadosDir.has(path)) selecionadosDir.delete(path); else selecionadosDir.add(path); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' DIR'; }
-async function puxarArquivo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const bytes=new Uint8Array(binary.length); for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i); const blob=new Blob([bytes]); const obj={id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob}; await save(obj); await carregarTudo(); log(`DIR→ESQ: ${path} → já renderizado`); }catch(e){} }
-async function moverEsqParaDir(){ if(selecionados.size===0) return; const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){alert('REPO_TOKEN');return;} const ids=[...selecionados]; for(let id of ids){ const obj=ativos.find(a=>a.id===id); if(!obj) continue; let targetPath=obj.path; if(currentPath){ const fn=obj.path.split('/').pop(); targetPath=currentPath+'/'+fn; } const b64=await new Promise(r=>{const fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.readAsDataURL(obj.blob);}); let sha=null; try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{} await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`EDIT: ${targetPath}`,content:b64,sha})}); } await carregarDadosRepo(); log(`Movidos ${ids.length} → já renderizado`); }
-async function moverDirParaEsq(){ if(selecionadosDir.size===0) return; for(let path of [...selecionadosDir]) await puxarArquivo(path); selecionadosDir.clear(); }
-function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-v8-REPO_TOKEN-cfg',JSON.stringify(cfg)); carregarDadosRepo(); }
-window.addEventListener('load',()=>{ setTimeout(()=>carregarDadosRepo(),400); });
+function toggleDir(path){ if(selecionadosDir.has(path)) selecionadosDir.delete(path); else selecionadosDir.add(path); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR'; }
+async function puxarArquivo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const convertido=converterParaKAI(binary); const bytes=new Uint8Array(convertido.length); for(let i=0;i<convertido.length;i++) bytes[i]=convertido.charCodeAt(i); const blob=new Blob([bytes]); const obj={id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob, isGeral:path.includes('.geral')}; await save(obj); await carregarTudo(); log(`DIR→ESQ K-AI: ${path} - convertido Jarvis→K-AI - já renderizado`); }catch(e){} }
+async function abrirEditorRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const convertido=converterParaKAI(binary); document.getElementById('editFileName').innerText=path+' - K-AI'; document.getElementById('editArea').value=convertido; document.getElementById('editModal').style.display='flex'; arquivoEditando={path:path, name:path.split('/').pop(), isRepo:true, sha:d.sha, blob:new Blob([convertido]), cat:'code', ext:path.split('.').pop(), isGeral:path.includes('.geral')}; renderInstant(); }catch(e){} }
+async function removerDoRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); if(!confirm(`Deletar ${path} DIR?`)) return; try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{method:'DELETE',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`DELETE K-AI: ${path}`,sha:d.sha})}); log(`🗑️ DIR K-AI: ${path}`); selecionadosDir.delete(path); setTimeout(()=>carregarDadosRepo(),600); renderLiveSite(); }catch(e){} }
+async function moverEsqParaDir(){ if(selecionados.size===0) return; const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){alert('REPO_TOKEN');return;} const ids=[...selecionados]; for(let id of ids){ const obj=ativos.find(a=>a.id===id); if(!obj) continue; let targetPath=obj.path; if(currentPath){ const fn=obj.path.split('/').pop(); targetPath=currentPath+'/'+fn; } let txt=await obj.blob.text(); txt=converterParaKAI(txt); const b64=btoa(unescape(encodeURIComponent(txt))); let sha=null; try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{} await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`K-AI MOVE: ${targetPath}`,content:b64,sha})}); } await carregarDadosRepo(); renderLiveSite(); log(`✓ ${ids.length} movidos K-AI → DIR`); }
+async function moverDirParaEsq(){ if(selecionadosDir.size===0) return; for(let path of [...selecionadosDir]) await puxarArquivo(path); selecionadosDir.clear(); document.getElementById('selCountRight').innerText='0 sel DIR'; }
+async function deletarSelecionadosDir(){ if(selecionadosDir.size===0) return; if(!confirm(`Deletar ${selecionadosDir.size} DIR?`)) return; const REPO_TOKEN=getREPO_TOKEN(); for(let path of [...selecionadosDir]){ try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{method:'DELETE',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`DELETE: ${path}`,sha:d.sha})}); }catch{} } selecionadosDir.clear(); setTimeout(()=>carregarDadosRepo(),700); }
+function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-v10-K-AI-REPO_TOKEN-cfg',JSON.stringify(cfg)); log(`Config K-AI: ${cfg.owner}/${cfg.repo} REPO_TOKEN OK`); carregarDadosRepo(); }
+const sLeft=document.getElementById('sLeft'), repoViewEl=document.getElementById('repoViewFallback');
+[sLeft, repoViewEl].forEach(el=>{
+  el.addEventListener('dragover',e=>{e.preventDefault(); el.classList.add('drop-active');});
+  el.addEventListener('dragleave',()=>el.classList.remove('drop-active'));
+  el.addEventListener('drop',async e=>{
+    e.preventDefault(); el.classList.remove('drop-active');
+    const from=e.dataTransfer.getData('from');
+    if(el.id==='sLeft' && from==='right'){ const pathsStr=e.dataTransfer.getData('paths'); let paths=[]; try{paths=JSON.parse(pathsStr);}catch{paths=[e.dataTransfer.getData('path')];} for(let p of paths) if(p) await puxarArquivo(p); selecionadosDir.clear(); }
+    if(el.id==='repoViewFallback' && from==='left'){ const idsStr=e.dataTransfer.getData('ids'); let ids=[]; try{ids=JSON.parse(idsStr);}catch{ids=[e.dataTransfer.getData('id')];} if(ids.length){ const oldSel=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=oldSel; renderLeft(); } }
+    if(e.dataTransfer.files?.length && el.id==='sLeft'){ await handle(e.dataTransfer.files); }
+  });
+});
+async function abrirHistorico(){ document.getElementById('historyModal').style.display='flex'; const listEl=document.getElementById('historyList'); const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){ listEl.innerHTML='Cole REPO_TOKEN'; return; } listEl.innerHTML='Carregando...'; try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/commits?per_page=20`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const commits=await r.json(); listEl.innerHTML=commits.map(c=>`<div style="padding:8px;border-bottom:1px solid #162040;display:flex;justify-content:space-between"><div><div style="font-size:8px;font-weight:700">${converterParaKAI(c.commit.message.slice(0,60))}</div><div style="font-size:6px;opacity:.5">${new Date(c.commit.author.date).toLocaleString()} • ${c.sha.slice(0,7)}</div></div><button class="btn ac" onclick="window.open('https://github.com/${ghO.value}/${ghR.value}/commit/${c.sha}','_blank')">VER</button></div>`).join(''); }catch(e){ listEl.innerHTML='Erro: '+e.message; } }
+function selecionarTodosDir(){ const items=getTreeForPath(currentPath).filter(i=>!i.isFolder); if(items.every(i=>selecionadosDir.has(i.fullPath))) items.forEach(i=>selecionadosDir.delete(i.fullPath)); else items.forEach(i=>selecionadosDir.add(i.fullPath)); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR'; }
+function limparSelDir(){ selecionadosDir.clear(); renderRepo(); document.getElementById('selCountRight').innerText='0 sel DIR'; }
+window.addEventListener('load',()=>{ setTimeout(()=>carregarDadosRepo(),500); renderLiveSite(); });
 </script>
 </body>
 </html>
