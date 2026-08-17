@@ -1,51 +1,57 @@
 <!-- g.hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG -->
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KORVIL V8 - sistemak/korvil-app - REPO_TOKEN</title>
+<title>KORVIL V8 LIVE SITE REALTIME - sistemak - REPO_TOKEN</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{--accent:#00ffea;--bg:#070a12;--card:#101420}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:#fff;font-family:Consolas,monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-#app{flex:1;display:flex;overflow:hidden}
-#left{flex:1.2;border-right:2px solid var(--accent);display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
-#right{flex:0.8;min-width:520px;background:#0d1117;display:flex;flex-direction:column;overflow:hidden}
-.top{height:56px;display:flex;align-items:center;gap:6px;padding:0 10px;background:var(--card);border-bottom:1px solid #222;flex-wrap:wrap}
-.btn{border:1px solid #444;background:#000;color:#fff;padding:6px 10px;border-radius:15px;cursor:pointer;font-size:9px;display:inline-flex;align-items:center;gap:4px}
+#app{flex:1;display:flex;overflow:hidden;min-height:0}
+#left{flex:1.1;border-right:2px solid var(--accent);display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+#right{flex:0.9;min-width:520px;background:#0d1117;display:flex;flex-direction:column;overflow:hidden}
+.top{height:56px;display:flex;align-items:center;gap:4px;padding:0 7px;background:var(--card);border-bottom:1px solid #222;flex-wrap:wrap}
+.btn{border:1px solid #444;background:#000;color:#fff;padding:4px 8px;border-radius:15px;cursor:pointer;font-size:7px;display:inline-flex;align-items:center;gap:3px}
 .btn.ac{border-color:var(--accent);color:var(--accent)}.btn.ac:hover{background:var(--accent);color:#000}
-.btn.neon{background:var(--accent);color:#000;font-weight:bold;box-shadow:0 0 15px var(--accent);padding:8px 14px;border-radius:8px}
+.btn.neon{background:var(--accent);color:#000;font-weight:bold;box-shadow:0 0 15px var(--accent);padding:6px 10px;border-radius:8px}
 .btn.danger{border-color:#ff2d7a;color:#ff2d7a}
-.stage{flex:1;overflow:auto;padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;align-content:start}
+.btn.live{border-color:#ff3b3b;color:#ff3b3b;background:rgba(255,59,59,0.1)}.btn.live.on{background:#ff3b3b;color:#000;box-shadow:0 0 12px #ff3b3b}
+.stage{flex:1;overflow:auto;padding:8px;display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:7px;align-content:start}
 .item{background:var(--card);border:2px solid #222;border-radius:10px;overflow:hidden;cursor:pointer;position:relative}
-.item.selected{border-color:var(--accent);box-shadow:0 0 12px var(--accent)}
-.item.selected::after{content:'✓';position:absolute;top:4px;right:4px;background:var(--accent);color:#000;font-size:8px;padding:2px 5px;border-radius:10px;font-weight:bold}
-.item img,.item video{width:100%;height:80px;object-fit:cover;display:block;pointer-events:none}
-.storage-panel{display:flex;gap:4px;padding:6px 8px;background:#080b16;border-bottom:1px solid #111;overflow:auto;flex-wrap:wrap}
-.storage-btn{font-size:8px;padding:4px 8px;border-radius:10px;border:1px solid #222;background:#000;color:#888;cursor:pointer}
-.storage-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,255,234,0.1)}
-#githubFrame{flex:1;width:100%;border:0;background:#0d1117}
-#repoViewFallback{flex:1;overflow:auto;background:#0a0c18;display:none;flex-direction:column}
-.repo-breadcrumb{padding:8px 10px;background:#000;border-bottom:1px solid #1a1f35;display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:9px}
-.repo-breadcrumb span{cursor:pointer;color:var(--accent);padding:2px 6px;border-radius:6px;background:#0f1426}
-.repo-folder,.repo-file-github{padding:8px 10px;background:#111320;border-bottom:1px solid #1a1d2e;display:flex;justify-content:space-between;align-items:center;font-size:9px;cursor:pointer}
-#liveViewer{height:220px;border-top:2px solid var(--accent);background:#05070f;display:flex;flex-direction:column;flex-shrink:0}
-.viewer-top{height:26px;background:#000;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:8px}
-.viewer-content{flex:1;display:flex;overflow:hidden}
-.viewer-preview{flex:1.2;background:#000;display:flex;align-items:center;justify-content:center;overflow:auto;border-right:1px solid #111}
-.viewer-info{flex:0.8;padding:8px;overflow:auto;font-size:8px;background:#080a14}
-#template-layer{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.4}
-#implantModal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-box{background:#101420;border:2px solid var(--accent);border-radius:12px;max-width:520px;width:100%}
-.modal-head{padding:12px;background:#000;border-bottom:1px solid var(--accent);display:flex;justify-content:space-between}
-.modal-body{padding:12px;display:flex;flex-direction:column;gap:8px}
-.opt{padding:10px;border:1px solid #222;border-radius:8px;cursor:pointer;background:#0a0e1a;display:flex;gap:10px;align-items:center}
+.item.selected{border-color:var(--accent);box-shadow:0 0 10px var(--accent)}
+.item.selected::after{content:'✓';position:absolute;top:3px;right:3px;background:var(--accent);color:#000;font-size:7px;padding:2px 4px;border-radius:10px;font-weight:bold}
+.item img,.item video{width:100%;height:70px;object-fit:cover;display:block;pointer-events:none}
+.storage-panel{display:flex;gap:3px;padding:5px 7px;background:#080b16;border-bottom:1px solid #111;overflow:auto;flex-wrap:wrap}
+.storage-btn{font-size:6px;padding:3px 6px;border-radius:10px;border:1px solid #222;background:#000;color:#888;cursor:pointer}
+.storage-btn.active{border-color:var(--accent);color:var(--accent)}
+#githubFrame{flex:1;width:100%;border:0;background:#0d1117;display:none}
+#repoViewFallback{flex:1;overflow:auto;background:#0a0c18;display:flex;flex-direction:column}
+.repo-breadcrumb{padding:7px 9px;background:#000;border-bottom:1px solid #1a1f35;display:flex;gap:5px;flex-wrap:wrap;align-items:center;font-size:7px}
+.repo-breadcrumb span{cursor:pointer;color:var(--accent);padding:2px 5px;border-radius:6px;background:#0f1426}
+.repo-folder,.repo-file-github{padding:6px 8px;background:#111320;border-bottom:1px solid #1a1d2e;display:flex;justify-content:space-between;align-items:center;font-size:7px;cursor:pointer}
+.repo-file-github.selected-right{border-left:3px solid var(--accent);background:#162032}
+#liveViewer{height:42%;min-height:260px;border-top:2px solid var(--accent);background:#05070f;display:flex;flex-direction:column;flex-shrink:0}
+.viewer-top{height:30px;background:#000;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:7px;gap:6px}
+.viewer-content{flex:1;display:flex;overflow:hidden;position:relative}
+.viewer-preview{flex:1.2;background:#000;display:flex;align-items:center;justify-content:center;overflow:auto;border-right:1px solid #111;position:relative}
+.viewer-info{flex:0.8;padding:7px;overflow:auto;font-size:7px;background:#080a14}
+#liveSiteFrame{width:100%;height:100%;border:0;background:#fff;display:none}
+#template-layer{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.3}
+#implantModal,#editModal,#historyModal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;display:none;align-items:center;justify-content:center;padding:15px}
+.modal-box{background:#101420;border:2px solid var(--accent);border-radius:12px;max-width:700px;width:100%;max-height:92vh;display:flex;flex-direction:column}
+.modal-head{padding:10px;background:#000;border-bottom:1px solid var(--accent);display:flex;justify-content:space-between;align-items:center}
+.modal-body{padding:10px;display:flex;flex-direction:column;gap:7px;overflow:auto}
+.opt{padding:9px;border:1px solid #222;border-radius:8px;cursor:pointer;background:#0a0e1a;display:flex;gap:8px;align-items:center}
 .opt:hover{border-color:var(--accent);background:#111a2a}
-input.in{background:#000;border:1px solid #333;color:#fff;padding:5px 8px;border-radius:8px;font-size:9px}
-#log{height:50px;background:#000;border-top:1px solid #222;overflow:auto;padding:4px 6px;font-size:7px;color:var(--accent);white-space:pre-wrap}
+input.in,textarea.in{background:#000;border:1px solid #333;color:#fff;padding:4px 7px;border-radius:8px;font-size:7px}
+textarea.in{font-family:Consolas,monospace}
+#log{height:44px;background:#000;border-top:1px solid #222;overflow:auto;padding:3px 6px;font-size:6px;color:var(--accent);white-space:pre-wrap}
+.drop-active{outline:3px dashed var(--accent)!important;background:rgba(0,255,234,0.1)!important}
 </style>
 </head>
 <body>
@@ -53,72 +59,94 @@ input.in{background:#000;border:1px solid #333;color:#fff;padding:5px 8px;border
 <div id="app">
   <div id="left">
     <div class="top">
-      <b style="font-size:9px">ESQ: LOCAL</b>
+      <b style="font-size:7px">ESQ: LOCAL</b>
       <button class="btn ac" onclick="document.getElementById('f').click()">+ ANEXAR</button>
       <button class="btn" onclick="document.getElementById('folder').click()">📁</button>
-      <button class="btn ac" onclick="toggleStorage()">💾 ARMAZENAMENTO</button>
+      <button class="btn ac" onclick="toggleStorage()">💾</button>
       <button class="btn ac" onclick="selecionarTodos()">☑ TODOS</button>
-      <span id="selCount" style="font-size:8px;background:#000;padding:3px 8px;border-radius:10px;border:1px solid var(--accent);color:var(--accent)">0 sel</span>
-      <button class="btn danger" onclick="limparSel()">🗑️ LIMPAR</button>
+      <span id="selCount" style="font-size:6px;background:#000;padding:2px 6px;border-radius:10px;border:1px solid var(--accent);color:var(--accent)">0 sel</span>
+      <button class="btn danger" onclick="limparSel()">🗑️</button>
       <button class="btn ac" onclick="implantSelected()">IMPLANTAR</button>
+      <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverEsqParaDir()">→ DIR</button>
     </div>
     <div class="storage-panel" id="storagePanel" style="display:none">
       <button class="storage-btn active" onclick="filtrarStorage('all',this)">📦 TODOS</button>
-      <button class="storage-btn" onclick="filtrarStorage('image',this)">🖼️ IMAGENS</button>
-      <button class="storage-btn" onclick="filtrarStorage('video',this)">🎬 VÍDEOS</button>
-      <button class="storage-btn" onclick="filtrarStorage('audio',this)">🔊 ÁUDIO</button>
-      <button class="storage-btn" onclick="filtrarStorage('code',this)">📄 CÓDIGOS</button>
-      <button class="storage-btn" onclick="filtrarStorage('other',this)">📁 OUTROS</button>
+      <button class="storage-btn" onclick="filtrarStorage('image',this)">🖼️ IMG</button>
+      <button class="storage-btn" onclick="filtrarStorage('video',this)">🎬 VID</button>
+      <button class="storage-btn" onclick="filtrarStorage('audio',this)">🔊 AUD</button>
+      <button class="storage-btn" onclick="filtrarStorage('code',this)">📄 CODE</button>
     </div>
     <div class="stage" id="sLeft"></div>
   </div>
   <div id="right">
-    <div style="padding:8px;background:#010409;border-bottom:2px solid var(--accent);display:flex;flex-direction:column;gap:5px">
-      <div style="display:flex;gap:6px">
-        <button class="btn neon" onclick="abrirGithubOriginal()">▶ GITHUB ORIGINAL</button>
-        <button class="btn ac" onclick="toggleFallback()">📁 EXPLORER 🗑️</button>
+    <div style="padding:6px;background:#010409;border-bottom:2px solid var(--accent);display:flex;flex-direction:column;gap:4px">
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn neon" onclick="abrirGithubOriginal()">▶ GITHUB</button>
+        <button class="btn ac" onclick="toggleFallback()">📁 EXPLORER</button>
+        <button class="btn ac" onclick="abrirHistorico()">🕒 HIST</button>
+        <button class="btn ac" onclick="carregarDadosRepo()">🔄</button>
       </div>
-      <div style="display:flex;gap:4px">
-        <input id="ghO" class="in" value="sistemak" style="width:70px"><input id="ghR" class="in" value="korvil-app" style="width:70px">
+      <div style="display:flex;gap:3px">
+        <input id="ghO" class="in" value="sistemak" style="width:60px"><input id="ghR" class="in" value="korvil-app" style="width:60px">
         <input id="REPO_TOKEN" type="password" class="in" placeholder="REPO_TOKEN ghp_..." style="flex:1">
         <button class="btn ac" onclick="saveCfg()">SALVAR</button>
       </div>
-      <div style="display:flex;gap:4px">
-        <button class="btn ac" style="flex:1" onclick="abrirGithubOriginal()">🌐 github.com/sistemak/korvil-app</button>
-        <button class="btn" style="flex:1" onclick="window.open('https://github.com/'+ghO.value+'/'+ghR.value,'_blank')">↗ NOVA ABA</button>
+      <div style="display:flex;gap:3px;flex-wrap:wrap;align-items:center;background:#000;padding:3px;border-radius:8px;border:1px solid #111">
+        <span id="selCountRight" style="font-size:6px;background:#111;padding:2px 5px;border-radius:10px;border:1px solid var(--accent)">0 sel DIR</span>
+        <button class="btn ac" onclick="selecionarTodosDir()">☑ PASTA</button>
+        <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverDirParaEsq()">← ESQ</button>
+        <button class="btn danger" onclick="deletarSelecionadosDir()">🗑️</button>
       </div>
-      <div id="currentPathDisplay" style="font-size:7px;opacity:.5;background:#000;padding:4px;border-radius:6px">github.com/sistemak/korvil-app - TOKEN: REPO_TOKEN</div>
+      <div id="currentPathDisplay" style="font-size:6px;opacity:.5;background:#000;padding:3px;border-radius:6px">sistemak/korvil-app - REPO_TOKEN</div>
     </div>
     <iframe id="githubFrame" src="https://github.com/sistemak/korvil-app"></iframe>
     <div id="repoViewFallback">
       <div class="repo-breadcrumb" id="breadcrumb"><span onclick="navegarPara('')">🏠 root</span></div>
       <div id="repoList" style="flex:1;overflow:auto"></div>
-      <div style="padding:6px;font-size:7px;background:#000;text-align:center">🗑️ Só aqui apaga da DIREITA</div>
     </div>
   </div>
 </div>
 <div id="liveViewer">
-  <div class="viewer-top"><span style="color:var(--accent)">◉ VISUALIZADOR - REPO_TOKEN ativo</span><span id="viewerType" style="opacity:.5">nenhum</span></div>
-  <div class="viewer-content"><div class="viewer-preview" id="viewerPreview"><div style="opacity:.3;font-size:9px;text-align:center">Anexe arquivos</div></div><div class="viewer-info" id="viewerInfo"></div></div>
-  <div id="log">[LOG] REPO_TOKEN pronto - sistemak/korvil-app</div>
+  <div class="viewer-top">
+    <div style="display:flex;gap:4px;align-items:center">
+      <button id="liveBtn" class="btn live" onclick="toggleLiveSite()">🔴 LIVE SITE: OFF</button>
+      <span style="opacity:.6">VISUALIZADOR REALTIME - EDITA TUDO AQUI</span>
+    </div>
+    <div style="display:flex;gap:4px;align-items:center">
+      <button class="btn ac" onclick="renderLiveSite()">⟳ RE-BUILD</button>
+      <button class="btn" onclick="abrirEditor()">✏️ EDITAR</button>
+      <span id="viewerType" style="opacity:.5">nenhum</span>
+    </div>
+  </div>
+  <div class="viewer-content">
+    <div class="viewer-preview" id="viewerPreview">
+      <div style="opacity:.3;font-size:8px;text-align:center;padding:20px">Ative 🔴 LIVE SITE<br>Arrasta pasta/arquivo na ESQ → o site aqui embaixo já muda<br>Edita código → já atualiza instantâneo<br>É o Github publicado em tempo real</div>
+    </div>
+    <iframe id="liveSiteFrame"></iframe>
+    <div class="viewer-info" id="viewerInfo"><div style="opacity:.5">Ative LIVE SITE pra ver o app inteiro renderizado</div></div>
+  </div>
+  <div id="log">[LOG] LIVE SITE REALTIME pronto - sistemak/korvil-app - REPO_TOKEN</div>
 </div>
-<div id="implantModal"><div class="modal-box"><div class="modal-head"><b style="font-size:11px;color:var(--accent)">⚡ IMPLANTAR: <span id="implantFileName"></span></b><button class="btn" onclick="document.getElementById('implantModal').style.display='none'">X</button></div><div class="modal-body" id="implantOptions"></div></div></div>
+
+<div id="implantModal"><div class="modal-box"><div class="modal-head"><b style="font-size:10px;color:var(--accent)">⚡ IMPLANTAR: <span id="implantFileName"></span></b><button class="btn" onclick="document.getElementById('implantModal').style.display='none'">X</button></div><div class="modal-body" id="implantOptions"></div></div></div>
+<div id="editModal"><div class="modal-box" style="max-width:850px"><div class="modal-head"><b style="font-size:9px;color:var(--accent)">✏️ EDITAR - <span id="editFileName"></span> - LIVE ATUALIZA</b><div style="display:flex;gap:4px"><button class="btn ac" onclick="salvarEdicao()">💾 SALVAR + LIVE UPDATE</button><button class="btn" onclick="document.getElementById('editModal').style.display='none'">X</button></div></div><div class="modal-body"><textarea id="editArea" class="in" style="width:100%;height:380px;font-size:9px" oninput="previewEdicaoLive()"></textarea><div style="font-size:6px;opacity:.5">Digita → já atualiza no LIVE SITE embaixo sem salvar no repo ainda. Clique SALVAR pra mandar pro sistemak via REPO_TOKEN</div><div id="editLivePreview" style="height:150px;border:1px solid #222;background:#fff"></div></div></div></div>
+<div id="historyModal"><div class="modal-box"><div class="modal-head"><b style="font-size:9px">🕒 HISTÓRICO</b><button class="btn" onclick="document.getElementById('historyModal').style.display='none'">X</button></div><div class="modal-body" id="historyList"></div></div></div>
+
 <input type="file" id="f" hidden multiple><input type="file" id="folder" hidden webkitdirectory multiple>
 <script>
-let db, ativos=[], repoCache=[], selecionados=new Set();
-let currentPath=""; let storageFilter="all";
+let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set();
+let currentPath="", storageFilter="all", arquivoEditando=null, liveMode=false;
 let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-v8-REPO_TOKEN-cfg')||'{}');}catch(e){cfg={}}
 if(!cfg.owner) cfg.owner='sistemak'; if(!cfg.repo) cfg.repo='korvil-app';
-// REPO_TOKEN é o nome do token agora
 ghO.value=cfg.owner; ghR.value=cfg.repo; document.getElementById('REPO_TOKEN').value=cfg.REPO_TOKEN||'';
-const openDB=indexedDB.open('korvil-v8-REPO_TOKEN',5);
+const openDB=indexedDB.open('korvil-v8-REPO_TOKEN',6);
 openDB.onupgradeneeded=e=>{const d=e.target.result; if(!d.objectStoreNames.contains('k')) d.createObjectStore('k',{keyPath:'id'});};
 openDB.onsuccess=e=>{db=e.target.result; carregarTudo();};
 function getREPO_TOKEN(){ return document.getElementById('REPO_TOKEN').value.trim(); }
 function save(o){return new Promise(r=>{const tx=db.transaction('k','readwrite'); tx.objectStore('k').put(o); tx.oncomplete=()=>r();});}
 function getAll(){return new Promise(r=>{const tx=db.transaction('k','readonly'); const q=tx.objectStore('k').getAll(); q.onsuccess=()=>r(q.result||[]);});}
 function delDB(id){return new Promise(r=>{const tx=db.transaction('k','readwrite'); tx.objectStore('k').delete(id); tx.oncomplete=()=>r();});}
-function log(m){const el=document.getElementById('log'); el.innerText=`[${new Date().toLocaleTimeString()}] ${m}\n`+el.innerText.slice(0,4000);}
+function log(m){const el=document.getElementById('log'); el.innerText=`[${new Date().toLocaleTimeString()}] ${m}\n`+el.innerText.slice(0,3500);}
 const fEl=document.getElementById('f'), folderEl=document.getElementById('folder');
 fEl.onchange=e=>{if(e.target.files.length) handle(e.target.files); e.target.value='';};
 folderEl.onchange=e=>{if(e.target.files.length) handle(e.target.files); e.target.value='';};
@@ -128,59 +156,221 @@ async function handle(files){
   let cat='other'; if(file.type.startsWith('image')) cat='image'; else if(file.type.startsWith('video')) cat='video'; else if(file.type.startsWith('audio')) cat='audio'; else if(['html','htm','js','css','json','ts','tsx','py','md','txt','yml'].includes(ext)) cat='code';
   await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name,path:file.webkitRelativePath||file.name,type:file.type,size:file.size,cat,ext,date:new Date().toISOString(),blob:file});
  }
- await carregarTudo(); log(`Anexou ${files.length}`);
+ await carregarTudo(); if(liveMode) renderLiveSite(); log(`Anexou ${files.length} → LIVE SITE atualizou`);
 }
-async function carregarTudo(){ ativos=await getAll(); try{const last=JSON.parse(localStorage.getItem('korvil-v8-last')||'{}'); if(last.template) document.getElementById('template-layer').innerHTML=last.template;}catch(e){} renderLeft(); }
+async function carregarTudo(){ ativos=await getAll(); try{const last=JSON.parse(localStorage.getItem('korvil-v8-last')||'{}'); if(last.template) document.getElementById('template-layer').innerHTML=last.template;}catch(e){} renderLeft(); if(liveMode) renderLiveSite(); }
 function toggleStorage(){const p=document.getElementById('storagePanel'); p.style.display=p.style.display==='none'?'flex':'none';}
 function filtrarStorage(filter,btn){ storageFilter=filter; document.querySelectorAll('.storage-btn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); renderLeft(); }
 function renderLeft(){
  const sL=document.getElementById('sLeft'); const selEl=document.getElementById('selCount'); sL.innerHTML=''; selEl.innerText=selecionados.size+' sel';
  let lista=ativos; if(storageFilter!=='all') lista=ativos.filter(a=>a.cat===storageFilter);
- if(lista.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.3;padding:40px">Vazio</div>`; return; }
+ if(lista.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.3;padding:30px">Vazio - Arraste da DIR ou + ANEXAR - LIVE SITE mostra tudo</div>`; return; }
  lista.forEach(o=>{
   const url=URL.createObjectURL(o.blob);
   const div=document.createElement('div'); div.className='item'+(selecionados.has(o.id)?' selected':''); div.draggable=true;
-  let thumb=o.cat==='image'?`<img src="${url}">`:o.cat==='video'?`<video src="${url}" muted loop></video>`:o.cat==='code'?`<div style="padding:14px;text-align:center;font-size:8px;background:#000;border:1px dashed var(--accent)">📄 ${o.name.slice(0,15)}</div>`:`<div style="padding:14px;text-align:center;font-size:8px">${o.name.slice(0,20)}</div>`;
-  div.innerHTML=`${thumb}<div style="padding:4px 6px;font-size:7px"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.name}</div><div style="opacity:.4">${o.cat}</div></div>`;
-  div.ondragstart=e=>{e.dataTransfer.setData('from','left'); e.dataTransfer.setData('id',o.id);};
-  div.onclick=()=>{ if(selecionados.has(o.id)) selecionados.delete(o.id); else selecionados.add(o.id); renderLeft(); visualizarArquivo(o.id); };
-  div.ondblclick=()=>implantSelected(); sL.appendChild(div);
+  let thumb=o.cat==='image'?`<img src="${url}">`:o.cat==='video'?`<video src="${url}" muted loop></video>`:o.cat==='code'?`<div style="padding:10px;text-align:center;font-size:6px;background:#000;border:1px dashed var(--accent)">📄 ${o.name.slice(0,12)}</div>`:`<div style="padding:10px;text-align:center;font-size:6px">${o.name.slice(0,12)}</div>`;
+  div.innerHTML=`${thumb}<div style="padding:3px 5px;font-size:6px"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.name}</div><div style="opacity:.4">${o.path.split('/').slice(0,-1).join('/')||'root'}</div></div>`;
+  div.ondragstart=e=>{
+    const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id);
+    e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id])); e.dataTransfer.setData('id',o.id);
+  };
+  div.onclick=()=>{ if(selecionados.has(o.id)) selecionados.delete(o.id); else selecionados.add(o.id); renderLeft(); visualizarArquivo(o.id); if(liveMode) renderLiveSite(); };
+  div.ondblclick=()=>{ if(liveMode){ visualizarArquivo(o.id); } else implantSelected(); };
+  // Editar path na hora (renomear/mover pasta)
+  div.oncontextmenu=(e)=>{ e.preventDefault(); const novo=prompt('Mover/Renomear path (ex: pasta/nova/'+o.name+')', o.path); if(novo && novo!==o.path){ o.path=novo; save(o).then(()=>{carregarTudo(); if(liveMode) renderLiveSite(); log(`Path alterado: ${novo} → LIVE SITE rebuild`); }); } };
+  sL.appendChild(div);
  });
 }
-function selecionarTodos(){ const lista=storageFilter==='all'?ativos:ativos.filter(a=>a.cat===storageFilter); if(lista.every(a=>selecionados.has(a.id))) lista.forEach(a=>selecionados.delete(a.id)); else lista.forEach(a=>selecionados.add(a.id)); renderLeft(); }
-async function limparSel(){ if(selecionados.size===0){ log('Selecione na ESQUERDA'); return; } if(!confirm(`Apagar ${selecionados.size} SÓ da ESQUERDA?`)) return; for(let id of [...selecionados]) await delDB(id); selecionados.clear(); await carregarTudo(); log(`🗑️ ESQ limpa`); }
-async function visualizarArquivo(id){ const o=ativos.find(a=>a.id===id); if(!o) return; const preview=document.getElementById('viewerPreview'); const info=document.getElementById('viewerInfo'); const url=URL.createObjectURL(o.blob); document.getElementById('viewerType').innerText=o.name; if(o.cat==='image') preview.innerHTML=`<img src="${url}" style="max-width:100%;max-height:100%">`; else if(o.cat==='video') preview.innerHTML=`<video src="${url}" controls autoplay loop muted style="max-width:100%"></video>`; else if(o.cat==='code'){ const txt=await o.blob.text(); if(o.ext==='html' || txt.includes('<html') || txt.includes('React')) preview.innerHTML=`<iframe src="${url}" style="width:100%;height:100%;background:#000;border:0"></iframe>`; else preview.innerHTML=`<pre style="padding:10px;font-size:8px;white-space:pre-wrap;background:#000;color:#0f0;width:100%;height:100%;overflow:auto">${txt.slice(0,8000).replace(/</g,'&lt;')}</pre>`; } else preview.innerHTML=`<div>📁 ${o.name}</div>`; info.innerHTML=`<b>${o.name}</b><br>${(o.size/1024).toFixed(1)}kb<br><button class="btn ac" onclick="implantSelected()" style="width:100%;margin-top:6px">⚡ IMPLANTAR</button>`; }
+function selecionarTodos(){ const lista=storageFilter==='all'?ativos:ativos.filter(a=>a.cat===storageFilter); if(lista.every(a=>selecionados.has(a.id))) lista.forEach(a=>selecionados.delete(a.id)); else lista.forEach(a=>selecionados.add(a.id)); renderLeft(); if(liveMode) renderLiveSite(); }
+async function limparSel(){ if(selecionados.size===0) return; if(!confirm(`Apagar ${selecionados.size} ESQ?`)) return; for(let id of [...selecionados]) await delDB(id); selecionados.clear(); await carregarTudo(); if(liveMode) renderLiveSite(); }
+
+// LIVE SITE REALTIME - O SITE TODO RENDERIZADO EM BAIXO
+function toggleLiveSite(){
+  liveMode=!liveMode;
+  const btn=document.getElementById('liveBtn');
+  const preview=document.getElementById('viewerPreview');
+  const liveFrame=document.getElementById('liveSiteFrame');
+  if(liveMode){
+    btn.classList.add('on'); btn.innerText='🔴 LIVE SITE: ON - EDITANDO TUDO';
+    preview.style.display='none'; liveFrame.style.display='block';
+    document.getElementById('viewerInfo').innerHTML='<b style="color:#ff3b3b">🔴 LIVE SITE ATIVO</b><br>Organize pastas na ESQ<br>Arrasta arquivos<br>Edita código<br>Tudo muda aqui ao vivo<br>É o site publicado<br><br><button class="btn live on" style="width:100%" onclick="toggleLiveSite()">DESLIGAR LIVE</button>';
+    renderLiveSite();
+    log('🔴 LIVE SITE ON - site inteiro renderizado em tempo real embaixo');
+  } else {
+    btn.classList.remove('on'); btn.innerText='🔴 LIVE SITE: OFF';
+    preview.style.display='flex'; liveFrame.style.display='none';
+    document.getElementById('viewerInfo').innerHTML='LIVE SITE OFF';
+  }
+}
+async function renderLiveSite(){
+  if(!liveMode) return;
+  const liveFrame=document.getElementById('liveSiteFrame');
+  // Monta FS virtual
+  const filesByPath={};
+  for(let f of ativos){
+    const url=URL.createObjectURL(f.blob);
+    filesByPath[f.path]= {url, blob:f.blob, name:f.name, type:f.cat};
+  }
+  // Procura index.html
+  let indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html') || f.path.toLowerCase().endsWith('indexx.html'));
+  let htmlContent='';
+  if(indexFile){
+    htmlContent=await indexFile.blob.text();
+    // Injeta live reload + intercepta paths relativos pra usar blob urls
+    const inject=`<script>
+      window.__LIVE_FS=${JSON.stringify(Object.keys(filesByPath))};
+      console.log('LIVE SITE -', window.__LIVE_FS.length, 'arquivos');
+      // Auto reload se parent mandar mensagem
+      window.addEventListener('message', e=>{ if(e.data==='reload-live'){ location.reload(); } });
+    <\/script><style>body{outline:2px dashed #00ffea;}.live-badge{position:fixed;top:5px;left:5px;background:#ff3b3b;color:#000;font-size:8px;padding:2px 6px;border-radius:10px;z-index:9999;font-family:Consolas}</style><div class="live-badge">🔴 LIVE SITE - ${ativos.length} arquivos - Edite na ESQ que atualiza</div>`;
+    if(htmlContent.includes('</head>')) htmlContent=htmlContent.replace('</head>', inject+'</head>');
+    else htmlContent=inject+htmlContent;
+    // Substitui src/href relativos por blob urls quando possível
+    for(let path in filesByPath){
+      const fname=path.split('/').pop();
+      if(fname) htmlContent=htmlContent.split(`"${fname}"`).join(`"${filesByPath[path].url}"`).split(`'${fname}'`).join(`'${filesByPath[path].url}'`);
+    }
+    liveFrame.srcdoc=htmlContent;
+  } else {
+    // Gera site automaticamente baseado na estrutura de pastas
+    const folders={};
+    ativos.forEach(f=>{
+      const parts=f.path.split('/'); const folder=parts.length>1?parts.slice(0,-1).join('/'):'root';
+      if(!folders[folder]) folders[folder]=[]; folders[folder].push(f);
+    });
+    let folderHtml=Object.keys(folders).map(folder=>`
+      <div style="border:1px solid #222;background:#0a0e1a;border-radius:8px;padding:8px;margin:6px">
+        <div style="font-size:10px;font-weight:bold;color:#00ffea;margin-bottom:6px">📁 ${folder} (${folders[folder].length})</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px">
+          ${folders[folder].map(f=>{
+            const url=filesByPath[f.path]?.url||'';
+            if(f.cat==='image') return `<div style="border:1px solid #222;border-radius:6px;overflow:hidden;background:#000"><img src="${url}" style="width:100%;height:60px;object-fit:cover"><div style="font-size:7px;padding:3px">${f.name}</div></div>`;
+            if(f.cat==='video') return `<div style="border:1px solid #222;border-radius:6px;overflow:hidden;background:#000"><video src="${url}" muted style="width:100%;height:60px;object-fit:cover"></video><div style="font-size:7px;padding:3px">${f.name}</div></div>`;
+            return `<div style="border:1px dashed #00ffea;border-radius:6px;padding:6px;background:#000"><div style="font-size:8px">📄 ${f.name}</div><div style="font-size:6px;opacity:.5">${f.cat}</div></div>`;
+          }).join('')}
+        </div>
+      </div>
+    `).join('');
+    htmlContent=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{background:#05070f;color:#fff;font-family:Consolas;margin:0;padding:10px} *{box-sizing:border-box}</style></head><body><div style="position:fixed;top:5px;left:5px;background:#ff3b3b;color:#000;font-size:8px;padding:3px 8px;border-radius:10px;z-index:9999">🔴 LIVE SITE AUTO-BUILD - ${ativos.length} arquivos - Organize pastas na ESQ que muda aqui</div><h2 style="margin-top:30px;font-size:12px;color:#00ffea">KORVIL LIVE SITE - Estrutura Real do App (sistemak/korvil-app)</h2><div style="font-size:8px;opacity:.5;margin-bottom:10px">Esse é o site já publicado - conforme você organiza a estrutura de pastas/arquivos/códigos na ESQ, ele se molda em tempo real. Sem trocar de tela.</div><div style="display:flex;gap:10px"><div style="flex:1">${folderHtml}</div><div style="width:200px;background:#000;border:1px solid #222;padding:8px;border-radius:8px;height:fit-content"><div style="font-size:8px;color:#00ffea">ESTRUTURA DE PASTAS AO VIVO</div><div style="font-size:7px;margin-top:6px;white-space:pre-wrap">${Object.keys(folders).map(f=>`📁 ${f}`).join('\n')}</div><div style="font-size:7px;margin-top:10px;opacity:.5">Total: ${ativos.length} arquivos<br>Arraste na ESQ pra reorganizar<br>Edita e já atualiza aqui</div></div></div></body></html>`;
+    liveFrame.srcdoc=htmlContent;
+  }
+  document.getElementById('viewerType').innerText=`LIVE SITE - ${ativos.length} arqs - ${Object.keys(filesByPath).length} blobs`;
+}
+function previewEdicaoLive(){
+  const txt=document.getElementById('editArea').value;
+  const preview=document.getElementById('editLivePreview');
+  if(txt.trim().startsWith('<')) preview.innerHTML=`<iframe srcdoc="${txt.replace(/"/g,'&quot;')}" style="width:100%;height:100%;border:0;background:#fff"></iframe>`;
+  else preview.innerText=txt.slice(0,500);
+  if(liveMode){ // Atualiza objeto temporariamente
+    if(arquivoEditando){
+      arquivoEditando.blob=new Blob([txt],{type:'text/html'});
+      renderLiveSite();
+    }
+  }
+}
+
+// Resto igual mas com live rebuild
+async function visualizarArquivo(id){
+  const o=ativos.find(a=>a.id===id); if(!o) return;
+  const preview=document.getElementById('viewerPreview'); const info=document.getElementById('viewerInfo'); const url=URL.createObjectURL(o.blob); document.getElementById('viewerType').innerText=o.name;
+  if(!liveMode){
+    if(o.cat==='image') preview.innerHTML=`<img src="${url}" style="max-width:100%;max-height:100%">`;
+    else if(o.cat==='video') preview.innerHTML=`<video src="${url}" controls autoplay loop muted style="max-width:100%"></video>`;
+    else if(o.cat==='code'){ const txt=await o.blob.text(); if(o.ext==='html' || txt.includes('<html') || txt.includes('React')) preview.innerHTML=`<iframe src="${url}" style="width:100%;height:100%;background:#fff;border:0"></iframe>`; else preview.innerHTML=`<pre style="padding:10px;font-size:8px;white-space:pre-wrap;background:#000;color:#0f0;width:100%;height:100%;overflow:auto">${txt.slice(0,8000).replace(/</g,'&lt;')}</pre>`; }
+    else preview.innerHTML=`<div>📁 ${o.name}</div>`;
+    info.innerHTML=`<b>${o.name}</b><br>${o.path}<br><div style="display:flex;gap:3px;margin-top:6px"><button class="btn ac" onclick="abrirEditor()" style="flex:1">✏️ EDITAR (LIVE)</button><button class="btn live" style="flex:1" onclick="toggleLiveSite()">🔴 LIVE SITE</button></div>`;
+  } else {
+    renderLiveSite();
+    info.innerHTML=`<b style="color:#ff3b3b">🔴 LIVE SITE ATIVO - ${o.name}</b><br>${o.path}<br><br>Esse arquivo já está dentro do site lá do lado.<br>Edite e veja mudar instantâneo.<br><br><button class="btn ac" onclick="abrirEditor()" style="width:100%">✏️ EDITAR ESSE ARQUIVO AO VIVO</button>`;
+  }
+  arquivoEditando=o;
+}
+function abrirEditor(){
+  let o=arquivoEditando; if(!o && selecionados.size>0){ o=ativos.find(a=>a.id===[...selecionados][0]); }
+  if(!o){ log('Selecione arquivo'); return; }
+  document.getElementById('editFileName').innerText=o.name+' - LIVE SITE ATUALIZA ENQUANTO DIGITA';
+  document.getElementById('editModal').style.display='flex';
+  o.blob.text().then(txt=>{ document.getElementById('editArea').value=txt; arquivoEditando=o; previewEdicaoLive(); });
+}
+async function salvarEdicao(){
+  if(!arquivoEditando) return;
+  const novoTexto=document.getElementById('editArea').value;
+  const blob=new Blob([novoTexto],{type:arquivoEditando.type||'text/plain'});
+  const novoObj={...arquivoEditando, blob:blob, size:blob.size, date:new Date().toISOString()};
+  await save(novoObj); await carregarTudo(); if(liveMode) renderLiveSite();
+  const REPO_TOKEN=getREPO_TOKEN();
+  if(REPO_TOKEN && arquivoEditando.path){
+    const targetPath=arquivoEditando.path;
+    const b64=btoa(unescape(encodeURIComponent(novoTexto)));
+    let sha=null; try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch(e){}
+    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`EDIT LIVE: ${targetPath}`,content:b64,sha})});
+    log(`💾 SALVO + LIVE SITE rebuild: ${targetPath} via REPO_TOKEN`);
+  } else log(`💾 Salvo local + LIVE SITE rebuild: ${arquivoEditando.name}`);
+  document.getElementById('editModal').style.display='none';
+}
 function implantSelected(){
-  if(selecionados.size===0){ log('Selecione arquivo'); return; }
+  if(selecionados.size===0) return;
   const id=[...selecionados][0]; const o=ativos.find(a=>a.id===id); if(!o) return;
   document.getElementById('implantFileName').innerText=o.name;
   const modal=document.getElementById('implantModal'); const optionsEl=document.getElementById('implantOptions');
-  let opts=[]; if(o.cat==='video') opts=[{icon:'🎬',title:'Fundo vídeo',desc:'Fundo full HUD',action:()=>implantarComo('bg-video',o)},{icon:'👁️',title:'Overlay HUD',desc:'Blend',action:()=>implantarComo('overlay-hud',o)}];
-  else if(o.cat==='image') opts=[{icon:'🖼️',title:'Fundo imagem',desc:'Muda template',action:()=>implantarComo('bg-image',o)},{icon:'🎨',title:'Tema',desc:'Extrai cor',action:()=>implantarComo('tema',o)}];
-  else if(o.cat==='code') opts=[{icon:'💻',title:'Injetar HTML/React',desc:'Vira template novo',action:()=>implantarComo('injetar-html',o)},{icon:'🎨',title:'CSS',desc:'Aplica estilo',action:()=>implantarComo('css',o)}];
-  else opts=[{icon:'📄',title:'Bloco',desc:'Mostra',action:()=>implantarComo('bloco',o)}];
+  let opts=[]; if(o.cat==='video') opts=[{icon:'🎬',title:'Fundo vídeo LIVE',desc:'Vira fundo do site todo',action:()=>implantarComo('bg-video',o)},{icon:'👁️',title:'Overlay HUD no LIVE SITE',desc:'Overlay',action:()=>implantarComo('overlay-hud',o)}];
+  else if(o.cat==='image') opts=[{icon:'🖼️',title:'Fundo LIVE SITE',desc:'Muda template',action:()=>implantarComo('bg-image',o)},{icon:'🎨',title:'Tema LIVE',desc:'Extrai cor',action:()=>implantarComo('tema',o)}];
+  else if(o.cat==='code') opts=[{icon:'💻',title:'Injetar no LIVE SITE (site inteiro)',desc:'Esse código vira o site publicado',action:()=>implantarComo('injetar-html',o)},{icon:'🎨',title:'CSS no LIVE',desc:'Aplica estilo instantâneo',action:()=>implantarComo('css',o)}];
+  else opts=[{icon:'📄',title:'Adicionar ao LIVE SITE',desc:'Mostra',action:()=>implantarComo('bloco',o)}];
   optionsEl.innerHTML=opts.map((opt,i)=>`<div class="opt" onclick="window._implantOpts[${i}].action()"><div style="font-size:18px;width:30px">${opt.icon}</div><div><div style="font-size:10px;font-weight:bold">${opt.title}</div><div style="font-size:8px;opacity:.6">${opt.desc}</div></div></div>`).join(''); window._implantOpts=opts; modal.style.display='flex';
 }
 async function implantarComo(tipo,obj){
-  document.getElementById('implantModal').style.display='none'; const url=URL.createObjectURL(obj.blob); const layer=document.getElementById('template-layer'); log(`Implantando ${obj.name} como ${tipo} via REPO_TOKEN`);
-  if(tipo==='bg-video'){ layer.style.opacity='0.6'; layer.innerHTML=`<video src="${url}" autoplay loop muted style="width:100%;height:100%;object-fit:cover"></video>`; }
+  document.getElementById('implantModal').style.display='none'; const url=URL.createObjectURL(obj.blob); const layer=document.getElementById('template-layer');
+  if(tipo==='bg-video'){ layer.style.opacity='0.6'; layer.innerHTML=`<video src="${url}" autoplay loop muted style="width:100%;height:100%;object-fit:cover"></video>`; if(liveMode) renderLiveSite(); }
   else if(tipo==='overlay-hud'){ layer.style.opacity='0.5'; layer.innerHTML=`<video src="${url}" autoplay loop muted style="width:100%;height:100%;object-fit:cover;mix-blend-mode:screen"></video>`; }
-  else if(tipo==='bg-image'){ layer.style.opacity='0.5'; layer.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover">`; }
-  else if(tipo==='tema'){ const img=new Image(); img.onload=()=>{ const c=document.createElement('canvas'); c.width=10; c.height=10; const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,10,10); const d=ctx.getImageData(5,5,1,1).data; const col=`rgb(${d[0]},${d[1]},${d[2]})`; document.documentElement.style.setProperty('--accent',col); }; img.src=url; }
-  else if(tipo==='injetar-html'){ const txt=await obj.blob.text(); if(txt.includes('<div id="root">') || txt.includes('React')){ const win=window.open('','_blank'); win.document.write(txt); win.document.close(); layer.innerHTML=`<iframe src="${url}" style="width:100%;height:100%;border:0"></iframe>`; } else { const inj=document.createElement('div'); inj.innerHTML=txt; inj.style.cssText='position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto;padding:20px'; const close=document.createElement('button'); close.innerText='X FECHAR'; close.className='btn danger'; close.onclick=()=>inj.remove(); inj.prepend(close); document.body.appendChild(inj); } }
-  else if(tipo==='css'){ const css=await obj.blob.text(); const st=document.createElement('style'); st.innerHTML=css; document.head.appendChild(st); }
+  else if(tipo==='bg-image'){ layer.style.opacity='0.5'; layer.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover">`; if(liveMode) renderLiveSite(); }
+  else if(tipo==='tema'){ const img=new Image(); img.onload=()=>{ const c=document.createElement('canvas'); c.width=10; c.height=10; const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,10,10); const d=ctx.getImageData(5,5,1,1).data; const col=`rgb(${d[0]},${d[1]},${d[2]})`; document.documentElement.style.setProperty('--accent',col); if(liveMode) renderLiveSite(); }; img.src=url; }
+  else if(tipo==='injetar-html'){ const txt=await obj.blob.text(); if(txt.includes('<div id="root">') || txt.includes('React')){ document.getElementById('liveSiteFrame').srcdoc=txt; if(!liveMode) toggleLiveSite(); } else { const inj=document.createElement('div'); inj.innerHTML=txt; inj.style.cssText='position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto;padding:20px'; const close=document.createElement('button'); close.innerText='X FECHAR LIVE'; close.className='btn danger'; close.onclick=()=>inj.remove(); inj.prepend(close); document.body.appendChild(inj); } }
+  else if(tipo==='css'){ const css=await obj.blob.text(); const st=document.createElement('style'); st.innerHTML=css; document.head.appendChild(st); if(liveMode) renderLiveSite(); }
   try{ localStorage.setItem('korvil-v8-last', JSON.stringify({template:document.getElementById('template-layer').innerHTML.slice(0,100000)})); }catch(e){}
 }
-function abrirGithubOriginal(){ const owner=ghO.value||'sistemak'; const repo=ghR.value||'korvil-app'; const pathPart=currentPath?`/tree/main/${currentPath}`:''; const url=`https://github.com/${owner}/${repo}${pathPart}`; document.getElementById('githubFrame').style.display='flex'; document.getElementById('repoViewFallback').style.display='none'; document.getElementById('githubFrame').src=url; document.getElementById('currentPathDisplay').innerText=url+' | REPO_TOKEN: '+(getREPO_TOKEN()? 'OK' : 'VAZIO'); log(`GitHub original: ${url} | REPO_TOKEN ${getREPO_TOKEN()?'OK':'VAZIO'}`); carregarDadosRepo(); }
+function abrirGithubOriginal(){ const owner=ghO.value||'sistemak'; const repo=ghR.value||'korvil-app'; const pathPart=currentPath?`/tree/main/${currentPath}`:''; const url=`https://github.com/${owner}/${repo}${pathPart}`; document.getElementById('githubFrame').style.display='flex'; document.getElementById('repoViewFallback').style.display='none'; document.getElementById('githubFrame').src=url; document.getElementById('currentPathDisplay').innerText=url; log(`GitHub: ${url}`); carregarDadosRepo(); }
 function toggleFallback(){ const f=document.getElementById('githubFrame'); const fb=document.getElementById('repoViewFallback'); if(fb.style.display==='none' || fb.style.display===''){ fb.style.display='flex'; f.style.display='none'; if(repoCache.length===0) carregarDadosRepo(); else renderRepo(); } else { fb.style.display='none'; f.style.display='flex'; } }
-function navegarPara(path){ currentPath=path; abrirGithubOriginal(); }
-async function carregarDadosRepo(){ const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){ log('REPO_TOKEN vazio - cole seu token no campo REPO_TOKEN'); return; } try{ const h={Authorization:`token ${REPO_TOKEN}`}; let r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/git/trees/main?recursive=1`,{headers:h}); if(!r.ok) r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/git/trees/master?recursive=1`,{headers:h}); const data=await r.json(); repoCache=data.tree||[]; log(`REPO_TOKEN OK: ${repoCache.length} arquivos em sistemak/korvil-app`); if(document.getElementById('repoViewFallback').style.display!=='none') renderRepo(); }catch(e){ log('Erro REPO_TOKEN: '+e.message); } }
+function navegarPara(path){ currentPath=path; document.getElementById('repoViewFallback').style.display='flex'; document.getElementById('githubFrame').style.display='none'; carregarDadosRepo(); }
+async function carregarDadosRepo(){ const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN) return; try{ const h={Authorization:`token ${REPO_TOKEN}`}; let r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/git/trees/main?recursive=1`,{headers:h}); if(!r.ok) r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/git/trees/master?recursive=1`,{headers:h}); const data=await r.json(); repoCache=data.tree||[]; if(document.getElementById('repoViewFallback').style.display!=='none') renderRepo(); }catch(e){} }
 function getTreeForPath(prefix){ const filesInPath=new Map(); const pref=prefix?(prefix.endsWith('/')?prefix:prefix+'/'):''; for(let entry of repoCache){ if(!entry.path.startsWith(pref)) continue; const rest=entry.path.slice(pref.length); if(!rest) continue; const parts=rest.split('/'); const first=parts[0]; if(!first) continue; const isFolder=parts.length>1; const ex=filesInPath.get(first); if(!ex) filesInPath.set(first,{name:first,fullPath:pref+first,isFolder:isFolder}); else if(isFolder) ex.isFolder=true; } return Array.from(filesInPath.values()).sort((a,b)=>{ if(a.isFolder&&!b.isFolder) return -1; if(!a.isFolder&&b.isFolder) return 1; return a.name.localeCompare(b.name); }); }
-function renderRepo(){ const breadcrumb=document.getElementById('breadcrumb'); const listEl=document.getElementById('repoList'); const parts=currentPath?currentPath.split('/').filter(Boolean):[]; let htmlCrumb=`<span onclick="navegarPara('')">🏠 root</span>`; let acc=""; parts.forEach(p=>{ acc+=(acc?"/":"")+p; htmlCrumb+=`<span style="opacity:.3">/</span><span onclick="navegarPara('${acc}')">${p}</span>`; }); breadcrumb.innerHTML=htmlCrumb; const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4">Vazia</div>'; return; } listEl.innerHTML=""; if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const divUp=document.createElement('div'); divUp.className='repo-folder'; divUp.innerHTML=`<span>📁.. voltar</span>`; divUp.onclick=()=>navegarPara(up); listEl.appendChild(divUp); } items.forEach(item=>{ const row=document.createElement('div'); row.className=item.isFolder?'repo-folder':'repo-file-github'; if(item.isFolder){ row.innerHTML=`<span>📁 ${item.name}</span><span>→</span>`; row.onclick=()=>navegarPara(item.fullPath); } else { row.innerHTML=`<span>📄 ${item.name}</span><div style="display:flex;gap:4px"><button class="btn" style="padding:2px 6px" onclick="event.stopPropagation(); removerDoRepo('${item.fullPath.replace(/'/g,"\\'")}')">🗑️</button><button class="btn ac" style="padding:2px 6px" onclick="event.stopPropagation(); puxarArquivo('${item.fullPath.replace(/'/g,"\\'")}')">←</button></div>`; } listEl.appendChild(row); }); }
-async function puxarArquivo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); if(!d.content) throw new Error('sem conteúdo'); const binary=atob(d.content.replace(/\n/g,'')); const bytes=new Uint8Array(binary.length); for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i); const blob=new Blob([bytes]); const obj={id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:path.match(/\.(png|jpg)$/i)?'image':path.match(/\.(mp4|webm)$/i)?'video':'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob}; await save(obj); await carregarTudo(); log(`PUXOU via REPO_TOKEN: ${path}`); }catch(e){ log('Erro puxar REPO_TOKEN: '+e.message); } }
-async function removerDoRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); if(!confirm(`Deletar "${path}" SÓ da DIREITA via REPO_TOKEN?`)) return; try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const delRes=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{method:'DELETE',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`DELETE: ${path} via REPO_TOKEN`,sha:d.sha})}); if(delRes.ok){ log(`🗑️ DIREITA deletado via REPO_TOKEN: ${path}`); setTimeout(()=>carregarDadosRepo(),800); } }catch(e){ log('Erro deletar REPO_TOKEN: '+e.message); } }
-function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-v8-REPO_TOKEN-cfg',JSON.stringify(cfg)); log(`Config salva: ${cfg.owner}/${cfg.repo} | REPO_TOKEN ${REPO_TOKEN?'OK':'VAZIO'}`); abrirGithubOriginal(); }
-window.addEventListener('load',()=>{ setTimeout(()=>abrirGithubOriginal(),500); });
+function renderRepo(){
+  const breadcrumb=document.getElementById('breadcrumb'); const listEl=document.getElementById('repoList');
+  const parts=currentPath?currentPath.split('/').filter(Boolean):[]; let htmlCrumb=`<span onclick="navegarPara('')">🏠 root</span>`; let acc=""; parts.forEach(p=>{ acc+=(acc?"/":"")+p; htmlCrumb+=`<span style="opacity:.3">/</span><span onclick="navegarPara('${acc}')">${p}</span>`; });
+  breadcrumb.innerHTML=htmlCrumb+`<span style="margin-left:auto;opacity:.4">${selecionadosDir.size} sel</span>`;
+  const items=getTreeForPath(currentPath);
+  if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4">Vazia - arraste da ESQ</div>'; return; }
+  listEl.innerHTML="";
+  if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const divUp=document.createElement('div'); divUp.className='repo-folder'; divUp.innerHTML=`<span>📁.. voltar</span>`; divUp.onclick=()=>navegarPara(up); listEl.appendChild(divUp); }
+  items.forEach(item=>{
+    const row=document.createElement('div'); row.className=item.isFolder?'repo-folder':'repo-file-github'+(selecionadosDir.has(item.fullPath)?' selected-right':''); row.draggable=!item.isFolder;
+    if(item.isFolder){ row.innerHTML=`<span>📁 ${item.name}</span><span>→</span>`; row.onclick=()=>navegarPara(item.fullPath); }
+    else { const checked=selecionadosDir.has(item.fullPath)?'checked':''; row.innerHTML=`<span style="display:flex;align-items:center;gap:5px"><input type="checkbox" ${checked} onclick="event.stopPropagation(); toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"><span>📄 ${item.name}</span></span><div style="display:flex;gap:2px"><button class="btn" style="padding:2px 4px" onclick="event.stopPropagation(); abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">✏️</button><button class="btn" style="padding:2px 4px" onclick="event.stopPropagation(); removerDoRepo('${item.fullPath.replace(/'/g,"\\'")}')">🗑️</button><button class="btn ac" style="padding:2px 4px" onclick="event.stopPropagation(); puxarArquivo('${item.fullPath.replace(/'/g,"\\'")}')">←</button></div>`; row.onclick=()=>toggleDir(item.fullPath); row.ondragstart=e=>{ const toDrag=[...selecionadosDir]; if(!selecionadosDir.has(item.fullPath)) toDrag.push(item.fullPath); e.dataTransfer.setData('from','right'); e.dataTransfer.setData('paths',JSON.stringify(toDrag)); }; }
+    listEl.appendChild(row);
+  });
+}
+function toggleDir(path){ if(selecionadosDir.has(path)) selecionadosDir.delete(path); else selecionadosDir.add(path); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR'; }
+async function puxarArquivo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); if(!d.content) throw new Error('sem conteúdo'); const binary=atob(d.content.replace(/\n/g,'')); const bytes=new Uint8Array(binary.length); for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i); const blob=new Blob([bytes]); const obj={id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:path.match(/\.(png|jpg)$/i)?'image':path.match(/\.(mp4|webm)$/i)?'video':'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob}; await save(obj); await carregarTudo(); if(liveMode) renderLiveSite(); log(`DIR→ESQ + LIVE rebuild: ${path}`); }catch(e){} }
+async function abrirEditorRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); document.getElementById('editFileName').innerText=path; document.getElementById('editArea').value=binary; document.getElementById('editModal').style.display='flex'; arquivoEditando={path:path, name:path.split('/').pop(), isRepo:true, sha:d.sha, blob:new Blob([binary])}; }catch(e){} }
+async function removerDoRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); if(!confirm(`Deletar ${path}?`)) return; try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{method:'DELETE',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`DELETE: ${path}`,sha:d.sha})}); log(`🗑️ DIR deletado: ${path}`); selecionadosDir.delete(path); setTimeout(()=>carregarDadosRepo(),600); if(liveMode) renderLiveSite(); }catch(e){} }
+async function moverEsqParaDir(){ if(selecionados.size===0) return; const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){alert('REPO_TOKEN');return;} const ids=[...selecionados]; for(let id of ids){ const obj=ativos.find(a=>a.id===id); if(!obj) continue; let targetPath=obj.path; if(currentPath){ const fn=obj.path.split('/').pop(); targetPath=currentPath+'/'+fn; } const b64=await new Promise(r=>{const fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.readAsDataURL(obj.blob);}); let sha=null; try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{} await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`LIVE MOVE: ${targetPath}`,content:b64,sha})}); } await carregarDadosRepo(); if(liveMode) renderLiveSite(); log(`Movidos ${ids.length} ESQ→DIR + LIVE rebuild`); }
+async function moverDirParaEsq(){ if(selecionadosDir.size===0) return; for(let path of [...selecionadosDir]) await puxarArquivo(path); selecionadosDir.clear(); if(liveMode) renderLiveSite(); }
+async function deletarSelecionadosDir(){ if(selecionadosDir.size===0) return; if(!confirm(`Deletar ${selecionadosDir.size}?`)) return; const REPO_TOKEN=getREPO_TOKEN(); for(let path of [...selecionadosDir]){ try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{method:'DELETE',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`DELETE: ${path}`,sha:d.sha})}); }catch{} } selecionadosDir.clear(); setTimeout(()=>carregarDadosRepo(),600); if(liveMode) renderLiveSite(); }
+function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-v8-REPO_TOKEN-cfg',JSON.stringify(cfg)); log(`Config ${cfg.owner}/${cfg.repo} REPO_TOKEN OK`); abrirGithubOriginal(); }
+const sLeft=document.getElementById('sLeft'), repoViewEl=document.getElementById('repoViewFallback');
+[sLeft, repoViewEl].forEach(el=>{
+  el.addEventListener('dragover',e=>{e.preventDefault(); el.classList.add('drop-active');});
+  el.addEventListener('dragleave',()=>el.classList.remove('drop-active'));
+  el.addEventListener('drop',async e=>{
+    e.preventDefault(); el.classList.remove('drop-active');
+    const from=e.dataTransfer.getData('from');
+    if(el.id==='sLeft' && from==='right'){ const pathsStr=e.dataTransfer.getData('paths'); let paths=[]; try{paths=JSON.parse(pathsStr);}catch{paths=[e.dataTransfer.getData('path')];} for(let p of paths) if(p) await puxarArquivo(p); selecionadosDir.clear(); if(liveMode) renderLiveSite(); }
+    if(el.id==='repoViewFallback' && from==='left'){ const idsStr=e.dataTransfer.getData('ids'); let ids=[]; try{ids=JSON.parse(idsStr);}catch{ids=[e.dataTransfer.getData('id')];} if(ids.length){ const oldSel=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=oldSel; renderLeft(); if(liveMode) renderLiveSite(); } }
+    if(e.dataTransfer.files?.length && el.id==='sLeft'){ await handle(e.dataTransfer.files); }
+  });
+});
+async function abrirHistorico(){ document.getElementById('historyModal').style.display='flex'; const listEl=document.getElementById('historyList'); const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){ listEl.innerHTML='Cole REPO_TOKEN'; return; } listEl.innerHTML='Carregando...'; try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/commits?per_page=20`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const commits=await r.json(); listEl.innerHTML=commits.map(c=>`<div style="padding:7px;border-bottom:1px solid #111;display:flex;justify-content:space-between"><div><div style="font-size:8px;font-weight:bold">${c.commit.message.slice(0,50)}</div><div style="font-size:6px;opacity:.5">${new Date(c.commit.author.date).toLocaleString()} • ${c.sha.slice(0,7)}</div></div><button class="btn ac" onclick="window.open('https://github.com/${ghO.value}/${ghR.value}/commit/${c.sha}','_blank')">VER</button></div>`).join(''); }catch(e){ listEl.innerHTML='Erro: '+e.message; } }
+window.addEventListener('load',()=>{ setTimeout(()=>{ abrirGithubOriginal(); },400); });
 </script>
 </body>
 </html>
