@@ -1,0 +1,19 @@
+<div class="menu-superior">
+  <div class="ms-logo">K-AI v-2026.38</div>
+  <div class="ms-actions">
+    <button onclick="executar('scan')">SCAN</button>
+    <button onclick="executar('radar')">RADAR</button>
+    <button onclick="openPanel()">ALERTAS</button>
+    <button onclick="goPage('central')">CONFIG</button>
+  </div>
+</div>
+
+<style>
+.menu-superior{position:absolute;top:0;left:0;width:100%;height:50px;background:rgba(0,0,0,.9);
+  border-bottom:2px solid #00FFFF;display:flex;justify-content:space-between;align-items:center;
+  padding:0 20px;z-index:100}
+.ms-logo{color:#00FFFF;font-weight:900;letter-spacing:2px;font-size:14px}
+.ms-actions button{background:transparent;border:1px solid #00FFFF;color:#00FFFF;
+  padding:6px 12px;margin-left:8px;cursor:pointer;font-weight:700;border-radius:4px}
+.ms-actions button:hover{background:#00FFFF;color:#000}
+</style>
