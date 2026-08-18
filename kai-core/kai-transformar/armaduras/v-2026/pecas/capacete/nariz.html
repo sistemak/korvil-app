@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>NARIZ</title>
+<style>
+:root{--c:#00FFFF;--tox:#FF00FF;--alerta:#FF3B30}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;padding:20px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+@keyframes radar{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+h2{text-shadow:0 0 10px var(--c)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:450px}
+.card{background:rgba(0,20,30,.7);border:2px solid var(--c);border-radius:10px;padding:12px;text-align:center}
+.radar{width:180px;height:180px;border:2px solid var(--c);border-radius:50%;position:relative;margin:15px}
+.scan{position:absolute;width:2px;height:90px;background:var(--c);top:0;left:89px;transform-origin:bottom;animation:radar 3s linear infinite}
+.barra{width:100%;max-width:450px;height:16px;background:#0d1a20;border:2px solid var(--c);border-radius:10px;margin:6px 0}
+.barra-fill{height:100%;background:var(--c);border-radius:8px;transition:width .3s}
+.btn{padding:10px;background:#0d1a20;border:2px solid var(--c);color:var(--c);border-radius:8px;margin:5px;cursor:pointer;font-weight:900}
+</style></head>
+<body>
+<h2>SISTEMA NASAL v-2026</h2>
+<p>FILTRO MULTI-CAMADAS + OLFATO QUÂNTICO</p>
+
+<div class="radar"><div class="scan"></div></div>
+
+<div class="grid">
+  <div class="card"><div>OXIGÊNIO</div><div id="ox">100%</div></div>
+  <div class="card"><div>FILTRO</div><div id="filtro">99%</div></div>
+  <div class="card"><div>TEMP INTERNA</div><div id="temp">22.0°C</div></div>
+  <div class="card"><div>TOXINAS</div><div id="tox">0 ppm</div></div>
+  <div class="card"><div>UMIDADE</div><div id="umid">45%</div></div>
+  <div class="card"><div>COMPOSTO</div><div id="comp">AR PURO</div></div>
+</div>
+
+<div class="barra"><div class="barra-fill" id="oxBar" style="width:100%"></div></div>
+<div class="barra"><div class="barra-fill" id="filtroBar" style="width:99%"></div></div>
+
+<button class="btn" onclick="purgar()">PURGAR FILTRO</button>
+<button class="btn" onclick="scan()">SCAN QUÍMICO</button>
+<button class="btn" onclick="modoOx()">MODO OXIGÊNIO PURO</button>
+
+<script>
+let o2=100, filtro=99, temp=22, tox=0, umid=45, oxPuro=false;
+setInterval(()=>{
+  o2 -= oxPuro ? 0.01 : 0.04;
+  filtro -= 0.008;
+  temp += (Math.random()-.5)*0.15;
+  umid += (Math.random()-.5)*0.5;
+  tox += Math.random()*0.3;
+  if(o2<0)o2=100; if(filtro<0)filtro=0; if(tox>100)tox=100;
+  
+  document.getElementById('oxBar').style.width=o2+'%';
+  document.getElementById('filtroBar').style.width=filtro+'%';
+  document.getElementById('ox').innerText=Math.round(o2)+'%';
+  document.getElementById('filtro').innerText=Math.round(filtro)+'%';
+  document.getElementById('temp').innerText=temp.toFixed(1)+'°C';
+  document.getElementById('tox').innerText=Math.round(tox)+' ppm';
+  document.getElementById('umid').innerText=Math.round(umid)+'%';
+  
+  if(window.parent.atualizarO2) window.parent.atualizarO2(Math.round(o2));
+  if(tox>70){document.getElementById('comp').innerText='TOXICO'; document.getElementById('comp').style.color='var(--tox)';}
+  if(o2<20 && window.parent.atualizarTexto) window.parent.atualizarTexto('ALERTA: OXIGÊNIO BAIXO');
+},1000);
+
+function purgar(){filtro=100; tox=0; document.getElementById('comp').innerText='AR PURO'; if(window.parent.falar)window.parent.falar('Filtro purgado');}
+function scan(){document.getElementById('comp').innerText='ANALISANDO...'; setTimeout(()=>{document.getElementById('comp').innerText='N2 78% O2 21%'},2000);}
+function modoOx(){oxPuro=!oxPuro; if(window.parent.falar)window.parent.falar(oxPuro?'Oxigênio puro ativado':'Modo normal');}
+</script>
+</body></html>
