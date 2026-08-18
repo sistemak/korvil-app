@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>DORSO KORVIL V-2026</title>
+<style>
+:root{--c:#00FFFF;--bateria:#00FF88;--refri:#00AFFF}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;padding:15px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+@keyframes ventilar{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes carga{0%{width:0%}100%{width:100%}}
+h2{letter-spacing:3px;text-shadow:0 0 10px var(--c)}
+.costas{width:300px;height:400px;background:linear-gradient(#0a0a0a,#111);border:3px solid var(--c);border-radius:30px 30px 10px 10px;position:relative;box-shadow:0 0 30px var(--c)}
+.asa-base{position:absolute;width:60px;height:120px;background:var(--c);top:100px;border-radius:10px}
+.asa-base.esq{left:-70px} .asa-base.dir{right:-70px}
+.vent{position:absolute;width:40px;height:40px;border:2px solid var(--refri);border-radius:50%;animation:ventilar 2s infinite}
+.vent1{top:50px;left:40px} .vent2{top:50px;right:40px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:320px;margin:15px 0}
+.card{background:rgba(0,255,255,.08);border:1px solid var(--c);border-radius:10px;padding:10px;font-size:11px;text-align:center}
+.barra{width:100%;height:12px;background:#0d1a20;border:1px solid var(--c);border-radius:10px}
+.fill{height:100%;border-radius:8px;transition:width .3s}
+.btn{padding:8px 12px;background:#0d1a20;border:2px solid var(--c);color:var(--c);border-radius:8px;margin:4px;cursor:pointer;font-weight:900;font-size:11px}
+.log{width:320px;height:80px;background:#001015;border:1px solid var(--c);padding:8px;font-size:10px;overflow-y:auto;border-radius:8px}
+</style></head>
+<body>
+<h2>DORSO KORVIL V-2026</h2>
+<p>BATERIA PRINCIPAL + REFRIGERAÇÃO + BASE ALAS</p>
+
+<div class="costas">
+  <div class="asa-base esq"></div>
+  <div class="asa-base dir"></div>
+  <div class="vent vent1"></div>
+  <div class="vent vent2"></div>
+</div>
+
+<div class="grid">
+  <div class="card"><div>BATERIA</div><div id="bateria">100%</div><div class="barra"><div class="fill" id="bBar" style="width:100%;background:var(--bateria)"></div></div></div>
+  <div class="card"><div>TEMP NÚCLEO</div><div id="temp">42°C</div></div>
+  <div class="card"><div>ESTABILIDADE</div><div id="estab">100%</div></div>
+  <div class="card"><div>ASAS</div><div id="asaStatus">RECOLHIDAS</div></div>
+</div>
+
+<div>
+  <button class="btn" onclick="abrirAsas()">ABRIR ASAS</button>
+  <button class="btn" onclick="refrigerar()">REFRIGERAR</button>
+  <button class="btn" onclick="carregarTudo()">CARREGAR SISTEMA</button>
+</div>
+
+<div class="log" id="log">> DORSO: Núcleo online. Alimentando CORAX<br></div>
+
+<script>
+let bateria=100, temp=42, estabilidade=100, asasAbertas=false;
+
+function log(t){document.getElementById('log').innerHTML+=`> ${t}<br>`;}
+
+function abrirAsas(){
+  asasAbertas = !asasAbertas;
+  bateria-=8;
+  document.getElementById('asaStatus').innerText = asasAbertas ? 'ABERTAS' : 'RECOLHIDAS';
+  log(`DORSO: Asas ${asasAbertas ? 'implantadas' : 'recolhidas'}`);
+  // CONJUGA: Avisa ALAS
+  if(window.parent.postMessage) window.parent.postMessage({tipo:'asas', status:asasAbertas},'*');
+  if(window.parent.falar) window.parent.falar(asasAbertas ? 'Asas ativas' : 'Asas recolhidas');
+  atualizar();
+}
+
+function refrigerar(){
+  temp-=10; bateria-=2;
+  log('DORSO: Ventoinhas em 100%. Resfriando Reator CORAX');
+  document.querySelectorAll('.vent').forEach(v=>v.style.animation='ventilar 0.3s infinite');
+  setTimeout(()=>document.querySelectorAll('.vent').forEach(v=>v.style.animation='ventilar 2s infinite'),5000);
+  atualizar();
+}
+
+function carregarTudo(){
+  log('DORSO: Carregamento por indução iniciado');
+  let carga = setInterval(()=>{ if(bateria<100) bateria+=2; atualizar(); if(bateria>=100) clearInterval(carga)},200);
+}
+
+function atualizar(){
+  document.getElementById('bBar').style.width=bateria+'%';
+  document.getElementById('bateria').innerText=Math.round(bateria)+'%';
+  document.getElementById('temp').innerText=Math.round(temp)+'°C';
+}
+
+// ALIMENTA TODO SISTEMA
+setInterval(()=>{
+  if(bateria<100) bateria+=0.2;
+  if(temp<42) temp+=0.1;
+  // Conecta no CORAX
+  if(window.parent.energiaCorax) bateria -= 0.05;
+  atualizar();
+},300);
+
+log('DORSO KORVIL: Conectado ao Núcleo K-AI');
+</script>
+</body></html>
