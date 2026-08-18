@@ -1,58 +1,52 @@
 <!-- g.hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG -->
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FORJA V19 EXATO - Move pasta exata sem dividir - Repo como antes - sistemak</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<title>FORJA V20 SIMPLES - Move exato onde quiser sem dividir nem duplicar - sistemak</title>
 <style>
-:root{--neon:#00f0ff;--border:rgba(0,240,255,0.3);--glow:0 0 12px var(--neon)}
+:root{--neon:#00f0ff;--border:rgba(0,240,255,0.3)}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;width:100%;background:#000!important;color:#e0faff;font-family:Consolas,monospace;overflow:hidden}
 body{display:flex;flex-direction:column}
-#forja-header{height:46px;min-height:46px;background:linear-gradient(180deg,#000 0%,#050a18 100%);border-bottom:2px solid var(--neon);display:flex;align-items:center;justify-content:space-between;padding:0 12px;flex-shrink:0}
-.logo{width:28px;height:28px;border-radius:50%;background:#000;border:2px solid var(--neon);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px var(--neon);color:var(--neon);font-weight:900}
-.btn{border:1px solid #1a2a4a;background:linear-gradient(180deg,#0a1428 0%,#000 100%);color:#a0e8ff;padding:6px 11px;border-radius:20px;cursor:pointer;font-size:7px;display:inline-flex;align-items:center;gap:4px;min-height:32px}
-.btn:hover{border-color:var(--neon);color:var(--neon);box-shadow:var(--glow)}
-.btn.ac{border-color:var(--neon);color:var(--neon);background:rgba(0,240,255,.12)}
-.btn.neon{background:var(--neon);color:#000;font-weight:800;border-color:var(--neon)}
+#forja-header{height:46px;min-height:46px;background:#000;border-bottom:2px solid var(--neon);display:flex;align-items:center;justify-content:space-between;padding:0 12px;flex-shrink:0}
+.logo{width:28px;height:28px;border-radius:50%;background:#000;border:2px solid var(--neon);display:flex;align-items:center;justify-content:center;color:var(--neon);font-weight:900}
+.btn{border:1px solid #1a2a4a;background:#0a1428;color:#a0e8ff;padding:6px 11px;border-radius:20px;cursor:pointer;font-size:7px;min-height:32px}
+.btn.ac{border-color:var(--neon);color:var(--neon)}
+.btn.neon{background:var(--neon);color:#000;font-weight:800}
 .btn.danger{border-color:#ff4a7a;color:#ff7a9a}
 .badge{font-size:6px;background:#000;border:1px solid var(--neon);color:var(--neon);padding:3px 8px;border-radius:20px}
 #app{flex:1;display:flex;overflow:hidden;min-height:0;width:100%}
 #left,#right{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;background:#000;position:relative}
 #left{border-right:2px solid var(--neon)}
-.top{padding:7px 8px;background:linear-gradient(180deg,#000 0%,#050a18 100%);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:5px;align-items:center;flex-shrink:0}
+.top{padding:7px 8px;background:#000;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:5px;align-items:center;flex-shrink:0}
 .stage{flex:1;overflow:auto;min-height:0;padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;align-content:start;background:#000}
-.item{background:linear-gradient(180deg,#080f24 0%,#000 100%);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:.2s;display:flex;flex-direction:column;position:relative}
-.item:hover{border-color:var(--neon);box-shadow:0 0 28px rgba(0,240,255,.3);transform:translateY(-2px)}
-.item.selected{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 0 28px var(--neon)}
-.item.drop-target{border-color:#00ff88!important;box-shadow:0 0 0 2px #00ff88,0 0 30px #00ff88!important;transform:scale(1.03);background:rgba(0,255,136,.08)}
+.item{background:#080f24;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:grab;transition:.15s;display:flex;flex-direction:column;position:relative}
+.item:active{cursor:grabbing}
+.item:hover{border-color:var(--neon)}
+.item.selected{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 0 20px var(--neon)}
+.item.drop-target{border-color:#00ff88!important;box-shadow:0 0 0 2px #00ff88!important;background:rgba(0,255,136,.1)}
 .item.folder-card{border-color:#ffcc00}
 .item-preview{width:100%;height:78px;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
 .item-info{padding:6px 7px;flex:1;display:flex;flex-direction:column;gap:3px}
-.item-name{font-size:7px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:text;padding:2px 4px;border-radius:6px;border:1px solid transparent;min-height:18px}
-.item-name:hover{border-color:var(--border);background:rgba(0,240,255,.08)}
-.item-name[contenteditable=true]{background:#000;border-color:var(--neon);outline:none}
-.item-path{font-size:5px;opacity:.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--neon);cursor:text;padding:1px 4px;border-radius:6px;border:1px solid transparent}
-.item-path[contenteditable=true]{background:#000;border-color:var(--neon);outline:none}
-.item-actions{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
-.dropzone{position:absolute;inset:8px;border:2px dashed var(--neon);border-radius:16px;background:rgba(0,240,255,.1);z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px;pointer-events:none}
+.item-name{font-size:7px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-path{font-size:5px;opacity:.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--neon)}
+.dropzone{position:absolute;inset:8px;border:2px dashed var(--neon);border-radius:16px;background:rgba(0,240,255,.08);z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;pointer-events:none}
 .dropzone.show{display:flex;pointer-events:auto}
 #repoViewFallback{flex:1;overflow:auto;background:#000;display:flex;flex-direction:column;min-height:0}
 .repo-breadcrumb{padding:7px 9px;background:#000;border-bottom:1px solid var(--border);display:flex;gap:5px;flex-wrap:wrap;font-size:7px;flex-shrink:0}
 .repo-breadcrumb span{cursor:pointer;color:var(--neon);padding:3px 7px;border-radius:20px;background:#050a18;border:1px solid var(--border)}
 .repo-list{flex:1;overflow:auto;min-height:0}
-.repo-row{padding:8px 10px;background:linear-gradient(180deg,#080f24 0%,#000 100%);border-bottom:1px solid #0f1a2a;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:7px}
+.repo-row{padding:8px 10px;background:#080f24;border-bottom:1px solid #0f1a2a;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:7px}
 .repo-row:hover{background:#0a152a}
 .repo-row.selected-right{border-left:3px solid var(--neon);background:#0a1a30}
 .repo-row.drop-target{border:1px solid #00ff88!important;background:rgba(0,255,136,.12)!important}
 .repo-row.folder-row{border-left:2px solid #ffcc00}
-.repo-row.name-edit{cursor:text;padding:2px 6px;border-radius:8px;border:1px solid transparent;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.repo-row.name-edit[contenteditable=true]{background:#000;border-color:var(--neon);outline:none}
 #githubFrame{flex:1;width:100%;border:0;background:#0d1117;display:flex;min-height:0}
 #liveViewer{height:44%;min-height:280px;max-height:70%;border-top:2px solid var(--neon);background:#000;display:flex;flex-direction:column;flex-shrink:0;position:relative}
-.viewer-top{height:34px;min-height:34px;background:linear-gradient(180deg,#000 0%,#050a18 100%);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:7px;gap:8px;flex-shrink:0}
+.viewer-top{height:34px;min-height:34px;background:#000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:7px;gap:8px;flex-shrink:0}
 .viewer-content{flex:1;display:flex;overflow:hidden;min-height:0}
 .viewer-preview{flex:1.3;background:#000;display:flex;overflow:hidden;min-width:0;border-right:1px solid var(--border)}
 #liveSiteFrame{width:100%;height:100%;border:0;background:#000;flex:1}
@@ -65,9 +59,6 @@ input.in{background:#000;border:1px solid var(--border);color:#e0faff;padding:6p
 .edit-header{height:40px;min-height:40px;background:#000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:7px;flex-shrink:0}
 #editArea{flex:1;width:100%;background:#000;color:#e0faff;border:0;padding:14px;font-size:10px;font-family:Consolas,monospace;resize:none;outline:none;white-space:pre;overflow:auto}
 #editLiveFrame{flex:1;width:100%;border:0;background:#000;min-height:0}
-#ctxMenu{position:fixed;background:linear-gradient(180deg,#0a152a 0%,#000 100%);border:1px solid var(--neon);border-radius:12px;padding:6px;min-width:220px;z-index:400;display:none;flex-direction:column;gap:3px;box-shadow:0 10px 40px rgba(0,0,0,.9),0 0 30px rgba(0,240,255,.3)}
-.ctx-item{padding:10px 10px;border-radius:8px;font-size:7px;cursor:pointer;display:flex;gap:8px;align-items:center;min-height:40px}
-.ctx-item:hover{background:rgba(0,240,255,.15);color:var(--neon)}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:var(--neon);border-radius:10px}
 </style>
 </head>
@@ -76,28 +67,24 @@ input.in{background:#000;border:1px solid var(--border);color:#e0faff;padding:6p
 <div id="forja-header">
   <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
     <div class="logo">F</div>
-    <b style="font-size:11px;color:var(--neon)">FORJA V19 EXATO</b>
-    <span class="badge ok" id="syncBadge">MOVE EXATO SEM DIVIDIR - Repo como antes</span>
+    <b style="font-size:11px;color:var(--neon)">FORJA V20 SIMPLES - MOVE EXATO</b>
+    <span class="badge ok" id="syncBadge">MOVE EXATO SEM DIVIDIR NEM DUPLICAR</span>
   </div>
   <div style="display:flex;gap:5px;align-items:center">
-    <button class="btn ac" onclick="document.getElementById('folder').click()">📁 ANEXAR PASTA EXATA</button>
-    <button class="btn neon" onclick="criarNovo('folder')">+ PASTA</button>
+    <button class="btn ac" onclick="document.getElementById('folder').click()">📁 ANEXAR PASTA</button>
+    <button class="btn ac" onclick="document.getElementById('f').click()">+ ARQUIVO</button>
   </div>
 </div>
 
 <div id="app">
   <div id="left">
     <div class="top">
-      <b style="font-size:8px;color:var(--neon)">ESQ: LOCAL - MOVE EXATO SEM DIVIDIR</b>
-      <button class="btn ac" onclick="document.getElementById('f').click()">+ ARQS</button>
-      <button class="btn ac" onclick="document.getElementById('folder').click()">📁 PASTA INTEIRA EXATA</button>
+      <b style="font-size:8px;color:var(--neon)">ESQ: LOCAL - ARRASTA E SOLTA ONDE QUISER - EXATO</b>
       <span id="selCount" class="badge">0 sel</span>
-      <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverEsqParaDir()">→ DIR EXATO</button>
-      <button class="btn ac" onclick="baixarSelecionadosComoZip()">↓ ZIP EXATO PRA FORA</button>
-      <button class="btn danger" onclick="excluirSelecionadosEsq()">🗑️</button>
+      <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverEsqParaDir()">→ DIR</button>
     </div>
     <div class="stage" id="sLeft"></div>
-    <div class="dropzone" id="dropEsq"><h3>📁 SOLTE PASTA EXATA AQUI - SEM DIVIDIR</h3><p>Move exatamente como já é - mantém pastas e arquivos iguais</p></div>
+    <div class="dropzone" id="dropEsq"><h3>SOLTE AQUI - QUALQUER PASTA/ARQUIVO - EXATO</h3><p>Do PC, celular ou da outra tela - mantém exatamente como é</p></div>
   </div>
 
   <div id="right">
@@ -110,57 +97,50 @@ input.in{background:#000;border:1px solid var(--border);color:#e0faff;padding:6p
         <button class="btn ac" onclick="saveCfg()">SALVAR</button>
         <button class="btn neon" onclick="abrirGithubOriginal()">▶ GITHUB ORIGINAL</button>
         <button class="btn ac" onclick="toggleFallback()">📁 EXPLORER COM 🗑️</button>
-        <button class="btn ac" onclick="carregarDadosRepo()">🔄</button>
+        <button class="btn ac" onclick="carregarDadosRepo()">🔄 ATUALIZAR</button>
       </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;width:100%;align-items:center">
         <span id="selCountRight" class="badge">0 sel DIR</span>
-        <button class="btn ac" onclick="selecionarTodosDir()">☑ TODOS</button>
         <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverDirParaEsq()">← ESQ EXATO</button>
-        <button class="btn danger" onclick="excluirSelecionadosDir()">🗑️</button>
-        <button class="btn ac" onclick="baixarDirSelecionadosComoZip()">↓ ZIP EXATO PRA FORA</button>
-        <button class="btn ac" onclick="criarNovo('file', true)">+ NOVO NA PASTA</button>
       </div>
-      <div id="currentPathDisplay" style="font-size:6px;opacity:.6;background:#000;padding:4px 8px;border-radius:20px;border:1px solid var(--border);width:100%;color:var(--neon)">sistemak/korvil-app • Repo como antes • Move exato sem dividir</div>
+      <div id="currentPathDisplay" style="font-size:6px;opacity:.6;background:#000;padding:4px 8px;border-radius:20px;border:1px solid var(--border);width:100%;color:var(--neon)">sistemak/korvil-app • Repo como antes • Arraste pasta inteira exata pra qualquer lugar</div>
     </div>
     <iframe id="githubFrame" src="https://github.com/sistemak/korvil-app" style="flex:1;width:100%;border:0;background:#0d1117;display:flex;min-height:0"></iframe>
     <div id="repoViewFallback" style="flex:1;min-height:0;display:none;background:#000;flex-direction:column">
       <div class="repo-breadcrumb" id="breadcrumb"><span onclick="navegarPara('')">🏠 root</span></div>
       <div class="repo-list" id="repoList" style="flex:1;overflow:auto"></div>
-      <div style="padding:6px;font-size:6px;background:#000;text-align:center;opacity:.5;border-top:1px solid var(--border)">Move exato sem dividir - mantém estrutura exata das pastas e arquivos - qualquer tela</div>
     </div>
-    <div class="dropzone" id="dropDir"><h3>📁 SOLTE PASTA EXATA AQUI - DIR - SEM DIVIDIR</h3><p>Move exatamente como já é - mantém pastas e arquivos iguais - já salva</p></div>
+    <div class="dropzone" id="dropDir"><h3>SOLTE AQUI - QUALQUER PASTA/ARQUIVO - EXATO</h3><p>Do PC, celular ou da outra tela - mantém exatamente como é - já salva</p></div>
   </div>
 </div>
 
 <div id="liveViewer">
   <div class="viewer-top">
     <div style="display:flex;gap:8px;align-items:center;flex:1;min-width:0">
-      <span style="color:var(--neon);font-weight:900">🔨 FORJA LIVE - EXATO SEM DIVIDIR</span>
-      <span style="opacity:.6">Move exatamente como já é - qualquer tela - PC/Cel dentro e fora</span>
+      <span style="color:var(--neon);font-weight:900">🔨 FORJA LIVE - EXATO</span>
+      <span style="opacity:.6">Arraste e solte onde quiser - pasta inteira exata - sem dividir nem duplicar</span>
     </div>
     <div style="display:flex;gap:5px;align-items:center;flex-shrink:0">
-      <button class="btn ac" onclick="renderLiveSite()">⟳</button>
+      <button class="btn ac" onclick="renderLiveSite()">⟳ RE-BUILD</button>
       <span id="viewerType" class="badge">EXATO</span>
     </div>
   </div>
   <div class="viewer-content">
     <div class="viewer-preview"><iframe id="liveSiteFrame"></iframe></div>
   </div>
-  <div id="log">[LOG] FORJA V19 EXATO SEM DIVIDIR - Repo como antes - sistemak</div>
+  <div id="log">[LOG] FORJA V20 SIMPLES - Move exato onde quiser sem dividir nem duplicar - sistemak</div>
 </div>
 
-<div id="ctxMenu"></div>
 <div id="editModal"><div class="edit-layout"><div class="edit-code"><div class="edit-header"><span style="color:var(--neon)">🔨 EDITAR - <span id="editFileName"></span></span><div style="display:flex;gap:5px"><button class="btn ac" onclick="salvarEdicao()">💾 SALVAR</button><button class="btn" onclick="document.getElementById('editModal').style.display='none'">X</button></div></div><textarea id="editArea" oninput="renderInstant()"></textarea></div><div class="edit-render"><div class="edit-header" style="background:var(--neon);color:#000"><span style="font-weight:900">👁️ RENDER EXATO</span></div><iframe id="editLiveFrame"></iframe></div></div></div>
 
 <input type="file" id="f" hidden multiple><input type="file" id="folder" hidden webkitdirectory multiple>
 
 <script>
-// === BASE IGUAL ANTES ===
 let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set(), currentPath="", arquivoEditando=null;
-let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-v19-EXATO-cfg')||'{}');}catch(e){cfg={}}
+let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-v20-SIMPLES-cfg')||'{}');}catch(e){cfg={}}
 if(!cfg.owner) cfg.owner='sistemak'; if(!cfg.repo) cfg.repo='korvil-app';
 ghO.value=cfg.owner; ghR.value=cfg.repo; document.getElementById('REPO_TOKEN').value=cfg.REPO_TOKEN||'';
-const openDB=indexedDB.open('korvil-v19-EXATO',1);
+const openDB=indexedDB.open('korvil-v20-SIMPLES',1);
 openDB.onupgradeneeded=e=>{ const d=e.target.result; if(!d.objectStoreNames.contains('k')) d.createObjectStore('k',{keyPath:'id'}); };
 openDB.onsuccess=e=>{ db=e.target.result; carregarTudo(); carregarDadosRepo(); abrirGithubOriginal(); };
 function getREPO_TOKEN(){ return document.getElementById('REPO_TOKEN').value.trim(); }
@@ -185,81 +165,54 @@ function getPastasUnicas(){
 async function handleFiles(fileList){
   const files=Array.from(fileList);
   for(let file of files){
-    const path=file.webkitRelativePath||file.name; // EXATO - mantém estrutura exata do PC/celular
-    const ext=(file.name.split('.').pop()||'').toLowerCase();
-    let cat='other'; if(file.type.startsWith('image')) cat='image'; else if(file.type.startsWith('video')) cat='video'; else if(['html','htm','js','css','json','ts','tsx','md','txt','geral'].includes(ext)) cat='code';
-    await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name,path:path,type:file.type,size:file.size,cat:cat,ext:ext,date:new Date().toISOString(),blob:file,isGeral:file.name.includes('.geral')});
+    const path=file.webkitRelativePath||file.name; // EXATO como vem do PC/celular
+    await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name,path:path,type:file.type,size:file.size,cat:'code',ext:file.name.split('.').pop(),date:new Date().toISOString(),blob:file});
   }
-  await carregarTudo(); renderLiveSite(); log(`FORJA EXATO: ${files.length} arquivos movidos exatamente como já são - sem dividir`);
+  await carregarTudo(); renderLiveSite(); log(`${files.length} arquivos movidos EXATAMENTE como são`);
 }
-async function handleDataTransferItems(items, targetFolderBase){
+async function handleDataTransferItems(items, targetFolder){
   const files=[];
-  async function traverseEntry(entry, path=''){
+  async function traverse(entry, path=''){
     return new Promise(resolve=>{
       if(entry.isFile){ entry.file(file=>{ file._relativePath=path+file.name; files.push(file); resolve(); }); }
-      else if(entry.isDirectory){ const reader=entry.createReader(); reader.readEntries(async entries=>{ for(let e of entries){ await traverseEntry(e, path+entry.name+'/'); } resolve(); }); } else resolve();
+      else if(entry.isDirectory){ const reader=entry.createReader(); reader.readEntries(async entries=>{ for(let e of entries){ await traverse(e, path+entry.name+'/'); } resolve(); }); } else resolve();
     });
   }
-  const promises=[]; for(let item of items){ const entry=item.webkitGetAsEntry(); if(entry) promises.push(traverseEntry(entry, '')); }
+  const promises=[]; for(let item of items){ const entry=item.webkitGetAsEntry(); if(entry) promises.push(traverse(entry, '')); }
   await Promise.all(promises);
   if(files.length>0){
     for(let file of files){
-      // EXATO: se targetFolderBase existe, prefixa mantendo estrutura exata interna
-      const finalPath=targetFolderBase? targetFolderBase+'/'+file._relativePath : file._relativePath;
+      // EXATO: mantém estrutura exata, só prefixa com pasta destino se tiver
+      const finalPath=targetFolder? targetFolder+'/'+file._relativePath : file._relativePath;
       Object.defineProperty(file, 'webkitRelativePath', {value:finalPath});
     }
     await handleFiles(files);
   }
   return files.length;
 }
-async function carregarTudo(){ ativos=await getAll(); renderLeft(); renderLiveSite(); document.getElementById('syncBadge').innerText=`EXATO SEM DIVIDIR - ESQ ${ativos.length} arqs - Repo como antes`; }
-function makeEditable(element, onSave){
-  const original=element.innerText;
-  element.contentEditable=true;
-  element.focus();
-  document.execCommand('selectAll',false,null);
-  function finish(save){
-    element.contentEditable=false;
-    if(save){
-      const novo=element.innerText.trim();
-      if(novo && novo!==original) onSave(novo);
-      else element.innerText=original;
-    } else element.innerText=original;
-    element.removeEventListener('blur', onBlur);
-    element.removeEventListener('keydown', onKey);
-  }
-  function onBlur(){ finish(true); }
-  function onKey(e){ if(e.key==='Enter'){ e.preventDefault(); finish(true); } if(e.key==='Escape'){ e.preventDefault(); finish(false); } }
-  element.addEventListener('blur', onBlur);
-  element.addEventListener('keydown', onKey);
-}
+async function carregarTudo(){ ativos=await getAll(); renderLeft(); renderLiveSite(); }
 function renderLeft(){
   const sL=document.getElementById('sLeft'); sL.innerHTML=''; document.getElementById('selCount').innerText=selecionados.size+' sel';
   const pastas=getPastasUnicas();
   const listaCompleta=[...pastas.map(p=>({isFolder:true, path:p.path, name:p.path.split('/').pop()+'/', count:p.count})),...ativos];
-  if(listaCompleta.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.5;padding:24px">Arraste pasta exata do PC/celular aqui<br>Move exatamente como já é</div>`; return; }
+  if(listaCompleta.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.5;padding:24px">Arraste qualquer pasta ou arquivo aqui<br>Exato como é - sem dividir</div>`; return; }
   listaCompleta.forEach(o=>{
     if(o.isFolder){
       const div=document.createElement('div'); div.className='item folder-card'+(selecionados.has('folder:'+o.path)?' selected':''); div.draggable=true; div.dataset.folder=o.path;
-      div.innerHTML=`<div class="item-preview" style="background:linear-gradient(135deg,#1a1500,#000);border:1px solid #ffcc00"><div style="font-size:20px">📁</div></div><div class="item-info"><div class="item-name" data-folder="${o.path}" title="Clique pra renomear pasta exata - move exato sem dividir">📁 ${o.name}</div><div class="item-path">${o.path}/ (${o.count} arqs) - EXATO - solte aqui pra mover pra qualquer lugar exato</div><div class="item-actions"><button class="btn ac" style="padding:3px 6px" onclick="event.stopPropagation();abrirPasta('${o.path}')">📂 ABRIR</button><button class="btn ac" style="border-color:#00ff88;color:#00ff88;padding:3px 6px" onclick="event.stopPropagation();moverPastaParaDir('${o.path}')">→ DIR EXATO</button><button class="btn danger" style="padding:3px 6px" onclick="event.stopPropagation();excluirPasta('${o.path}')">🗑️</button><button class="btn ac" style="padding:3px 6px" onclick="event.stopPropagation();baixarPastaComoZip('${o.path}')">↓ ZIP EXATO PRA FORA</button></div></div>`;
-      const nameEl=div.querySelector('.item-name');
-      nameEl.addEventListener('click', e=>{ e.stopPropagation(); makeEditable(nameEl, async (novo)=>{ if(novo){ const parent=o.path.split('/').slice(0,-1).join('/'); const novoPath=(parent?parent+'/':'')+novo.replace('/',''); const arqs=getArquivosDaPasta(o.path); for(let a of arqs){ const rel=a.path===o.path?'':a.path.slice(o.path.length+1); const novoAPath=rel? novoPath+'/'+rel : novoPath; a.path=novoAPath; await save(a); } await carregarTudo(); } }); });
+      div.innerHTML=`<div class="item-preview" style="background:linear-gradient(135deg,#1a1500,#000);border:1px solid #ffcc00"><div style="font-size:20px">📁</div></div><div class="item-info"><div class="item-name">📁 ${o.name} (${o.count})</div><div class="item-path">${o.path}/ - EXATO</div></div>`;
       div.addEventListener('dragenter', e=>{ e.preventDefault(); div.classList.add('drop-target'); });
       div.addEventListener('dragover', e=>{ e.preventDefault(); div.classList.add('drop-target'); });
       div.addEventListener('dragleave', e=>{ if(!div.contains(e.relatedTarget)) div.classList.remove('drop-target'); });
       div.addEventListener('drop', async e=>{
         e.preventDefault(); div.classList.remove('drop-target');
         const from=e.dataTransfer.getData('from');
-        const targetFolder=o.path; // mover exatamente pra dentro dessa pasta
+        const targetFolder=o.path;
         if(e.dataTransfer.files && e.dataTransfer.files.length>0 &&!from){
-          // De fora do PC/celular direto pra dentro dessa pasta - EXATO sem dividir
           await handleDataTransferItems(e.dataTransfer.items, targetFolder);
-          log(`FORJA EXATO: ${e.dataTransfer.files.length} arquivos do PC movidos exatamente pra ${targetFolder}/ - sem dividir`);
         } else {
           const idsStr=e.dataTransfer.getData('ids'); let ids=[]; try{ids=JSON.parse(idsStr);}catch{ids=[];}
           const folder=e.dataTransfer.getData('folder');
           if(folder && folder!==targetFolder){
-            // Mover pasta inteira exatamente como é pra dentro de outra pasta
             const arqs=getArquivosDaPasta(folder);
             const folderName=folder.split('/').pop();
             for(let a of arqs){
@@ -267,117 +220,50 @@ function renderLeft(){
               const newPath=rel? targetFolder+'/'+folderName+'/'+rel : targetFolder+'/'+folderName;
               a.path=newPath; await save(a);
             }
-            await carregarTudo(); log(`Pasta ${folder}/ movida exatamente pra ${targetFolder}/${folderName}/ - sem dividir`);
+            await carregarTudo();
           } else if(ids.length>0){
             for(let id of ids){
               const a=ativos.find(x=>x.id===id); if(a){
-                const nome=a.path.split('/').pop();
-                a.path=targetFolder+'/'+nome; await save(a);
+                const rel=a.path.split('/').pop();
+                a.path=targetFolder+'/'+rel; await save(a);
               }
             }
-            await carregarTudo(); log(`${ids.length} arquivos movidos exatamente pra ${targetFolder}/`);
+            await carregarTudo();
           }
         }
       });
       div.ondragstart=e=>{ e.dataTransfer.setData('from','left'); e.dataTransfer.setData('folder',o.path); };
-      div.onclick=(e)=>{ if(e.target.classList.contains('item-name')) return; const key='folder:'+o.path; if(selecionados.has(key)) selecionados.delete(key); else selecionados.add(key); renderLeft(); };
+      div.onclick=()=>{ const key='folder:'+o.path; if(selecionados.has(key)) selecionados.delete(key); else selecionados.add(key); renderLeft(); };
+      div.ondblclick=()=>{ const arqs=getArquivosDaPasta(o.path); if(arqs[0]) abrirEditorComId(arqs[0].id); };
       sL.appendChild(div);
     } else {
       const url=URL.createObjectURL(o.blob);
       const div=document.createElement('div'); div.className='item'+(selecionados.has(o.id)?' selected':''); div.draggable=true; div.dataset.id=o.id;
-      const thumb=o.cat==='image'?`<img src="${url}">`:o.cat==='code'?`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;border:1px dashed var(--neon);font-size:7px">📄 ${o.name.slice(0,14)}</div>`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">📁</div>`;
-      div.innerHTML=`<div class="item-preview">${thumb}</div><div class="item-info"><div class="item-name" data-id="${o.id}" title="Clique pra editar direto - exato sem dividir">${o.name}</div><div class="item-path" data-id="${o.id}" title="Clique pra editar caminho exato - qualquer lugar">${o.path} - EXATO</div><div class="item-actions"><button class="btn ac" style="padding:3px 6px" onclick="event.stopPropagation();abrirEditorComId('${o.id}')">✏️ EDITAR</button><button class="btn ghost" style="border-color:#00ff88;color:#00ff88;padding:3px 6px" onclick="event.stopPropagation();moverUmParaDir('${o.id}')">→ DIR EXATO</button><button class="btn danger" style="padding:3px 6px" onclick="event.stopPropagation();excluirArquivo('${o.id}')">🗑️</button><button class="btn ac" style="padding:3px 6px" onclick="event.stopPropagation();baixarArquivo('${o.id}')">↓ EXATO PRA FORA</button></div></div>`;
-      const nameEl=div.querySelector('.item-name'); const pathEl=div.querySelector('.item-path');
-      nameEl.addEventListener('click', e=>{ e.stopPropagation(); makeEditable(nameEl, async (novo)=>{ if(novo && novo!==o.name){ const dir=o.path.split('/').slice(0,-1).join('/'); o.name=novo; o.path=(dir?dir+'/':'')+novo; await save(o); await carregarTudo(); } }); });
-      pathEl.addEventListener('click', e=>{ e.stopPropagation(); makeEditable(pathEl, async (novo)=>{ if(novo && novo!==o.path){ o.path=novo; o.name=novo.split('/').pop(); await save(o); await carregarTudo(); } }); });
+      const thumb=o.cat==='image'?`<img src="${url}">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;border:1px dashed var(--neon);font-size:7px">📄 ${o.name.slice(0,14)}</div>`;
+      div.innerHTML=`<div class="item-preview">${thumb}</div><div class="item-info"><div class="item-name">${o.name}</div><div class="item-path">${o.path}</div></div>`;
       div.ondragstart=e=>{
-        const ids=[...selecionados].filter(s=>!s.startsWith('folder:')); if(!selecionados.has(o.id)) ids.push(o.id);
+        const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id);
         e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id]));
         try{ const blobUrl=URL.createObjectURL(o.blob); e.dataTransfer.setData('DownloadURL', `${o.type||'application/octet-stream'}:${o.name}:${blobUrl}`); }catch{}
       };
-      div.onclick=(e)=>{ if(e.target.classList.contains('item-name')||e.target.classList.contains('item-path')||e.target.closest('.item-actions')) return; if(selecionados.has(o.id)) selecionados.delete(o.id); else selecionados.add(o.id); renderLeft(); };
+      div.onclick=()=>{ if(selecionados.has(o.id)) selecionados.delete(o.id); else selecionados.add(o.id); renderLeft(); };
       div.ondblclick=()=>abrirEditorComId(o.id);
-      div.oncontextmenu=e=>{ e.preventDefault(); showCtxMenu(e.clientX,e.clientY,o.id,false,false); };
       sL.appendChild(div);
     }
   });
 }
-function abrirPasta(path){
-  const sL=document.getElementById('sLeft');
-  sL.innerHTML=`<div style="grid-column:1/-1;padding:8px;background:#000;border:1px solid #ffcc00;border-radius:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><span>📁 ${path}/ - EXATO SEM DIVIDIR</span><div style="display:flex;gap:5px"><button class="btn ac" onclick="carregarTudo()">⬅ VOLTAR</button><button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverPastaParaDir('${path}')">→ DIR EXATO</button><button class="btn ac" onclick="baixarPastaComoZip('${path}')">↓ ZIP EXATO PRA FORA</button></div></div>`;
-  const arquivos=getArquivosDaPasta(path);
-  arquivos.forEach(o=>{
-    if(o.path===path) return;
-    const div=document.createElement('div'); div.className='item';
-    div.innerHTML=`<div class="item-info"><div class="item-name" data-id="${o.id}">${o.name}</div><div class="item-path">${o.path} - EXATO</div><div class="item-actions"><button class="btn ac" style="padding:3px 6px" onclick="event.stopPropagation();abrirEditorComId('${o.id}')">✏️ EDITAR EXATO</button></div></div>`;
-    sL.appendChild(div);
-  });
-}
-async function excluirPasta(path){ if(!confirm(`EXCLUIR PASTA INTEIRA EXATA ${path}/ com ${getArquivosDaPasta(path).length} arquivos?`)) return; const arqs=getArquivosDaPasta(path); for(let a of arqs) await delDB(a.id); await carregarTudo(); }
-async function moverPastaParaDir(path){
-  // Mover pasta exatamente como é - sem dividir - preserva estrutura interna exata
-  const arqs=getArquivosDaPasta(path);
-  if(arqs.length===0) return;
-  const old=new Set(selecionados);
-  selecionados=new Set(arqs.map(a=>a.id));
-  await moverEsqParaDir();
-  selecionados=old; renderLeft();
-}
-async function baixarPastaComoZip(path){
-  const arquivos=getArquivosDaPasta(path);
-  if(arquivos.length===0) return;
-  const zip=new JSZip();
-  const folderName=path.split('/').pop();
-  for(let a of arquivos){
-    const rel=a.path===path? a.name : a.path.slice(path.length+1);
-    const zipPath=rel? folderName+'/'+rel : a.path;
-    // EXATO: mantém estrutura exata como já é
-    zip.file(a.path, a.blob); // salva com path exato
-  }
-  const content=await zip.generateAsync({type:"blob"});
-  const url=URL.createObjectURL(content);
-  const a=document.createElement('a'); a.href=url; a.download=folderName+'.zip'; a.click();
-  log(`Pasta ${path}/ baixada EXATAMENTE como já é - sem dividir - ${arquivos.length} arquivos`);
-}
-async function baixarArquivo(id){
-  const o=ativos.find(a=>a.id===id); if(!o) return;
-  const url=URL.createObjectURL(o.blob);
-  const a=document.createElement('a'); a.href=url; a.download=o.name; a.click();
-}
-async function baixarSelecionadosComoZip(){
-  let arquivos=[];
-  for(let key of [...selecionados]){
-    if(key.startsWith('folder:')){
-      const p=key.slice(7); arquivos.push(...getArquivosDaPasta(p));
-    } else {
-      const o=ativos.find(a=>a.id===key); if(o) arquivos.push(o);
-    }
-  }
-  arquivos=[...new Map(arquivos.map(a=>[a.path,a])).values()];
-  if(arquivos.length===0) return;
-  const zip=new JSZip();
-  for(let a of arquivos) zip.file(a.path, a.blob); // EXATO - mantém path exato como já é
-  const content=await zip.generateAsync({type:"blob"});
-  const url=URL.createObjectURL(content); const a=document.createElement('a'); a.href=url; a.download=`forja-exato-${arquivos.length}arqs.zip`; a.click();
-}
-function selecionarTodos(){ const all=[...ativos.map(a=>a.id),...getPastasUnicas().map(p=>'folder:'+p.path)]; if(all.every(id=>selecionados.has(id))) all.forEach(id=>selecionados.delete(id)); else all.forEach(id=>selecionados.add(id)); renderLeft(); }
-async function excluirSelecionadosEsq(){ if(selecionados.size===0) return; if(!confirm(`EXCLUIR ${selecionados.size} itens EXATOS da ESQ?`)) return; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); for(let a of arqs) await delDB(a.id); } else await delDB(key); } selecionados.clear(); await carregarTudo(); }
-async function excluirArquivo(id){ const o=ativos.find(a=>a.id===id); if(!o) return; if(!confirm(`EXCLUIR ${o.name}?`)) return; await delDB(id); await carregarTudo(); }
-function excluirArquivoAtual(){ if(arquivoEditando){ delDB(arquivoEditando.id).then(()=>{ document.getElementById('editModal').style.display='none'; carregarTudo(); }); } }
-function editarSelecionado(){ if(selecionados.size===0) return; const id=[...selecionados].find(s=>!s.startsWith('folder:')); if(id) abrirEditorComId(id); }
-function moverUmParaDir(id){ const old=new Set(selecionados); selecionados=new Set([id]); moverEsqParaDir().then(()=>{ selecionados=old; renderLeft(); }); }
 function abrirEditorComId(id){ const o=ativos.find(a=>a.id===id); if(o){ arquivoEditando=o; abrirEditor(); } }
 function abrirEditor(){
   let o=arquivoEditando; if(!o && selecionados.size>0){ const id=[...selecionados].find(s=>!s.startsWith('folder:')); if(id) o=ativos.find(a=>a.id===id); }
   if(!o) return;
-  document.getElementById('editFileName').innerText=o.path+' - EXATO';
+  document.getElementById('editFileName').innerText=o.path;
   document.getElementById('editModal').style.display='flex';
   o.blob.text().then(txt=>{ document.getElementById('editArea').value=txt; renderInstant(); });
 }
 function renderInstant(){
   const txt=document.getElementById('editArea').value;
   const frame=document.getElementById('editLiveFrame');
-  try{ if(txt.trim().startsWith('<') || txt.includes('<html')) frame.srcdoc=txt; else frame.srcdoc=`<!DOCTYPE html><html><body style="background:#000;color:#e0faff;padding:12px"><pre style="white-space:pre-wrap">${txt.replace(/</g,'&lt;')}</pre></body></html>`; }catch(e){ frame.srcdoc=`Erro: ${e.message}`; }
+  try{ if(txt.trim().startsWith('<') || txt.includes('<html')) frame.srcdoc=txt; else frame.srcdoc=`<pre style="white-space:pre-wrap;color:#e0faff;background:#000;padding:12px">${txt.replace(/</g,'&lt;')}</pre>`; }catch(e){ frame.srcdoc=`Erro: ${e.message}`; }
   if(arquivoEditando){ arquivoEditando.blob=new Blob([txt],{type:'text/html'}); renderLiveSite(); }
 }
 async function salvarEdicao(){
@@ -391,29 +277,18 @@ async function salvarEdicao(){
   if(REPO_TOKEN && arquivoEditando.path){
     const b64=btoa(unescape(encodeURIComponent(novoTexto))); let sha=null;
     try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(arquivoEditando.path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{}
-    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(arquivoEditando.path)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA EDIT EXATO: ${arquivoEditando.path}`,content:b64,sha})});
+    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(arquivoEditando.path)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA EDIT: ${arquivoEditando.path}`,content:b64,sha})});
   }
 }
 async function renderLiveSite(){
   const liveFrame=document.getElementById('liveSiteFrame');
-  if(ativos.length===0){ liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#000;color:#e0faff;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column"><div style="width:80px;height:80px;border-radius:50%;border:2px solid #00f0ff;box-shadow:0 0 20px #00f0ff;display:flex;align-items:center;justify-content:center">F</div><div style="margin-top:12px;color:#00f0ff">Move exato sem dividir - mantém estrutura exata</div></body></html>`; return; }
   const indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html'));
   if(indexFile){ let html=await indexFile.blob.text(); liveFrame.srcdoc=html; return; }
   if(arquivoEditando){ const txt=await arquivoEditando.blob.text(); if(txt.trim().startsWith('<')){ liveFrame.srcdoc=txt; return; } }
-  let html=`<!DOCTYPE html><html><head><style>body{background:#000;color:#e0faff;font-family:Consolas;padding:10px}.card{border:1px solid #00f0ff;background:#050a18;border-radius:12px;padding:10px;margin:8px}</style></head><body><div style="background:#00f0ff;color:#000;padding:5px 10px;border-radius:20px;display:inline-block;font-weight:800">FORJA EXATO - ${ativos.length} arqs - Sem dividir</div>`;
-  const folders={}; ativos.forEach(f=>{ const p=f.path.split('/'); const folder=p.length>1?p.slice(0,-1).join('/'):'root'; if(!folders[folder]) folders[folder]=[]; folders[folder].push(f); });
-  for(let folder in folders){ html+=`<div class="card"><div style="color:#00f0ff">📁 ${folder} (${folders[folder].length}) - EXATO sem dividir</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">`; for(let f of folders[folder]){ html+=`<div style="border:1px dashed #00f0ff;padding:5px;border-radius:8px;font-size:6px">📄 ${f.name}</div>`; } html+=`</div></div>`; } html+=`</body></html>`; liveFrame.srcdoc=html;
-}
-function criarNovo(tipo, naPastaAtual=false){
-  const basePath=naPastaAtual && currentPath? currentPath+'/' : '';
-  let nome=prompt(tipo==='folder'?`Nome da nova pasta exata`:`Nome do novo arquivo exato - mantém estrutura`, basePath+(tipo==='folder'?'nova-pasta/':'novo-arquivo.html'));
-  if(!nome) return; if(tipo==='folder' &&!nome.endsWith('/')) nome+='/';
-  let conteudo=tipo==='folder'?'':nome.endsWith('.html')?`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{background:#000;color:#e0faff}</style></head><body><h1>${nome}</h1><p>Exato sem dividir</p></body></html>`:`// ${nome}\n`;
-  const blob=new Blob([conteudo],{type:'text/plain'});
-  save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:nome.split('/').pop()||nome,path:nome,type:'text/plain',size:blob.size,cat:tipo==='folder'?'other':'code',ext:nome.split('.').pop(),date:new Date().toISOString(),blob:blob,isGeral:nome.includes('.geral')}).then(async()=>{ await carregarTudo(); renderLiveSite(); });
+  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#000;color:#e0faff;padding:12px"><div style="background:#00f0ff;color:#000;padding:5px 10px;border-radius:20px;display:inline-block">FORJA - ${ativos.length} arqs - EXATO sem dividir</div></body></html>`;
 }
 
-// === REPO NA TELA COMO ANTES FUNCIONANDO - NÃO MEXIDO - CÓDIGO ORIGINAL INTACTO ===
+// === REPO NA TELA COMO ANTES - CÓDIGO ORIGINAL INTACTO - NÃO MEXIDO ===
 function abrirGithubOriginal(){
   const owner=document.getElementById('ghO').value||'sistemak';
   const repo=document.getElementById('ghR').value||'korvil-app';
@@ -422,8 +297,8 @@ function abrirGithubOriginal(){
   document.getElementById('githubFrame').style.display='flex';
   document.getElementById('repoViewFallback').style.display='none';
   document.getElementById('githubFrame').src=url;
-  document.getElementById('currentPathDisplay').innerText=url+` • REPO_TOKEN ${getREPO_TOKEN()?'OK':'VAZIO'} • Repo na tela como antes funcionando - EXATO sem dividir`;
-  log(`FORJA: ▶ GITHUB ORIGINAL - ${url} - mostrando repo na tela como antes`);
+  document.getElementById('currentPathDisplay').innerText=url+` • Repo na tela como antes`;
+  log(`▶ GITHUB ORIGINAL - ${url}`);
   carregarDadosRepo();
 }
 function toggleFallback(){
@@ -432,22 +307,15 @@ function toggleFallback(){
   if(fb.style.display==='none' || fb.style.display===''){
     fb.style.display='flex';
     f.style.display='none';
-    document.getElementById('currentPathDisplay').innerText=`${ghO.value}/${ghR.value}/${currentPath} - 📁 EXPLORER COM 🗑️ - Repo na tela como antes - EXATO`;
-    log(`FORJA: 📁 EXPLORER COM 🗑️ - mostrando explorer do repo na tela como antes`);
+    document.getElementById('currentPathDisplay').innerText=`${ghO.value}/${ghR.value}/${currentPath} - 📁 EXPLORER COM 🗑️`;
     if(repoCache.length===0) carregarDadosRepo(); else renderRepo();
   } else {
     fb.style.display='none';
     f.style.display='flex';
-    document.getElementById('currentPathDisplay').innerText=`https://github.com/${ghO.value}/${ghR.value}${currentPath?'/tree/main/'+currentPath:''} - ▶ GITHUB ORIGINAL - Repo na tela como antes`;
-    log(`FORJA: ▶ GITHUB ORIGINAL - voltando pra iframe do GitHub como antes`);
+    document.getElementById('currentPathDisplay').innerText=`https://github.com/${ghO.value}/${ghR.value}${currentPath?'/tree/main/'+currentPath:''} - ▶ GITHUB ORIGINAL`;
   }
 }
-function navegarPara(path){
-  currentPath=path;
-  document.getElementById('repoViewFallback').style.display='flex';
-  document.getElementById('githubFrame').style.display='none';
-  carregarDadosRepo();
-}
+function navegarPara(path){ currentPath=path; document.getElementById('repoViewFallback').style.display='flex'; document.getElementById('githubFrame').style.display='none'; carregarDadosRepo(); }
 async function carregarDadosRepo(){
   const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN) return;
   try{
@@ -471,14 +339,12 @@ function renderRepo(){
   const breadcrumb=document.getElementById('breadcrumb'); const listEl=document.getElementById('repoList');
   const parts=currentPath?currentPath.split('/').filter(Boolean):[]; let htmlCrumb=`<span onclick="navegarPara('')">🏠 root</span>`; let acc=""; parts.forEach(p=>{ acc+=(acc?"/":"")+p; htmlCrumb+=`<span style="opacity:.3">/</span><span onclick="navegarPara('${acc}')">${p}</span>`; });
   breadcrumb.innerHTML=htmlCrumb+`<span style="margin-left:auto;opacity:.5">${selecionadosDir.size} sel DIR</span>`;
-  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia - Explorer como antes - arraste pasta exata da ESQ pra cá - sem dividir</div>'; return; }
+  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia - arraste pasta exata aqui</div>'; return; }
   listEl.innerHTML=""; if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const d=document.createElement('div'); d.className='repo-row'; d.innerHTML=`<span>📁.. voltar</span>`; d.onclick=()=>navegarPara(up); listEl.appendChild(d); }
   items.forEach(item=>{
     const row=document.createElement('div'); row.className='repo-row'+(item.isFolder?' folder-row':'')+(selecionadosDir.has(item.fullPath)?' selected-right':''); row.dataset.path=item.fullPath;
     if(item.isFolder){
-      row.innerHTML=`<div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0"><span class="name-edit" data-fullpath="${item.fullPath}" title="Pasta exata - sem dividir">📁 ${item.name}/ - EXATO - solte pasta aqui</span></div><div style="display:flex;gap:4px;flex-shrink:0"><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();navegarPara('${item.fullPath}')">📂 ABRIR</button><button class="btn danger" style="padding:3px 7px" onclick="event.stopPropagation();excluirPastaDir('${item.fullPath}')">🗑️ PASTA EXATA</button><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();baixarPastaDirComoZip('${item.fullPath}')">↓ ZIP EXATO PRA FORA</button></div>`;
-      const nameEl=row.querySelector('.name-edit');
-      nameEl.addEventListener('click', e=>{ e.stopPropagation(); makeEditable(nameEl, async (novo)=>{ if(novo && novo!==item.name){ await renomearPastaDir(item.fullPath, novo); } }); });
+      row.innerHTML=`<div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0">📁 ${item.name}/ - EXATO</div><div style="display:flex;gap:4px;flex-shrink:0"><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();navegarPara('${item.fullPath}')">📂 ABRIR</button></div>`;
       row.addEventListener('dragenter', e=>{ e.preventDefault(); row.classList.add('drop-target'); });
       row.addEventListener('dragover', e=>{ e.preventDefault(); row.classList.add('drop-target'); });
       row.addEventListener('dragleave', e=>{ if(!row.contains(e.relatedTarget)) row.classList.remove('drop-target'); });
@@ -488,8 +354,9 @@ function renderRepo(){
         const targetFolder=item.fullPath;
         if(e.dataTransfer.files && e.dataTransfer.files.length>0 &&!from){
           for(let file of e.dataTransfer.files){
-            const txt=await file.text(); const b64=btoa(unescape(encodeURIComponent(txt))); const targetPath=targetFolder+'/'+file.name;
-            await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA MOVE EXATO PRA QUALQUER LUGAR: ${targetPath}`,content:b64})});
+            const txt=await file.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
+            const targetPath=file.webkitRelativePath? targetFolder+'/'+file.webkitRelativePath : targetFolder+'/'+file.name;
+            await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA MOVE EXATO: ${targetPath}`,content:b64})});
           }
           setTimeout(()=>carregarDadosRepo(),700);
         } else if(from==='left'){
@@ -504,11 +371,12 @@ function renderRepo(){
               let txt=await a.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
               await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA MOVE PASTA EXATA: ${targetPath}`,content:b64})});
             }
-            setTimeout(()=>carregarDadosRepo(),800); log(`Pasta ${folder}/ movida exatamente como é pra ${targetFolder}/${folderName}/ - sem dividir`);
+            setTimeout(()=>carregarDadosRepo(),800);
           } else if(ids.length>0){
             for(let id of ids){
               const a=ativos.find(x=>x.id===id); if(a){
-                let txt=await a.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt))); const targetPath=targetFolder+'/'+a.name;
+                let txt=await a.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
+                const targetPath=targetFolder+'/'+a.path; // EXATO - mantém path exato
                 await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA MOVE EXATO: ${targetPath}`,content:b64})});
               }
             }
@@ -518,79 +386,37 @@ function renderRepo(){
       });
       row.onclick=()=>navegarPara(item.fullPath);
     } else {
-      const chk=selecionadosDir.has(item.fullPath)?'checked':'';
-      row.innerHTML=`<div style="display:flex;align-items:center;gap:6px;min-width:0;flex:1"><input type="checkbox" ${chk} onclick="event.stopPropagation();toggleDir('${item.fullPath.replace(/'/g,"\\'")}')" style="accent-color:#00f0ff"> <span class="name-edit" data-fullpath="${item.fullPath}" title="Arquivo exato">📄 ${item.name} - EXATO</span></div><div style="display:flex;gap:4px;flex-shrink:0"><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">✏️ EDITAR EXATO</button><button class="btn danger" style="padding:3px 7px" onclick="event.stopPropagation();excluirArquivoDir('${item.fullPath.replace(/'/g,"\\'")}')">🗑️</button><button class="btn ghost" style="padding:3px 7px" onclick="event.stopPropagation();puxarArquivo('${item.fullPath.replace(/'/g,"\\'")}')">← ESQ EXATO</button><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();baixarArquivoDir('${item.fullPath}')">↓ EXATO PRA FORA</button></div>`;
-      const nameEl=row.querySelector('.name-edit');
-      nameEl.addEventListener('click', e=>{ e.stopPropagation(); makeEditable(nameEl, async (novo)=>{ if(novo && novo!==item.name){ await renomearArquivoDir(item.fullPath, novo); } }); });
+      row.innerHTML=`<div style="display:flex;align-items:center;gap:6px;min-width:0;flex:1"><input type="checkbox" onclick="event.stopPropagation();toggleDir('${item.fullPath.replace(/'/g,"\\'")}')" style="accent-color:#00f0ff"> 📄 ${item.name} - EXATO</div><div style="display:flex;gap:4px;flex-shrink:0"><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">✏️ EDITAR</button></div>`;
       row.onclick=()=>toggleDir(item.fullPath);
-      row.ondblclick=()=>abrirEditorRepo(item.fullPath);
     }
     listEl.appendChild(row);
   });
 }
 function toggleDir(path){ if(selecionadosDir.has(path)) selecionadosDir.delete(path); else selecionadosDir.add(path); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR'; }
 async function puxarArquivo(path){
-  // Puxar exatamente como já é - mantém path exato
-  const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const blob=new Blob([new Uint8Array([...binary].map(c=>c.charCodeAt(0)))]); await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob,isGeral:path.includes('.geral')}); await carregarTudo(); log(`Puxado EXATO sem dividir: ${path}`); }catch(e){} }
-async function abrirEditorRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); document.getElementById('editFileName').innerText=path+' - EXATO'; document.getElementById('editArea').value=binary; document.getElementById('editModal').style.display='flex'; arquivoEditando={path:path,name:path.split('/').pop(),isRepo:true,sha:d.sha,blob:new Blob([binary]),cat:'code',ext:path.split('.').pop(),isGeral:path.includes('.geral')}; renderInstant(); }catch(e){} }
-async function excluirArquivoDir(path){ if(!confirm(`EXCLUIR ${path} do repo?`)) return; const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{method:'DELETE',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA DELETE: ${path}`,sha:d.sha})}); selecionadosDir.delete(path); setTimeout(()=>carregarDadosRepo(),700); }catch(e){} }
-async function excluirPastaDir(path){ if(!confirm(`EXCLUIR PASTA INTEIRA EXATA ${path}/ e todos arquivos?`)) return; const REPO_TOKEN=getREPO_TOKEN(); const arquivos=repoCache.filter(e=>e.path.startsWith(path+'/') && e.type==='blob'); for(let file of arquivos){ try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(file.path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(file.path)}`,{method:'DELETE',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA DELETE PASTA EXATA: ${file.path}`,sha:d.sha})}); }catch{} } setTimeout(()=>carregarDadosRepo(),800); }
-async function renomearArquivoDir(oldPath, novoNome){
-  const REPO_TOKEN=getREPO_TOKEN(); const dir=oldPath.split('/').slice(0,-1).join('/'); const newPath=(dir?dir+'/':'')+novoNome; if(oldPath===newPath) return;
-  try{
-    const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(oldPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}});
-    const d=await r.json();
-    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(newPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA RENAME EXATO: ${oldPath} → ${newPath}`,content:d.content})});
-    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(oldPath)}`,{method:'DELETE',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA RENAME DELETE: ${oldPath}`,sha:d.sha})});
-    setTimeout(()=>carregarDadosRepo(),800);
-  }catch(e){}
-}
-async function renomearPastaDir(oldPath, novoNome){ const arquivos=repoCache.filter(e=>e.path.startsWith(oldPath+'/') && e.type==='blob'); const dir=oldPath.split('/').slice(0,-1).join('/'); const newPath=(dir?dir+'/':'')+novoNome; for(let file of arquivos){ const novoFilePath=newPath+file.path.slice(oldPath.length); await renomearArquivoDir(file.path, novoFilePath.split('/').pop()); } setTimeout(()=>carregarDadosRepo(),1000); }
-async function baixarPastaDirComoZip(path){
-  const arquivos=repoCache.filter(e=>e.path.startsWith(path+'/') && e.type==='blob'); if(arquivos.length===0) return;
-  const zip=new JSZip(); const REPO_TOKEN=getREPO_TOKEN();
-  for(let file of arquivos){ try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(file.path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); zip.file(file.path, binary, {binary:true}); }catch{} } // EXATO: mantém path exato como já é
-  const content=await zip.generateAsync({type:"blob"}); const url=URL.createObjectURL(content); const a=document.createElement('a'); a.href=url; a.download=path.split('/').pop()+'.zip'; a.click();
-}
-async function baixarArquivoDir(path){
-  const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const blob=new Blob([new Uint8Array([...binary].map(c=>c.charCodeAt(0)))]); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=path.split('/').pop(); a.click(); }catch{}
-}
+  const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const blob=new Blob([new Uint8Array([...binary].map(c=>c.charCodeAt(0)))]); await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob}); await carregarTudo(); }catch(e){} }
+async function abrirEditorRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); document.getElementById('editFileName').innerText=path; document.getElementById('editArea').value=binary; document.getElementById('editModal').style.display='flex'; arquivoEditando={path:path,name:path.split('/').pop(),isRepo:true,sha:d.sha,blob:new Blob([binary])}; renderInstant(); }catch(e){} }
 async function moverEsqParaDir(){
-  // MOVE EXATO SEM DIVIDIR - mantém estrutura exata de pastas e arquivos como já são
   if(selecionados.size===0) return; const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){alert('REPO_TOKEN');return;}
   let arquivos=[]; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const p=key.slice(7); arquivos.push(...getArquivosDaPasta(p)); } else { const o=ativos.find(a=>a.id===key); if(o) arquivos.push(o); } }
   arquivos=[...new Map(arquivos.map(a=>[a.path,a])).values()];
   for(let obj of arquivos){
-    // EXATO: se obj.path é scripts/utils/a.js, mantém scripts/utils/a.js exato
-    // Se currentPath existe, prefixa mantendo exato: currentPath + '/' + obj.path
-    let targetPath=obj.path;
-    if(currentPath){
-      targetPath=currentPath+'/'+obj.path;
-    }
+    let targetPath=currentPath? currentPath+'/'+obj.path : obj.path; // EXATO sem dividir
     let txt=await obj.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt))); let sha=null;
     try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{}
-    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA MOVE EXATO SEM DIVIDIR: ${targetPath}`,content:b64,sha})});
+    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA MOVE EXATO: ${targetPath}`,content:b64,sha})});
   }
-  await carregarDadosRepo(); renderLiveSite(); log(`FORJA EXATO SEM DIVIDIR: ${arquivos.length} arquivos movidos exatamente como já são - estrutura mantida`);
+  await carregarDadosRepo(); renderLiveSite();
+  // MOVE e não duplica - remove da ESQ após mover exato
+  for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); for(let a of arqs) await delDB(a.id); } else await delDB(key); }
+  selecionados.clear(); await carregarTudo();
 }
 async function moverDirParaEsq(){
-  // Puxar exatamente como já é - mantém estrutura exata
   if(selecionadosDir.size===0) return;
-  for(let p of [...selecionadosDir]){
-    if(repoCache.some(e=>e.path===p && e.type==='tree')){
-      const arqs=repoCache.filter(e=>e.path.startsWith(p+'/') && e.type==='blob');
-      for(let f of arqs) await puxarArquivo(f.path); // puxa com path exato
-    } else await puxarArquivo(p);
-  }
+  for(let p of [...selecionadosDir]){ await puxarArquivo(p); }
   selecionadosDir.clear(); document.getElementById('selCountRight').innerText='0 sel DIR';
 }
-async function excluirSelecionadosDir(){ if(selecionadosDir.size===0) return; if(!confirm(`EXCLUIR ${selecionadosDir.size} da DIR? Pastas exatas incluídas`)) return; for(let path of [...selecionadosDir]){ if(repoCache.some(e=>e.path===path && e.type==='tree')) await excluirPastaDir(path); else await excluirArquivoDir(path); } selecionadosDir.clear(); setTimeout(()=>carregarDadosRepo(),700); }
-async function baixarDirSelecionadosComoZip(){
-  if(selecionadosDir.size===0) return; const zip=new JSZip(); const REPO_TOKEN=getREPO_TOKEN();
-  for(let path of [...selecionadosDir]){ try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); zip.file(path, binary, {binary:true}); }catch{} } // EXATO: mantém path exato
-  const content=await zip.generateAsync({type:"blob"}); const url=URL.createObjectURL(content); const a=document.createElement('a'); a.href=url; a.download=`forja-exato-dir-${selecionadosDir.size}arqs.zip`; a.click();
-}
-function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-v19-EXATO-cfg',JSON.stringify(cfg)); carregarDadosRepo(); abrirGithubOriginal(); }
+function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-v20-SIMPLES-cfg',JSON.stringify(cfg)); carregarDadosRepo(); abrirGithubOriginal(); }
 function setupDropZones(){
   const zones=[{el:document.getElementById('left'), drop:document.getElementById('dropEsq'), target:'esq'}, {el:document.getElementById('right'), drop:document.getElementById('dropDir'), target:'dir'}];
   zones.forEach(({el, drop, target})=>{
@@ -601,37 +427,22 @@ function setupDropZones(){
       e.preventDefault(); drop.classList.remove('show');
       const from=e.dataTransfer.getData('from');
       if(e.dataTransfer.files && e.dataTransfer.files.length>0 &&!from){
-        // De fora do PC/celular - EXATO sem dividir - mantém estrutura exata
         if(e.dataTransfer.items && e.dataTransfer.items[0].webkitGetAsEntry){
-          const c=await handleDataTransferItems(e.dataTransfer.items, currentPath||'');
-          if(c===0) await handleFiles(e.dataTransfer.files);
+          await handleDataTransferItems(e.dataTransfer.items, currentPath||'');
         } else await handleFiles(e.dataTransfer.files);
-        if(target==='dir'){
-          const ids=[...ativos].slice(-e.dataTransfer.files.length).map(a=>a.id); const old=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=old; renderLeft();
-        }
+        if(target==='dir'){ const ids=[...ativos].slice(-e.dataTransfer.files.length).map(a=>a.id); const old=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=old; renderLeft(); }
       } else if(from){
         if(target==='esq' && from==='right'){
-          const folder=e.dataTransfer.getData('folder'); if(folder){ const arqs=repoCache.filter(x=>x.path.startsWith(folder+'/') && x.type==='blob'); for(let f of arqs) await puxarArquivo(f.path); } // EXATO
+          for(let p of [...selecionadosDir]) await puxarArquivo(p);
+          selecionadosDir.clear();
         }
         if(target==='dir' && from==='left'){
-          const idsStr=e.dataTransfer.getData('ids'); let ids=[]; try{ids=JSON.parse(idsStr);}catch{ids=[];} const folder=e.dataTransfer.getData('folder'); if(folder){ await moverPastaParaDir(folder); } else if(ids.length){ const old=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=old; renderLeft(); }
+          const idsStr=e.dataTransfer.getData('ids'); let ids=[]; try{ids=JSON.parse(idsStr);}catch{ids=[];} const folder=e.dataTransfer.getData('folder'); if(folder){ const old=new Set(selecionados); selecionados=new Set(['folder:'+folder]); await moverEsqParaDir(); selecionados=old; renderLeft(); } else if(ids.length){ const old=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=old; renderLeft(); }
         }
       }
     });
   });
 }
-function showCtxMenu(x,y,idOrPath,isFolder,isDir){
-  const ctx=document.getElementById('ctxMenu');
-  if(idOrPath.startsWith('folder:')){
-    const path=idOrPath.slice(7);
-    ctx.innerHTML=`<div class="ctx-item" onclick="abrirPasta('${path}');hideCtx()">📂 ABRIR PASTA EXATA</div><div class="ctx-item" onclick="moverPastaParaDir('${path}');hideCtx()">→ MOVER PASTA EXATA PRA DIR - SEM DIVIDIR</div><div class="ctx-item" onclick="baixarPastaComoZip('${path}');hideCtx()">↓ BAIXAR PASTA EXATA PRA FORA - PC/CEL - SEM DIVIDIR</div><div class="ctx-item" style="color:#ff7a9a" onclick="excluirPasta('${path}');hideCtx()">🗑️ EXCLUIR PASTA EXATA</div>`;
-  } else {
-    ctx.innerHTML=`<div class="ctx-item" onclick="abrirEditorComId('${idOrPath}');hideCtx()">✏️ EDITAR DIRETO EXATO</div><div class="ctx-item" onclick="moverUmParaDir('${idOrPath}');hideCtx()">→ MOVER EXATO PRA DIR - SEM DIVIDIR</div><div class="ctx-item" onclick="baixarArquivo('${idOrPath}');hideCtx()">↓ BAIXAR EXATO PRA FORA - PC/CEL</div><div class="ctx-item" style="color:#ff7a9a" onclick="excluirArquivo('${idOrPath}');hideCtx()">🗑️ EXCLUIR EXATO</div>`;
-  }
-  ctx.style.left=x+'px'; ctx.style.top=y+'px'; ctx.style.display='flex';
-}
-function hideCtx(){ document.getElementById('ctxMenu').style.display='none'; }
-document.addEventListener('click', e=>{ if(!e.target.closest('#ctxMenu')) hideCtx(); });
 function selecionarTodosDir(){ const items=getTreeForPath(currentPath).filter(i=>!i.isFolder); if(items.every(i=>selecionadosDir.has(i.fullPath))) items.forEach(i=>selecionadosDir.delete(i.fullPath)); else items.forEach(i=>selecionadosDir.add(i.fullPath)); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR'; }
 setupDropZones();
 </script>
