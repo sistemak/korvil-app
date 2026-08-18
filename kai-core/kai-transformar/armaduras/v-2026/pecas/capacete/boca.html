@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>BOCA KORVIL IMITADOR</title>
+<style>
+:root{--c:#00FF88}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;padding:15px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+@keyframes pulso{0%,100%{box-shadow:0 0 20px var(--c)}50%{box-shadow:0 0 60px var(--c)}}
+@keyframes onda{0%{transform:scale(0);opacity:1}100%{transform:scale(6);opacity:0}}
+h2{color:var(--c);text-shadow:0 0 10px var(--c);margin:5px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%;max-width:520px}
+.card{background:rgba(0,255,136,.08);border:2px solid var(--c);border-radius:10px;padding:8px;text-align:center;font-size:11px}
+.barra{width:100%;max-width:520px;height:14px;background:#0d1a20;border:2px solid var(--c);border-radius:10px}
+.barra-fill{height:100%;background:var(--c);border-radius:8px;transition:width.3s}
+.btn-modo{padding:7px;background:#0d1a20;border:2px solid var(--c);color:var(--c);border-radius:8px;margin:3px;cursor:pointer;font-size:10px;font-weight:900}
+.btn-ataque{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,var(--c),#000);border:3px solid var(--c);color:#fff;font-weight:900;cursor:pointer;margin:15px;animation:pulso 1.8s infinite}
+.btn-voz{padding:5px 8px;background:#001015;border:1px solid var(--c);color:var(--c);border-radius:6px;margin:2px;cursor:pointer;font-size:9px}
+.ia-log{width:100%;max-width:520px;height:90px;background:#001015;border:1px solid var(--c);padding:8px;font-size:10px;overflow-y:auto;border-radius:8px}
+.voz-box{width:100%;max-width:520px;background:rgba(0,255,136,.05);border:1px dashed var(--c);padding:10px;border-radius:8px;margin:10px 0}
+input,select{width:90%;background:#001015;border:1px solid var(--c);color:var(--c);padding:5px;border-radius:5px;font-size:11px}
+.onda{position:absolute;width:150px;height:150px;border:3px solid var(--c);border-radius:50%;animation:onda 1s forwards}
+.tag{background:var(--c);color:#000;padding:2px 6px;border-radius:4px;font-size:9px;margin:2px;display:inline-block}
+</style></head>
+<body>
+<h2>PROTOCOLO IMITADOR QUÂNTICO v-2026.2</h2>
+<p>CLONA QUALQUER SOM | SEGURANÇA AUDITIVA ATIVA</p>
+
+<div class="ia-log" id="iaLog">> IA: Banco de dados vazio. Pronto pra clonar<br></div>
+
+<div class="grid">
+  <div class="card"><div>ENERGIA</div><div id="energia">100%</div></div>
+  <div class="card"><div>FREQUÊNCIA</div><div id="freq">1.0 kHz</div></div>
+  <div class="card"><div>DB SAÍDA</div><div id="db">65 dB</div></div>
+  <div class="card"><div>ALVO</div><div id="alvo">NENHUM</div></div>
+  <div class="card"><div>TIPO ONDA</div><div id="tipo">SENO</div></div>
+  <div class="card"><div>CLONE</div><div id="clone">VAZIO</div></div>
+</div>
+
+<div class="barra"><div class="barra-fill" id="energiaBar" style="width:100%"></div></div>
+
+<div>
+  <button class="btn-modo" onclick="setModo('auto')">AUTO IA</button>
+  <button class="btn-modo" onclick="setModo('ataque')">ATAQUE</button>
+  <button class="btn-modo" onclick="setModo('propulsor')">PROPULSOR</button>
+  <button class="btn-modo" onclick="setModo('banshee')">BANSHEE</button>
+  <button class="btn-modo" onclick="setModo('imitar')">IMITAR</button>
+  <button class="btn-modo" onclick="setModo('voz')">MODULAÇÃO</button>
+</div>
+
+<button class="btn-ataque" onmousedown="atirar()" onmouseup="parar()">DISPARAR</button>
+
+<div class="voz-box">
+  <b>BIBLIOTECA DE CLONES</b> <span id="tags"></span><br>
+  <button class="btn-voz" onclick="gravar()">GRAV</button>
+  <button class="btn-voz" onclick="pararGrav()">STOP</button>
+  <button class="btn-voz" onclick="salvarClone()">SALVAR</button>
+  <button class="btn-voz" onclick="listarClones()">LISTAR</button><br>
+
+  <b>IMITAR PRESETS</b><br>
+  <button class="btn-voz" onclick="carregarPreset('corvo')">CORVO</button>
+  <button class="btn-voz" onclick="carregarPreset('tiro')">TIRO</button>
+  <button class="btn-voz" onclick="carregarPreset('sirene')">SIRENE</button>
+  <button class="btn-voz" onclick="carregarPreset('motor')">MOTOR JATO</button>
+  <button class="btn-voz" onclick="carregarPreset('banshee')">BANSHEE</button>
+  <button class="btn-voz" onclick="carregarPreset('jarvis')">JARVIS</button><br>
+
+  <b>CLONAR VOZ</b><br>
+  <input type="text" id="txtFalar" placeholder="Digite o que imitar">
+  <button class="btn-voz" onclick="falarTexto()">FALAR</button>
+  <select id="selectClone" onchange="selecionarClone(this.value)"><option>Selecione um Clone</option></select>
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+let energia=100, modo='auto', atirando=false, gravando=false;
+let cfg={freq:1000, db:65, alcance:5, tipo:'SENO', foco:'LARGO'};
+let clones={}; // BANCO DE DADOS DE CLONES
+let cloneAtivo=null;
+const DB_MAX=90;
+const audio=document.getElementById('audio');
+
+// PRESETS DE IMITAÇÃO
+const PRESETS={
+  corvo:{src:'https://cdn.freesound.org/previews/456/456789_9497971-lq.mp3', pitch:2.2, nome:'CORVO', uso:'Distração + Medo'},
+  tiro:{src:'https://cdn.freesound.org/previews/270/270404_5123851-lq.mp3', pitch:1, nome:'TIRO 12G', uso:'Desorientar'},
+  sirene:{src:'https://cdn.freesound.org/previews/456/456789_9497971-lq.mp3', pitch:0.5, rate:0.7, nome:'SIRENE POLÍCIA', uso:'Pânico'},
+  motor:{src:'https://cdn.freesound.org/previews/612/612345_12345678-lq.mp3', pitch:0.3, nome:'MOTOR JATO', uso:'Propulsão'},
+  banshee:{src:'https://cdn.freesound.org/previews/456/456789_9497971-lq.mp3', pitch:3, rate:1.8, nome:'BANSHEE', uso:'Onda de choque'},
+  jarvis:{pitch:0.9, rate:0.95, nome:'JARVIS', uso:'IA Mordomo'}
+}
+
+const BANCO={
+  auto:{uso:'IA decide'},
+  ataque:{freq:5000,db:85,alcance:15,tipo:'QUADRADA',foco:'DIRECIONAL',uso:'Destruir'},
+  propulsor:{freq:200,db:70,alcance:2,tipo:'TRIANGULAR',foco:'TRASEIRO',uso:'Voo'},
+  banshee:{freq:18000,db:90,alcance:30,tipo:'SERRA',foco:'CONE',uso:'Onda choque'},
+  imitar:{freq:1000,db:75,alcance:10,tipo:'SENO',foco:'LARGO',uso:'Imitar qualquer som'},
+  voz:{freq:1000,db:65,alcance:5,tipo:'SENO',foco:'LARGO',uso:'Modular voz'}
+}
+
+function log(t){document.getElementById('iaLog').innerHTML+=`> ${t}<br>`; document.getElementById('iaLog').scrollTop=9999;}
+
+function setModo(m){
+  modo=m;
+  if(m!=='auto') Object.assign(cfg,BANCO);
+  atualizarHUD();
+  log(`Modo ${m.toUpperCase()}: ${BANCO.uso}`);
+}
+
+// GRAVAR E CLONAR QUALQUER COISA
+async function gravar(){
+  if(!navigator.mediaDevices) return log('Microfone indisponível');
+  const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+  const recorder = new MediaRecorder(stream);
+  let chunks=[];
+  recorder.ondataavailable=e=>chunks.push(e.data);
+  recorder.onstop=()=>{
+    const blob=new Blob(chunks,{type:'audio/webm'});
+    audio.src=URL.createObjectURL(blob);
+    window.ultimoGravado=blob;
+    log('Amostra capturada. Clique em SALVAR');
+  }
+  recorder.start(); gravando=true; log('Gravando...');
+  setTimeout(()=>{if(gravando)pararGrav()},5000); // auto stop 5s
+}
+
+function pararGrav(){ gravando=false; log('Gravação parada'); }
+
+function salvarClone(){
+  if(!window.ultimoGravado) return log('Grave algo primeiro');
+  const nome=prompt('Nome do Clone:');
+  if(!nome) return;
+  clones[nome]=URL.createObjectURL(window.ultimoGravado);
+  atualizarSelect();
+  log(`Clone "${nome}" salvo no banco`);
+  document.getElementById('clone').innerText=nome.toUpperCase();
+}
+
+function atualizarSelect(){
+  const sel=document.getElementById('selectClone');
+  sel.innerHTML='<option>Selecione um Clone</option>';
+  Object.keys(clones).forEach(n=>{
+    sel.innerHTML+=`<option value="${n}">${n}</option>`;
+    document.getElementById('tags').innerHTML+=`<span class="tag">${n}</span>`;
+  });
+}
+
+function selecionarClone(nome){
+  if(clones[nome]){ cloneAtivo=nome; audio.src=clones[nome]; document.getElementById('clone').innerText=nome.toUpperCase(); log(`Clone "${nome}" carregado`); }
+}
+
+function listarClones(){ log('Clones: '+Object.keys(clones).join(', ') || 'Nenhum'); }
+
+// IMITAR PRESETS
+function carregarPreset(p){
+  if(!PRESETS) return;
+  cloneAtivo=PRESETS[p].nome;
+  audio.src=PRESETS[p].src;
+  cfg.freq=1000*PRESETS[p].pitch;
+  cfg.db=80;
+  document.getElementById('clone').innerText=PRESETS[p].nome;
+  log(`Imitando: ${PRESETS[p].nome} - Uso: ${PRESETS[p].uso}`);
+  atualizarHUD();
+}
+
+// FALAR COM VOZ CLONADA
+function falarTexto(){
+  const txt=document.getElementById('txtFalar').value;
+  if(!txt) return;
+  const utter = new SpeechSynthesisUtterance(txt);
+
+  if(cloneAtivo && PRESETS[cloneAtivo.toLowerCase()]){
+    utter.pitch=PRESETS[cloneAtivo.toLowerCase()].pitch || 1;
+    utter.rate=PRESETS[cloneAtivo.toLowerCase()].rate || 1;
+  }
+  speechSynthesis.speak(utter);
+  log(`Imitando fala: "${txt}"`);
+}
+
+function criarOnda(){ const o=document.createElement('div'); o.className='onda'; o.style.left='50%'; o.style.top='50%'; o.style.marginLeft='-75px'; o.style.marginTop='-75px'; document.body.appendChild(o); setTimeout(()=>o.remove(),1000); }
+
+function atualizarHUD(){
+  document.getElementById('freq').innerText=(cfg.freq/1000).toFixed(1)+' kHz';
+  document.getElementById('db').innerText=Math.min(cfg.db,DB_MAX)+' dB';
+  document.getElementById('alcance').innerText=cfg.alcance+' m';
+  document.getElementById('tipo').innerText=cfg.tipo;
+}
+
+function atirar(){
+  if(energia<5) return; atirando=true;
+  if(modo==='auto'){
+    if(cloneAtivo) Object.assign(cfg,BANCO.imitar);
+    else Object.assign(cfg,BANCO.ataque);
+  }
+
+  let dbSaida = window.parent.fonesANC? DB_MAX-25 : Math.min(cfg.db,DB_MAX);
+  if(audio.src){
+    audio.volume=dbSaida/100;
+    audio.playbackRate=cfg.freq/1000;
+    audio.currentTime=0; audio.play();
+  }
+
+  criarOnda(); energia-=7;
+  log(`Disparando: ${cloneAtivo || 'GRITO'} ${dbSaida}dB`);
+}
+
+function parar(){atirando=false; audio.pause();}
+
+setInterval(()=>{
+  if(!atirando && energia<100) energia+=0.3;
+  document.getElementById('energiaBar').style.width=energia+'%';
+  document.getElementById('energia').innerText=Math.round(energia)+'%';
+},100);
+
+setModo('auto'); atualizarHUD();
+</script>
+</body></html>
