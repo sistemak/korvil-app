@@ -1,0 +1,102 @@
+<!-- MENU ESQUERDO = K-AI TRANSFORMAR -->
+<div class="menu" id="menuLeft">
+  <div class="sideHeader"><div>K-AI</div><div class="modo">MODO CHEFE</div></div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="openTab('estat', this)">ESTATÍSTICAS</button>
+    <button class="tab-btn" onclick="openTab('transformar', this)">K-AI TRANSFORMAR</button>
+  </div>
+
+  <!-- ABA ESTATÍSTICAS -->
+  <div id="tab-estat" class="tab-content active">
+    <div class="sideSection">
+      <div class="sideTitle">DIAGNÓSTICO TÁTICO</div>
+      <div class="sideItem">ALVOS <b id="alvos">0</b></div>
+      <div class="sideItem">RADAR <b>ATIVO</b></div>
+      <div class="sideItem">SCAN <b>360°</b></div>
+      <div class="sideItem">ENERGIA <b>100%</b></div>
+    </div>
+  </div>
+
+  <!-- ABA K-AI TRANSFORMAR -->
+  <div id="tab-transformar" class="tab-content">
+    <div class="sideSection">
+      <div class="sideTitle">K-AI TRANSFORMAR</div>
+      <div class="sideItem" onclick="ativarTransformacao()">🔮 TRANSFORMAÇÃO ATIVA</div>
+      <div class="sideItem" onclick="carregarArmaduraCompleta()">🛡️ ARMADURA: v-2026 MASTER</div>
+    </div>
+    <div class="sideSection">
+      <div class="sideTitle">TRANSFORMAÇÃO EM CIMA DE ARMADURAS</div>
+      <div class="peca-grid" id="gridPecas"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// LISTA DAS 17 PEÇAS
+const PECAS = [
+  'ante-bracos','bracos','peitoral','costas','pelvis',
+  'femur','patela','tibia','botas','luvas',
+  'capacete','corvonas','ombros','abdomen','maos',
+  'pescoco','cintura'
+];
+
+// 1. TRANSFORMAÇÃO = VISOR CAPACETE + ARMADURA NO CENTRO
+function ativarTransformacao(){
+  closeAllMenus();
+  showOutput('TRANSFORMAÇÃO ATIVADA');
+  document.getElementById('hologramaContainer').innerHTML = `
+    <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle,rgba(0,255,255,.1) 0%,#000 70%);display:flex;align-items:center;justify-content:center;flex-direction:column">
+      <div style="font-size:40px;color:#00FFFF;text-shadow:0 0 30px #00FFFF;margin-bottom:20px">VISOR K-AI ATIVO</div>
+      <div style="width:80%;height:60%;border:3px solid #00FFFF;border-radius:20px;display:flex;align-items:center;justify-content:center">
+        <div id="armaduraCentral" style="color:#00FFFF;font-size:24px">CARREGANDO ARMADURA...</div>
+      </div>
+      <div style="margin-top:20px;color:#A8FFE6">SCAN: 360° | ALVOS: 0 | ENERGIA: 100%</div>
+    </div>`;
+  
+  // Carrega armadura no centro do visor
+  fetch(`kai-transformar/armaduras/v-2026/armadura-v-2026.html`)
+ .then(r=>r.text())
+ .then(html=>{document.getElementById('armaduraCentral').innerHTML = html;})
+ .catch(()=>{document.getElementById('armaduraCentral').innerText = 'ARMADURA v-2026 MASTER';});
+}
+
+// 2. ARMADURA = MOSTRA SÓ A ARMADURA ATUAL
+function carregarArmaduraCompleta(){
+  closeAllMenus();
+  showOutput('ARMADURA v-2026 MASTER');
+  document.querySelectorAll('.peca-btn').forEach(b=>b.classList.remove('ativa'));
+  fetch(`kai-transformar/armaduras/v-2026/armadura-v-2026.html`)
+ .then(r=>r.text())
+ .then(html=>{document.getElementById('hologramaContainer').innerHTML = html;})
+ .catch(()=>{document.getElementById('hologramaContainer').innerHTML = `<div style="color:#00FFFF;text-align:center;padding-top:40%">ARMADURA v-2026 MASTER<br><small>Arquivo não encontrado</small></div>`;});
+}
+
+// 3. PEÇAS = CARREGA CADA PEÇA INDIVIDUAL
+function carregarPeca(nome){
+  document.querySelectorAll('.peca-btn').forEach(b=>b.classList.remove('ativa'));
+  document.querySelector(`[data-peca="${nome}"]`).classList.add('ativa');
+  closeAllMenus();
+  showOutput(`PEÇA: ${nome.toUpperCase()}`);
+
+  fetch(`kai-transformar/armaduras/v-2026/pecas/${nome}/${nome}.html`)
+ .then(r=>r.text())
+ .then(html=>{document.getElementById('hologramaContainer').innerHTML = html;})
+ .catch(()=>{document.getElementById('hologramaContainer').innerHTML = `<div style="color:#00FFFF;text-align:center;padding-top:40%">PEÇA: ${nome.toUpperCase()}<br><small>Arquivo não encontrado</small></div>`;});
+}
+
+// GERA OS 17 BOTÕES AUTOMÁTICO
+window.addEventListener('load', ()=>{
+  const grid = document.getElementById('gridPecas');
+  if(grid){
+    PECAS.forEach(p=>{
+      const btn = document.createElement('div');
+      btn.className = 'peca-btn';
+      btn.dataset.peca = p;
+      btn.innerText = p.toUpperCase();
+      btn.onclick = ()=>carregarPeca(p);
+      grid.appendChild(btn);
+    })
+  }
+});
+</script>
