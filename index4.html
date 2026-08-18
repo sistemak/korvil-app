@@ -8,61 +8,47 @@ SÓ LEMBRETE FALSO
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IA GEMINI FUNCIONANDO</title>
+<title>GEMINI FUNCIONANDO AGORA</title>
 <style>
-body{background:#050505;color:#00ff88;font-family:Consolas,monospace;padding:15px;max-width:800px;margin:auto}
-h2{color:#00ff88;text-align:center}
-input,textarea,button{width:100%;padding:12px;margin:8px 0;background:#111;border:1px solid #00ff88;color:#00ff88;border-radius:5px;font-family:inherit;box-sizing:border-box}
-button{cursor:pointer;font-weight:bold;background:#00ff88;color:#000;font-size:16px}
-button:hover{background:#00cc66}
-#resposta{border:1px solid #00ff88;padding:15px;min-height:300px;background:#000;border-radius:5px;white-space:pre-wrap}
-.ok{color:#00ff00}.err{color:#ff0000}.loading{color:#ffff00}
+body{background:#000;color:#0f0;font-family:monospace;padding:20px}
+input,textarea,button{width:100%;padding:10px;margin:10px 0;background:#111;border:1px solid #0f0;color:#0f0}
+button{background:#0f0;color:#000;font-weight:bold;cursor:pointer}
+#resposta{border:1px solid #0f0;padding:10px;min-height:200px;white-space:pre-wrap}
 </style>
 </head>
 <body>
-<h2>🔥 GEMINI IA FUNCIONANDO 🔥</h2>
+<h2>GEMINI IA - SEM ERRO</h2>
 
-<label>1. Cole seu AQ_TOKEN Gemini:</label>
-<input id="aqtoken" type="password" placeholder="A.Q.xxxxxxxxxxxxxxxx">
-<button onclick="salvar()">SALVAR TOKEN</button>
-<div id="status"></div>
+Cole seu AQ_TOKEN: <input id="token" type="password">
+Prompt: <textarea id="prompt" rows="3">Me diga oi</textarea>
+<button onclick="rodar()">RODAR IA</button>
 
-<label>2. Digite o Prompt:</label>
-<textarea id="prompt" rows="5">Faça um site de vendas moderno</textarea>
-<button onclick="chamar()">ENVIAR PRA IA</button>
-
-<label>3. Resposta:</label>
-<div id="resposta">Aguardando...</div>
+Resposta:
+<div id="resposta"></div>
 
 <script>
-window.onload = function(){
-  const aq = localStorage.getItem('aq');
-  if(aq) document.getElementById('aqtoken').value = aq;
-  if(aq) document.getElementById('status').innerHTML = '<span class="ok">✅ Token carregado</span>';
-}
-function salvar(){
-  localStorage.setItem('aq', document.getElementById('aqtoken').value);
-  document.getElementById('status').innerHTML = '<span class="ok">✅ TOKEN SALVO!</span>';
-}
-
-async function chamar(){
-  const AQ = localStorage.getItem('aq');
-  if(!AQ) return alert("Salve o AQ_TOKEN primeiro");
+async function rodar(){
+  const token = document.getElementById('token').value;
+  const prompt = document.getElementById('prompt').value;
   const div = document.getElementById('resposta');
-  div.innerHTML = '<span class="loading">Pensando...</span>';
+  div.innerText = "Carregando...";
+  
   try {
-    // MODELO CORRIGIDO: gemini-1.5-flash-latest
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${AQ}`, {
+    // USEI PROXY PRA NÃO DAR ERRO DE CORS NO GITHUB PAGES
+    const url = `https://corsproxy.io/?https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${token}`;
+    
+    const r = await fetch(url, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({contents: [{parts: [{text: document.getElementById('prompt').value}]}]})
+      body: JSON.stringify({contents: [{parts: [{text: prompt}]}]})
     });
     const data = await r.json();
-    if(data.error) {div.innerHTML = `<span class="err">ERRO: ${data.error.message}</span>`; return;}
-    div.innerText = data.candidates[0].content.parts[0].text;
-  } catch(e) {
-    div.innerHTML = `<span class="err">ERRO: ${e.message}</span>`;
+    
+    if(data.error) div.innerText = "ERRO: " + data.error.message;
+    else div.innerText = data.candidates[0].content.parts[0].text;
+    
+  } catch(e){
+    div.innerText = "ERRO: " + e.message;
   }
 }
 </script>
