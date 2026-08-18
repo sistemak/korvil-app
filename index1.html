@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FORJA COMPLETO IGUAL NAS DUAS TELAS - sistemak/korvil-app</title>
+<title>FORJA - Todas funções PC - sistemak/korvil-app</title>
 <style>
 :root{--neon:#0078d4;--bg:#202020;--panel:#2b2b2b;--item:#323232;--item-hover:#3a3a3a;--border:#3f3f3f;--text:#ffffff;--text-dim:#a0a0a0;--sel:#0078d4;--sel-bg:rgba(0,120,212,.2)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -13,7 +13,7 @@ html,body{height:100%;width:100%;background:var(--bg)!important;color:var(--text
 body{display:flex;flex-direction:column}
 #forja-header{height:48px;min-height:48px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0}
 .logo{width:32px;height:32px;background:#0078d4;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
-.btn{border:1px solid var(--border);background:var(--item);color:var(--text);padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:6px;min-height:32px}
+.btn{border:1px solid var(--border);background:var(--item);color:var(--text);padding:6px 12px;border-radius:4px;cursor:pointer;font-size:11px;display:inline-flex;align-items:center;gap:6px;min-height:32px}
 .btn:hover{background:var(--item-hover);border-color:#555}
 .btn.primary{background:var(--sel);color:#fff;border-color:var(--sel)}
 .btn.neon{background:#00f0ff;color:#000;font-weight:700;border-color:#00f0ff}
@@ -22,9 +22,9 @@ body{display:flex;flex-direction:column}
 #left,#right{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;background:var(--bg);position:relative}
 #left{border-right:1px solid var(--border)}
 #left.active,#right.active{outline:2px solid var(--sel);outline-offset:-2px}
-.top{padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap}
-.toolbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--border);font-size:12px;flex-shrink:0;flex-wrap:wrap}
-.path-bar{flex:1;background:var(--item);border:1px solid var(--border);border-radius:4px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:12px;min-width:0}
+.top{padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.toolbar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--border);font-size:11px;flex-shrink:0;flex-wrap:wrap}
+.path-bar{flex:1;background:var(--item);border:1px solid var(--border);border-radius:4px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:11px;min-width:0}
 .list-header{display:flex;align-items:center;padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-dim);font-weight:600;gap:12px;position:sticky;top:0;z-index:2}
 .item-row{display:flex;align-items:center;padding:0 12px;height:36px;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;gap:12px;transition:.08s}
 .item-row:hover{background:var(--item-hover)}
@@ -48,13 +48,13 @@ body{display:flex;flex-direction:column}
 .repo-row.drop-target{background:rgba(0,255,136,.15)!important;border:1px dashed #00ff88!important}
 .repo-row.folder-row{border-left:3px solid #ffcc00}
 #githubFrame{flex:1;width:100%;border:0;background:#0d1117;display:flex;min-height:0}
-#liveViewer{height:32%;min-height:180px;max-height:50%;border-top:1px solid var(--border);background:var(--panel);display:flex;flex-direction:column;flex-shrink:0}
-.viewer-top{height:36px;min-height:36px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:12px;gap:8px;flex-shrink:0}
+#liveViewer{height:28%;min-height:160px;max-height:45%;border-top:1px solid var(--border);background:var(--panel);display:flex;flex-direction:column;flex-shrink:0}
+.viewer-top{height:32px;min-height:32px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:11px;gap:8px;flex-shrink:0}
 .viewer-content{flex:1;display:flex;overflow:hidden;min-height:0}
 .viewer-preview{flex:1;background:var(--bg);display:flex;overflow:hidden;min-width:0}
 #liveSiteFrame{width:100%;height:100%;border:0;background:var(--bg);flex:1}
 #log{height:32px;min-height:32px;background:var(--panel);border-top:1px solid var(--border);overflow:auto;padding:6px 12px;font-size:10px;color:var(--text-dim);flex-shrink:0;font-family:Consolas}
-input.in{background:var(--item);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:12px;outline:none;min-height:32px}
+input.in{background:var(--item);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:11px;outline:none;min-height:32px}
 #editModal{position:fixed;inset:0;background:var(--bg);z-index:200;display:none;flex-direction:column}
 .edit-layout{flex:1;display:flex;overflow:hidden;min-height:0}
 .edit-code{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--bg);min-width:0}
@@ -62,10 +62,11 @@ input.in{background:var(--item);border:1px solid var(--border);color:var(--text)
 .edit-header{height:40px;min-height:40px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:12px;flex-shrink:0}
 #editArea{flex:1;width:100%;background:var(--bg);color:var(--text);border:0;padding:14px;font-size:13px;font-family:Consolas,monospace;resize:none;outline:none;white-space:pre;overflow:auto}
 #editLiveFrame{flex:1;width:100%;border:0;background:var(--bg);min-height:0}
-#ctxMenu{position:fixed;background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:4px;min-width:260px;z-index:400;display:none;flex-direction:column;gap:2px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+#ctxMenu{position:fixed;background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:4px;min-width:280px;z-index:400;display:none;flex-direction:column;gap:2px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .ctx-item{padding:8px 12px;border-radius:4px;font-size:12px;cursor:pointer;display:flex;gap:10px;align-items:center}
 .ctx-item:hover{background:var(--item)}
 .ctx-item kbd{margin-left:auto;background:var(--item);border:1px solid var(--border);padding:2px 6px;border-radius:3px;font-size:10px;color:var(--text-dim)}
+.ctx-sep{height:1px;background:var(--border);margin:4px 0}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:#3f3f3f;border-radius:5px}
 #duplicateWarn{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#ffcc00;color:#000;padding:10px 18px;border-radius:6px;font-size:12px;font-weight:600;z-index:500;display:none;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .status-bar{padding:4px 12px;background:var(--panel);border-top:1px solid var(--border);display:flex;gap:16px;font-size:11px;color:var(--text-dim);flex-shrink:0}
@@ -76,33 +77,33 @@ input.in{background:var(--item);border:1px solid var(--border);color:var(--text)
 <div id="forja-header">
   <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
     <div class="logo">F</div>
-    <b style="font-size:14px;font-weight:600">FORJA - Igual nas duas telas</b>
-    <span class="badge" id="syncBadge">Clique na tela pra ativar - atalhos iguais PC</span>
+    <b style="font-size:14px;font-weight:600">FORJA - Todas funções PC</b>
+    <span class="badge" id="syncBadge">Clique na tela pra ativar - todas funções iguais</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center">
-    <button class="btn" onclick="document.getElementById('folder').click()">📁 Pasta</button>
-    <button class="btn" onclick="document.getElementById('f').click()">+ Arquivo</button>
+    <button class="btn" onclick="document.getElementById('folder').click()">📁 Pasta PC</button>
+    <button class="btn" onclick="document.getElementById('f').click()">+ Arquivo PC</button>
   </div>
 </div>
 
 <div id="app">
   <div id="left" class="active" onclick="setActivePanel('left')">
     <div class="top">
-      <input type="checkbox" class="check" id="checkAllLeft" onclick="toggleSelectAllLeft(this.checked)" title="Selecionar todos ESQ (Ctrl+A)">
+      <input type="checkbox" class="check" id="checkAllLeft" onclick="toggleSelectAllLeft(this.checked)">
       <b>ESQ: Local</b>
-      <button class="btn primary" onclick="selecionarTodos()">☑ Todos</button>
+      <button class="btn primary" onclick="selecionarTodos()">☑ Todos Ctrl+A</button>
       <span id="selCount" class="badge">0 selecionados</span>
-      <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn" onclick="moverEsqParaDir()">→ DIR F5</button>
-        <button class="btn" onclick="copySelection()">⎘ C Ctrl+C</button>
-        <button class="btn" onclick="cutSelection()">✂️ X Ctrl+X</button>
-        <button class="btn" onclick="pasteSelection('')">📋 V Ctrl+V</button>
-        <button class="btn" onclick="renomearSelecionadoAtual()">✏️ F2</button>
-        <button class="btn" style="border-color:#ff7a7a;color:#ff7a7a" onclick="excluirSelecionadosEsq()">🗑️ Del</button>
-      </div>
     </div>
     <div class="toolbar">
-      <div class="path-bar"><span>🏠</span><span id="leftPath">ESQ - Pasta exata - arraste pra qualquer lugar</span></div>
+      <button class="btn" onclick="criarNovaPastaEsq()">📁 Nova Pasta</button>
+      <button class="btn" onclick="criarNovoArquivoEsq()">📄 Novo Arquivo</button>
+      <button class="btn" onclick="moverEsqParaDir()">→ DIR F5</button>
+      <button class="btn" onclick="copySelection()">⎘ Copiar Ctrl+C</button>
+      <button class="btn" onclick="cutSelection()">✂️ Recortar Ctrl+X</button>
+      <button class="btn" onclick="pasteSelection('')">📋 Colar Ctrl+V</button>
+      <button class="btn" onclick="duplicarSelecionadoEsq()">⎗ Duplicar Ctrl+D</button>
+      <button class="btn" onclick="renomearSelecionadoAtual()">✏️ Renomear F2</button>
+      <button class="btn" style="border-color:#ff7a7a;color:#ff7a7a" onclick="excluirSelecionadosEsq()">🗑️ Excluir Del</button>
     </div>
     <div class="list-header">
       <input type="checkbox" class="check" style="visibility:hidden">
@@ -113,14 +114,14 @@ input.in{background:var(--item);border:1px solid var(--border);color:var(--text)
       <div style="width:110px">Modificado</div>
     </div>
     <div class="stage" id="sLeft" style="display:block;padding:0"></div>
-    <div class="status-bar"><span id="leftStatus">0 itens</span><span id="leftSelStatus">• 0 selecionados</span><span style="margin-left:auto">Ativo: Ctrl+A todos, Ctrl+clique, Shift+clique, F2, Del, Ctrl+C/X/V</span></div>
-    <div class="dropzone" id="dropEsq"><h3>📁 Soltar aqui ESQ - exato onde soltar</h3></div>
+    <div class="status-bar"><span id="leftStatus">0 itens</span><span id="leftSelStatus">• 0 selecionados</span><span style="margin-left:auto">ESQ: Criar, Renomear F2, Mover arrasta, Duplicar Ctrl+D, Del, Ctrl+C/X/V</span></div>
+    <div class="dropzone" id="dropEsq"><h3>📁 Soltar aqui ESQ</h3></div>
   </div>
 
   <div id="right" onclick="setActivePanel('right')">
     <div class="top" style="flex-direction:column;align-items:flex-start;gap:8px">
       <div style="display:flex;gap:6px;flex-wrap:wrap;width:100%;align-items:center">
-        <b style="font-size:12px">DIR: Repositório - COMO ANTES</b>
+        <b style="font-size:12px">DIR: Repo - COMO ANTES</b>
         <input id="ghO" class="in" value="sistemak" style="width:70px">
         <input id="ghR" class="in" value="korvil-app" style="width:90px">
         <input id="REPO_TOKEN" type="password" class="in" placeholder="REPO_TOKEN repo" style="flex:1;min-width:140px">
@@ -130,14 +131,17 @@ input.in{background:var(--item);border:1px solid var(--border);color:var(--text)
         <button class="btn" onclick="carregarDadosRepo()">🔄</button>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;width:100%;align-items:center">
-        <input type="checkbox" class="check" id="checkAllRight" onclick="toggleSelectAllRight(this.checked)" title="Selecionar todos DIR (Ctrl+A)">
-        <button class="btn primary" onclick="selecionarTodosDir()">☑ Todos DIR</button>
+        <input type="checkbox" class="check" id="checkAllRight" onclick="toggleSelectAllRight(this.checked)">
+        <button class="btn primary" onclick="selecionarTodosDir()">☑ Todos DIR Ctrl+A</button>
         <span id="selCountRight" class="badge">0 selecionados DIR</span>
+        <button class="btn" onclick="criarNovaPastaDir()">📁 Nova Pasta DIR</button>
+        <button class="btn" onclick="criarNovoArquivoDir()">📄 Novo Arquivo DIR</button>
         <button class="btn" onclick="moverDirParaEsq()">← ESQ F6</button>
-        <button class="btn" onclick="copySelectionDir()">⎘ C Ctrl+C</button>
-        <button class="btn" onclick="cutSelectionDir()">✂️ X Ctrl+X</button>
-        <button class="btn" onclick="pasteSelectionDir()">📋 V Ctrl+V</button>
-        <button class="btn" onclick="renomearSelecionadoDir()">✏️ F2</button>
+        <button class="btn" onclick="copySelectionDir()">⎘ Copiar</button>
+        <button class="btn" onclick="cutSelectionDir()">✂️ Recortar</button>
+        <button class="btn" onclick="pasteSelectionDir()">📋 Colar</button>
+        <button class="btn" onclick="duplicarSelecionadoDir()">⎗ Duplicar</button>
+        <button class="btn" onclick="renomearSelecionadoDir()">✏️ Renomear F2</button>
         <button class="btn" style="border-color:#ff7a7a;color:#ff7a7a" onclick="excluirSelecionadosDir()">🗑️ Del</button>
         <span style="margin-left:auto;font-size:11px;opacity:.7" id="currentPathDisplay">sistemak/korvil-app</span>
       </div>
@@ -146,9 +150,9 @@ input.in{background:var(--item);border:1px solid var(--border);color:var(--text)
     <div id="repoViewFallback" style="flex:1;min-height:0;display:none;background:var(--bg);flex-direction:column">
       <div class="repo-breadcrumb" id="breadcrumb"><span onclick="navegarPara('')">🏠 root</span></div>
       <div class="repo-list" id="repoList" style="flex:1;overflow:auto"></div>
-      <div class="status-bar"><span id="rightStatus">0 itens DIR</span><span id="rightSelStatus">• 0 selecionados DIR</span><span style="margin-left:auto">Ativo: Ctrl+A, Ctrl+clique, Shift+clique, F2, Del, Ctrl+C/X/V iguais ESQ</span></div>
+      <div class="status-bar"><span id="rightStatus">0 itens DIR</span><span id="rightSelStatus">• 0 selecionados DIR</span><span style="margin-left:auto">DIR: Criar, Renomear F2, Mover, Duplicar, Del, Ctrl+C/X/V - igual ESQ - commit main</span></div>
     </div>
-    <div class="dropzone" id="dropDir"><h3>📁 Soltar aqui DIR - exato onde soltar - branch main Pages atualiza</h3></div>
+    <div class="dropzone" id="dropDir"><h3>📁 Soltar aqui DIR - branch main Pages atualiza</h3></div>
   </div>
 </div>
 
@@ -157,14 +161,14 @@ input.in{background:var(--item);border:1px solid var(--border);color:var(--text)
 <div id="liveViewer">
   <div class="viewer-top">
     <div style="display:flex;gap:12px;align-items:center;flex:1;min-width:0">
-      <span style="font-weight:600">🔨 Log - Commits fix branch main</span>
-      <span style="opacity:.6;font-size:11px">Clique na tela ESQ ou DIR pra ativar - atalhos iguais nas duas - F2, Del, Ctrl+A/C/X/V, F5/F6</span>
+      <span style="font-weight:600">🔨 Log - Todas funções PC</span>
+      <span style="opacity:.6;font-size:11px">Clique na tela pra ativar - Nova Pasta, Novo Arquivo, Renomear F2, Mover arrasta, Duplicar Ctrl+D, Del, Ctrl+C/X/V, F5/F6</span>
     </div>
   </div>
   <div class="viewer-content">
     <div class="viewer-preview"><iframe id="liveSiteFrame"></iframe></div>
   </div>
-  <div id="log">[LOG] Funções iguais nas duas telas - atalhos PC certos - clique na tela pra ativar</div>
+  <div id="log">[LOG] Todas funções PC - criar, renomear, mover, duplicar, excluir, copiar - iguais nas duas telas</div>
 </div>
 
 <div id="ctxMenu"></div>
@@ -196,7 +200,7 @@ function setActivePanel(panel){
   activePanel=panel;
   document.getElementById('left').classList.toggle('active', panel==='left');
   document.getElementById('right').classList.toggle('active', panel==='right');
-  document.getElementById('syncBadge').innerText=`Ativo: ${panel.toUpperCase()} - Ctrl+A todos, F2 renomeia, Del exclui, Ctrl+C/X/V`;
+  document.getElementById('syncBadge').innerText=`Ativo: ${panel.toUpperCase()} - Nova Pasta, Novo Arquivo, Renomear F2, Mover arrasta, Duplicar Ctrl+D, Del, Ctrl+C/X/V`;
 }
 const fEl=document.getElementById('f'), folderEl=document.getElementById('folder');
 fEl.onchange=e=>{ if(e.target.files.length) handleFiles(e.target.files); e.target.value=''; };
@@ -220,7 +224,7 @@ async function handleFiles(fileList){
     if(ativos.some(a=>a.path===path)){ dup++; continue; }
     await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name,path:path,type:file.type,size:file.size,cat:'code',ext:file.name.split('.').pop(),date:new Date().toISOString(),blob:file});
   }
-  if(dup>0) showDuplicateWarn(`${dup} arquivo(s) já existe(m) - não duplicado`);
+  if(dup>0) showDuplicateWarn(`${dup} já existe(m) - não duplicado`);
   await carregarTudo(); renderLiveSite();
 }
 async function handleDataTransferItems(items, targetFolder){
@@ -265,8 +269,7 @@ async function githubPutFile(path, blobOrText, message){
       headers:{Authorization:`token ${REPO_TOKEN}`, Accept:'application/vnd.github.v3+json'}
     });
     if(check.ok){ const data = await check.json(); sha = data.sha; }
-    else if(check.status!==404){ const err = await check.text(); log(`❌ Falha checar ${path}: ${check.status}`); return false; }
-  }catch(e){ log(`❌ Erro rede ${path}: ${e.message}`); return false; }
+  }catch(e){}
   let contentB64;
   if(typeof blobOrText === 'string'){ contentB64 = toBase64(blobOrText); } else { contentB64 = await toBase64FromBlob(blobOrText); }
   const body = { message: message, content: contentB64, branch: "main" };
@@ -277,8 +280,7 @@ async function githubPutFile(path, blobOrText, message){
       headers:{Authorization:`token ${REPO_TOKEN}`, 'Content-Type':'application/json', Accept:'application/vnd.github.v3+json'},
       body: JSON.stringify(body)
     });
-    const resData = await res.json();
-    if(!res.ok){ log(`❌ COMMIT FALHOU ${path}: ${res.status}`); if(res.status===401) showDuplicateWarn(`Token inválido`); if(res.status===403) showDuplicateWarn(`Token sem permissão repo`); return false; }
+    if(!res.ok){ const err=await res.json(); log(`❌ COMMIT FALHOU ${path}: ${res.status} ${JSON.stringify(err).slice(0,400)}`); return false; }
     log(`✅ Commit OK: ${path} -> main`);
     return true;
   }catch(e){ log(`❌ Erro commit ${path}: ${e.message}`); return false; }
@@ -304,6 +306,143 @@ async function githubDeleteFile(path, message){
   }catch(e){ return false; }
 }
 
+// === TODAS FUNÇÕES COMO NO PC - CRIAR, RENOMEAR, MOVER, DUPLICAR, EXCLUIR, COPIAR ===
+async function criarNovaPastaEsq(){
+  setActivePanel('left');
+  const nome=prompt('Nome da nova pasta (como no PC):');
+  if(!nome) return;
+  const basePath=currentPath? currentPath+'/' : '';
+  const fullPath=(basePath+nome).replace(/\/+/g,'/').replace(/\/$/,'');
+  if(getPastasUnicas().some(p=>p.path===fullPath) || ativos.some(a=>a.path===fullPath || a.path.startsWith(fullPath+'/'))){
+    showDuplicateWarn(`Já existe pasta ${fullPath}`);
+    return;
+  }
+  // cria pasta vazia com.gitkeep igual PC cria pasta
+  const blob=new Blob([''],{type:'text/plain'});
+  await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:'.gitkeep',path:fullPath+'/.gitkeep',type:'text/plain',size:0,cat:'code',ext:'gitkeep',date:new Date().toISOString(),blob:blob});
+  await carregarTudo();
+  log(`📁 Nova pasta ESQ criada: ${fullPath}/`);
+}
+async function criarNovoArquivoEsq(){
+  setActivePanel('left');
+  const nome=prompt('Nome do novo arquivo (como no PC) - ex: index.html, app.js, style.css:');
+  if(!nome) return;
+  const basePath=currentPath? currentPath+'/' : '';
+  const fullPath=(basePath+nome).replace(/\/+/g,'/');
+  if(ativos.some(a=>a.path===fullPath)){ showDuplicateWarn(`Já existe arquivo ${fullPath}`); return; }
+  const ext=nome.split('.').pop();
+  let conteudo='';
+  if(ext==='html') conteudo='<!DOCTYPE html>\n<html>\n<head><title>Novo</title></head>\n<body>\n<h1>Novo arquivo</h1>\n</body>\n</html>';
+  else if(ext==='js') conteudo='// Novo arquivo JS\nconsole.log("novo");';
+  else if(ext==='css') conteudo='/* Novo CSS */\nbody{ margin:0; }';
+  else conteudo='';
+  const blob=new Blob([conteudo],{type:'text/plain'});
+  await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:nome.split('/').pop(),path:fullPath,type:'text/plain',size:blob.size,cat:'code',ext:ext,date:new Date().toISOString(),blob:blob});
+  await carregarTudo();
+  log(`📄 Novo arquivo ESQ criado: ${fullPath}`);
+}
+async function criarNovaPastaDir(){
+  setActivePanel('right');
+  const nome=prompt('Nome da nova pasta no DIR (como no PC) - vai commitar na main:');
+  if(!nome) return;
+  const basePath=currentPath? currentPath+'/' : '';
+  const fullPath=(basePath+nome).replace(/\/+/g,'/').replace(/\/$/,'')+'/.gitkeep';
+  if(repoCache.some(r=>r.path===fullPath || r.path.startsWith(fullPath.replace('/.gitkeep','/')))){ showDuplicateWarn(`Já existe pasta ${nome} no DIR`); return; }
+  const ok=await githubPutFile(fullPath, '', `FORJA CREATE FOLDER: ${fullPath}`);
+  if(ok) setTimeout(()=>carregarDadosRepo(),1500);
+}
+async function criarNovoArquivoDir(){
+  setActivePanel('right');
+  const nome=prompt('Nome do novo arquivo no DIR (como no PC) - ex: novo.html - vai commitar na main e Pages atualiza:');
+  if(!nome) return;
+  const basePath=currentPath? currentPath+'/' : '';
+  const fullPath=(basePath+nome).replace(/\/+/g,'/');
+  if(repoCache.some(r=>r.path===fullPath)){ showDuplicateWarn(`Já existe arquivo ${fullPath} no DIR`); return; }
+  const ext=nome.split('.').pop();
+  let conteudo='';
+  if(ext==='html') conteudo='<!DOCTYPE html>\n<html><head><title>Novo</title></head><body><h1>Novo arquivo DIR</h1></body></html>';
+  else if(ext==='js') conteudo='// Novo JS DIR\nconsole.log("novo dir");';
+  else if(ext==='css') conteudo='/* Novo CSS DIR */\nbody{margin:0}';
+  const ok=await githubPutFile(fullPath, conteudo, `FORJA CREATE FILE: ${fullPath}`);
+  if(ok) setTimeout(()=>carregarDadosRepo(),1500);
+}
+async function duplicarSelecionadoEsq(){
+  setActivePanel('left');
+  if(selecionados.size===0){ showDuplicateWarn('Selecione algo pra duplicar Ctrl+D'); return; }
+  let count=0;
+  for(let key of [...selecionados]){
+    if(key.startsWith('folder:')){
+      const path=key.slice(7);
+      const arqs=getArquivosDaPasta(path);
+      const newFolderName=path.split('/').pop()+' - cópia';
+      const parent=path.split('/').slice(0,-1).join('/');
+      const newPath=(parent?parent+'/':'')+newFolderName;
+      if(ativos.some(a=>a.path===newPath || a.path.startsWith(newPath+'/'))){ continue; }
+      for(let a of arqs){
+        const rel=a.path===path?'':a.path.slice(path.length+1);
+        const dupPath=rel? newPath+'/'+rel : newPath;
+        await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:a.name,path:dupPath,type:a.type,size:a.size,cat:a.cat,ext:a.ext,date:new Date().toISOString(),blob:a.blob});
+        count++;
+      }
+    } else {
+      const a=ativos.find(x=>x.id===key); if(!a) continue;
+      const dir=a.path.split('/').slice(0,-1).join('/');
+      const nameParts=a.name.split('.');
+      const ext=nameParts.length>1?'.'+nameParts.pop():'';
+      const base=nameParts.join('.');
+      const newName=base+' - cópia'+ext;
+      const newPath=(dir?dir+'/':'')+newName;
+      if(ativos.some(x=>x.path===newPath)) continue;
+      await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:newName,path:newPath,type:a.type,size:a.size,cat:a.cat,ext:a.ext,date:new Date().toISOString(),blob:a.blob});
+      count++;
+    }
+  }
+  await carregarTudo();
+  log(`⎗ Duplicado ESQ: ${count} itens - Ctrl+D igual PC`);
+}
+async function duplicarSelecionadoDir(){
+  setActivePanel('right');
+  if(selecionadosDir.size===0){ showDuplicateWarn('Selecione algo DIR pra duplicar'); return; }
+  let count=0;
+  for(let path of [...selecionadosDir]){
+    const isFolder=repoCache.some(r=>r.path.startsWith(path+'/'));
+    if(isFolder){
+      const newFolderName=path.split('/').pop()+' - cópia';
+      const parent=path.split('/').slice(0,-1).join('/');
+      const newPath=(parent?parent+'/':'')+newFolderName;
+      const files=repoCache.filter(r=>r.path.startsWith(path+'/') && r.type==='blob');
+      for(let f of files){
+        const rel=f.path.slice(path.length);
+        const dupPath=newPath+rel;
+        if(repoCache.some(r=>r.path===dupPath)) continue;
+        const contentRes=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${f.path.split('/').map(encodeURIComponent).join('/')}?ref=main`, {headers:{Authorization:`token ${getREPO_TOKEN()}`}});
+        if(!contentRes.ok) continue;
+        const data=await contentRes.json();
+        await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${dupPath.split('/').map(encodeURIComponent).join('/')}`, {method:'PUT', headers:{Authorization:`token ${getREPO_TOKEN()}`, 'Content-Type':'application/json'}, body: JSON.stringify({message:`FORJA DUPLICATE DIR: ${f.path} -> ${dupPath}`, content:data.content, branch:"main"})});
+        count++;
+        await new Promise(r=>setTimeout(r,400));
+      }
+    } else {
+      const dir=path.split('/').slice(0,-1).join('/');
+      const name=path.split('/').pop();
+      const nameParts=name.split('.');
+      const ext=nameParts.length>1?'.'+nameParts.pop():'';
+      const base=nameParts.join('.');
+      const newName=base+' - cópia'+ext;
+      const newPath=(dir?dir+'/':'')+newName;
+      if(repoCache.some(r=>r.path===newPath)) continue;
+      const contentRes=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=main`, {headers:{Authorization:`token ${getREPO_TOKEN()}`}});
+      if(!contentRes.ok) continue;
+      const data=await contentRes.json();
+      await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${newPath.split('/').map(encodeURIComponent).join('/')}`, {method:'PUT', headers:{Authorization:`token ${getREPO_TOKEN()}`, 'Content-Type':'application/json'}, body: JSON.stringify({message:`FORJA DUPLICATE: ${path} -> ${newPath}`, content:data.content, branch:"main"})});
+      count++;
+      await new Promise(r=>setTimeout(r,400));
+    }
+  }
+  log(`⎗ Duplicado DIR: ${count} itens`);
+  setTimeout(()=>carregarDadosRepo(),2000);
+}
+
 function toggleSelectAllLeft(checked){
   const pastas=getPastasUnicas();
   const all=[...pastas.map(p=>'folder:'+p.path),...ativos.map(a=>a.id)];
@@ -323,7 +462,7 @@ function renderLeft(){
   document.getElementById('leftSelStatus').innerText=`• ${selecionados.size} selecionados`;
   const pastas=getPastasUnicas();
   const listaCompleta=[...pastas.map(p=>({isFolder:true, path:p.path, name:p.path.split('/').pop()+'/', count:p.count, date:'', size:'', type:'Pasta'})),...ativos.map(a=>({isFolder:false, id:a.id, path:a.path, name:a.name, size:(a.size/1024).toFixed(1)+' KB', date:new Date(a.date).toLocaleDateString(), type:a.ext||'Arquivo'}))];
-  if(listaCompleta.length===0){ sL.innerHTML=`<div style="text-align:center;opacity:.5;padding:40px"><div style="font-size:48px">📁</div><div style="margin-top:12px">Esta pasta está vazia</div><div style="font-size:11px;opacity:.6;margin-top:8px">Arraste aqui - Ctrl+A todos, F2 renomeia, Del exclui</div></div>`; return; }
+  if(listaCompleta.length===0){ sL.innerHTML=`<div style="text-align:center;opacity:.5;padding:40px"><div style="font-size:48px">📁</div><div style="margin-top:12px">Esta pasta está vazia</div><div style="font-size:11px;opacity:.6;margin-top:8px">Clique direito → Novo → Pasta/Arquivo igual PC<br>Arraste pasta inteira aqui</div></div>`; return; }
   sL.innerHTML='';
   listaCompleta.forEach((o, idx)=>{
     const key=o.isFolder?'folder:'+o.path:o.id;
@@ -400,11 +539,15 @@ function showCtxMenuLeft(x,y,id){
   ctx.innerHTML=`
     <div class="ctx-item" onclick="abrirEditorComId('${id}');hideCtx()">📂 Abrir <kbd>Enter</kbd></div>
     <div class="ctx-item" onclick="renomearSelecionado('${id}');hideCtx()">✏️ Renomear <kbd>F2</kbd></div>
-    <div style="height:1px;background:var(--border);margin:4px 0"></div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-item" onclick="criarNovaPastaEsq();hideCtx()">📁 Nova pasta</div>
+    <div class="ctx-item" onclick="criarNovoArquivoEsq();hideCtx()">📄 Novo arquivo</div>
+    <div class="ctx-sep"></div>
     <div class="ctx-item" onclick="copySelection();hideCtx()">⎘ Copiar <kbd>Ctrl+C</kbd></div>
     <div class="ctx-item" onclick="cutSelection();hideCtx()">✂️ Recortar <kbd>Ctrl+X</kbd></div>
     <div class="ctx-item" onclick="pasteSelection('');hideCtx()">📋 Colar <kbd>Ctrl+V</kbd></div>
-    <div style="height:1px;background:var(--border);margin:4px 0"></div>
+    <div class="ctx-item" onclick="duplicarSelecionadoEsq();hideCtx()">⎗ Duplicar <kbd>Ctrl+D</kbd></div>
+    <div class="ctx-sep"></div>
     <div class="ctx-item" onclick="moverEsqParaDir();hideCtx()">→ Mover pra DIR <kbd>F5</kbd></div>
     <div class="ctx-item" style="color:#ff7a7a" onclick="excluirSelecionadosEsq();hideCtx()">🗑️ Excluir <kbd>Del</kbd></div>
   `;
@@ -414,12 +557,12 @@ function hideCtx(){ document.getElementById('ctxMenu').style.display='none'; }
 document.addEventListener('click', e=>{ if(!e.target.closest('#ctxMenu')) hideCtx(); });
 function renomearSelecionado(id){
   if(!id){
-    if(selecionados.size!==1){ showDuplicateWarn(`Selecione 1 item pra renomear com F2`); return; }
+    if(selecionados.size!==1){ showDuplicateWarn(`Selecione 1 item pra renomear F2`); return; }
     id=[...selecionados][0];
   }
   if(id.startsWith('folder:')){
     const path=id.slice(7);
-    const novo=prompt('Renomear pasta (F2):', path.split('/').pop());
+    const novo=prompt('Renomear pasta (F2 igual PC):', path.split('/').pop());
     if(novo){
       const parent=path.split('/').slice(0,-1).join('/');
       const novoPath=(parent?parent+'/':'')+novo;
@@ -435,7 +578,7 @@ function renomearSelecionado(id){
   } else {
     const o=ativos.find(a=>a.id===id);
     if(o){
-      const novo=prompt('Renomear arquivo (F2):', o.name);
+      const novo=prompt('Renomear arquivo (F2 igual PC):', o.name);
       if(novo){
         const dir=o.path.split('/').slice(0,-1).join('/');
         const novoPath=(dir?dir+'/':'')+novo;
@@ -449,10 +592,10 @@ function renomearSelecionado(id){
 function renomearSelecionadoAtual(){ renomearSelecionado(); }
 function renomearSelecionadoDir(id){
   if(!id){
-    if(selecionadosDir.size!==1){ showDuplicateWarn(`Selecione 1 item DIR pra renomear com F2`); return; }
+    if(selecionadosDir.size!==1){ showDuplicateWarn(`Selecione 1 item DIR pra renomear F2`); return; }
     id=[...selecionadosDir][0];
   }
-  const novoNome=prompt('Renomear no DIR (F2) - novo nome:', id.split('/').pop());
+  const novoNome=prompt('Renomear no DIR (F2 igual PC) - novo nome:', id.split('/').pop());
   if(!novoNome) return;
   const dir=id.split('/').slice(0,-1).join('/');
   const novoPath=(dir?dir+'/':'')+novoNome;
@@ -488,18 +631,14 @@ function cutSelectionDir(){ clipboard=[...selecionadosDir]; clipboardAction='cut
 async function pasteSelection(targetFolder){
   if(!clipboard) return;
   if(clipboardIsDir){
-    // colar DIR -> ESQ ou DIR -> DIR
     if(activePanel==='left'){
       for(let path of clipboard){
         await puxarArquivo(path);
-        if(clipboardAction==='cut'){
-          await githubDeleteFile(path, `FORJA CUT: ${path}`);
-        }
+        if(clipboardAction==='cut'){ await githubDeleteFile(path, `FORJA CUT: ${path}`); }
       }
       if(clipboardAction==='cut') clipboard=null;
       setTimeout(()=>carregarDadosRepo(),1500);
     } else {
-      // DIR -> DIR dentro de outra pasta
       for(let path of clipboard){
         const fileName=path.split('/').pop();
         const newPath=targetFolder? targetFolder+'/'+fileName : fileName;
@@ -508,9 +647,7 @@ async function pasteSelection(targetFolder){
         if(!contentRes.ok) continue;
         const data=await contentRes.json();
         await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${newPath.split('/').map(encodeURIComponent).join('/')}`, {method:'PUT', headers:{Authorization:`token ${getREPO_TOKEN()}`, 'Content-Type':'application/json'}, body: JSON.stringify({message:`FORJA COPY DIR: ${path} -> ${newPath}`, content:data.content, branch:"main"})});
-        if(clipboardAction==='cut'){
-          await githubDeleteFile(path, `FORJA CUT: ${path}`);
-        }
+        if(clipboardAction==='cut'){ await githubDeleteFile(path, `FORJA CUT: ${path}`); }
         await new Promise(r=>setTimeout(r,400));
       }
       if(clipboardAction==='cut') clipboard=null;
@@ -551,13 +688,12 @@ async function pasteSelection(targetFolder){
     }
   }
   if(clipboardAction==='cut') clipboard=null;
-  if(dup>0) showDuplicateWarn(`${dup} já existe(m) - não duplicado`);
+  if(dup>0) showDuplicateWarn(`${dup} já existe(m)`);
   await carregarTudo();
 }
 async function pasteSelectionDir(){
   if(!clipboard) return;
   if(!clipboardIsDir){
-    // ESQ -> DIR
     for(let key of clipboard){
       if(key.startsWith('folder:')){
         const path=key.slice(7);
@@ -620,7 +756,7 @@ async function renderLiveSite(){
   const liveFrame=document.getElementById('liveSiteFrame');
   const indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html'));
   if(indexFile){ let html=await indexFile.blob.text(); liveFrame.srcdoc=html; return; }
-  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#202020;color:#fff;padding:12px">FORJA - ${ativos.length} itens - Igual nas duas telas</body></html>`;
+  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#202020;color:#fff;padding:12px">FORJA - ${ativos.length} itens - Todas funções PC</body></html>`;
 }
 
 // === REPO COMO ANTES - NÃO MEXIDO ===
@@ -673,7 +809,7 @@ function renderRepo(){
   const breadcrumb=document.getElementById('breadcrumb'); const listEl=document.getElementById('repoList');
   const parts=currentPath?currentPath.split('/').filter(Boolean):[]; let htmlCrumb=`<span onclick="navegarPara('')">🏠 root</span>`; let acc=""; parts.forEach(p=>{ acc+=(acc?"/":"")+p; htmlCrumb+=`<span style="opacity:.3">/</span><span onclick="navegarPara('${acc}')">${p}</span>`; });
   breadcrumb.innerHTML=htmlCrumb+`<span style="margin-left:auto;opacity:.5">${selecionadosDir.size} sel</span>`;
-  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia - arraste pasta exata aqui</div>'; return; }
+  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia - clique direito → Nova Pasta/Arquivo igual PC<br>Ou arraste pasta exata aqui</div>'; return; }
   listEl.innerHTML=""; if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const d=document.createElement('div'); d.className='repo-row'; d.innerHTML=`<span>📁.. voltar</span>`; d.onclick=()=>{ setActivePanel('right'); navegarPara(up); }; listEl.appendChild(d); }
   items.forEach((item, idx)=>{
     const row=document.createElement('div'); row.className='repo-row'+(item.isFolder?' folder-row':'')+(selecionadosDir.has(item.fullPath)?' selected-right':''); row.dataset.path=item.fullPath; row.dataset.index=idx;
@@ -762,11 +898,15 @@ function showCtxMenuDir(x,y,fullPath,isFolder){
   ctx.innerHTML=`
     <div class="ctx-item" onclick="abrirEditorRepo('${fullPath}');hideCtx()">📂 Abrir <kbd>Enter</kbd></div>
     <div class="ctx-item" onclick="renomearSelecionadoDir('${fullPath}');hideCtx()">✏️ Renomear <kbd>F2</kbd></div>
-    <div style="height:1px;background:var(--border);margin:4px 0"></div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-item" onclick="criarNovaPastaDir();hideCtx()">📁 Nova pasta</div>
+    <div class="ctx-item" onclick="criarNovoArquivoDir();hideCtx()">📄 Novo arquivo</div>
+    <div class="ctx-sep"></div>
     <div class="ctx-item" onclick="copySelectionDir();hideCtx()">⎘ Copiar <kbd>Ctrl+C</kbd></div>
     <div class="ctx-item" onclick="cutSelectionDir();hideCtx()">✂️ Recortar <kbd>Ctrl+X</kbd></div>
     <div class="ctx-item" onclick="pasteSelectionDir();hideCtx()">📋 Colar <kbd>Ctrl+V</kbd></div>
-    <div style="height:1px;background:var(--border);margin:4px 0"></div>
+    <div class="ctx-item" onclick="duplicarSelecionadoDir();hideCtx()">⎗ Duplicar <kbd>Ctrl+D</kbd></div>
+    <div class="ctx-sep"></div>
     <div class="ctx-item" onclick="moverDirParaEsq();hideCtx()">← Mover pra ESQ <kbd>F6</kbd></div>
     <div class="ctx-item" style="color:#ff7a7a" onclick="excluirSelecionadosDir();hideCtx()">🗑️ Excluir <kbd>Del</kbd></div>
   `;
@@ -797,7 +937,7 @@ async function moverEsqParaDir(){
   if(ok>0){ log(`✅ ${ok} -> main - Pages 30-60s`); setTimeout(()=>carregarDadosRepo(), 1500); setTimeout(()=>carregarDadosRepo(), 4000); }
 }
 async function moverDirParaEsq(){ if(selecionadosDir.size===0){ log('Nada selecionado DIR'); return; } for(let p of [...selecionadosDir]) await puxarArquivo(p); selecionadosDir.clear(); renderRepo(); }
-function excluirSelecionadosEsq(){ if(selecionados.size===0) return; if(!confirm(`Excluir ${selecionados.size} itens ESQ? (Del)`)) return; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); arqs.forEach(a=>delDB(a.id)); } else delDB(key); } selecionados.clear(); setTimeout(()=>carregarTudo(),200); }
+function excluirSelecionadosEsq(){ if(selecionados.size===0) return; if(!confirm(`Excluir ${selecionados.size} itens ESQ? (Del igual PC)`)) return; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); arqs.forEach(a=>delDB(a.id)); } else delDB(key); } selecionados.clear(); setTimeout(()=>carregarTudo(),200); }
 async function excluirSelecionadosDir(){
   if(selecionadosDir.size===0) return;
   if(!confirm(`Excluir ${selecionadosDir.size} itens DIR do repo? (Del) - vai commitar delete na main e Pages atualiza`)) return;
@@ -810,7 +950,7 @@ async function excluirSelecionadosDir(){
       await new Promise(r=>setTimeout(r,400));
     }
   }
-  showDuplicateWarn(`${ok} excluído(s) DIR - Pages atualiza em 30-60s`);
+  showDuplicateWarn(`${ok} excluído(s) DIR - Pages 30-60s`);
   selecionadosDir.clear();
   setTimeout(()=>carregarDadosRepo(),2000);
 }
@@ -835,6 +975,34 @@ function setupDropZones(){
       }
     });
   });
+  // clique direito no vazio = menu criar igual PC
+  document.getElementById('sLeft').addEventListener('contextmenu', e=>{
+    if(e.target.closest('.item-row')) return;
+    e.preventDefault(); setActivePanel('left');
+    const ctx=document.getElementById('ctxMenu');
+    ctx.innerHTML=`
+      <div class="ctx-item" onclick="criarNovaPastaEsq();hideCtx()">📁 Nova pasta</div>
+      <div class="ctx-item" onclick="criarNovoArquivoEsq();hideCtx()">📄 Novo arquivo</div>
+      <div class="ctx-sep"></div>
+      <div class="ctx-item" onclick="pasteSelection('');hideCtx()">📋 Colar <kbd>Ctrl+V</kbd></div>
+      <div class="ctx-item" onclick="selecionarTodos();hideCtx()">☑ Selecionar todos <kbd>Ctrl+A</kbd></div>
+    `;
+    ctx.style.left=e.clientX+'px'; ctx.style.top=e.clientY+'px'; ctx.style.display='flex';
+  });
+  document.getElementById('repoList').addEventListener('contextmenu', e=>{
+    if(e.target.closest('.repo-row')) return;
+    e.preventDefault(); setActivePanel('right');
+    const ctx=document.getElementById('ctxMenu');
+    ctx.innerHTML=`
+      <div class="ctx-item" onclick="criarNovaPastaDir();hideCtx()">📁 Nova pasta DIR</div>
+      <div class="ctx-item" onclick="criarNovoArquivoDir();hideCtx()">📄 Novo arquivo DIR</div>
+      <div class="ctx-sep"></div>
+      <div class="ctx-item" onclick="pasteSelectionDir();hideCtx()">📋 Colar <kbd>Ctrl+V</kbd></div>
+      <div class="ctx-item" onclick="selecionarTodosDir();hideCtx()">☑ Selecionar todos <kbd>Ctrl+A</kbd></div>
+      <div class="ctx-item" onclick="carregarDadosRepo();hideCtx()">🔄 Atualizar</div>
+    `;
+    ctx.style.left=e.clientX+'px'; ctx.style.top=e.clientY+'px'; ctx.style.display='flex';
+  });
 }
 function selecionarTodosDir(){
   const items=getTreeForPath(currentPath);
@@ -844,78 +1012,50 @@ function selecionarTodosDir(){
 }
 setupDropZones();
 
-// === ATALHOS FUNCIONANDO CERTOS - IGUAIS NAS DUAS TELAS ===
+// === ATALHOS CERTOS IGUAIS PC - FUNCIONANDO NAS DUAS TELAS ===
 document.addEventListener('keydown', e=>{
   const isInput=e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA' || e.target.id==='editArea';
   if(isInput && e.key!=='Escape') return;
 
-  // Ctrl+A = selecionar todos na tela ativa - igual PC
   if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='a'){
     e.preventDefault();
-    if(activePanel==='right'){
-      toggleSelectAllRight(true);
-      log('Ctrl+A DIR - todos selecionados');
-    } else {
-      toggleSelectAllLeft(true);
-      log('Ctrl+A ESQ - todos selecionados');
-    }
+    if(activePanel==='right'){ toggleSelectAllRight(true); } else { toggleSelectAllLeft(true); }
     return;
   }
-  // Ctrl+C = copiar - igual PC
   if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='c'){
     e.preventDefault();
     if(activePanel==='right') copySelectionDir(); else copySelection();
     return;
   }
-  // Ctrl+X = recortar - igual PC
   if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='x'){
     e.preventDefault();
     if(activePanel==='right') cutSelectionDir(); else cutSelection();
     return;
   }
-  // Ctrl+V = colar - igual PC
   if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='v'){
     e.preventDefault();
     if(activePanel==='right') pasteSelectionDir(); else pasteSelection(currentPath||'');
-    log(`Ctrl+V ${activePanel.toUpperCase()} - colar`);
     return;
   }
-  // Delete = excluir na tela ativa - igual PC
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='d'){
+    e.preventDefault();
+    if(activePanel==='right') duplicarSelecionadoDir(); else duplicarSelecionadoEsq();
+    return;
+  }
   if(e.key==='Delete'){
     e.preventDefault();
-    if(activePanel==='right'){
-      if(selecionadosDir.size>0) excluirSelecionadosDir();
-    } else {
-      if(selecionados.size>0) excluirSelecionadosEsq();
-    }
+    if(activePanel==='right'){ if(selecionadosDir.size>0) excluirSelecionadosDir(); }
+    else { if(selecionados.size>0) excluirSelecionadosEsq(); }
     return;
   }
-  // F2 = renomear - igual PC
   if(e.key==='F2'){
     e.preventDefault();
     if(activePanel==='right') renomearSelecionadoDir(); else renomearSelecionado();
     return;
   }
-  // F5 = mover ESQ->DIR - igual PC (F5 atualizar/mover)
-  if(e.key==='F5'){
-    e.preventDefault();
-    if(activePanel==='left') moverEsqParaDir(); else carregarDadosRepo();
-    return;
-  }
-  // F6 = mover DIR->ESQ
-  if(e.key==='F6'){
-    e.preventDefault();
-    moverDirParaEsq();
-    return;
-  }
-  // Escape = desselecionar tudo - igual PC
-  if(e.key==='Escape'){
-    selecionados.clear(); selecionadosDir.clear();
-    renderLeft(); renderRepo(); hideCtx();
-    log('Esc - desselecionado tudo');
-    return;
-  }
-  // Enter = abrir - igual PC
+  if(e.key==='F5'){ e.preventDefault(); if(activePanel==='left') moverEsqParaDir(); else carregarDadosRepo(); return; }
+  if(e.key==='F6'){ e.preventDefault(); moverDirParaEsq(); return; }
+  if(e.key==='Escape'){ selecionados.clear(); selecionadosDir.clear(); renderLeft(); renderRepo(); hideCtx(); return; }
   if(e.key==='Enter'){
     e.preventDefault();
     if(activePanel==='left' && selecionados.size===1){
@@ -928,10 +1068,7 @@ document.addEventListener('keydown', e=>{
     }
     return;
   }
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){
-    e.preventDefault();
-    if(document.getElementById('editModal').style.display==='flex') salvarEdicao();
-  }
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); if(document.getElementById('editModal').style.display==='flex') salvarEdicao(); }
 });
 </script>
 </body>
