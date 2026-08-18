@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#00f5ff">
+<title>K-ONVERSA</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+:root{--bg:#000;--c:#00f5ff;--bg2:#050a14}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+body{background:radial-gradient(circle at 50% 50%, #001a33 0%, #000 100%);color:#fff;height:100vh;overflow:hidden}
+.status{position:fixed;top:10px;right:10px;padding:5px 15px;border-radius:20px;font-size:12px;background:#333;z-index:10}
+.status.online{background:var(--c);color:#000}
+.topo{padding:15px;background:rgba(0,10,20,0.8);border-bottom:1px solid var(--c);display:flex;justify-content:space-between;align-items:center}
+.topo h1{color:var(--c);text-shadow:0 0 20px var(--c);font-size:18px}
+.btn{padding:8px 15px;background:var(--c);border:none;border-radius:10px;color:#000;font-weight:700}
+.telas{display:flex;height:calc(100vh - 70px)}
+.lista{width:35%;background:rgba(0,10,20,0.5);border-right:1px solid var(--c);overflow-y:auto}
+.item-grupo{padding:15px;border-bottom:1px solid #001a33;cursor:pointer}
+.item-grupo:hover{background:#001a33}
+.item-grupo h3{color:var(--c);font-size:14px}
+.item-grupo p{font-size:10px;color:#aaa}
+.chat-area{width:65%;display:flex;flex-direction:column}
+.chat{flex:1;overflow-y:auto;padding:15px}
+.msg{max-width:70%;padding:12px 18px;margin-bottom:10px;border-radius:15px;animation:aparecer .3s}
+.eu{background:linear-gradient(90deg,#0066ff,#00f5ff);margin-left:auto;color:#000}
+.outro{background:rgba(0,100,255,0.3);border:1px solid var(--c)}
+.nome-msg{font-size:10px;color:var(--c);margin-bottom:3px}
+.input-area{display:flex;padding:15px;gap:10px;background:rgba(0,10,20,0.9)}
+.input-area input{flex:1;padding:15px;background:#001a33;border:1px solid var(--c);border-radius:15px;color:#fff}
+.input-area button{padding:15px 25px;background:var(--c);border:none;border-radius:15px;color:#000;font-weight:700}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:20;padding:20px}
+.check-contato{display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid #001a33}
+@keyframes aparecer{from{opacity:0;transform:translateY(20px)}}
+</style>
+</head>
+<body>
+<div class="status" id="status">OFFLINE</div>
+
+<div class="topo">
+  <h1>K-ONVERSA NEXUS</h1>
+  <button class="btn" onclick="abrirModalGrupo()">+ GRUPO</button>
+</div>
+
+<div class="telas">
+  <div class="lista" id="listaGrupos">
+    <h3 style="padding:15px;color:var(--c)">MEUS GRUPOS</h3>
+  </div>
+  <div class="chat-area">
+    <div class="chat" id="chat"></div>
+    <div class="input-area">
+      <input type="text" id="input" placeholder="Digite aqui..." onkeydown="if(event.key==='Enter')enviar()">
+      <button onclick="enviar()">ENVIAR</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modalGrupo">
+  <h2 style="color:var(--c);margin-bottom:15px">Criar Novo Grupo</h2>
+  <input type="text" id="nomeGrupo" placeholder="Nome do Grupo" style="width:100%;padding:10px;margin-bottom:15px;background:#001a33;border:1px solid var(--c);color:#fff">
+  <div id="listaContatos"></div>
+  <button class="btn" onclick="criarGrupo()" style="width:100%;margin-top:15px">CRIAR GRUPO</button>
+  <button class="btn" onclick="fecharModal()" style="width:100%;margin-top:10px;background:#333;color:#fff">CANCELAR</button>
+</div>
+
+<script>
+// CONFIG
+const TOKEN = "ghp_COLE_SEU_TOKEN"; // 1x só
+const REPO = "korvilp-sudo/korvil-app";
+const ARQ_GRUPOS = "k-onversa/grupos.json";
+const ARQ_MSGS = "k-onversa/mensagens.json";
+const MEU_ID = "willian"; // Troque pelo seu nome/id
+
+let grupos = [];
+let mensagens = [];
+let grupoAberto = null;
+
+// STATUS
+function attStatus(){
+  document.getElementById('status').innerText = navigator.onLine ? 'ONLINE' : 'OFFLINE';
+  document.getElementById('status').className = navigator.onLine ? 'status online' : 'status';
+}
+window.addEventListener('online', attStatus);
+window.addEventListener('offline', attStatus);
+attStatus();
+
+// 1. CARREGAR DADOS DO GITHUB
+async function carregarDados(){
+  const g = await fetch(`https://raw.githubusercontent.com/${REPO}/main/${ARQ_GRUPOS}`);
+  grupos = await g.json();
+  const m = await fetch(`https://raw.githubusercontent.com/${REPO}/main/${ARQ_MSGS}`);
+  mensagens = await m.json();
+  carregarListaGrupos();
+}
+carregarDados();
+setInterval(carregarDados, 3000); // Atualiza a cada 3s
+
+// 2. LISTA DE GRUPOS
+function carregarListaGrupos(){
+  const div = document.getElementById('listaGrupos');
+  div.innerHTML = '<h3 style="padding:15px;color:var(--c)">MEUS GRUPOS</h3>';
+  grupos.filter(g=>g.membros.includes(MEU_ID)).forEach(g=>{
+    div.innerHTML += `<div class="item-grupo" onclick="abrirGrupo('${g.id}')">
+      <h3>${g.nome}</h3>
+      <p>${g.ultima_msg || 'Sem mensagens'}</p>
+    </div>`;
+  });
+}
+
+// 3. ABRIR GRUPO E CHAT
+function abrirGrupo(id){
+  grupoAberto = id;
+  carregarMsgs();
+}
+function carregarMsgs(){
+  const chat = document.getElementById('chat');
+  const msgsDoGrupo = mensagens.filter(m=>m.grupo === grupoAberto);
+  chat.innerHTML = msgsDoGrupo.map(m=>`
+    <div class="msg ${m.autor === MEU_ID ? 'eu' : 'outro'}">
+      ${m.autor !== MEU_ID ? `<div class="nome-msg">${m.autor}</div>` : ''}
+      ${m.txt}
+    </div>`).join('');
+  chat.scrollTop = 99999;
+}
+
+// 4. ENVIAR MENSAGEM
+async function enviar(){
+  if(!grupoAberto) return alert('Selecione um grupo');
+  let txt = document.getElementById('input').value;
+  if(!txt) return;
+  
+  const novaMsg = {id:'m'+Date.now(), grupo:grupoAberto, autor:MEU_ID, txt, hora:new Date().toISOString()};
+  mensagens.push(novaMsg);
+  
+  // Atualiza ultima msg do grupo
+  const g = grupos.find(x=>x.id===grupoAberto);
+  g.ultima_msg = txt;
+  
+  await salvarNoGithub(ARQ_MSGS, mensagens);
+  await salvarNoGithub(ARQ_GRUPOS, grupos);
+  document.getElementById('input').value='';
+}
+
+// 5. CRIAR GRUPO
+function abrirModalGrupo(){
+  document.getElementById('modalGrupo').style.display='block';
+  // Simula contatos do Projeto
+  const contatos = ["keli","aluno1","aluno2","aluno3"];
+  document.getElementById('listaContatos').innerHTML = contatos.map(c=>`
+    <div class="check-contato"><input type="checkbox" value="${c}" class="check"> ${c}</div>
+  `).join('');
+}
+function fecharModal(){document.getElementById('modalGrupo').style.display='none';}
+
+async function criarGrupo(){
+  const nome = document.getElementById('nomeGrupo').value;
+  const selecionados = [...document.querySelectorAll('.check:checked')].map(c=>c.value);
+  selecionados.push(MEU_ID);
+  
+  const novoGrupo = {
+    id:'g'+Date.now(), nome, membros:selecionados, criado_por:MEU_ID, ultima_msg:"", hora:new Date().toISOString()
+  };
+  grupos.push(novoGrupo);
+  await salvarNoGithub(ARQ_GRUPOS, grupos);
+  fecharModal();
+  carregarListaGrupos();
+}
+
+// 6. SALVAR NO GITHUB
+async function salvarNoGithub(arquivo, dados){
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${arquivo}`, {headers:{Authorization:`token ${TOKEN}`}});
+  const data = await res.json();
+  await fetch(`https://api.github.com/repos/${REPO}/contents/${arquivo}`, {
+    method:'PUT',
+    headers:{Authorization:`token ${TOKEN}`},
+    body:JSON.stringify({
+      message:'update',
+      content:btoa(JSON.stringify(dados)),
+      sha:data.sha
+    })
+  });
+}
+
+// SW
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
+</script>
+</body>
+</html>
