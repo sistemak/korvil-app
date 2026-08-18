@@ -5,67 +5,45 @@ Github token g.hp_2QIJJlBAS2TXg3bPN3HN7yuipxabw42V5MyO -->
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FORJA GEMINI AQ</title>
+<title>FORJA AQ + GH</title>
 <style>
-body{background:#050505;color:#00ff88;font-family:Consolas,monospace;padding:15px;max-width:800px;margin:auto}
-h2{color:#00ff88;text-align:center}
-input,textarea,button{width:100%;padding:12px;margin:8px 0;background:#111;border:1px solid #00ff88;color:#00ff88;border-radius:5px;font-family:inherit;box-sizing:border-box}
-button{cursor:pointer;font-weight:bold;background:#00ff88;color:#000;font-size:16px}
-button:hover{background:#00cc66}
-#log{border:1px solid #00ff88;padding:15px;height:350px;overflow:auto;background:#000;border-radius:5px;white-space:pre-wrap}
+body{background:#000;color:#0f0;font-family:monospace;padding:15px}
+input,textarea,button{width:100%;padding:12px;margin:8px 0;background:#111;border:1px solid #0f0;color:#0f0}
+button{background:#0f0;color:#000;font-weight:bold;cursor:pointer}
+#log{border:1px solid #0f0;padding:10px;height:300px;overflow:auto}
 </style>
 </head>
 <body>
-<h2>🔥 FORJA GEMINI COM GH_TOKEN 🔥</h2>
-
-<label>1. Cole seu GH_TOKEN aqui:</label>
-<input id="ghtoken" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-<button onclick="salvarGH()">SALVAR GH_TOKEN</button>
-
-<label>2. Digite o Prompt:</label>
-<textarea id="prompt" rows="5">Faça um site de vendas moderno</textarea>
+<h2>FORJA GEMINI - 2 CAMPOS</h2>
+<input id="aq" type="password" placeholder="Cole o AQ... aqui">
+<input id="gh" type="password" placeholder="Cole o ghp_... aqui embaixo">
+<button onclick="salvar()">SALVAR OS 2</button>
+<textarea id="p" rows="4">Faça um site de vendas</textarea>
 <button onclick="enviar()">ENVIAR PRA IA</button>
-
-<label>3. Log:</label>
-<div id="log">Aguardando...</div>
+<div id="log"></div>
 
 <script>
-function salvarGH(){
-  localStorage.setItem('gh', document.getElementById('ghtoken').value);
-  alert("GH_TOKEN salvo no navegador!");
+function salvar(){
+  localStorage.setItem('t', document.getElementById('aq').value + '\n' + document.getElementById('gh').value);
+  alert("2 Tokens salvos!");
 }
 
 async function enviar(){
-  const GH = localStorage.getItem('gh');
-  if(!GH) return alert("Salve o GH_TOKEN primeiro");
-
-  const log = document.getElementById('log');
-  log.innerText = "Enviando pro Action...\n";
-
-  // Pega owner e repo da URL do GitHub Pages
-  const parts = location.hostname.split('.');
-  const owner = parts[0];
+  const tudo = localStorage.getItem('t').split('\n');
+  const GH = tudo[1]; // linha 2 é o GH_TOKEN
+  
+  const owner = location.hostname.split('.')[0];
   const repo = location.pathname.split('/')[1];
-
-  const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Gemini%20Proxy/dispatches`, {
+  
+  document.getElementById('log').innerText = "Enviando...";
+  
+  await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Gemini%20Proxy/dispatches`, {
     method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + GH,
-      'Accept': 'application/vnd.github.v3+json'
-    },
-    body: JSON.stringify({
-      ref: "main",
-      inputs: {prompt: document.getElementById('prompt').value}
-    })
+    headers: {'Authorization': 'Bearer ' + GH},
+    body: JSON.stringify({ref: "main", inputs: {prompt: document.getElementById('p').value}})
   });
-
-  if(r.status === 204) {
-    log.innerText = "✅ ENVIADO COM SUCESSO!\n\nPasso 1: Vá na aba ACTIONS do repo\nPasso 2: Clique em 'Gemini Proxy' rodando\nPasso 3: Espere 15 segundos\nPasso 4: A resposta vai estar no arquivo resultado.txt";
-  } else {
-    const err = await r.text();
-    log.innerText = "❌ Erro: " + r.status + "\n\n" + err + "\n\nVerifique se GH_TOKEN tem permissão 'workflow' e 'repo'";
-  }
+  
+  document.getElementById('log').innerText = "✅ Enviado!\n\nVá em ACTIONS > Gemini Proxy > resultado.txt";
 }
 </script>
 </body>
