@@ -5,746 +5,312 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FORJA V12 K-AI NEON 3D HOLOGRÁFICO - sistemak - REPO_TOKEN</title>
+<title>KORVIL V8 LIVE RENDER INSTANT - sistemak - REPO_TOKEN</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
-/* === FORJA.GERAL K-AI NEON HOLOGRÁFICO 3D - Ferramenta Oficial === */
-:root{
-  --neon:#00f0ff;
-  --neon2:#00ffff;
-  --neon3:#00e5ff;
-  --bg:#000000;
-  --card:#050a14;
-  --card2:#080f1e;
-  --border:rgba(0,240,255,0.28);
-  --glow:0 0 12px var(--neon), 0 0 28px rgba(0,240,255,0.35), 0 0 50px rgba(0,240,255,0.15);
-}
+:root{--accent:#00ffea;--bg:#070a12;--card:#101420}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{background:#000!important;color:#e0faff;font-family:Consolas,monospace;height:100vh;overflow:hidden}
-body{display:flex;flex-direction:column}
-
-/* HEADER FORJA */
-#forja-header{
-  height:44px;background:linear-gradient(180deg, #000 0%, #050a14 100%);
-  border-bottom:2px solid var(--neon);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 14px;box-shadow:0 2px 30px rgba(0,240,255,.35), inset 0 1px 0 rgba(0,240,255,.2);
-  position:relative;z-index:10;
-}
-#forja-header::after{
-  content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;
-  background:linear-gradient(90deg, transparent, var(--neon), var(--neon2), transparent);
-  animation:scan 3s linear infinite;
-}
-@keyframes scan{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-
-/* LAYOUT */
+body{background:var(--bg);color:#fff;font-family:Consolas,monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 #app{flex:1;display:flex;overflow:hidden;min-height:0}
-#left{flex:1.15;border-right:2px solid var(--neon);display:flex;flex-direction:column;background:#000;overflow:hidden;box-shadow:4px 0 30px rgba(0,240,255,.18)}
-#right{flex:1;min-width:580px;background:#000;display:flex;flex-direction:column;overflow:hidden;box-shadow:-4px 0 30px rgba(0,240,255,.12)}
-.top{padding:8px 10px;background:linear-gradient(180deg, #000 0%, #050a14 100%);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-
-/* BOTÕES 3D HOLOGRÁFICOS */
-.btn{
-  border:1px solid #1a2a4a;background:linear-gradient(180deg, #0a1428 0%, #000 100%);
-  color:#a0e8ff;padding:6px 11px;border-radius:20px;cursor:pointer;font-size:7px;
-  display:inline-flex;align-items:center;gap:4px;transition:.25s;
-  box-shadow:0 2px 8px rgba(0,0,0,.6), inset 0 1px 0 rgba(0,240,255,.15);
-  position:relative;transform-style:preserve-3d;
-}
-.btn::before{
-  content:'';position:absolute;inset:0;border-radius:20px;
-  background:linear-gradient(180deg, rgba(0,240,255,.12), transparent);
-  opacity:0;transition:.25s;
-}
-.btn:hover{border-color:var(--neon);color:var(--neon);box-shadow:var(--glow), 0 4px 12px rgba(0,0,0,.8);transform:translateY(-1px) translateZ(5px)}
-.btn:hover::before{opacity:1}
-.btn.ac{border-color:var(--neon);color:var(--neon);background:linear-gradient(180deg, rgba(0,240,255,.15) 0%, #000 100%);box-shadow:0 0 15px rgba(0,240,255,.3)}
-.btn.ac:hover{background:var(--neon);color:#000;box-shadow:0 0 25px var(--neon), 0 0 50px var(--neon)}
-.btn.neon{background:var(--neon);color:#000;font-weight:800;box-shadow:0 0 18px var(--neon), 0 0 35px var(--neon);border-color:var(--neon);text-shadow:none}
-.btn.kai{background:linear-gradient(180deg, #1a0e3a 0%, #000 100%);color:#c084ff;border-color:#a855f7;box-shadow:0 0 15px rgba(168,85,247,.3)}
-.btn.kai:hover{box-shadow:0 0 25px #a855f7, 0 0 50px rgba(168,85,247,.4)}
-.btn.danger{border-color:#ff4a7a;color:#ff7a9a}.btn.danger:hover{background:#ff4a7a;color:#fff;box-shadow:0 0 20px #ff4a7a}
-.btn.ghost{border-color:#1a2a4a;color:#5a6a8a}
-.badge{font-size:6px;background:#000;border:1px solid var(--neon);color:var(--neon);padding:3px 8px;border-radius:20px;box-shadow:0 0 10px rgba(0,240,255,.25), inset 0 0 10px rgba(0,240,255,.08)}
-
-/* CARDS 3D */
-.stage{flex:1;overflow:auto;padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:10px;align-content:start;background:#000;perspective:1000px}
-.item{
-  background:linear-gradient(180deg, #080f1e 0%, #000 100%);
-  border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;position:relative;transition:.3s;
-  box-shadow:0 4px 15px rgba(0,0,0,.6), 0 0 15px rgba(0,240,255,.08), inset 0 1px 0 rgba(0,240,255,.1);
-  transform-style:preserve-3d;
-}
-.item:hover{border-color:var(--neon);box-shadow:0 8px 25px rgba(0,0,0,.8), 0 0 30px rgba(0,240,255,.35), inset 0 1px 0 rgba(0,240,255,.2);transform:translateY(-3px) rotateX(2deg) translateZ(10px)}
-.item.selected{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon), 0 0 30px var(--neon), 0 0 60px rgba(0,240,255,.3)}
-.item.selected::after{content:'✓';position:absolute;top:6px;right:6px;background:var(--neon);color:#000;font-size:7px;padding:3px 6px;border-radius:20px;font-weight:900;box-shadow:0 0 12px var(--neon)}
-.item img,.item video{width:100%;height:74px;object-fit:cover;display:block;background:#000;filter:contrast(1.05) brightness(1.05)}
-.item.kai-file{border-color:#a855f7;box-shadow:0 0 15px rgba(168,85,247,.2)}
-
-/* MENUS E MINI-MENUS */
-.mini-menu{
-  position:absolute;top:100%;left:0;background:#050a14;border:1px solid var(--neon);border-radius:12px;
-  padding:6px;min-width:180px;z-index:50;display:none;flex-direction:column;gap:4px;
-  box-shadow:0 10px 40px rgba(0,0,0,.9), 0 0 30px rgba(0,240,255,.25);backdrop-filter:blur(10px);
-}
-.mini-menu.show{display:flex}
-.mini-menu button{width:100%;justify-content:flex-start;padding:8px 10px;font-size:7px;border-radius:8px;background:#000;border:1px solid #1a2a4a;color:#8ab4ff;text-align:left}
-.mini-menu button:hover{background:rgba(0,240,255,.12);border-color:var(--neon);color:var(--neon)}
-
-.storage-panel{display:flex;gap:5px;padding:8px 10px;background:#000;border-bottom:1px solid var(--border);overflow:auto}
-.storage-btn{font-size:6px;padding:5px 9px;border-radius:20px;border:1px solid #1e293b;background:#000;color:#6a7a9a;cursor:pointer;transition:.3s;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
-.storage-btn.active{border-color:var(--neon);color:var(--neon);background:rgba(0,240,255,.12);box-shadow:0 0 12px rgba(0,240,255,.25)}
-.storage-btn.kai{border-color:#a855f7;color:#a084ff}.storage-btn.kai.active{background:rgba(168,85,247,.15);box-shadow:0 0 12px rgba(168,85,247,.25)}
-
-/* DIREITA */
-#repoViewFallback{flex:1;overflow:auto;background:#000;display:flex;flex-direction:column}
-.repo-breadcrumb{padding:8px 10px;background:#000;border-bottom:1px solid var(--border);display:flex;gap:5px;flex-wrap:wrap;font-size:7px}
-.repo-breadcrumb span{cursor:pointer;color:var(--neon);padding:4px 8px;border-radius:20px;background:#050a14;border:1px solid var(--border);box-shadow:0 0 8px rgba(0,240,255,.15);transition:.2s}
-.repo-breadcrumb span:hover{box-shadow:0 0 15px var(--neon);transform:translateY(-1px)}
-.repo-folder,.repo-file-github{padding:9px 11px;background:linear-gradient(180deg, #080f1e 0%, #000 100%);border-bottom:1px solid #0f1a2a;display:flex;justify-content:space-between;align-items:center;font-size:7px;cursor:pointer;transition:.2s}
-.repo-folder:hover,.repo-file-github:hover{background:#0a152a;border-color:var(--neon);box-shadow:inset 0 0 15px rgba(0,240,255,.08)}
-.repo-file-github.selected-right{border-left:3px solid var(--neon);background:#0a1a30;box-shadow:0 0 15px rgba(0,240,255,.2)}
-
-/* VISUALIZADOR FORJA */
-#liveViewer{height:48%;min-height:340px;border-top:2px solid var(--neon);background:#000;display:flex;flex-direction:column;flex-shrink:0;box-shadow:0 -4px 30px rgba(0,240,255,.25)}
-.viewer-top{height:34px;background:linear-gradient(180deg, #000 0%, #050a14 100%);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:7px;gap:8px}
-.viewer-preview{flex:1.3;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border-right:1px solid var(--border)}
-.viewer-info{flex:0.7;padding:12px;overflow:auto;font-size:7px;background:#050a14;line-height:1.7;border-left:1px solid rgba(0,240,255,.1)}
-#liveSiteFrame{width:100%;height:100%;border:0;background:#000}
-#template-layer{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.2}
-
-/* MODAIS FORJA */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:100;display:none;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(6px)}
-.modal-box{background:linear-gradient(180deg, #080f1e 0%, #000 100%);border:1.5px solid var(--neon);border-radius:16px;max-width:760px;width:100%;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 0 50px rgba(0,240,255,.3), 0 20px 60px rgba(0,0,0,.8)}
-.modal-box.kai{border-color:#a855f7;box-shadow:0 0 50px rgba(168,85,247,.35)}
-.modal-head{padding:12px 14px;background:#000;border-bottom:1px solid var(--neon);display:flex;justify-content:space-between;align-items:center;font-size:8px;box-shadow:0 2px 15px rgba(0,240,255,.15)}
-.modal-body{padding:12px;display:flex;flex-direction:column;gap:8px;overflow:auto}
-.opt{padding:11px;border:1px solid #1e2a4a;border-radius:12px;cursor:pointer;background:linear-gradient(180deg, #0a152a 0%, #000 100%);display:flex;gap:10px;align-items:center;transition:.3s;box-shadow:0 2px 10px rgba(0,0,0,.4)}
-.opt:hover{border-color:var(--neon);background:linear-gradient(180deg, #0f1f3a 0%, #000 100%);box-shadow:0 0 20px rgba(0,240,255,.25);transform:translateY(-1px)}
-input.in,textarea.in{background:#000;border:1px solid var(--border);color:#e0faff;padding:6px 10px;border-radius:10px;font-size:7px;outline:none;transition:.3s;box-shadow:inset 0 1px 0 rgba(0,240,255,.08)}
-input.in:focus,textarea.in:focus{border-color:var(--neon);box-shadow:0 0 15px rgba(0,240,255,.35), inset 0 0 10px rgba(0,240,255,.08)}
-#log{height:44px;background:#000;border-top:1px solid var(--border);overflow:auto;padding:5px 10px;font-size:6px;color:var(--neon);white-space:pre-wrap;text-shadow:0 0 6px var(--neon);box-shadow:inset 0 0 20px rgba(0,240,255,.05)}
-
-/* EDITOR FORJA */
-#editModal{position:fixed;inset:0;background:#000;z-index:200;display:none;flex-direction:column}
+#left{flex:1;border-right:2px solid var(--accent);display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+#right{flex:1;min-width:500px;background:#0d1117;display:flex;flex-direction:column;overflow:hidden}
+.top{height:52px;display:flex;align-items:center;gap:4px;padding:0 6px;background:var(--card);border-bottom:1px solid #222;flex-wrap:wrap}
+.btn{border:1px solid #444;background:#000;color:#fff;padding:4px 7px;border-radius:15px;cursor:pointer;font-size:7px;display:inline-flex;align-items:center;gap:3px}
+.btn.ac{border-color:var(--accent);color:var(--accent)}.btn.ac:hover{background:var(--accent);color:#000}
+.btn.neon{background:var(--accent);color:#000;font-weight:bold;box-shadow:0 0 12px var(--accent);padding:5px 9px;border-radius:8px}
+.btn.danger{border-color:#ff2d7a;color:#ff2d7a}
+.btn.live.on{background:#ff3b3b;color:#000;box-shadow:0 0 12px #ff3b3b;border-color:#ff3b3b}
+.stage{flex:1;overflow:auto;padding:7px;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;align-content:start}
+.item{background:var(--card);border:2px solid #222;border-radius:10px;overflow:hidden;cursor:pointer;position:relative}
+.item.selected{border-color:var(--accent);box-shadow:0 0 8px var(--accent)}
+.item.selected::after{content:'✓';position:absolute;top:3px;right:3px;background:var(--accent);color:#000;font-size:6px;padding:2px 4px;border-radius:10px;font-weight:bold}
+.item img,.item video{width:100%;height:65px;object-fit:cover;display:block}
+.storage-panel{display:flex;gap:3px;padding:4px 6px;background:#080b16;border-bottom:1px solid #111;overflow:auto}
+.storage-btn{font-size:6px;padding:3px 5px;border-radius:10px;border:1px solid #222;background:#000;color:#888;cursor:pointer}
+.storage-btn.active{border-color:var(--accent);color:var(--accent)}
+#repoViewFallback{flex:1;overflow:auto;background:#0a0c18;display:flex;flex-direction:column}
+.repo-breadcrumb{padding:6px 8px;background:#000;border-bottom:1px solid #1a1f35;display:flex;gap:4px;flex-wrap:wrap;font-size:7px}
+.repo-breadcrumb span{cursor:pointer;color:var(--accent);padding:2px 5px;border-radius:6px;background:#0f1426}
+.repo-folder,.repo-file-github{padding:6px 8px;background:#111320;border-bottom:1px solid #1a1d2e;display:flex;justify-content:space-between;align-items:center;font-size:7px;cursor:pointer}
+.repo-file-github.selected-right{border-left:3px solid var(--accent);background:#162032}
+#liveViewer{height:48%;min-height:300px;border-top:2px solid var(--accent);background:#05070f;display:flex;flex-direction:column;flex-shrink:0}
+.viewer-top{height:28px;background:#000;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 6px;font-size:7px}
+.viewer-content{flex:1;display:flex;overflow:hidden;position:relative}
+.viewer-preview{flex:1;background:#000;display:flex;align-items:center;justify-content:center;overflow:auto;position:relative}
+#liveSiteFrame{width:100%;height:100%;border:0;background:#fff}
+#template-layer{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.25}
+#editModal{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:200;display:none;flex-direction:column}
 .edit-layout{flex:1;display:flex;overflow:hidden}
-.edit-code{flex:1;display:flex;flex-direction:column;border-right:2px solid var(--neon);background:#000;box-shadow:4px 0 30px rgba(0,240,255,.2)}
-.edit-render{flex:1.2;display:flex;flex-direction:column;background:#000}
-.edit-header{height:40px;background:#000;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:7px;box-shadow:0 2px 15px rgba(0,240,255,.1)}
-#editArea{flex:1;width:100%;background:#000;color:#e0faff;border:0;padding:14px;font-size:10px;font-family:Consolas,monospace;resize:none;outline:none;white-space:pre;overflow:auto;line-height:1.6;text-shadow:0 0 5px rgba(0,240,255,.3)}
-#editLiveFrame{flex:1;width:100%;border:0;background:#000}
-
-/* COMMAND PALETTE */
-#cmdPalette{position:fixed;top:20%;left:50%;transform:translate(-50%, -50%);width:520px;max-width:90vw;background:linear-gradient(180deg, #080f1e 0%, #000 100%);border:2px solid var(--neon);border-radius:16px;box-shadow:0 0 60px rgba(0,240,255,.4), 0 20px 80px rgba(0,0,0,.9);z-index:300;display:none;flex-direction:column;overflow:hidden}
-#cmdInput{width:100%;background:#000;border:0;border-bottom:1px solid var(--border);padding:14px 16px;color:var(--neon);font-family:Consolas;font-size:12px;outline:none}
-#cmdList{max-height:300px;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:4px}
-.cmd-item{padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:8px;border:1px solid transparent;transition:.2s}
-.cmd-item:hover,.cmd-item.active{background:rgba(0,240,255,.12);border-color:var(--neon);box-shadow:0 0 15px rgba(0,240,255,.2)}
-
-/* CONTEXT MENU */
-#ctxMenu{position:fixed;background:linear-gradient(180deg, #0a152a 0%, #000 100%);border:1px solid var(--neon);border-radius:12px;padding:6px;min-width:200px;z-index:400;display:none;flex-direction:column;gap:3px;box-shadow:0 10px 40px rgba(0,0,0,.9), 0 0 30px rgba(0,240,255,.3)}
-.ctx-item{padding:8px 10px;border-radius:8px;font-size:7px;cursor:pointer;display:flex;gap:8px;align-items:center;transition:.2s}
-.ctx-item:hover{background:rgba(0,240,255,.15);color:var(--neon)}
-
-/* PULSANTE K-AI NEON */
-.rounded-full.bg-white,.kai-core{
-  background:#000!important;border:2px solid var(--neon)!important;color:var(--neon)!important;
-  box-shadow:0 0 20px var(--neon), inset 0 0 20px rgba(0,240,255,0.2)!important;
-  animation:pulse-kai 2s infinite;
-}
-@keyframes pulse-kai{
-  0%,100%{box-shadow:0 0 15px var(--neon), 0 0 30px var(--neon); transform:scale(1)}
-  50%{box-shadow:0 0 30px var(--neon), 0 0 60px var(--neon), 0 0 90px var(--neon2), 0 0 120px rgba(168,85,247,.25); transform:scale(1.06)}
-}
-.text-glow{color:var(--neon)!important;text-shadow:0 0 8px var(--neon), 0 0 16px var(--neon);animation:glow-kai 2s infinite}
-@keyframes glow-kai{0%,100%{text-shadow:0 0 5px var(--neon)}50%{text-shadow:0 0 15px var(--neon), 0 0 25px var(--neon2)}}
-.drop-active{outline:2px dashed var(--neon)!important;outline-offset:-4px;background:rgba(0,240,255,.08)!important;box-shadow:0 0 25px rgba(0,240,255,.3)!important}
-::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:var(--neon);border-radius:10px;box-shadow:0 0 10px var(--neon)}::-webkit-scrollbar-track{background:#000}
-.geral-panel{background:linear-gradient(135deg, #050a14 0%, #110e26 100%);border:1px solid var(--neon);border-radius:12px;padding:10px;margin:6px 0;box-shadow:0 0 20px rgba(0,240,255,.15), inset 0 0 20px rgba(0,240,255,.05)}
+.edit-code{flex:1;display:flex;flex-direction:column;border-right:2px solid var(--accent);background:#0a0e1a}
+.edit-render{flex:1.3;display:flex;flex-direction:column;background:#fff}
+.edit-header{height:36px;background:#000;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:8px}
+#editArea{flex:1;width:100%;background:#000;color:#0f0;border:0;padding:10px;font-size:10px;font-family:Consolas,monospace;resize:none;outline:none;white-space:pre;overflow:auto}
+#editLiveFrame{flex:1;width:100%;border:0;background:#fff}
+input.in{background:#000;border:1px solid #333;color:#fff;padding:4px 6px;border-radius:8px;font-size:7px}
+#log{height:38px;background:#000;border-top:1px solid #222;overflow:auto;padding:3px 6px;font-size:6px;color:var(--accent);white-space:pre-wrap}
 </style>
 </head>
 <body>
-
-<!-- HEADER FORJA -->
-<div id="forja-header">
-  <div style="display:flex;align-items:center;gap:10px">
-    <div style="width:28px;height:28px;border-radius:50%;background:#000;border:2px solid var(--neon);display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px var(--neon), inset 0 0 10px rgba(0,240,255,.2);animation:pulse-kai 2s infinite;font-size:10px;font-weight:900;color:var(--neon)">F</div>
-    <b style="font-size:11px;color:var(--neon);text-shadow:0 0 10px var(--neon);letter-spacing:.1em">FORJA</b>
-    <span style="font-size:7px;opacity:.6;color:var(--neon)">• K-AI NEON 3D HOLOGRÁFICO • Cria/Edita/Atualiza sem sair da página</span>
-    <span class="badge" style="margin-left:8px">Ctrl+K COMANDOS</span>
-  </div>
-  <div style="display:flex;gap:6px;align-items:center">
-    <button class="btn kai" onclick="document.getElementById('geralFile').click()">⚙️.GERAL FORJA</button>
-    <button class="btn ac" onclick="document.getElementById('cmdPalette').style.display='flex';document.getElementById('cmdInput').focus()">⌘ COMANDOS</button>
-    <button class="btn neon" onclick="criarNovo('file')">+ ARQUIVO</button>
-    <button class="btn neon" onclick="criarNovo('folder')">+ PASTA</button>
-  </div>
-</div>
-
 <div id="template-layer"></div>
 <div id="app">
   <div id="left">
     <div class="top">
-      <div style="position:relative">
-        <button class="btn ac" onclick="toggleMiniMenu('menu-esq')">ESQ: LOCAL ▾</button>
-        <div id="menu-esq" class="mini-menu">
-          <button onclick="document.getElementById('f').click();hideMenus()">+ ANEXAR ARQUIVOS</button>
-          <button onclick="document.getElementById('folder').click();hideMenus()">📁 ANEXAR PASTA</button>
-          <button onclick="toggleStorage();hideMenus()">💾 ARMAZENAMENTO</button>
-          <button onclick="selecionarTodos();hideMenus()">☑ SELECIONAR TODOS</button>
-          <button onclick="limparSel();hideMenus()">🗑️ LIMPAR SELECIONADOS (SÓ ESQ)</button>
-          <button onclick="converterTudoKAI();hideMenus()">🤖 CONVERTER JARVIS→K-AI</button>
-        </div>
-      </div>
+      <b style="font-size:7px">ESQ</b>
       <button class="btn ac" onclick="document.getElementById('f').click()">+ ANEXAR</button>
-      <button class="btn ghost" onclick="document.getElementById('folder').click()">📁</button>
+      <button class="btn" onclick="document.getElementById('folder').click()">📁</button>
       <button class="btn ac" onclick="toggleStorage()">💾</button>
-      <button class="btn ac" onclick="selecionarTodos()">☑ TODOS</button>
-      <span id="selCount" class="badge">0 sel</span>
+      <button class="btn ac" onclick="selecionarTodos()">☑</button>
+      <span id="selCount" style="font-size:6px;background:#000;padding:2px 5px;border-radius:10px;border:1px solid var(--accent)">0</span>
       <button class="btn danger" onclick="limparSel()">🗑️</button>
-      <button class="btn ac" onclick="implantSelected()">⚡ IMPLANTAR</button>
-      <button class="btn ac" style="border-color:#00ff88;color:#00ff88;box-shadow:0 0 12px #00ff88" onclick="moverEsqParaDir()">→ DIR</button>
-      <button class="btn kai" onclick="duplicarSelecionados()">⎘ DUPLICAR</button>
+      <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverEsqParaDir()">→ DIR</button>
     </div>
     <div class="storage-panel" id="storagePanel" style="display:none">
-      <button class="storage-btn active" onclick="filtrarStorage('all',this)">📦 TODOS</button>
-      <button class="storage-btn kai" style="border-color:#a855f7;color:#c084ff" onclick="filtrarStorage('geral',this)">⚙️.GERAL FORJA NEON</button>
-      <button class="storage-btn" onclick="filtrarStorage('code',this)">📄 CÓDIGOS</button>
-      <button class="storage-btn" onclick="filtrarStorage('image',this)">🖼️ IMAGENS</button>
-      <button class="storage-btn" onclick="filtrarStorage('video',this)">🎬 VÍDEOS</button>
-      <button class="storage-btn" onclick="filtrarStorage('audio',this)">🔊 ÁUDIO</button>
-    </div>
-    <div style="padding:6px 10px;background:#000;border-bottom:1px solid var(--border);font-size:6px;opacity:.7;display:flex;justify-content:space-between;color:var(--neon)">
-      <span>FORJA: cria/edita/atualiza pastas, arquivos, códigos dentro do código primário • Sem mudar de tela</span>
-      <span>Arraste ESQ ↔ DIR • Clique direito → menu • Duplo clique → editar render exato</span>
+      <button class="storage-btn active" onclick="filtrarStorage('all',this)">TODOS</button>
+      <button class="storage-btn" onclick="filtrarStorage('code',this)">CODE</button>
+      <button class="storage-btn" onclick="filtrarStorage('image',this)">IMG</button>
+      <button class="storage-btn" onclick="filtrarStorage('video',this)">VID</button>
     </div>
     <div class="stage" id="sLeft"></div>
   </div>
   <div id="right">
-    <div style="padding:8px;background:#000;border-bottom:2px solid var(--neon);display:flex;flex-direction:column;gap:6px;box-shadow:0 2px 20px rgba(0,240,255,.2)">
-      <div style="display:flex;gap:5px;flex-wrap:wrap">
-        <div style="position:relative">
-          <button class="btn neon" onclick="toggleMiniMenu('menu-dir')">DIR: REPO ▾</button>
-          <div id="menu-dir" class="mini-menu">
-            <button onclick="abrirGithubOriginal();hideMenus()">▶ GITHUB ORIGINAL - sistemak/korvil-app</button>
-            <button onclick="toggleFallback();hideMenus()">📁 EXPLORER COM 🗑️ (SÓ DIR)</button>
-            <button onclick="abrirHistorico();hideMenus()">🕒 HISTÓRICO - voltar versões</button>
-            <button onclick="carregarDadosRepo();hideMenus()">🔄 ATUALIZAR REPO</button>
-            <button onclick="converterTudoKAI();hideMenus()">🤖 K-AI NEON MODE</button>
-          </div>
-        </div>
-        <button class="btn ac" onclick="abrirGithubOriginal()">▶ GITHUB</button>
-        <button class="btn ac" onclick="toggleFallback()">📁 EXPLORER</button>
-        <button class="btn ac" onclick="abrirHistorico()">🕒 HIST</button>
-        <button class="btn kai" onclick="converterTudoKAI()">🤖 K-AI</button>
+    <div style="padding:5px;background:#010409;border-bottom:2px solid var(--accent);display:flex;flex-direction:column;gap:4px">
+      <div style="display:flex;gap:3px">
+        <input id="ghO" class="in" value="sistemak" style="width:55px"><input id="ghR" class="in" value="korvil-app" style="width:55px">
+        <input id="REPO_TOKEN" type="password" class="in" placeholder="REPO_TOKEN" style="flex:1">
+        <button class="btn ac" onclick="saveCfg()">OK</button>
+      </div>
+      <div style="display:flex;gap:3px;align-items:center;background:#000;padding:3px;border-radius:6px">
+        <span id="selCountRight" style="font-size:6px">0 DIR</span>
+        <button class="btn ac" onclick="selecionarTodosDir()">☑ PASTA</button>
+        <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverDirParaEsq()">← ESQ</button>
         <button class="btn ac" onclick="carregarDadosRepo()">🔄</button>
       </div>
-      <div style="display:flex;gap:5px">
-        <input id="ghO" class="in" value="sistemak" style="width:70px">
-        <input id="ghR" class="in" value="korvil-app" style="width:70px">
-        <input id="REPO_TOKEN" type="password" class="in" placeholder="REPO_TOKEN ghp_..." style="flex:1">
-        <button class="btn ac" onclick="saveCfg()">SALVAR</button>
-      </div>
-      <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;background:#000;padding:6px;border-radius:12px;border:1px solid var(--border);box-shadow:inset 0 0 15px rgba(0,240,255,.05)">
-        <span id="selCountRight" class="badge">0 sel DIR</span>
-        <button class="btn ac" onclick="selecionarTodosDir()">☑ TODOS DA PASTA</button>
-        <button class="btn ghost" onclick="limparSelDir()">✕ LIMPAR</button>
-        <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverDirParaEsq()">← ESQ (BAIXAR)</button>
-        <button class="btn danger" onclick="deletarSelecionadosDir()">🗑️ DEL SEL</button>
-        <button class="btn ac" onclick="abrirEditor()">✏️ EDITAR</button>
-        <button class="btn kai" onclick="criarNovo('file', true)">+ NOVO NA PASTA</button>
-      </div>
-      <div id="currentPathDisplay" style="font-size:6px;opacity:.6;background:#000;padding:4px 8px;border-radius:20px;border:1px solid var(--border);color:var(--neon)">sistemak/korvil-app • FORJA K-AI NEON 3D • REPO_TOKEN</div>
+      <div id="currentPathDisplay" style="font-size:6px;opacity:.5">sistemak/korvil-app</div>
     </div>
-    <iframe id="githubFrame" src="https://github.com/sistemak/korvil-app" style="flex:1;width:100%;border:0;background:#000;display:none"></iframe>
     <div id="repoViewFallback">
       <div class="repo-breadcrumb" id="breadcrumb"><span onclick="navegarPara('')">🏠 root</span></div>
       <div id="repoList" style="flex:1;overflow:auto"></div>
-      <div style="padding:6px;font-size:6px;background:#000;text-align:center;opacity:.5;border-top:1px solid var(--border);color:var(--neon)">FORJA: 🗑️ Só aqui apaga da DIR (sistemak) • ESQ intacta • Arraste da ESQ pra dentro de pastas • Clique direito → ações</div>
     </div>
   </div>
 </div>
 
 <div id="liveViewer">
   <div class="viewer-top">
-    <div style="display:flex;gap:8px;align-items:center">
-      <span style="color:var(--neon);font-weight:900;text-shadow:0 0 12px var(--neon);letter-spacing:.08em">🔨 FORJA</span>
-      <span style="color:#a855f7;font-weight:800;text-shadow:0 0 10px #a855f7">K-AI NEON 3D</span>
-      <span style="color:#ff3b3b;font-weight:800;text-shadow:0 0 10px #ff3b3b">🔴 LIVE RENDER</span>
-      <span style="opacity:.6">Cria, edita, atualiza pastas/arquivos/códigos dentro do código primário • Sem mudar de tela • Holográfico</span>
+    <div style="display:flex;gap:4px;align-items:center">
+      <span style="color:#ff3b3b">🔴 LIVE RENDER INSTANTÂNEO</span>
+      <span style="opacity:.5">Salvou → já mostra a página renderizada aqui - mexe sem sair</span>
     </div>
-    <div style="display:flex;gap:5px;align-items:center">
-      <button class="btn kai" onclick="converterTudoKAI()">🤖 JARVIS→K-AI</button>
-      <button class="btn ac" onclick="renderLiveSite()">⟳ RE-BUILD FORJA</button>
-      <button class="btn ghost" onclick="toggleFullscreenLive()">⛶ FULL</button>
-      <span id="viewerType" class="badge">FORJA LIVE</span>
+    <div style="display:flex;gap:4px">
+      <button class="btn ac" onclick="renderLiveSite()">⟳ RE-BUILD SITE TODO</button>
+      <span id="viewerType" style="opacity:.5">nenhum</span>
     </div>
   </div>
   <div class="viewer-content">
-    <div class="viewer-preview" id="viewerPreview"><iframe id="liveSiteFrame"></iframe></div>
-    <div class="viewer-info" id="viewerInfo">
-      <div class="geral-panel">
-        <div style="color:var(--neon);font-weight:800;font-size:8px;margin-bottom:6px;text-shadow:0 0 10px var(--neon)">🔨 FORJA - FERRAMENTA OFICIAL - Seu CSS.geral aplicado como ferramenta</div>
-        <div style="font-size:7px;line-height:1.7;color:#e0faff">
-          <b style="color:var(--neon)">FORJA serve pra:</b><br>
-          • Criar pastas/arquivos/códigos dentro do código primário<br>
-          • Editar/atualizar sem mudar de tela ou página<br>
-          • Mover ESQ↔DIR, duplicar, renomear, tudo na mesma página<br>
-          • Render exato instantâneo - salvou já mostra página real<br>
-          • Tema preto ciano neon holográfico 3D com núcleo pulsante<br><br>
-          <b style="color:#a855f7">Comandos rápidos:</b> Ctrl+K, clique direito, duplo clique, drag & drop
-        </div>
-      </div>
-      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:5px">
-        <button class="btn neon" onclick="criarNovo('file')">+ NOVO ARQUIVO</button>
-        <button class="btn neon" onclick="criarNovo('folder')">+ NOVA PASTA</button>
-        <button class="btn ac" onclick="abrirEditor()">✏️ EDITAR RENDER</button>
-        <button class="btn kai" onclick="document.getElementById('geralFile').click()">⚙️.GERAL FORJA</button>
-      </div>
+    <div class="viewer-preview" id="viewerPreview" style="flex:1">
+      <iframe id="liveSiteFrame"></iframe>
     </div>
   </div>
-  <div id="log">[LOG] FORJA K-AI NEON 3D HOLOGRÁFICO pronto - sistemak/korvil-app - REPO_TOKEN - Cria/edita/atualiza sem sair da página - Preto ciano neon</div>
+  <div id="log">[LOG] Live render instantâneo ativo - sistemak</div>
 </div>
 
-<!-- COMMAND PALETTE -->
-<div id="cmdPalette">
-  <input id="cmdInput" placeholder="FORJA > Digite: criar arquivo, criar pasta, mover, editar, converter K-AI, limpar, implantar..." oninput="filtrarComandos()" onkeydown="navegarComandos(event)">
-  <div id="cmdList"></div>
-  <div style="padding:6px 10px;font-size:6px;opacity:.5;border-top:1px solid var(--border)">Ctrl+K abre • ESC fecha • Enter executa • Tudo sem sair da página</div>
-</div>
-
-<!-- CONTEXT MENU -->
-<div id="ctxMenu"></div>
-
-<div id="implantModal" class="modal"><div class="modal-box kai"><div class="modal-head" style="border-color:#a855f7"><b style="color:#a855f7;text-shadow:0 0 10px #a855f7">🔨 FORJA K-AI IMPLANTAR: <span id="implantFileName"></span></b><button class="btn" onclick="document.getElementById('implantModal').style.display='none'">X</button></div><div class="modal-body" id="implantOptions"></div></div></div>
-<div id="historyModal" class="modal"><div class="modal-box"><div class="modal-head"><b style="color:var(--neon)">🕒 HISTÓRICO FORJA</b><button class="btn" onclick="document.getElementById('historyModal').style.display='none'">X</button></div><div class="modal-body" id="historyList"></div></div></div>
-
-<div id="editModal" style="position:fixed;inset:0;background:#000;z-index:200;display:none;flex-direction:column">
+<!-- EDITOR COM RENDER LADO A LADO NA MESMA TELA -->
+<div id="editModal">
   <div class="edit-layout">
     <div class="edit-code">
       <div class="edit-header">
-        <span style="color:var(--neon);text-shadow:0 0 8px var(--neon)">🔨 FORJA K-AI NEON - <span id="editFileName"></span></span>
-        <div style="display:flex;gap:5px">
-          <button class="btn kai" onclick="converterCodigoAtualKAI()">🤖 JARVIS→K-AI</button>
-          <button class="btn ac" onclick="salvarEdicao()" style="padding:7px 14px;box-shadow:0 0 15px var(--neon)">💾 SALVAR E MOSTRAR RENDER EXATO NA MESMA PÁGINA</button>
+        <span style="color:var(--accent)">✏️ CÓDIGO - <span id="editFileName"></span> - DIGITA E JÁ VÊ RENDERIZADO AO LADO →</span>
+        <div style="display:flex;gap:4px">
+          <button class="btn ac" onclick="salvarEdicao()" style="padding:6px 12px;font-size:8px">💾 SALVAR E MOSTRAR NA PÁGINA ORIGINAL</button>
           <button class="btn" onclick="document.getElementById('editModal').style.display='none'">X</button>
         </div>
       </div>
       <textarea id="editArea" oninput="renderInstant()"></textarea>
     </div>
     <div class="edit-render">
-      <div class="edit-header" style="background:var(--neon);color:#000">
-        <span style="font-weight:900">👁️ FORJA PÁGINA RENDERIZADA EXATA - COMO FICA QUANDO SALVAR - MEXE SEM SAIR</span>
-        <span class="badge" style="background:#000;color:var(--neon);border-color:#000">FORJA LIVE 3D</span>
+      <div class="edit-header" style="background:#111;color:#000;background:#00ffea">
+        <span>👁️ PÁGINA RENDERIZADA EXATA - COMO FICA QUANDO SALVAR - MEXE AQUI MESMO</span>
+        <span style="font-size:6px;background:#000;color:#00ffea;padding:2px 6px;border-radius:10px">LIVE</span>
       </div>
       <iframe id="editLiveFrame"></iframe>
     </div>
   </div>
 </div>
 
-<input type="file" id="f" hidden multiple><input type="file" id="folder" hidden webkitdirectory multiple><input type="file" id="geralFile" hidden accept=".geral,geral,*.geral,.env,*.json,*.txt,*.css">
-
+<input type="file" id="f" hidden multiple><input type="file" id="folder" hidden webkitdirectory multiple>
 <script>
-/* === FORJA CORE - Cria, edita, atualiza dentro do código primário sem sair === */
-function converterParaKAI(texto){
-  if(!texto) return texto;
-  let t=texto;
-  [
-    [/Jarvis/gi, 'K-AI'],
-    [/J\.A\.R\.V\.I\.S\./g, 'K-AI'],
-    [/JARVIS/g, 'K-AI'],
-    [/Sr\. Stark/gi, 'Comandante'],
-    [/Senhor Stark/gi, 'Comandante'],
-    [/--neon:/g, '--kai-neon:'],
-    [/pulse-neon/g, 'pulse-kai'],
-    [/glow-text/g, 'glow-kai'],
-  ].forEach(([r,repl])=>{ t=t.replace(r,repl); });
-  return t;
-}
-function converterTudoKAI(){
-  if(!confirm('FORJA: Converter TODOS Jarvis → K-AI NEON?')) return;
-  ativos.forEach(async o=>{
-    if(o.cat==='code' || o.name.includes('geral')){
-      const txt=await o.blob.text();
-      if(/jarvis/i.test(txt) || txt.includes('--neon')){
-        const novo=converterParaKAI(txt);
-        if(novo!==txt){
-          const blob=new Blob([novo],{type:'text/plain'});
-          await save({...o, blob:blob, size:blob.size, date:new Date().toISOString()});
-        }
-      }
-    }
-  });
-  setTimeout(async()=>{ await carregarTudo(); renderLiveSite(); log('🔨 FORJA K-AI: Todos convertidos Jarvis→K-AI NEON 3D'); },800);
-}
-function converterCodigoAtualKAI(){
-  const area=document.getElementById('editArea');
-  area.value=converterParaKAI(area.value);
-  renderInstant();
-}
-function toggleMiniMenu(id){
-  document.querySelectorAll('.mini-menu').forEach(m=>{ if(m.id!==id) m.classList.remove('show'); });
-  document.getElementById(id).classList.toggle('show');
-}
-function hideMenus(){ document.querySelectorAll('.mini-menu').forEach(m=>m.classList.remove('show')); }
-document.addEventListener('click', e=>{ if(!e.target.closest('.top') &&!e.target.closest('#forja-header')) hideMenus(); });
-
-/* FORJA: Criar arquivo/pasta dentro do código primário sem sair */
-async function criarNovo(tipo, naPastaAtual=false){
-  const basePath = naPastaAtual && currentPath? currentPath + '/' : '';
-  let nome = prompt(tipo==='folder'? `FORJA: Nome da nova pasta (ex: ${basePath}minha-pasta)` : `FORJA: Nome do novo arquivo (ex: ${basePath}index.html ou ${basePath}.geral)`, basePath + (tipo==='folder'? 'nova-pasta/' : 'novo-arquivo.html'));
-  if(!nome) return;
-  if(tipo==='folder' &&!nome.endsWith('/')) nome+='/';
-  let conteudo = '';
-  if(tipo==='file'){
-    if(nome.endsWith('.html')) conteudo=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>:root{--neon:#00f0ff;--bg:#000}body{background:#000;color:#e0faff;font-family:Consolas;padding:20px}.kai-core{width:80px;height:80px;border-radius:50%;border:2px solid var(--neon);box-shadow:0 0 20px var(--neon);display:flex;align-items:center;justify-content:center;margin:20px auto;animation:pulse-kai 2s infinite}@keyframes pulse-kai{0%,100%{box-shadow:0 0 15px var(--neon)}50%{box-shadow:0 0 30px var(--neon),0 0 60px var(--neon)}}</style></head><body><div class="kai-core">K-AI</div><h1 style="color:#00f0ff;text-shadow:0 0 10px #00f0ff;text-align:center">FORJA K-AI NEON - ${nome}</h1><p>Criado dentro do código primário sem sair da página</p></body></html>`;
-    else if(nome.includes('.geral')) conteudo=`/*.GERAL FORJA K-AI NEON 3D HOLOGRÁFICO - Ferramenta oficial */
-:root{
-  --neon:#00f0ff;
-  --neon2:#00ffff;
-  --bg:#000000;
-}
-html,body{background:#000!important;color:#e0faff}
-.bg-\\[\\#0a0a0a\\]{background:#000!important;border-color:rgba(0,240,255,0.25)!important}
-.rounded-full.bg-white{background:#000!important;border:2px solid var(--neon)!important;box-shadow:0 0 20px var(--neon), inset 0 0 20px rgba(0,240,255,0.2)!important;animation:pulse-kai 2s infinite}
-@keyframes pulse-kai{0%,100%{box-shadow:0 0 15px var(--neon)}50%{box-shadow:0 0 30px var(--neon),0 0 60px var(--neon),0 0 90px var(--neon2)}}
-`;
-    else conteudo=`// FORJA K-AI - ${nome} - Criado sem sair da página\nconsole.log('FORJA K-AI NEON 3D - ${nome}');\n`;
-  }
-  const blob=new Blob([conteudo],{type:'text/plain'});
-  const isGeral=nome.includes('.geral');
-  const obj={id:Date.now()+'_'+Math.random().toString(16).slice(2),name:nome.split('/').pop()||nome,path:nome,type:'text/plain',size:blob.size,cat:isGeral?'code':(tipo==='folder'?'other':'code'),ext:nome.split('.').pop(),date:new Date().toISOString(),blob:blob, isGeral:isGeral};
-  if(tipo==='folder'){
-    // Cria pasta vazia criando um.keep
-    const keepBlob=new Blob([''],{type:'text/plain'});
-    const keepObj={id:Date.now()+'_'+Math.random().toString(16).slice(2)+'k',name:'.keep',path:nome+'.keep',type:'text/plain',size:0,cat:'other',ext:'keep',date:new Date().toISOString(),blob:keepBlob};
-    await save(keepObj);
-  }
-  await save(obj);
-  await carregarTudo();
-  renderLiveSite();
-  log(`🔨 FORJA: ${tipo} criado dentro do código primário: ${nome} - sem sair da página - já renderizado`);
-  // Já abre pra editar
-  arquivoEditando=obj;
-  if(tipo==='file') abrirEditor();
-}
-async function duplicarSelecionados(){
-  if(selecionados.size===0){ log('FORJA: Selecione arquivos na ESQ pra duplicar'); return; }
-  for(let id of [...selecionados]){
-    const o=ativos.find(a=>a.id===id);
-    if(!o) continue;
-    const novoPath=o.path.replace(/(\.[^.]+)?$/, '-copia$1');
-    const blob=o.blob;
-    const novoObj={id:Date.now()+'_'+Math.random().toString(16).slice(2),name:novoPath.split('/').pop(),path:novoPath,type:o.type,size:o.size,cat:o.cat,ext:o.ext,date:new Date().toISOString(),blob:blob, isGeral:o.isGeral};
-    await save(novoObj);
-  }
-  await carregarTudo();
-  log(`🔨 FORJA: Duplicados ${selecionados.size} arquivos dentro do código primário`);
-}
-
-/* COMMAND PALETTE FORJA */
-const comandos=[
-  {id:'novo-arquivo', label:'+ Novo Arquivo (dentro do código primário)', desc:'Cria arquivo HTML, JS, CSS,.geral sem sair', action:()=>criarNovo('file')},
-  {id:'nova-pasta', label:'+ Nova Pasta (dentro do código primário)', desc:'Cria pasta e já mostra no LIVE', action:()=>criarNovo('folder')},
-  {id:'novo-geral', label:'⚙️ Novo.geral FORJA NEON', desc:'Cria config K-AI neon turquesa pulsante', action:()=>criarNovo('file')},
-  {id:'editar', label:'✏️ Editar selecionado com render exato', desc:'Abre editor lado a lado com página renderizada exata', action:()=>abrirEditor()},
-  {id:'mover-dir', label:'→ Mover ESQ → DIR (sistemak)', desc:'Manda selecionados pro repo sistemak/korvil-app', action:()=>moverEsqParaDir()},
-  {id:'mover-esq', label:'← Baixar DIR → ESQ', desc:'Puxa selecionados da DIR pra ESQ', action:()=>moverDirParaEsq()},
-  {id:'converter-kai', label:'🤖 Converter tudo Jarvis → K-AI NEON', desc:'Tira Jarvis e conjuga pra K-AI melhorado', action:()=>converterTudoKAI()},
-  {id:'limpar-esq', label:'🗑️ Limpar selecionados ESQ', desc:'Apaga só da ESQ, DIR intacta', action:()=>limparSel()},
-  {id:'implantar', label:'⚡ Implantar como fundo/tema', desc:'Implanta arquivo como fundo, tema, HUD', action:()=>implantSelected()},
-  {id:'rebuild', label:'⟳ Re-build FORJA LIVE', desc:'Reconstrói site todo renderizado exato', action:()=>renderLiveSite()},
-  {id:'historico', label:'🕒 Histórico - Voltar versões', desc:'Mostra commits pra recuperar', action:()=>abrirHistorico()},
-  {id:'duplicar', label:'⎘ Duplicar selecionados', desc:'Duplica arquivos dentro do código primário', action:()=>duplicarSelecionados()},
-  {id:'selecionar-todos', label:'☑ Selecionar todos da ESQ', desc:'Seleciona todos filtrados', action:()=>selecionarTodos()},
-];
-let cmdIndex=0;
-function filtrarComandos(){
-  const q=document.getElementById('cmdInput').value.toLowerCase();
-  const list=document.getElementById('cmdList');
-  const filtrados=comandos.filter(c=>c.label.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q));
-  list.innerHTML=filtrados.map((c,i)=>`<div class="cmd-item ${i===cmdIndex?'active':''}" onclick="executarComando('${c.id}')"><div><div style="font-weight:700;color:var(--neon)">${c.label}</div><div style="opacity:.6;font-size:6px">${c.desc}</div></div><span style="opacity:.4">↵</span></div>`).join('') || '<div style="padding:12px;opacity:.4;text-align:center">Nenhum comando - digite: arquivo, pasta, mover, editar, K-AI...</div>';
-}
-function navegarComandos(e){
-  if(e.key==='ArrowDown'){ cmdIndex=Math.min(cmdIndex+1, comandos.length-1); filtrarComandos(); e.preventDefault(); }
-  else if(e.key==='ArrowUp'){ cmdIndex=Math.max(cmdIndex-1, 0); filtrarComandos(); e.preventDefault(); }
-  else if(e.key==='Enter'){
-    const q=document.getElementById('cmdInput').value.toLowerCase();
-    const filtrados=comandos.filter(c=>c.label.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q));
-    if(filtrados[cmdIndex]) executarComando(filtrados[cmdIndex].id);
-    else if(filtrados[0]) executarComando(filtrados[0].id);
-  }
-  else if(e.key==='Escape'){ document.getElementById('cmdPalette').style.display='none'; }
-}
-function executarComando(id){
-  const cmd=comandos.find(c=>c.id===id);
-  if(cmd){ cmd.action(); document.getElementById('cmdPalette').style.display='none'; document.getElementById('cmdInput').value=''; cmdIndex=0; }
-}
-document.addEventListener('keydown', e=>{
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); const p=document.getElementById('cmdPalette'); p.style.display=p.style.display==='flex'?'none':'flex'; if(p.style.display==='flex'){ document.getElementById('cmdInput').focus(); filtrarComandos(); } }
-  if(e.key==='Escape'){ document.getElementById('cmdPalette').style.display='none'; document.getElementById('ctxMenu').style.display='none'; document.querySelectorAll('.mini-menu').forEach(m=>m.classList.remove('show')); }
-});
-
-/* CONTEXT MENU FORJA */
-function showCtxMenu(x,y, fileId, isDir=false, dirPath=null){
-  const menu=document.getElementById('ctxMenu');
-  const o=fileId?ativos.find(a=>a.id===fileId):null;
-  let html='';
-  if(!isDir && o){
-    html+=`<div class="ctx-item" onclick="abrirEditorComId('${o.id}');hideCtx()">✏️ Editar com render exato</div>`;
-    html+=`<div class="ctx-item" onclick="duplicarSelecionados();hideCtx()">⎘ Duplicar</div>`;
-    html+=`<div class="ctx-item" onclick="moverEsqParaDir();hideCtx()">→ Mover pra DIR (sistemak)</div>`;
-    html+=`<div class="ctx-item" onclick="implantSelected();hideCtx()">⚡ Implantar como tema/fundo</div>`;
-    html+=`<div class="ctx-item" onclick="promptRenomear('${o.id}');hideCtx()">✏️ Renomear/Mover pasta</div>`;
-    html+=`<div class="ctx-item" style="color:#ff7a9a" onclick="if(confirm('Apagar ${o.name}?')){delDB('${o.id}').then(()=>carregarTudo())};hideCtx()">🗑️ Apagar (só ESQ)</div>`;
-  } else if(isDir){
-    html+=`<div class="ctx-item" onclick="criarNovo('file', true);hideCtx()">+ Novo arquivo nessa pasta</div>`;
-    html+=`<div class="ctx-item" onclick="criarNovo('folder', true);hideCtx()">+ Nova subpasta</div>`;
-    html+=`<div class="ctx-item" onclick="navegarPara('${dirPath}');hideCtx()">📂 Abrir pasta</div>`;
-  }
-  menu.innerHTML=html;
-  menu.style.left=x+'px'; menu.style.top=y+'px'; menu.style.display='flex';
-}
-function hideCtx(){ document.getElementById('ctxMenu').style.display='none'; }
-document.addEventListener('click', e=>{ if(!e.target.closest('#ctxMenu')) hideCtx(); });
-function promptRenomear(id){
-  const o=ativos.find(a=>a.id===id); if(!o) return;
-  const novo=prompt('FORJA: Renomear/Mover path (ex: pasta/nova/'+o.name+') - tudo dentro do código primário', o.path);
-  if(novo && novo!==o.path){ o.path=novo; save(o).then(()=>{carregarTudo(); renderLiveSite(); log(`FORJA: Path → ${novo} - já renderizado sem sair`); }); }
-}
-
-/* CORE DB + RENDER */
 let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set(), currentPath="", storageFilter="all", arquivoEditando=null;
-let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-v12-FORJA-NEON-cfg')||'{}');}catch(e){cfg={}}
+let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-v8-REPO_TOKEN-cfg')||'{}');}catch(e){cfg={}}
 if(!cfg.owner) cfg.owner='sistemak'; if(!cfg.repo) cfg.repo='korvil-app';
 ghO.value=cfg.owner; ghR.value=cfg.repo; document.getElementById('REPO_TOKEN').value=cfg.REPO_TOKEN||'';
-const openDB=indexedDB.open('korvil-v12-FORJA',1);
+const openDB=indexedDB.open('korvil-v8-REPO_TOKEN',7);
 openDB.onupgradeneeded=e=>{const d=e.target.result; if(!d.objectStoreNames.contains('k')) d.createObjectStore('k',{keyPath:'id'});};
 openDB.onsuccess=e=>{db=e.target.result; carregarTudo();};
 function getREPO_TOKEN(){ return document.getElementById('REPO_TOKEN').value.trim(); }
 function save(o){return new Promise(r=>{const tx=db.transaction('k','readwrite'); tx.objectStore('k').put(o); tx.oncomplete=()=>r();});}
 function getAll(){return new Promise(r=>{const tx=db.transaction('k','readonly'); const q=tx.objectStore('k').getAll(); q.onsuccess=()=>r(q.result||[]);});}
 function delDB(id){return new Promise(r=>{const tx=db.transaction('k','readwrite'); tx.objectStore('k').delete(id); tx.oncomplete=()=>r();});}
-function log(m){const el=document.getElementById('log'); el.innerText=`[${new Date().toLocaleTimeString()}] ${m}\n`+el.innerText.slice(0,4000);}
-
-const fEl=document.getElementById('f'), folderEl=document.getElementById('folder'), geralFileEl=document.getElementById('geralFile');
+function log(m){const el=document.getElementById('log'); el.innerText=`[${new Date().toLocaleTimeString()}] ${m}\n`+el.innerText.slice(0,3000);}
+const fEl=document.getElementById('f'), folderEl=document.getElementById('folder');
 fEl.onchange=e=>{if(e.target.files.length) handle(e.target.files); e.target.value='';};
 folderEl.onchange=e=>{if(e.target.files.length) handle(e.target.files); e.target.value='';};
-geralFileEl.onchange=async e=>{
-  if(e.target.files.length){
-    for(let file of e.target.files){
-      let txt=await file.text();
-      const convertido=converterParaKAI(txt);
-      const blob=new Blob([convertido],{type:'text/plain'});
-      const obj={id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name.endsWith('.geral')?file.name:'.geral',path:'.geral',type:'text/plain',size:blob.size,cat:'code',ext:'geral',date:new Date().toISOString(),blob:blob, isGeral:true};
-      await save(obj);
-      log(`⚙️.geral FORJA NEON anexado: ${file.name} → FORJA ferramenta oficial`);
-    }
-    await carregarTudo(); renderLiveSite();
-  }
-  e.target.value='';
-};
-
 async function handle(files){
  for(let file of files){
   const ext=(file.name.split('.').pop()||'').toLowerCase();
-  let cat='other'; if(file.type.startsWith('image')) cat='image'; else if(file.type.startsWith('video')) cat='video'; else if(file.type.startsWith('audio')) cat='audio'; else if(['html','htm','js','css','json','ts','tsx','py','md','txt','yml','geral','css'].includes(ext) || file.name.includes('.geral')) cat='code';
-  let blob=file;
-  if(cat==='code' || file.name.includes('.geral')){
-    const txt=await file.text();
-    const convertido=converterParaKAI(txt);
-    if(convertido!==txt) blob=new Blob([convertido],{type:file.type||'text/plain'});
-  }
-  const isGeral=file.name.includes('.geral') || file.name==='.geral' || ext==='geral';
-  await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name,path:file.webkitRelativePath||file.name,type:file.type,size:blob.size,cat:isGeral?'code':cat,ext:ext,date:new Date().toISOString(),blob:blob, isGeral:isGeral});
+  let cat='other'; if(file.type.startsWith('image')) cat='image'; else if(file.type.startsWith('video')) cat='video'; else if(file.type.startsWith('audio')) cat='audio'; else if(['html','htm','js','css','json','ts','tsx','py','md','txt','yml'].includes(ext)) cat='code';
+  await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name,path:file.webkitRelativePath||file.name,type:file.type,size:file.size,cat,ext,date:new Date().toISOString(),blob:file});
  }
- await carregarTudo(); renderLiveSite(); log(`FORJA: Anexou ${files.length} - já renderizado 3D holográfico`);
+ await carregarTudo(); renderLiveSite(); log(`Anexou ${files.length} → LIVE já renderizou`);
 }
 async function carregarTudo(){ ativos=await getAll(); renderLeft(); renderLiveSite(); }
 function toggleStorage(){const p=document.getElementById('storagePanel'); p.style.display=p.style.display==='none'?'flex':'none';}
 function filtrarStorage(filter,btn){ storageFilter=filter; document.querySelectorAll('.storage-btn').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); renderLeft(); }
 function renderLeft(){
- const sL=document.getElementById('sLeft'); const selEl=document.getElementById('selCount'); sL.innerHTML=''; selEl.innerText=selecionados.size+' sel';
- let lista=ativos;
- if(storageFilter==='geral') lista=ativos.filter(a=>a.isGeral || a.name.includes('.geral'));
- else if(storageFilter!=='all') lista=ativos.filter(a=>a.cat===storageFilter);
- if(lista.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.5;padding:30px"><div style="width:60px;height:60px;border-radius:50%;border:2px solid var(--neon);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--neon);animation:pulse-kai 2s infinite">F</div><div style="color:var(--neon);text-shadow:0 0 8px var(--neon)">FORJA vazia - Ctrl+K pra criar sem sair</div><div style="font-size:7px;margin-top:8px"><button class="btn neon" onclick="criarNovo('file')">+ NOVO ARQUIVO</button> <button class="btn kai" onclick="document.getElementById('geralFile').click()">⚙️.GERAL FORJA</button></div></div>`; return; }
+ const sL=document.getElementById('sLeft'); const selEl=document.getElementById('selCount'); sL.innerHTML=''; selEl.innerText=selecionados.size;
+ let lista=ativos; if(storageFilter!=='all') lista=ativos.filter(a=>a.cat===storageFilter);
+ if(lista.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.3;padding:20px">Vazio</div>`; return; }
  lista.forEach(o=>{
   const url=URL.createObjectURL(o.blob);
-  const isGeral=o.isGeral || o.name.includes('.geral');
-  const div=document.createElement('div'); div.className='item'+(selecionados.has(o.id)?' selected':'')+(isGeral?' kai-file':''); div.draggable=true;
-  let thumb=isGeral?`<div style="padding:12px;text-align:center;font-size:7px;background:linear-gradient(135deg,#000,#110e26);border:1px solid var(--neon);box-shadow:0 0 15px rgba(0,240,255,.3), inset 0 0 15px rgba(0,240,255,.08)"><div style="width:30px;height:30px;border-radius:50%;border:2px solid var(--neon);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px var(--neon);animation:pulse-kai 2s infinite;color:var(--neon);font-weight:800">F</div>⚙️.GERAL<br><span style="color:var(--neon);font-weight:700;text-shadow:0 0 8px var(--neon)">FORJA NEON</span></div>`:o.cat==='image'?`<img src="${url}">`:o.cat==='video'?`<video src="${url}" muted loop></video>`:o.cat==='code'?`<div style="padding:10px;text-align:center;font-size:6px;background:#000;border:1px dashed var(--neon);box-shadow:0 0 10px rgba(0,240,255,.15), inset 0 0 10px rgba(0,240,255,.05)">📄 ${o.name.slice(0,12)}<br><span style="color:var(--neon);font-size:5px">K-AI</span></div>`:`<div style="padding:10px;text-align:center;font-size:6px">📁 ${o.name.slice(0,12)}</div>`;
-  div.innerHTML=`${thumb}<div style="padding:5px 6px;font-size:6px"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:#e0faff;text-shadow:0 0 5px rgba(0,240,255,.4)">${o.name}</div><div style="opacity:.6;color:var(--neon)">${isGeral?'FORJA CONFIG':o.path.split('/').slice(0,-1).join('/')||'root'}</div></div>`;
-  div.ondragstart=e=>{
-    const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id);
-    e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id])); e.dataTransfer.setData('id',o.id);
-  };
+  const div=document.createElement('div'); div.className='item'+(selecionados.has(o.id)?' selected':''); div.draggable=true;
+  let thumb=o.cat==='image'?`<img src="${url}">`:o.cat==='video'?`<video src="${url}" muted loop></video>`:o.cat==='code'?`<div style="padding:8px;text-align:center;font-size:6px;background:#000;border:1px dashed var(--accent)">📄 ${o.name.slice(0,10)}</div>`:`<div style="padding:8px;text-align:center;font-size:6px">${o.name.slice(0,10)}</div>`;
+  div.innerHTML=`${thumb}<div style="padding:3px;font-size:6px;white-space:nowrap;overflow:hidden">${o.name}</div>`;
+  div.ondragstart=e=>{ const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id); e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id])); };
   div.onclick=()=>{ if(selecionados.has(o.id)) selecionados.delete(o.id); else selecionados.add(o.id); renderLeft(); visualizarArquivo(o.id); };
   div.ondblclick=()=>abrirEditorComId(o.id);
-  div.oncontextmenu=e=>{ e.preventDefault(); showCtxMenu(e.clientX, e.clientY, o.id); };
   sL.appendChild(div);
  });
 }
-function selecionarTodos(){ const lista=storageFilter==='all'?ativos:storageFilter==='geral'?ativos.filter(a=>a.isGeral||a.name.includes('.geral')):ativos.filter(a=>a.cat===storageFilter); if(lista.every(a=>selecionados.has(a.id))) lista.forEach(a=>selecionados.delete(a.id)); else lista.forEach(a=>selecionados.add(a.id)); renderLeft(); renderLiveSite(); }
-async function limparSel(){ if(selecionados.size===0) return; if(!confirm(`FORJA: Apagar ${selecionados.size} SÓ ESQ? DIR intacta`)) return; for(let id of [...selecionados]) await delDB(id); selecionados.clear(); await carregarTudo(); log('🔨 FORJA: ESQ limpa - sem sair da página'); }
-function visualizarArquivo(id){ const o=ativos.find(a=>a.id===id); if(!o) return; arquivoEditando=o; document.getElementById('viewerType').innerText=(o.isGeral?'⚙️.GERAL FORJA NEON: ':'')+o.name; renderLiveSite(); }
-function abrirEditorComId(id){ const o=ativos.find(a=>a.id===id); if(o){ arquivoEditando=o; abrirEditor(); } }
+function selecionarTodos(){ const lista=storageFilter==='all'?ativos:ativos.filter(a=>a.cat===storageFilter); if(lista.every(a=>selecionados.has(a.id))) lista.forEach(a=>selecionados.delete(a.id)); else lista.forEach(a=>selecionados.add(a.id)); renderLeft(); renderLiveSite(); }
+async function limparSel(){ if(selecionados.size===0) return; if(!confirm(`Apagar ${selecionados.size}?`)) return; for(let id of [...selecionados]) await delDB(id); selecionados.clear(); await carregarTudo(); }
+
+async function visualizarArquivo(id){ const o=ativos.find(a=>a.id===id); if(!o) return; arquivoEditando=o; renderLiveSite(); }
+function abrirEditorComId(id){ const o=ativos.find(a=>a.id===id); if(!o) return; arquivoEditando=o; abrirEditor(); }
+
 function abrirEditor(){
   let o=arquivoEditando; if(!o && selecionados.size>0) o=ativos.find(a=>a.id===[...selecionados][0]);
-  if(!o){ log('FORJA: Selecione CODE ou.GERAL'); return; }
-  document.getElementById('editFileName').innerText=o.path + (o.isGeral?' - FORJA NEON CONFIG':' - FORJA NEON');
+  if(!o){ log('Selecione arquivo CODE na ESQ'); return; }
+  document.getElementById('editFileName').innerText=o.path;
   document.getElementById('editModal').style.display='flex';
-  o.blob.text().then(txt=>{ document.getElementById('editArea').value=converterParaKAI(txt); renderInstant(); });
+  o.blob.text().then(txt=>{
+    document.getElementById('editArea').value=txt;
+    renderInstant();
+  });
 }
 function renderInstant(){
   const txt=document.getElementById('editArea').value;
   const frame=document.getElementById('editLiveFrame');
+  // Renderiza exatamente como vai ficar
   try{
-    if(txt.includes('.geral') || txt.includes('--neon') || txt.includes('pulse-kai')){
-      frame.srcdoc=`<!DOCTYPE html><html><head><style>${converterParaKAI(txt)} body{background:#000;color:#e0faff;font-family:Consolas;padding:20px}.kai-core{width:80px;height:80px;border-radius:50%;background:#000;border:2px solid #00f0ff;margin:20px auto;box-shadow:0 0 20px #00f0ff, inset 0 0 20px rgba(0,240,255,.2);animation:pulse-kai 2s infinite;display:flex;align-items:center;justify-content:center;color:#00f0ff;font-weight:800}@keyframes pulse-kai{0%,100%{box-shadow:0 0 15px #00f0ff}50%{box-shadow:0 0 30px #00f0ff,0 0 60px #00f0ff,0 0 90px #00ffff}}</style></head><body><div style="background:#00f0ff;color:#000;padding:6px 14px;border-radius:20px;display:inline-block;font-weight:800;box-shadow:0 0 20px #00f0ff">🔨 FORJA.GERAL NEON 3D HOLOGRÁFICO - RENDER EXATO</div><div class="kai-core">FORJA</div><h3 style="color:#00f0ff;text-shadow:0 0 10px #00f0ff;text-align:center">NÚCLEO FORJA PULSANTE NEON</h3><pre style="white-space:pre-wrap;font-size:9px;background:#050a14;padding:12px;border-radius:12px;border:1px solid #00f0ff;box-shadow:0 0 20px rgba(0,240,255,.2);margin-top:12px;color:#e0faff">${txt.replace(/</g,'&lt;').slice(0,5000)}</pre></body></html>`;
-    } else if(txt.trim().startsWith('<') || txt.includes('<html')){
-      frame.srcdoc=converterParaKAI(txt);
+    if(txt.trim().startsWith('<') || txt.includes('<html') || txt.includes('<!DOCTYPE')){
+      frame.srcdoc=txt;
+    } else if(txt.trim().startsWith('body') || txt.trim().startsWith('.') || txt.trim().startsWith(':root') || txt.includes('{')){
+      // É CSS - mostra aplicado num HTML base
+      frame.srcdoc=`<!DOCTYPE html><html><head><style>${txt}</style></head><body><h1>CSS Preview</h1><p>Esse é o CSS que você editou - veja como fica aplicado</p><button>Botão teste</button><div style="margin-top:20px;border:1px solid #ccc;padding:10px">Div teste</div></body></html>`;
     } else {
-      frame.srcdoc=`<!DOCTYPE html><html><head><style>${converterParaKAI(txt)}</style></head><body style="background:#000;color:#e0faff;padding:20px"><h2 style="color:#00f0ff;text-shadow:0 0 10px #00f0ff">FORJA K-AI NEON Preview 3D</h2><div class="kai-core" style="width:60px;height:60px;border-radius:50%;border:2px solid #00f0ff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px #00f0ff">K-AI</div></body></html>`;
+      frame.srcdoc=`<!DOCTYPE html><html><body><pre style="white-space:pre-wrap;font-family:Consolas;padding:10px">${txt.replace(/</g,'&lt;')}</pre></body></html>`;
     }
   }catch(e){ frame.srcdoc=`Erro: ${e.message}`; }
-  if(arquivoEditando){ arquivoEditando.blob=new Blob([txt],{type:'text/html'}); renderLiveSite(); }
+  // Também atualiza o LIVE SITE de baixo em tempo real enquanto digita
+  if(arquivoEditando){
+    arquivoEditando.blob = new Blob([txt], {type: 'text/html'});
+    renderLiveSite();
+  }
 }
 async function salvarEdicao(){
   if(!arquivoEditando) return;
-  let novoTexto=document.getElementById('editArea').value;
-  novoTexto=converterParaKAI(novoTexto);
+  const novoTexto=document.getElementById('editArea').value;
   const blob=new Blob([novoTexto],{type:arquivoEditando.type||'text/html'});
   const novoObj={...arquivoEditando, blob:blob, size:blob.size, date:new Date().toISOString()};
-  await save(novoObj); await carregarTudo();
-  document.getElementById('editModal').style.display='none';
+  await save(novoObj);
+  await carregarTudo();
+  // JÁ MOSTRA RENDERIZADO NA PÁGINA ORIGINAL (liveSiteFrame)
   const liveFrame=document.getElementById('liveSiteFrame');
-  liveFrame.srcdoc=novoTexto;
-  log(`🔨 FORJA: SALVO - Render exato na mesma página original: ${arquivoEditando.path} - sem sair - neon 3D holográfico`);
+  if(novoTexto.trim().startsWith('<') || arquivoEditando.ext==='html' || arquivoEditando.path.endsWith('.html')){
+    liveFrame.srcdoc=novoTexto;
+    log(`💾 SALVOU - Já mostrando página renderizada exatamente como ficou: ${arquivoEditando.path} - mexe sem sair da página`);
+  } else {
+    renderLiveSite();
+    log(`💾 SALVOU - LIVE SITE rebuild instantâneo: ${arquivoEditando.path}`);
+  }
+  // Salva no repo também
   const REPO_TOKEN=getREPO_TOKEN();
   if(REPO_TOKEN && arquivoEditando.path){
-    const targetPath=arquivoEditando.path; const b64=btoa(unescape(encodeURIComponent(novoTexto)));
+    const targetPath=arquivoEditando.path;
+    const b64=btoa(unescape(encodeURIComponent(novoTexto)));
     let sha=null; try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{}
-    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA NEON EDIT: ${targetPath}`,content:b64,sha})});
+    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`EDIT RENDER: ${targetPath}`,content:b64,sha})});
   }
+  document.getElementById('editModal').style.display='none';
 }
+
+// LIVE SITE QUE MOSTRA EXATAMENTE COMO O CÓDIGO FICA
 async function renderLiveSite(){
   const liveFrame=document.getElementById('liveSiteFrame');
-  if(ativos.length===0){ liveFrame.srcdoc=`<!DOCTYPE html><html><head><style>body{background:#000;color:#e0faff;font-family:Consolas;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column}.core{width:100px;height:100px;border-radius:50%;background:#000;border:2px solid #00f0ff;display:flex;align-items:center;justify-content:center;color:#00f0ff;font-weight:900;box-shadow:0 0 20px #00f0ff, inset 0 0 20px rgba(0,240,255,.2);animation:pulse-kai 2s infinite} @keyframes pulse-kai{0%,100%{box-shadow:0 0 15px #00f0ff}50%{box-shadow:0 0 30px #00f0ff,0 0 60px #00f0ff}}</style></head><body><div class="core">FORJA</div><div style="margin-top:20px;color:#00f0ff;text-shadow:0 0 10px #00f0ff">FORJA K-AI NEON 3D HOLOGRÁFICO</div><div style="font-size:8px;opacity:.6;margin-top:8px">Ctrl+K → criar arquivo/pasta sem sair • Duplo clique edita render exato</div></body></html>`; return; }
-  const geralFile=ativos.find(f=>f.isGeral || f.name==='.geral');
-  if(geralFile){
-    const txt=await geralFile.blob.text(); const convertido=converterParaKAI(txt);
-    liveFrame.srcdoc=`<!DOCTYPE html><html><head><style>${convertido}</style></head><body style="background:#000;padding:20px"><div style="background:#00f0ff;color:#000;padding:6px 14px;border-radius:20px;display:inline-block;font-weight:800;box-shadow:0 0 20px #00f0ff">🔨 FORJA.GERAL NEON 3D HOLOGRÁFICO - FERRAMENTA OFICIAL</div><div class="rounded-full bg-white" style="width:90px;height:90px;margin:20px auto;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px">FORJA</div><h2 style="color:#00f0ff;text-shadow:0 0 15px #00f0ff;text-align:center">NÚCLEO FORJA PULSANTE NEON HOLOGRÁFICO 3D</h2><div style="background:#000;border:1px solid #00f0ff;border-radius:12px;padding:14px;margin-top:14px;box-shadow:0 0 20px rgba(0,240,255,.2)"><pre style="white-space:pre-wrap;font-size:9px;color:#e0faff">${convertido.replace(/</g,'&lt;').slice(0,6000)}</pre></div><div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap"><span style="border:1px solid #00f0ff;color:#00f0ff;padding:4px 10px;border-radius:20px;font-size:7px;box-shadow:0 0 10px #00f0ff">Cria pastas/arquivos sem sair</span><span style="border:1px solid #a855f7;color:#c084ff;padding:4px 10px;border-radius:20px;font-size:7px">Edita render exato na mesma página</span></div></body></html>`;
-    document.getElementById('viewerType').innerText=`FORJA.GERAL NEON 3D RENDER EXATO`;
+  if(ativos.length===0){ liveFrame.srcdoc=`<div style="font-family:Consolas;padding:20px;text-align:center;opacity:.5">Vazio - anexe arquivos HTML na ESQ que já renderiza aqui exatamente como fica a página</div>`; return; }
+  // Se tem index.html, mostra ele exatamente
+  const indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html') || f.path.toLowerCase().endsWith('indexx.html'));
+  if(indexFile){
+    const html=await indexFile.blob.text();
+    // Se o arquivo sendo editado é o index, já mostra a versão editada
+    if(arquivoEditando && (arquivoEditando.path===indexFile.path)){
+      const edited=await arquivoEditando.blob.text();
+      liveFrame.srcdoc=edited;
+      document.getElementById('viewerType').innerText=`RENDER EXATO: ${indexFile.path} (editado) - ${edited.length} bytes - já renderizado sem sair da página`;
+      return;
+    }
+    liveFrame.srcdoc=html;
+    document.getElementById('viewerType').innerText=`RENDER EXATO: ${indexFile.path} - ${html.length} bytes - página real renderizada`;
     return;
   }
-  const indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html') || f.path.toLowerCase().endsWith('indexx.html'));
-  if(indexFile){ let html=await indexFile.blob.text(); html=converterParaKAI(html); liveFrame.srcdoc=html; document.getElementById('viewerType').innerText=`FORJA RENDER EXATO: ${indexFile.path}`; return; }
-  if(arquivoEditando){
+  // Se não tem index, mostra último arquivo CODE editado exatamente renderizado
+  if(arquivoEditando && arquivoEditando.cat==='code'){
     const txt=await arquivoEditando.blob.text();
-    if(txt.trim().startsWith('<')){ liveFrame.srcdoc=converterParaKAI(txt); return; }
+    if(txt.trim().startsWith('<')){
+      liveFrame.srcdoc=txt;
+      document.getElementById('viewerType').innerText=`RENDER EXATO: ${arquivoEditando.path} - HTML renderizado exato`;
+      return;
+    }
   }
-  const filesByPath={}; for(let f of ativos) filesByPath[f.path]=URL.createObjectURL(f.blob);
-  let html=`<!DOCTYPE html><html><head><style>body{background:#000;color:#e0faff;font-family:Consolas;padding:12px}.card{border:1px solid #00f0ff;background:#050a14;border-radius:12px;padding:10px;margin:8px;box-shadow:0 0 15px rgba(0,240,255,.15)}</style></head><body><div style="background:#00f0ff;color:#000;padding:6px 12px;border-radius:20px;display:inline-block;font-weight:800;box-shadow:0 0 20px #00f0ff">🔨 FORJA LIVE 3D - ${ativos.length} ARQS - SEM SAIR DA PÁGINA</div>`;
-  const folders={}; ativos.forEach(f=>{ const p=f.path.split('/'); const folder=p.length>1?p.slice(0,-1).join('/'):'root'; if(!folders[folder]) folders[folder]=[]; folders[folder].push(f); });
+  // Auto build com todos
+  const filesByPath={}; for(let f of ativos){ filesByPath[f.path]=URL.createObjectURL(f.blob); }
+  const folders={}; ativos.forEach(f=>{ const parts=f.path.split('/'); const folder=parts.length>1?parts.slice(0,-1).join('/'):'root'; if(!folders[folder]) folders[folder]=[]; folders[folder].push(f); });
+  let html=`<!DOCTYPE html><html><head><style>body{background:#0a0e1a;color:#fff;font-family:Consolas;padding:10px}.card{border:1px solid #00ffea;background:#101420;border-radius:8px;padding:8px;margin:6px} img,video{max-width:100%;height:80px;object-fit:cover;border-radius:6px}</style></head><body><div style="background:#ff3b3b;color:#000;font-size:8px;padding:4px 8px;border-radius:10px;display:inline-block">🔴 RENDER EXATO - SITE TODO - ${ativos.length} ARQUIVOS - SALVOU JÁ MOSTRA AQUI</div><h3 style="color:#00ffea;margin-top:10px">Estrutura atual do app (sistemak/korvil-app) renderizada exatamente</h3>`;
   for(let folder in folders){
-    html+=`<div class="card"><div style="color:#00f0ff;text-shadow:0 0 8px #00f0ff">📁 ${folder} (${folders[folder].length})</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">`;
+    html+=`<div class="card"><div style="color:#00ffea;font-size:10px">📁 ${folder} (${folders[folder].length})</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">`;
     for(let f of folders[folder]){
       const url=filesByPath[f.path];
-      if(f.cat==='image') html+=`<div><img src="${url}" style="width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #00f0ff"><div style="font-size:6px">${f.name}</div></div>`;
-      else html+=`<div style="border:1px dashed #00f0ff;padding:6px;border-radius:8px;font-size:6px">📄 ${f.name}</div>`;
+      if(f.cat==='image') html+=`<div><img src="${url}"><div style="font-size:7px">${f.name}</div></div>`;
+      else if(f.cat==='video') html+=`<div><video src="${url}" muted></video><div style="font-size:7px">${f.name}</div></div>`;
+      else html+=`<div style="border:1px dashed #00ffea;padding:6px;border-radius:6px;font-size:7px">📄 ${f.name}</div>`;
     }
     html+=`</div></div>`;
   }
-  html+=`</body></html>`; liveFrame.srcdoc=converterParaKAI(html);
+  html+=`</body></html>`;
+  liveFrame.srcdoc=html;
 }
-function implantSelected(){
-  if(selecionados.size===0) return;
-  const id=[...selecionados][0]; const o=ativos.find(a=>a.id===id); if(!o) return;
-  document.getElementById('implantFileName').innerText=o.name+(o.isGeral?' - FORJA NEON CONFIG':'');
-  const modal=document.getElementById('implantModal'); const optionsEl=document.getElementById('implantOptions');
-  let opts=[];
-  if(o.isGeral) opts=[{icon:'🔨',title:'Aplicar.geral como ferramenta FORJA NEON 3D oficial',desc:'Vira tema preto ciano neon holográfico 3D pulsante - ferramenta oficial FORJA',action:()=>implantarComo('geral-kai',o), kai:true},{icon:'💾',title:'Salvar.geral FORJA no repo sistemak',desc:'Manda.geral pra raiz com tema neon',action:()=>implantarComo('geral-save',o), kai:true}];
-  else if(o.cat==='code') opts=[{icon:'🔨',title:'Injetar como FORJA - Vira site renderizado neon 3D',desc:'Código vira página exata com tema preto ciano holográfico',action:()=>implantarComo('injetar-html',o), kai:true},{icon:'🎨',title:'Aplicar CSS FORJA NEON no LIVE',desc:'Estilo instantâneo holográfico',action:()=>implantarComo('css',o)}];
-  else if(o.cat==='image') opts=[{icon:'🖼️',title:'Fundo FORJA NEON 3D',desc:'Muda template do site',action:()=>implantarComo('bg-image',o)}];
-  else opts=[{icon:'📄',title:'Adicionar ao FORJA LIVE 3D',desc:'Mostra no render',action:()=>implantarComo('bloco',o)}];
-  optionsEl.innerHTML=opts.map((opt,i)=>`<div class="opt ${opt.kai?'kai':''}" onclick="window._implantOpts[${i}].action()"><div style="font-size:18px;width:30px">${opt.icon}</div><div><div style="font-size:10px;font-weight:700">${opt.title}</div><div style="font-size:7px;opacity:.6">${opt.desc}</div></div></div>`).join(''); window._implantOpts=opts; modal.style.display='flex';
-}
-async function implantarComo(tipo,obj){
-  document.getElementById('implantModal').style.display='none'; const url=URL.createObjectURL(obj.blob); const layer=document.getElementById('template-layer');
-  if(tipo==='geral-kai'){
-    const txt=await obj.blob.text(); const convertido=converterParaKAI(txt);
-    const styleEl=document.createElement('style'); styleEl.innerHTML=convertido; document.head.appendChild(styleEl);
-    localStorage.setItem('korvil-forja-geral-neon', convertido);
-    document.getElementById('liveSiteFrame').srcdoc=`<!DOCTYPE html><html><head><style>${convertido}</style></head><body><div style="padding:20px"><div style="background:#00f0ff;color:#000;padding:6px 14px;border-radius:20px;display:inline-block;font-weight:800;box-shadow:0 0 20px #00f0ff">🔨 FORJA.GERAL NEON 3D APLICADO COMO FERRAMENTA</div><div class="rounded-full bg-white" style="width:80px;height:80px;margin:20px auto;display:flex;align-items:center;justify-content:center">FORJA</div><pre style="background:#000;border:1px solid #00f0ff;border-radius:12px;padding:12px;white-space:pre-wrap;font-size:9px;box-shadow:0 0 20px rgba(0,240,255,.2)">${convertido.replace(/</g,'&lt;').slice(0,6000)}</pre></div></body></html>`;
-    log(`🔨.geral FORJA NEON 3D aplicado como ferramenta oficial - seu CSS turquesa holográfico`);
-  } else if(tipo==='geral-save'){
-    const txt=await obj.blob.text(); const convertido=converterParaKAI(txt);
-    const b64=btoa(unescape(encodeURIComponent(convertido))); const REPO_TOKEN=getREPO_TOKEN();
-    let sha=null; try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/.geral`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{}
-    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/.geral`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:'FORJA.geral NEON 3D HOLOGRÁFICO - ferramenta oficial',content:b64,sha})});
-    log(`💾.geral FORJA salvo em sistemak/korvil-app/.geral`);
-    carregarDadosRepo();
-  } else if(tipo==='injetar-html'){ const txt=await obj.blob.text(); const convertido=converterParaKAI(txt); document.getElementById('liveSiteFrame').srcdoc=convertido; log(`🔨 FORJA NEON HTML injetado - render exato 3D holográfico - sem sair`); }
-  else if(tipo==='css'){ const css=await obj.blob.text(); const convertido=converterParaKAI(css); const st=document.createElement('style'); st.innerHTML=convertido; document.head.appendChild(st); renderLiveSite(); }
-  else if(tipo==='bg-image'){ layer.style.opacity='0.5'; layer.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover">`; renderLiveSite(); }
-}
-function abrirGithubOriginal(){ const owner=ghO.value||'sistemak'; const repo=ghR.value||'korvil-app'; const pathPart=currentPath?`/tree/main/${currentPath}`:''; const url=`https://github.com/${owner}/${repo}${pathPart}`; document.getElementById('githubFrame').style.display='flex'; document.getElementById('repoViewFallback').style.display='none'; document.getElementById('githubFrame').src=url; document.getElementById('currentPathDisplay').innerText=url+` • FORJA NEON 3D • REPO_TOKEN ${getREPO_TOKEN()?'OK':'VAZIO'}`; carregarDadosRepo(); }
-function toggleFallback(){ const f=document.getElementById('githubFrame'); const fb=document.getElementById('repoViewFallback'); if(fb.style.display==='none' || fb.style.display===''){ fb.style.display='flex'; f.style.display='none'; if(repoCache.length===0) carregarDadosRepo(); else renderRepo(); } else { fb.style.display='none'; f.style.display='flex'; } }
-function navegarPara(path){ currentPath=path; document.getElementById('repoViewFallback').style.display='flex'; document.getElementById('githubFrame').style.display='none'; carregarDadosRepo(); }
+
+// DIREITA
+function navegarPara(path){ currentPath=path; carregarDadosRepo(); }
 async function carregarDadosRepo(){ const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN) return; try{ const h={Authorization:`token ${REPO_TOKEN}`}; let r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/git/trees/main?recursive=1`,{headers:h}); if(!r.ok) r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/git/trees/master?recursive=1`,{headers:h}); const data=await r.json(); repoCache=data.tree||[]; renderRepo(); }catch(e){} }
 function getTreeForPath(prefix){ const filesInPath=new Map(); const pref=prefix?(prefix.endsWith('/')?prefix:prefix+'/'):''; for(let entry of repoCache){ if(!entry.path.startsWith(pref)) continue; const rest=entry.path.slice(pref.length); if(!rest) continue; const parts=rest.split('/'); const first=parts[0]; if(!first) continue; const isFolder=parts.length>1; const ex=filesInPath.get(first); if(!ex) filesInPath.set(first,{name:first,fullPath:pref+first,isFolder:isFolder}); else if(isFolder) ex.isFolder=true; } return Array.from(filesInPath.values()).sort((a,b)=>{ if(a.isFolder&&!b.isFolder) return -1; if(!a.isFolder&&b.isFolder) return 1; return a.name.localeCompare(b.name); }); }
 function renderRepo(){
   const breadcrumb=document.getElementById('breadcrumb'); const listEl=document.getElementById('repoList');
   const parts=currentPath?currentPath.split('/').filter(Boolean):[]; let htmlCrumb=`<span onclick="navegarPara('')">🏠 root</span>`; let acc=""; parts.forEach(p=>{ acc+=(acc?"/":"")+p; htmlCrumb+=`<span style="opacity:.3">/</span><span onclick="navegarPara('${acc}')">${p}</span>`; });
-  breadcrumb.innerHTML=htmlCrumb+`<span style="margin-left:auto;opacity:.4">${selecionadosDir.size} sel</span>`;
-  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia - FORJA: arraste da ESQ que já renderiza</div>'; return; }
+  breadcrumb.innerHTML=htmlCrumb;
+  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:15px;opacity:.4">Vazia</div>'; return; }
   listEl.innerHTML=""; if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const divUp=document.createElement('div'); divUp.className='repo-folder'; divUp.innerHTML=`<span>📁.. voltar</span>`; divUp.onclick=()=>navegarPara(up); listEl.appendChild(divUp); }
   items.forEach(item=>{
-    const row=document.createElement('div'); row.className=item.isFolder?'repo-folder':'repo-file-github'+(selecionadosDir.has(item.fullPath)?' selected-right':''); row.draggable=!item.isFolder;
-    if(item.isFolder){
-      row.innerHTML=`<span>📁 ${item.name}</span><span>→</span>`;
-      row.onclick=()=>navegarPara(item.fullPath);
-      row.oncontextmenu=e=>{ e.preventDefault(); showCtxMenu(e.clientX, e.clientY, null, true, item.fullPath); };
-    } else {
-      const isGeral=item.fullPath.includes('.geral');
-      const chk=selecionadosDir.has(item.fullPath)?'checked':''; row.innerHTML=`<span style="display:flex;align-items:center;gap:6px"><input type="checkbox" ${chk} onclick="event.stopPropagation(); toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"> ${isGeral?'⚙️':'📄'} ${item.name}${isGeral?' <span style="color:#00f0ff">(FORJA)</span>':''}</span><div style="display:flex;gap:3px"><button class="btn kai" style="padding:3px 6px" onclick="event.stopPropagation(); abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">✏️</button><button class="btn" style="padding:3px 6px" onclick="event.stopPropagation(); puxarArquivo('${item.fullPath.replace(/'/g,"\\'")}')">←</button></div>`; row.onclick=()=>toggleDir(item.fullPath);
-      row.oncontextmenu=e=>{ e.preventDefault(); showCtxMenu(e.clientX, e.clientY, null, false, item.fullPath); };
-    }
-    row.ondragstart=e=>{ const toDrag=[...selecionadosDir]; if(!selecionadosDir.has(item.fullPath)) toDrag.push(item.fullPath); e.dataTransfer.setData('from','right'); e.dataTransfer.setData('paths',JSON.stringify(toDrag)); };
+    const row=document.createElement('div'); row.className=item.isFolder?'repo-folder':'repo-file-github'+(selecionadosDir.has(item.fullPath)?' selected-right':'');
+    if(item.isFolder){ row.innerHTML=`<span>📁 ${item.name}</span><span>→</span>`; row.onclick=()=>navegarPara(item.fullPath); }
+    else { const chk=selecionadosDir.has(item.fullPath)?'checked':''; row.innerHTML=`<span><input type="checkbox" ${chk} onclick="event.stopPropagation(); toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"> 📄 ${item.name}</span><div style="display:flex;gap:2px"><button class="btn" onclick="event.stopPropagation(); puxarArquivo('${item.fullPath.replace(/'/g,"\\'")}')">←</button></div>`; row.onclick=()=>toggleDir(item.fullPath); }
     listEl.appendChild(row);
   });
 }
-function toggleDir(path){ if(selecionadosDir.has(path)) selecionadosDir.delete(path); else selecionadosDir.add(path); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR'; }
-async function puxarArquivo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const convertido=converterParaKAI(binary); const bytes=new Uint8Array(convertido.length); for(let i=0;i<convertido.length;i++) bytes[i]=convertido.charCodeAt(i); const blob=new Blob([bytes]); const obj={id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob, isGeral:path.includes('.geral')}; await save(obj); await carregarTudo(); log(`FORJA DIR→ESQ: ${path} - já renderizado exato 3D`); }catch(e){} }
-async function abrirEditorRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const convertido=converterParaKAI(binary); document.getElementById('editFileName').innerText=path+' - FORJA NEON 3D'; document.getElementById('editArea').value=convertido; document.getElementById('editModal').style.display='flex'; arquivoEditando={path:path, name:path.split('/').pop(), isRepo:true, sha:d.sha, blob:new Blob([convertido]), cat:'code', ext:path.split('.').pop(), isGeral:path.includes('.geral')}; renderInstant(); }catch(e){} }
-async function moverEsqParaDir(){ if(selecionados.size===0) return; const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){alert('REPO_TOKEN');return;} const ids=[...selecionados]; for(let id of ids){ const obj=ativos.find(a=>a.id===id); if(!obj) continue; let targetPath=obj.path; if(currentPath){ const fn=obj.path.split('/').pop(); targetPath=currentPath+'/'+fn; } let txt=await obj.blob.text(); txt=converterParaKAI(txt); const b64=btoa(unescape(encodeURIComponent(txt))); let sha=null; try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{} await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA NEON MOVE: ${targetPath}`,content:b64,sha})}); } await carregarDadosRepo(); renderLiveSite(); log(`🔨 FORJA: ${ids.length} movidos ESQ→DIR sem sair da página`); }
-async function moverDirParaEsq(){ if(selecionadosDir.size===0) return; for(let path of [...selecionadosDir]) await puxarArquivo(path); selecionadosDir.clear(); document.getElementById('selCountRight').innerText='0 sel DIR'; }
-function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-v12-FORJA-NEON-cfg',JSON.stringify(cfg)); carregarDadosRepo(); }
-const sLeft=document.getElementById('sLeft'), repoViewEl=document.getElementById('repoViewFallback');
-[sLeft, repoViewEl].forEach(el=>{
-  el.addEventListener('dragover',e=>{e.preventDefault(); el.classList.add('drop-active');});
-  el.addEventListener('dragleave',()=>el.classList.remove('drop-active'));
-  el.addEventListener('drop',async e=>{
-    e.preventDefault(); el.classList.remove('drop-active');
-    const from=e.dataTransfer.getData('from');
-    if(el.id==='sLeft' && from==='right'){ const pathsStr=e.dataTransfer.getData('paths'); let paths=[]; try{paths=JSON.parse(pathsStr);}catch{paths=[e.dataTransfer.getData('path')];} for(let p of paths) if(p) await puxarArquivo(p); selecionadosDir.clear(); }
-    if(el.id==='repoViewFallback' && from==='left'){ const idsStr=e.dataTransfer.getData('ids'); let ids=[]; try{ids=JSON.parse(idsStr);}catch{ids=[e.dataTransfer.getData('id')];} if(ids.length){ const oldSel=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=oldSel; renderLeft(); } }
-    if(e.dataTransfer.files?.length && el.id==='sLeft'){ await handle(e.dataTransfer.files); }
-  });
-});
-async function abrirHistorico(){ document.getElementById('historyModal').style.display='flex'; const listEl=document.getElementById('historyList'); const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){ listEl.innerHTML='Cole REPO_TOKEN'; return; } listEl.innerHTML='Carregando...'; try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/commits?per_page=20`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const commits=await r.json(); listEl.innerHTML=commits.map(c=>`<div style="padding:8px;border-bottom:1px solid #0f1a2a;display:flex;justify-content:space-between"><div><div style="font-size:8px;font-weight:700;color:#e0faff">${converterParaKAI(c.commit.message.slice(0,60))}</div><div style="font-size:6px;opacity:.5">${new Date(c.commit.author.date).toLocaleString()} • ${c.sha.slice(0,7)}</div></div><button class="btn ac" onclick="window.open('https://github.com/${ghO.value}/${ghR.value}/commit/${c.sha}','_blank')">VER</button></div>`).join(''); }catch(e){ listEl.innerHTML='Erro: '+e.message; } }
-function selecionarTodosDir(){ const items=getTreeForPath(currentPath).filter(i=>!i.isFolder); if(items.every(i=>selecionadosDir.has(i.fullPath))) items.forEach(i=>selecionadosDir.delete(i.fullPath)); else items.forEach(i=>selecionadosDir.add(i.fullPath)); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR'; }
-function limparSelDir(){ selecionadosDir.clear(); renderRepo(); document.getElementById('selCountRight').innerText='0 sel DIR'; }
-async function deletarSelecionadosDir(){ if(selecionadosDir.size===0) return; if(!confirm(`FORJA: Deletar ${selecionadosDir.size} DIR?`)) return; const REPO_TOKEN=getREPO_TOKEN(); for(let path of [...selecionadosDir]){ try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{method:'DELETE',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA DELETE: ${path}`,sha:d.sha})}); }catch{} } selecionadosDir.clear(); setTimeout(()=>carregarDadosRepo(),700); }
-function toggleFullscreenLive(){ const v=document.getElementById('liveViewer'); if(v.style.height==='92vh'){ v.style.height='48%'; } else { v.style.height='92vh'; } }
-filtrarComandos();
-window.addEventListener('load',()=>{ setTimeout(()=>carregarDadosRepo(),500); renderLiveSite(); });
+function toggleDir(path){ if(selecionadosDir.has(path)) selecionadosDir.delete(path); else selecionadosDir.add(path); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' DIR'; }
+async function puxarArquivo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const bytes=new Uint8Array(binary.length); for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i); const blob=new Blob([bytes]); const obj={id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob}; await save(obj); await carregarTudo(); log(`DIR→ESQ: ${path} → já renderizado`); }catch(e){} }
+async function moverEsqParaDir(){ if(selecionados.size===0) return; const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){alert('REPO_TOKEN');return;} const ids=[...selecionados]; for(let id of ids){ const obj=ativos.find(a=>a.id===id); if(!obj) continue; let targetPath=obj.path; if(currentPath){ const fn=obj.path.split('/').pop(); targetPath=currentPath+'/'+fn; } const b64=await new Promise(r=>{const fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.readAsDataURL(obj.blob);}); let sha=null; try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{} await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`EDIT: ${targetPath}`,content:b64,sha})}); } await carregarDadosRepo(); log(`Movidos ${ids.length} → já renderizado`); }
+async function moverDirParaEsq(){ if(selecionadosDir.size===0) return; for(let path of [...selecionadosDir]) await puxarArquivo(path); selecionadosDir.clear(); }
+function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-v8-REPO_TOKEN-cfg',JSON.stringify(cfg)); carregarDadosRepo(); }
+window.addEventListener('load',()=>{ setTimeout(()=>carregarDadosRepo(),400); });
 </script>
 </body>
-</html>
-
-<!-- g.hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG -->
-
-    
+</html> 
