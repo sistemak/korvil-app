@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>REATOR CORAX</title>
+<style>
+:root{--ciano:#00FFFF;--turquesa:#00FFD0;--azul:#0088FF;--energia:#00FF88}
+body{margin:0;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;height:100vh;color:var(--ciano);font-family:Segoe UI}
+@keyframes pulsar{0%,100%{transform:scale(1);box-shadow:0 0 30px var(--ciano), 0 0 60px var(--turquesa)}50%{transform:scale(1.08);box-shadow:0 0 60px var(--ciano), 0 0 120px var(--turquesa)}}
+@keyframes girar{from{transform:rotateX(0) rotateY(0)}to{transform:rotateX(360deg) rotateY(360deg)}}
+@keyframes onda{0%{transform:scale(1);opacity:1}100%{transform:scale(2.5);opacity:0}}
+
+.container{text-align:center}
+.titulo{font-size:22px;font-weight:900;letter-spacing:4px;text-shadow:0 0 15px var(--ciano)}
+.sub{font-size:12px;color:var(--turquesa);margin-bottom:20px}
+
+/* REATOR OCTAEDRO */
+.cena{width:200px;height:200px;perspective:800px;margin:20px auto}
+.octaedro{position:relative;width:100%;height:100%;transform-style:preserve-3d;animation:girar 8s linear infinite, pulsar 2s ease-in-out infinite}
+.face{position:absolute;width:100px;height:100px;background:linear-gradient(135deg,rgba(0,255,255,.3),rgba(0,255,208,.1));border:2px solid var(--ciano);clip-path:polygon(50% 0%, 0% 100%, 100% 100%)}
+.face1{transform:rotateY(0deg) translateZ(50px) rotateX(30deg)}
+.face2{transform:rotateY(90deg) translateZ(50px) rotateX(30deg)}
+.face3{transform:rotateY(180deg) translateZ(50px) rotateX(30deg)}
+.face4{transform:rotateY(270deg) translateZ(50px) rotateX(30deg)}
+.face5{transform:rotateX(90deg) translateZ(50px) rotateZ(45deg)}
+.face6{transform:rotateX(-90deg) translateZ(50px) rotateZ(45deg)}
+.nucleo{position:absolute;top:50%;left:50%;width:40px;height:40px;background:radial-gradient(var(--turquesa),var(--azul));border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 40px var(--turquesa)}
+.onda{position:absolute;top:50%;left:50%;width:200px;height:200px;border:2px solid var(--ciano);border-radius:50%;transform:translate(-50%,-50%);animation:onda 2s infinite}
+
+/* HUD */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:400px;margin-top:20px}
+.card{background:rgba(0,255,255,.08);border:1px solid var(--ciano);border-radius:10px;padding:10px;font-size:11px}
+.barra{width:100%;height:10px;background:#0d1a20;border:1px solid var(--ciano);border-radius:10px;margin-top:5px}
+.fill{height:100%;background:linear-gradient(90deg,var(--azul),var(--turquesa));border-radius:8px;transition:width .3s}
+.btn{padding:8px 14px;background:#0d1a20;border:2px solid var(--ciano);color:var(--ciano);border-radius:8px;margin:5px;cursor:pointer;font-weight:900}
+.btn:hover{background:var(--ciano);color:#000}
+.log{width:400px;height:70px;background:#001015;border:1px solid var(--ciano);padding:8px;font-size:10px;overflow-y:auto;border-radius:8px;margin-top:10px}
+</style></head>
+<body>
+<div class="container">
+  <div class="titulo">REATOR CORAX</div>
+  <div class="sub">NÚCLEO ENERGÉTICO K-AI | OCTAEDRO QUANTICO</div>
+
+  <div class="cena">
+    <div class="octaedro" id="reator">
+      <div class="face face1"></div><div class="face face2"></div>
+      <div class="face face3"></div><div class="face face4"></div>
+      <div class="face face5"></div><div class="face face6"></div>
+      <div class="nucleo"></div>
+      <div class="onda"></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card"><div>ENERGIA</div><div id="energia">100%</div><div class="barra"><div class="fill" id="eBar" style="width:100%"></div></div></div>
+    <div class="card"><div>TEMPERATURA</div><div id="temp">36°C</div></div>
+    <div class="card"><div>POTÊNCIA</div><div id="pot">8.5 GW</div></div>
+    <div class="card"><div>PURIFICADOR</div><div id="ar">ON</div></div>
+    <div class="card"><div>CARREGAMENTO</div><div id="carga">DRONES</div></div>
+    <div class="card"><div>HOLO</div><div id="holo">STANDBY</div></div>
+  </div>
+
+  <div>
+    <button class="btn" onclick="sobrecarga()">SOBRECARGA</button>
+    <button class="btn" onclick="holograma()">HOLOGRAMA</button>
+    <button class="btn" onclick="carregarDrones()">CARREGAR DRONES</button>
+  </div>
+
+  <div class="log" id="log">> REATOR CORAX: Núcleo Estável. Frequência: 432Hz<br></div>
+</div>
+
+<script>
+let energia=100, temp=36, potencia=8.5;
+
+function log(t){document.getElementById('log').innerHTML+=`> ${t}<br>`;}
+
+function sobrecarga(){
+  energia-=15; potencia+=2;
+  document.getElementById('reator').style.animation='girar 2s linear infinite, pulsar 0.3s ease-in-out infinite';
+  log('CORAX: Sobrecarga ativada. +200% energia pros sistemas');
+  if(window.parent.falar) window.parent.falar('Sobrecarga do reator');
+  setTimeout(()=>{document.getElementById('reator').style.animation='girar 8s linear infinite, pulsar 2s ease-in-out infinite'; potencia=8.5},5000);
+  atualizar();
+}
+
+function holograma(){
+  document.getElementById('holo').innerText='ATIVO';
+  energia-=5;
+  log('CORAX: Projetor holográfico 360° ativado');
+  if(window.parent.postMessage) window.parent.postMessage({tipo:'holo'},'*');
+  setTimeout(()=>document.getElementById('holo').innerText='STANDBY',8000);
+  atualizar();
+}
+
+function carregarDrones(){
+  energia-=10;
+  log('CORAX: Carregando CORVONAS via indução');
+  if(window.parent.postMessage) window.parent.postMessage({tipo:'carregar'},'*');
+  atualizar();
+}
+
+function atualizar(){
+  document.getElementById('eBar').style.width=energia+'%';
+  document.getElementById('energia').innerText=Math.round(energia)+'%';
+  document.getElementById('pot').innerText=potencia.toFixed(1)+' GW';
+  temp = 36 + (100-energia)*0.2;
+  document.getElementById('temp').innerText=Math.round(temp)+'°C';
+}
+
+setInterval(()=>{
+  if(energia<100) energia+=0.3;
+  atualizar();
+  
+  // CONJUGAÇÃO: Alimenta tudo
+  if(window.parent.energiaCorax) window.parent.energiaCorax = energia;
+},300);
+
+log('REATOR CORAX: Conectado ao Núcleo K-AI');
+</script>
+</body></html>
