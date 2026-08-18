@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-AI VISOR v-2026.22</title>
+<style>
+:root{--c:#00FFFF;--c2:#00FFD5;--glow:#00FFFF}
+body{margin:0;background:#000;overflow:hidden;font-family:'Segoe UI',Roboto;user-select:none}
+video,canvas{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:all.4s ease}
+
+#hud3d{pointer-events:none;z-index:5}
+
+/* OCTAEDRO PULSANTE */
+.hud-octa{position:absolute;top:10%;left:5%;width:180px;height:180px;z-index:10;animation:pulseOcta 2s infinite;pointer-events:none}
+@keyframes pulseOcta{
+ 0%,100%{filter:drop-shadow(0 0 20px var(--glow));transform:scale(1)}
+ 50%{filter:drop-shadow(0 0 40px var(--glow));transform:scale(1.05)}
+}
+
+/* LINHA DE SCAN CIANA */
+.hud-linha{position:absolute;top:50%;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);box-shadow:0 0 10px var(--c);animation:scan 3s linear infinite}
+@keyframes scan{0%{top:0}100%{top:100%}}
+
+.hud-top{position:absolute;top:20px;width:100%;text-align:center;color:var(--c);font-weight:900;font-size:14px;letter-spacing:4px;text-shadow:0 0 20px var(--glow);z-index:10}
+.hud-info{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);color:var(--c2);font-weight:700;font-size:16px;text-shadow:0 0 15px var(--glow);z-index:10;background:rgba(0,20,30,.8);padding:8px 20px;border-radius:20px;border:1px solid var(--c)}
+.hud-diagnostico{position:absolute;bottom:20px;left:20px;color:var(--c2);font-size:11px;z-index:10;text-shadow:0 0 8px var(--glow)}
+.hud-camera{position:absolute;top:50px;right:20px;color:var(--c);font-size:10px;font-weight:700;z-index:10;text-shadow:0 0 8px var(--glow)}
+
+/* DICA DUPLO CLIQUE */
+.hud-dica{position:absolute;top:70px;right:20px;color:#5a8a96;font-size:9px;z-index:10}
+
+/* BARRA DE ÍCONES OCTAEDRO */
+.barra-icones{position:absolute;left:15px;top:50%;transform:translateY(-50%);z-index:15;display:flex;flex-direction:column;gap:14px}
+.icone-peca{
+  width:55px;height:55px;background:rgba(0,255,255,.05);
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); /* OCTAEDRO */
+  border:2px solid var(--c);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:.3s;
+  box-shadow:0 0 20px var(--glow)40; animation:pulseIcon 3s infinite
+}
+@keyframes pulseIcon{0%,100%{box-shadow:0 0 20px var(--glow)40}50%{box-shadow:0 0 35px var(--glow)80}}
+.icone-peca:hover{background:var(--c);color:#000;transform:scale(1.15);box-shadow:0 0 40px var(--glow)}
+.icone-peca.ativo{background:var(--c);color:#000;box-shadow:0 0 50px var(--glow);animation:none}
+
+/* MINI MENU OCTAEDRO */
+.mini-menu{
+  position:absolute;top:50%;right:20px;transform:translateY(-50%);width:310px;
+  background:linear-gradient(180deg,rgba(0,255,255,.05),rgba(0,0,0,.9));
+  clip-path: polygon(5% 0%, 95% 0%, 100% 10%, 100% 90%, 95% 100%, 5% 100%, 0% 90%, 0% 10%); /* OCTAEDRO GRANDE */
+  border:2px solid var(--c2);padding:18px;z-index:15;box-shadow:0 0 40px var(--glow)60;display:none
+}
+.mini-menu.open{display:block;animation:fadeInOcta.4s}
+@keyframes fadeInOcta{from{opacity:0;transform:translateY(-50%) scale(.8)} to{opacity:1;transform:translateY(-50%) scale(1)}}
+.mini-title{color:var(--c2);font-size:17px;font-weight:900;text-align:center;margin-bottom:4px;text-shadow:0 0 15px var(--glow)}
+.mini-caminho{color:#5a8a96;font-size:10px;text-align:center;margin-bottom:12px;border-bottom:1px solid var(--c)30;padding-bottom:8px}
+.mini-btn{
+  background:rgba(0,255,255,.08);clip-path: polygon(5% 0%, 95% 0%, 100% 30%, 100% 70%, 95% 100%, 5% 100%, 0% 70%, 0% 30%);
+  border:1px solid var(--c);color:var(--c);padding:11px 14px;margin:7px 0;cursor:pointer;font-size:12px;font-weight:700;transition:.2s;text-align:left
+}
+.mini-btn:hover{background:var(--c);color:#000;box-shadow:0 0 20px var(--glow)}
+.mini-btn.ativo{background:var(--c);color:#000;box-shadow:0 0 30px var(--glow)}
+.mini-close{position:absolute;top:8px;right:12px;color:var(--c);font-size:22px;cursor:pointer;text-shadow:0 0 10px var(--glow)}
+
+.btn-fechar{
+  position:absolute;bottom:20px;right:20px;background:#000;
+  clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%); /* OCTAEDRO */
+  border:2px solid var(--c);color:var(--c);padding:14px 28px;font-weight:900;cursor:pointer;box-shadow:0 0 25px var(--glow);z-index:10
+}
+
+/* EFEITOS REAIS */
+.zoom{transform:scale(2.5)}.raiox{filter: invert(1) hue-rotate(180deg) contrast(250%) drop-shadow(0 0 20px var(--c))}
+.termico{filter: hue-rotate(160deg) saturate(4) contrast(180%)}.noturno{filter: brightness(2.5) hue-rotate(170deg)}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
+</head>
+<body>
+<video id="video" autoplay playsinline></video>
+<canvas id="canvas"></canvas>
+
+<!-- OCTAEDRO SVG -->
+<svg class="hud-octa" viewBox="0 0 100 100">
+  <polygon points="50,5 95,38 82,95 18,95 5,38" fill="none" stroke="#00FFFF" stroke-width="1.5"/>
+  <polygon points="50,5 95,38 50,50 5,38" fill="rgba(0,255,255,.1)"/>
+  <polygon points="50,50 95,38 82,95" fill="rgba(0,255,255,.05)"/>
+</svg>
+
+<div class="hud-linha"></div>
+<div class="hud-top">K-AI VISOR v-2026.22 | PROTOCOLO: SAY KORVIL</div>
+<div class="hud-camera" id="hudCamera">CÂMERA: TRASEIRA</div>
+<div class="hud-dica">TOQUE 2X NA TELA PARA TROCAR CÂMERA</div>
+<div class="hud-info" id="hudTexto">SCANEANDO...</div>
+
+<div class="hud-diagnostico">
+  <div>ENERGIA: <span style="color:var(--c)">98%</span></div>
+  <div>ALVOS: <span id="qtdAlvos" style="color:var(--c)">0</span></div>
+  <div>STATUS: <span style="color:var(--c)">ONLINE</span></div>
+</div>
+
+<!-- 11 ÍCONES OCTAEDRO -->
+<div class="barra-icones">
+  <div class="icone-peca" title="VISOR" onclick="abrirPeca('visor')">👁️</div>
+  <div class="icone-peca" title="FONES" onclick="abrirPeca('fones')">🎧</div>
+  <div class="icone-peca" title="NARIZ" onclick="abrirPeca('nariz')">👃</div>
+  <div class="icone-peca" title="BOCA" onclick="abrirPeca('boca')">👄</div>
+  <div class="icone-peca" title="BICO" onclick="abrirPeca('bico')">🔺</div>
+  <div class="icone-peca" title="PEITORAL" onclick="abrirPeca('peitoral')">🛡️</div>
+  <div class="icone-peca" title="ASAS" onclick="abrirPeca('asas')">🪽</div>
+  <div class="icone-peca" title="BRAÇOS" onclick="abrirPeca('bracos')">💪</div>
+  <div class="icone-peca" title="LUVAS" onclick="abrirPeca('luvas')">🧤</div>
+  <div class="icone-peca" title="PERNAS" onclick="abrirPeca('pernas')">🦵</div>
+  <div class="icone-peca" title="PÉS" onclick="abrirPeca('pes')">👟</div>
+</div>
+
+<div class="mini-menu" id="miniMenu">
+  <span class="mini-close" onclick="fecharMiniMenu()">×</span>
+  <div id="miniConteudo"></div>
+</div>
+
+<button class="btn-fechar" onclick="sairVisor()">SAIR</button>
+
+<script>
+let video = document.getElementById('video');
+let canvas = document.getElementById('canvas');
+let ctx = canvas.getContext('2d');
+let modelFace;
+let pecaAtual = '';
+let stream = null;
+let usandoCameraFrontal = false; // COMEÇA NA TRASEIRA
+let ultimoToque = 0;
+
+// TODAS AS 11 PEÇAS
+const PECAS = {
+  'visor': {nome: "VISOR K-1", sentido: "VISÃO", icone:"👁️",
+    funcoes: [
+      {nome:"Modo Raio-X",id:"raiox"},
+      {nome:"Zoom 8x",id:"zoom"},
+      {nome:"Câmera Térmica",id:"termico"},
+      {nome:"Visão Noturna",id:"noturno"},
+      {nome:"Reset Visor",id:"reset"}
+    ]
+  },
+  'fones': {nome: "FONES K-AUDIO", sentido: "AUDIÇÃO", icone:"🎧", funcoes: [{nome:"Cancelamento Ruído",id:"noise"},{nome:"Amplificar Som",id:"amp"}]},
+  'nariz': {nome: "NARIZ SENSORIAL", sentido: "OLFATO", icone:"👃", funcoes: [{nome:"Analisar Odor",id:"olfato"}]},
+  'boca': {nome: "BOCA KORVIL", sentido: "FALA", icone:"👄", funcoes: [{nome:"Sintetizador Voz",id:"fala"}]},
+  'bico': {nome: "BICO DE CORVO", sentido: "TATO", icone:"🔺", funcoes: [{nome:"Disparo Laser",id:"laser"}]},
+  'peitoral': {nome: "PEITORAL K-CORE", sentido: "DEFESA", icone:"🛡️", funcoes: [{nome:"Escudo Energia",id:"escudo"}]},
+  'asas': {nome: "AS CORAX", sentido: "VOO", icone:"🪽", funcoes: [{nome:"Voo Tático",id:"voo"}]},
+  'bracos': {nome: "BRAÇOS K-1", sentido: "FORÇA", icone:"💪", funcoes: [{nome:"Força +500kg",id:"forca"}]},
+  'luvas': {nome: "LUVAS K-1", sentido: "ATAQUE", icone:"🧤", funcoes: [{nome:"Disparo K-1",id:"disparo"}]},
+  'pernas': {nome: "PERNAS K-3", sentido: "LOCOMOÇÃO", icone:"🦵", funcoes: [{nome:"Salto 15m",id:"salto"}]},
+  'pes': {nome: "PÉS PROPULSORES", sentido: "PROPULSÃO", icone:"👟", funcoes: [{nome:"Propulsor",id:"propulsor"}]}
+};
+
+// DUPLO CLIQUE PRA TROCAR CÂMERA
+document.addEventListener('dblclick', trocarCamera);
+document.addEventListener('touchend', function(e){
+  let agora = new Date().getTime();
+  if(agora - ultimoToque < 300){ // 300ms = duplo toque
+    trocarCamera();
+  }
+  ultimoToque = agora;
+});
+
+async function trocarCamera(){
+  usandoCameraFrontal =!usandoCameraFrontal;
+
+  // PARA STREAM ANTIGO
+  if(stream) stream.getTracks().forEach(track => track.stop());
+
+  // ABRE NOVA CÂMERA
+  let facing = usandoCameraFrontal? "user" : "environment";
+  stream = await navigator.mediaDevices.getUserMedia({video: { facingMode: facing }});
+  video.srcObject = stream;
+
+  // ATUALIZA HUD
+  document.getElementById('hudCamera').innerText = `CÂMERA: ${usandoCameraFrontal? 'FRONTAL' : 'TRASEIRA'}`;
+  falar(usandoCameraFrontal? "Câmera Frontal Ativada" : "Câmera Traseira Ativada");
+
+  video.onloadedmetadata = () => {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+  }
+}
+
+function abrirPeca(peca){
+  pecaAtual = peca;
+  document.querySelectorAll('.icone-peca').forEach(i=>i.classList.remove('ativo'));
+  document.querySelector(`.icone-peca[onclick="abrirPeca('${peca}')"]`).classList.add('ativo');
+  montarListaFuncoes(PECAS[peca]); // <-- AQUI ERA O BUG. TAVA PECAS
+  document.getElementById('miniMenu').classList.add('open');
+}
+
+function montarListaFuncoes(dados){
+  let html = `<div class="mini-title">${dados.icone} ${dados.nome}</div>`;
+  html += `<div class="mini-caminho">${dados.sentido}</div>`;
+  dados.funcoes.forEach((f,i)=>{
+    html += `<div class="mini-btn" id="btn-${f.id}" onclick="executar('${f.id}')">${i+1}. ${f.nome}</div>`;
+  });
+  document.getElementById('miniConteudo').innerHTML = html;
+}
+
+function executar(id){
+  document.querySelectorAll('.mini-btn').forEach(b=>b.classList.remove('ativo'));
+  document.getElementById(`btn-${id}`)?.classList.add('ativo');
+
+  video.className = '';
+
+  switch(id){
+    case 'raiox': video.classList.add('raiox'); falar("Raio-X Ativado"); break;
+    case 'zoom': video.classList.toggle('zoom'); falar(video.classList.contains('zoom')? "Zoom 8x" : "Zoom Off"); break;
+    case 'termico': video.classList.add('termico'); falar("Térmico Ativado"); break;
+    case 'noturno': video.classList.add('noturno'); falar("Visão Noturna"); break;
+    case 'reset': falar("Sistema Resetado"); break;
+    default: falar(`${PECAS[pecaAtual].nome}: ${id}`); break;
+  }
+
+  atualizarTexto(`${PECAS[pecaAtual].nome} > ${id}`);
+}
+
+function fecharMiniMenu(){document.getElementById('miniMenu').classList.remove('open')}
+function atualizarTexto(txt){document.getElementById('hudTexto').innerText=txt}
+function falar(txt){if('speechSynthesis' in window){speechSynthesis.speak(new SpeechSynthesisUtterance(txt))}}
+
+async function iniciar(){
+  modelFace = await blazeface.load();
+  await trocarCamera(); // COMEÇA COM TRASEIRA
+  detectar();
+}
+async function detectar(){
+  const faces = await modelFace.estimateFaces(video, false);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  document.getElementById('qtdAlvos').innerText = faces.length;
+  faces.forEach(face => {
+    const [x,y] = face.topLeft; const [x2,y2] = face.bottomRight;
+    ctx.strokeStyle = '#00FFFF'; ctx.lineWidth = 2; ctx.shadowBlur=15; ctx.shadowColor='#00FFFF';
+    ctx.strokeRect(x,y,x2-x,y2-y);
+    atualizarTexto('ALVO: HUMANO DETECTADO');
+  });
+  if(faces.length === 0) atualizarTexto('SCANEANDO...');
+  requestAnimationFrame(detectar);
+}
+function sairVisor(){
+  video.className='';
+  if(stream) stream.getTracks().forEach(track => track.stop());
+  if(window.parent.fecharVisor)window.parent.fecharVisor()
+}
+
+iniciar();
+</script>
+</body>
+</html>
