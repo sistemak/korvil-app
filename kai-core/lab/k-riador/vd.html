@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>K-AI BOOT</title>
+<style>
+  *{margin:0;padding:0}
+  body{background:#000;overflow:hidden;font-family:monospace;color:#00ffaa}
+
+  /* 1. TELA PRETA 3s */
+  #boot{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:10;animation:sair 1s forwards;animation-delay:3s}
+  @keyframes sair{to{opacity:0;visibility:hidden}}
+
+  /* 2. CÍRCULOS APARECENDO LENTO 3s */
+  #circulos{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;z-index:9;opacity:0;animation:aparecer 3s forwards;animation-delay:3s}
+  @keyframes aparecer{to{opacity:1}}
+  .anel{position:absolute;border:2px solid #00ffaa;border-radius:50%;animation:giro 4s linear infinite}
+  .a1{width:300px;height:300px;top:-150px;left:-150px;animation-delay:0s}
+  .a2{width:240px;height:240px;top:-120px;left:-120px;animation-delay:0.3s}
+  .a3{width:180px;height:180px;top:-90px;left:-90px;animation-delay:0.6s}
+  @keyframes giro{100%{transform:rotate(360deg)}}
+
+  /* 3. VIDEO NORMAL */
+  .wrapper{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:1;opacity:0;animation:mostrarVideo 1s forwards;animation-delay:6s}
+  @keyframes mostrarVideo{to{opacity:1}}
+  #bgvideo{max-width:90%;max-height:90%;object-fit:contain}
+
+  /* 4. HUD K-AI POR CIMA DO VIDEO */
+  #hud{position:fixed;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none;opacity:0;animation:mostrarHUD 1s forwards;animation-delay:6.5s}
+  
+  /* BARRAS SUPERIOR ESQUERDO - IGUAL DO VIDEO */
+  .barra-k{position:absolute;left:8%;width:12%;height:6px;border:1px solid #00ffaa;background:rgba(0,255,170,0.1)}
+  .b1{top:18%} .b2{top:22%} .b3{top:26%}
+  .barra-k .fill{height:100%;background:#00ffaa;width:0%;animation:encher 2s forwards}
+  .b1 .fill{animation-delay:6.5s;width:80%}
+  .b2 .fill{animation-delay:6.7s;width:100%}
+  .b3 .fill{animation-delay:6.9s;width:65%}
+  .label{position:absolute;left:21%;font-size:9px;text-shadow:0 0 5px #00ffaa}
+  .l1{top:17%} .l2{top:21%} .l3{top:25%}
+
+  /* BARRA INFERIOR ESQUERDO */
+  .barra-inf{position:absolute;left:8%;bottom:12%;width:15%;height:6px;border:1px solid #00ffaa}
+  .barra-inf .fill{height:100%;background:#00ffaa;width:90%;animation:encher 2s forwards;animation-delay:7.1s}
+  .label-inf{position:absolute;left:24%;bottom:11%;font-size:9px;text-shadow:0 0 5px #00ffaa}
+
+  /* TEXTO ENERGIA */
+  .energia{position:absolute;left:8%;bottom:16%;font-size:10px;animation:piscar 2s infinite}
+  @keyframes piscar{0%,100%{opacity:1}50%{opacity:0.3}}
+</style>
+</head>
+<body>
+
+<!-- 1. TELA PRETA -->
+<div id="boot"></div>
+
+<!-- 2. CÍRCULOS -->
+<div id="circulos">
+  <div class="anel a1"></div>
+  <div class="anel a2"></div>
+  <div class="anel a3"></div>
+</div>
+
+<!-- 3. VIDEO -->
+<div class="wrapper">
+  <video id="bgvideo" autoplay loop playsinline>
+    <source src="k-ai-hud.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- 4. HUD K-AI -->
+<div id="hud">
+  <!-- 3 BARRAS SUPERIOR ESQ -->
+  <div class="barra-k b1"><div class="fill"></div></div>
+  <div class="label l1">ID: K-AI-09</div>
+
+  <div class="barra-k b2"><div class="fill"></div></div>
+  <div class="label l2">ON: SYSTEM</div>
+
+  <div class="barra-k b3"><div class="fill"></div></div>
+  <div class="label l3">TURBO: 65%</div>
+
+  <!-- BARRA INFERIOR ESQ -->
+  <div class="energia">ENERGIA</div>
+  <div class="barra-inf"><div class="fill"></div></div>
+</div>
+
+<script>
+  const v=document.getElementById('bgvideo');
+  v.volume=0.7;
+  // Inicia vídeo no segundo 6 pra sincronizar
+  setTimeout(()=>{v.currentTime=0;v.play()},6000);
+  document.body.onclick=()=>{v.play()};
+</script>
+
+</body>
+</html>
