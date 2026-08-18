@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K-AI AR TEST</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+
+<style>
+body{
+margin:0;
+overflow:hidden;
+background:black;
+font-family:Arial;
+}
+
+video{
+position:fixed;
+width:100%;
+height:100%;
+object-fit:cover;
+transform:scaleX(-1);
+}
+
+#hud{
+position:fixed;
+inset:0;
+pointer-events:none;
+}
+
+#title{
+position:absolute;
+top:10px;
+left:50%;
+transform:translateX(-50%);
+color:#00ffff;
+font-size:24px;
+text-shadow:0 0 15px #00ffff;
+}
+
+#info{
+position:absolute;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+color:#00ffff;
+font-size:18px;
+text-shadow:0 0 15px #00ffff;
+}
+
+.corner{
+position:absolute;
+width:100px;
+height:100px;
+border:3px solid #00ffff;
+box-shadow:0 0 20px #00ffff;
+}
+
+.tl{top:20px;left:20px;border-right:none;border-bottom:none;}
+.tr{top:20px;right:20px;border-left:none;border-bottom:none;}
+.bl{bottom:20px;left:20px;border-right:none;border-top:none;}
+.br{bottom:20px;right:20px;border-left:none;border-top:none;}
+</style>
+</head>
+<body>
+
+<video id="video" autoplay playsinline></video>
+
+<div id="hud">
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<div id="title">K-AI AR TEST</div>
+<div id="info">Inicializando...</div>
+</div>
+
+<script>
+
+const info = document.getElementById("info");
+const video = document.getElementById("video");
+
+navigator.mediaDevices.getUserMedia({
+video:true
+}).then(stream=>{
+video.srcObject=stream;
+});
+
+const hands = new Hands({
+locateFile:(file)=>{
+return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+}
+});
+
+hands.setOptions({
+maxNumHands:1,
+minDetectionConfidence:0.6,
+minTrackingConfidence:0.6
+});
+
+hands.onResults(results=>{
+
+if(!results.multiHandLandmarks.length){
+info.innerHTML="Nenhuma mão detectada";
+return;
+}
+
+const hand = results.multiHandLandmarks[0];
+
+const polegar = hand[4];
+const indicador = hand[8];
+
+const distancia =
+Math.hypot(
+polegar.x-indicador.x,
+polegar.y-indicador.y
+);
+
+if(distancia < 0.05){
+info.innerHTML="GESTO: PINÇA";
+}
+else{
+info.innerHTML="GESTO: MÃO ABERTA";
+}
+
+});
+
+const camera = new Camera(video,{
+onFrame:async()=>{
+await hands.send({image:video});
+},
+width:640,
+height:480
+});
+
+camera.start();
+
+const SR =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
+if(SR){
+
+const rec = new SR();
+
+rec.lang="pt-BR";
+rec.continuous=true;
+
+rec.onresult=(e)=>{
+
+const txt =
+e.results[e.results.length-1][0]
+.transcript.toLowerCase();
+
+if(txt.includes("lanterna")){
+info.innerHTML="COMANDO: LANTERNA";
+}
+
+if(txt.includes("câmera")){
+info.innerHTML="COMANDO: CÂMERA";
+}
+
+if(txt.includes("jarvis")){
+info.innerHTML="K-AI OUVINDO";
+}
+
+};
+
+rec.start();
+}
+
+</script>
+
+</body>
+</html>
