@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-TP | KORVIL Treinamento 360° </title>
+<style>
+  :root{--bg:#06070b;--panel:#0d1017;--card:#11141d;--text:#eaf6ff;--muted:#7d8aa1;--neon:#00f5ff;--ok:#00ff88;--err:#ff3366;--border:#1a2030;--glow:0 0 12px rgba(0,245,255,.35);--gold:#f59e0b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font:14px/1.6 Inter,Arial}
+  header{position:sticky;top:0;z-index:999;background:rgba(6,7,11,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.topbar{display:flex;align-items:center;gap:12px;padding:10px 12px}
+.logo{font-weight:900;font-size:18px;color:var(--neon)}
+.wrap{display:grid;grid-template-columns:340px 1fr;align-items:start}
+  @media(max-width:1100px){.wrap{grid-template-columns:1fr} aside{position:fixed;inset:52px 0 auto 0;transform:translateX(-100%);transition:.3s;z-index:998;background:var(--panel);width:88%;border-right:1px solid var(--border);max-height:calc(100vh - 52px)}}
+  aside{position:sticky;top:52px;overflow:auto;padding:12px}
+  main{padding:0;margin:0}
+.menu-btn{display:none;padding:8px;border:1px solid var(--border);border-radius:8px;background:#0a0d14;color:var(--neon)}
+  @media(max-width:1100px){.menu-btn{display:block}}
+.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:997}
+.overlay.show{display:block}
+.tabs{display:flex;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);background:var(--panel)}
+.tab{padding:8px 14px;border:1px solid var(--border);border-radius:8px;background:#0b0e15;color:var(--muted);font-weight:700;cursor:pointer;font-size:13px}
+.tab.active{border-color:var(--neon);color:var(--neon);box-shadow:var(--glow)}
+.timeline{padding:12px}
+.ano-title{font-size:18px;color:var(--neon);margin:0 0 12px}
+.fase{border:1px solid var(--border);border-radius:10px;background:var(--card);margin-bottom:10px}
+.fase-head{padding:12px;background:#0b0e15;display:flex;justify-content:space-between;cursor:pointer}
+.fase-head h3{margin:0;color:var(--neon);font-size:14px}
+.fase-body{display:none;padding:10px;color:var(--muted);font-size:13px}
+.fase.open.fase-body{display:block}
+.course-title{padding:8px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.course-title h1{font-size:16px;margin:0;color:var(--neon)}
+.stat{font-size:12px;color:var(--muted);margin-top:4px}
+.modulo{margin-bottom:10px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#0b0e15}
+.modulo-head{padding:12px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:14px}
+.modulo-head span{color:var(--muted);font-size:12px}
+.modulo.open.aulas{display:block}
+.aulas{display:none;padding:6px 8px;background:#0a0d14}
+.aula{padding:8px 10px;border-radius:6px;margin:4px 0;background:#0d111a;font-size:13px;cursor:pointer;border:1px solid transparent;color:var(--muted)}
+.aula:hover{border-color:var(--neon);color:var(--text)}
+.aula.active{border-color:var(--neon);background:#0f1622;color:var(--neon)}
+.aula.locked{opacity:.35;pointer-events:none}
+.aula.completed{border-color:var(--ok);color:var(--ok)}
+.player{margin:0;border:1px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden}
+.video-wrap{position:relative;padding-top:56.25%;background:#000;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.content{padding:14px}
+.breadcrumb{font-size:11px;color:var(--muted);margin-bottom:8px}
+.breadcrumb b{color:var(--neon)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.chip{font-size:11px;padding:6px 10px;border:1px solid var(--neon);border-radius:999px;color:var(--neon);background:#0b0e15}
+.chip.gray{border-color:var(--border);color:var(--muted)}
+.chip.gold{border-color:var(--gold);color:var(--gold)}
+.content h2{font-size:18px;color:var(--neon);margin:0 0 10px;text-shadow:var(--glow)}
+.tema-nav{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap}
+.tema-btn{padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:#0b0e15;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tema-btn.active{border-color:var(--neon);color:var(--neon);box-shadow:var(--glow)}
+.tema-btn.completed{border-color:var(--ok);color:var(--ok)}
+.pagina-nav{display:flex;gap:6px;margin:10px 0}
+.p-btn{padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:#0a0d14;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer}
+.p-btn.active{border-color:var(--neon);color:var(--neon)}
+.pagina{margin-top:12px;padding:14px;border:1px solid var(--border);border-radius:10px;background:#0b0e15}
+.pagina h4{font-size:15px;color:var(--neon);margin:0 0 8px}
+.pagina p{font-size:13px;color:var(--muted);margin:0}
+.avaliacao{margin-top:16px;padding:16px;border:2px solid var(--neon);border-radius:12px;background:#0a0f14;box-shadow:var(--glow)}
+.avaliacao h3{font-size:15px;color:var(--neon);margin:0 0 8px}
+.avaliacao p{font-size:12px;color:var(--muted);margin:0 0 10px}
+.questao{margin:12px 0;padding:12px;border:1px solid var(--border);border-radius:8px;background:#0b0e15}
+.questao p{margin:0 0 8px;font-weight:600;font-size:13px}
+.opcao{display:block;margin:6px 0;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:#0a0d14;cursor:pointer;font-size:13px}
+.opcao:hover{border-color:var(--neon)}
+.opcao.selecionada{border-color:var(--neon)}
+.opcao.correta{border-color:var(--ok);background:#0a1a14}
+.opcao.errada{border-color:var(--err);background:#1a0a0f}
+.resultado{margin-top:10px;padding:10px;border-radius:8px;font-weight:700;text-align:center;font-size:13px}
+.resultado.aprovado{background:#0a1a14;color:var(--ok);border:1px solid var(--ok)}
+.resultado.reprovado{background:#1a0a0f;color:var(--err);border:1px solid var(--err)}
+.navfooter{display:flex;gap:8px;justify-content:space-between;padding:12px;border-top:1px solid var(--border);background:#0b0e15;position:sticky;bottom:0}
+.btn{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#0a0d14;color:var(--text);font-weight:700;font-size:13px;cursor:pointer}
+.btn.primary{background:var(--neon);color:#001012;border:0;box-shadow:var(--glow)}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+</style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <button class="menu-btn" id="btnMenu">☰</button>
+    <div class="logo">K-TP 360°</div>
+    <div style="color:var(--muted);font-size:12px">Cursos > Saúde > K-TP</div>
+  </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+<div class="wrap">
+  <aside id="sidebar">
+    <div class="course-title">
+      <h1>K-TP Formação 360°</h1>
+      <div class="stat">11 Módulos • 220h • 4 Fases • Certificação</div>
+    </div>
+    <div id="menuModulos"></div>
+  </aside>
+
+  <main>
+    <div class="tabs">
+      <div class="tab active" id="tabCron">Cronograma Anual</div>
+      <div class="tab" id="tabAula">Área de Aula</div>
+    </div>
+
+    <div id="tab-cronograma" class="timeline">
+      <h2 class="ano-title">Cronograma Anual K-TP 2026</h2>
+      <div class="fase open"><div class="fase-head"><h3>Janeiro e Fevereiro | FASE 1: OFF SEASON - ADAPTAÇÃO GERAL</h3><span>M1 M2</span></div><div class="fase-body"><p><b>Módulo 1:</b> Fundamentos da Transformação | <b>Módulo 2:</b> Nutrição e Metabolismo</p></div></div>
+      <div class="fase"><div class="fase-head"><h3>Março a Maio | FASE 2: BULKING - HIPERTROFIA MÁXIMA</h3><span>M3 M4 M5</span></div><div class="fase-body"><p><b>Módulo 3:</b> Treinamento de Força | <b>Módulo 4:</b> Ortopedia e Prevenção | <b>Módulo 5:</b> Psicologia do Esporte</p></div></div>
+      <div class="fase"><div class="fase-head"><h3>Junho a Agosto | FASE 3: MAINTENANCE - CONSOLIDAÇÃO</h3><span>M6 M7 M8</span></div><div class="fase-body"><p><b>Módulo 6:</b> Prescrição Multidisciplinar | <b>Módulo 7:</b> Fisiologia Avançada | <b>Módulo 8:</b> Bioquímica Aplicada</p></div></div>
+      <div class="fase"><div class="fase-head"><h3>Setembro a Novembro | FASE 4: CUTTING - DEFINIÇÃO TOTAL</h3><span>M9 M10 M11</span></div><div class="fase-body"><p><b>Módulo 9:</b> Estratégias de Cutting | <b>Módulo 10:</b> Saúde Mental e Hábitos | <b>Módulo 11:</b> Estágio e Prática Supervisionada</p></div></div>
+      <div class="fase"><div class="fase-head"><h3>Dezembro: PROGRAMA DE PARCERIA KORVIL | K-TP</h3><span>Bônus</span></div><div class="fase-body"><p>Revisão | Avaliações Finais | Certificados 220h | Convite para Professor</p></div></div>
+    </div>
+
+    <div id="tab-aula" style="display:none">
+      <div class="player">
+        <div class="video-wrap" id="videoWrap">[Selecione uma aula no menu lateral]</div>
+        <div class="content" id="conteudoAula">
+          <div class="chips"><span class="chip gold">220H CERTIFICADO</span><span class="chip">Selecione uma Aula</span></div>
+          <h2>Bem-vindo ao K-TP 360°</h2>
+          <p>Regra: Conclua 5 Páginas > Tema 5 Página 5 = Avaliação 70% > Libera Próxima Aula. Sem limite de tentativas.</p>
+        </div>
+        <div class="navfooter">
+          <button class="btn" id="btnAnt" disabled>← Aula Anterior</button>
+          <button class="btn primary" id="btnConcluir" disabled>✓ Concluir Aula</button>
+          <button class="btn primary" id="btnProx" disabled>Próxima Aula →</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+// DADOS COMPLETOS K-TP 360°
+const DADOS={
+ 1:{nome:"Módulo 1: Fundamentos da Transformação",video:"j3PdVh1j7e0",aulas:[
+    {nome:"Aula 1: Conceito 360°",temas:["Tema 1: O que é Transformação 360°","Tema 2: Os 4 Pilares: Médico, Nutri, Ortopedia, Terapeuta","Tema 3: Metodologia K-TP","Tema 4: Avaliação Inicial","Tema 5: Definição de Metas"]},
+    {nome:"Aula 2: Anatomia Aplicada",temas:["Tema 1: Sistema Muscular","Tema 2: Sistema Hormonal","Tema 3: Sistema Energético","Tema 4: Biomecânica","Tema 5: Adaptação Corporal"]},
+    {nome:"Aula 3: Avaliação Física",temas:["Tema 1: Anamnese Completa","Tema 2: Bioimpedância","Tema 3: Medidas Antropométricas","Tema 4: Teste de Força","Tema 5: Laudo Inicial"]},
+    {nome:"Aula 4: Planejamento Anual",temas:["Tema 1: Ciclo OFF SEASON","Tema 2: Ciclo BULKING","Tema 3: Ciclo MAINTENANCE","Tema 4: Ciclo CUTTING","Tema 5: Periodização"]},
+    {nome:"Aula 5: Ética Profissional",temas:["Tema 1: Código de Conduta","Tema 2: Limites da Prescrição","Tema 3: Trabalho em Equipe","Tema 4: Documentação","Tema 5: Responsabilidade Legal"]},
+  ]},
+ 2:{nome:"Módulo 2: Nutrição e Metabolismo",video:"k4_RvR3QZ8k",aulas:[
+    {nome:"Aula 1: Macronutrientes",temas:["Tema 1: Proteínas","Tema 2: Carboidratos","Tema 3: Gorduras","Tema 4: Timing Nutricional","Tema 5: Suplementação Base"]},
+    {nome:"Aula 2: Metabolismo Basal",temas:["Tema 1: TMB e GET","Tema 2: Adaptação Metabólica","Tema 3: Efeito Térmico","Tema 4: Hormônios Metabólicos","Tema 5: Cálculo de Calorias"]},
+    {nome:"Aula 3: Dieta OFF SEASON",temas:["Tema 1: Superávit Calórico","Tema 2: Alimentos Estratégicos","Tema 3: Frequência Alimentar","Tema 4: Hidratação","Tema 5: Monitoramento"]},
+    {nome:"Aula 4: Patologias Nutricionais",temas:["Tema 1: Diabetes","Tema 2: Hipertensão","Tema 3: Intolerâncias","Tema 4: Doenças Autoimunes","Tema 5: Quando encaminhar"]},
+    {nome:"Aula 5: Prática Clínica",temas:["Tema 1: Montagem de Dieta","Tema 2: Reeducação Alimentar","Tema 3: Diário Alimentar","Tema 4: Adesão do Paciente","Tema 5: Reavaliação"]},
+  ]},
+ 3:{nome:"Módulo 3: Treinamento de Força",video:"j3PdVh1j7e0",aulas:[
+    {nome:"Aula 1: Princípios do Treino",temas:["Tema 1: Sobrecarga Progressiva","Tema 2: Especificidade","Tema 3: Volume vs Intensidade","Tema 4: Frequência","Tema 5: Recuperação"]},
+    {nome:"Aula 2: BULKING",temas:["Tema 1: Foco em Hipertrofia","Tema 2: Exercícios Compostos","Tema 3: Séries e Repetições","Tema 4: Descanso","Tema 5: Progression Load"]},
+    {nome:"Aula 3: Técnicas Avançadas",temas:["Tema 1: Drop Set","Tema 2: Rest Pause","Tema 3: Pirâmide","Tema 4: Pré-Exaustão","Tema 5: Isometria"]},
+    {nome:"Aula 4: Lesões no Treino",temas:["Tema 1: Causas Comuns","Tema 2: Prevenção","Tema 3: Sinais de Alerta","Tema 4: Conduta Inicial","Tema 5: Encaminhamento"]},
+    {nome:"Aula 5: Montagem de Ficha",temas:["Tema 1: Divisão de Treino","Tema 2: Seleção de Exercícios","Tema 3: Periodização","Tema 4: Progressão","Tema 5: Reavaliação"]},
+  ]},
+ 4:{nome:"Módulo 4: Ortopedia e Prevenção",video:"k4_RvR3QZ8k",aulas:[
+    {nome:"Aula 1: Coluna Vertebral",temas:["Tema 1: Anatomia da Coluna","Tema 2: Postura","Tema 3: Hérnia de Disco","Tema 4: Escoliose","Tema 5: Exercícios Seguros"]},
+    {nome:"Aula 2: Joelhos e Ombros",temas:["Tema 1: Biomecânica","Tema 2: Lesões Comuns","Tema 3: Fortalecimento","Tema 4: Reabilitação","Tema 5: Adaptação de Treino"]},
+    {nome:"Aula 3: Aquecimento e Mobilidade",temas:["Tema 1: Importância","Tema 2: Protocolos","Tema 3: Alongamento","Tema 4: Liberação Miofascial","Tema 5: Resfriamento"]},
+    {nome:"Aula 4: Ergonomia",temas:["Tema 1: Postura no Trabalho","Tema 2: Prevenção de Dores","Tema 3: Exercícios Corretivos","Tema 4: Pausa Ativa","Tema 5: Qualidade de Vida"]},
+    {nome:"Aula 5: Quando Encaminhar",temas:["Tema 1: Sinais de Alerta","Tema 2: Exames","Tema 3: Laudo Médico","Tema 4: Equipe Multidisciplinar","Tema 5: Retorno Seguro"]},
+  ]},
+ 5:{nome:"Módulo 5: Psicologia do Esporte",video:"j3PdVh1j7e0",aulas:[
+    {nome:"Aula 1: Motivação",temas:["Tema 1: Tipos de Motivação","Tema 2: Gatilhos","Tema 3: Procrastinação","Tema 4: Disciplina","Tema 5: Constância"]},
+    {nome:"Aula 2: Comportamento Alimentar",temas:["Tema 1: Fome Emocional","Tema 2: Compulsão","Tema 3: Ansiedade","Tema 4: Recompensa","Tema 5: Estratégias"]},
+    {nome:"Aula 3: Gestão de Estresse",temas:["Tema 1: Cortisol","Tema 2: Sono","Tema 3: Técnicas de Relaxamento","Tema 4: Mindfulness","Tema 5: Rotina"]},
+    {nome:"Aula 4: Autossabotagem",temas:["Tema 1: Crenças Limitantes","Tema 2: Medo do Resultado","Tema 3: Efeito Sanfona","Tema 4: Reprogramação","Tema 5: Apoio"]},
+    {nome:"Aula 5: Alta Performance",temas:["Tema 1: Foco","Tema 2: Resiliência","Tema 3: Metas SMART","Tema 4: Visualização","Tema 5: Mentalidade Vencedora"]},
+  ]},
+ 6:{nome:"Módulo 6: Prescrição Multidisciplinar",video:"k4_RvR3QZ8k",aulas:[
+    {nome:"Aula 1: Equipe 360°",temas:["Tema 1: Papel do Médico","Tema 2: Papel do Nutricionista","Tema 3: Papel do Ortopedista","Tema 4: Papel do Terapeuta","Tema 5: Comunicação"]},
+    {nome:"Aula 2: MAINTENANCE",temas:["Tema 1: Consolidação de Ganhos","Tema 2: Manutenção de Massa","Tema 3: Equilíbrio","Tema 4: Monitoramento","Tema 5: Ajustes"]},
+    {nome:"Aula 3: Caso Clínico 1",temas:["Tema 1: Anamnese","Tema 2: Diagnóstico","Tema 3: Prescrição","Tema 4: Acompanhamento","Tema 5: Resultado"]},
+    {nome:"Aula 4: Caso Clínico 2",temas:["Tema 1: Anamnese","Tema 2: Diagnóstico","Tema 3: Prescrição","Tema 4: Acompanhamento","Tema 5: Resultado"]},
+    {nome:"Aula 5: Documentação",temas:["Tema 1: Ficha 360°","Tema 2: Evolução","Tema 3: Relatórios","Tema 4: Encaminhamentos","Tema 5: Ética"]},
+  ]},
+ 7:{nome:"Módulo 7: Fisiologia Avançada",video:"j3PdVh1j7e0",aulas:[
+    {nome:"Aula 1: Hormônios",temas:["Tema 1: Testosterona","Tema 2: GH","Tema 3: Insulina","Tema 4: Cortisol","Tema 5: Tireoide"]},
+    {nome:"Aula 2: Sistema Nervoso",temas:["Tema 1: Adaptação Neural","Tema 2: Força","Tema 3: Fadiga","Tema 4: Recuperação","Tema 5: Overtraining"]},
+    {nome:"Aula 3: Energia",temas:["Tema 1: ATP-CP","Tema 2: Glicolítico","Tema 3: Oxidativo","Tema 4: Treino e Energia","Tema 5: Suplementos"]},
+    {nome:"Aula 4: Adaptação",temas:["Tema 1: SAID Principle","Tema 2: Hipertrofia","Tema 3: Força","Tema 4: Resistência","Tema 5: Potência"]},
+    {nome:"Aula 5: Aplicação Prática",temas:["Tema 1: Testes","Tema 2: Monitoramento","Tema 3: Ajustes","Tema 4: Resultados","Tema 5: Longo Prazo"]},
+  ]},
+ 8:{nome:"Módulo 8: Bioquímica Aplicada",video:"k4_RvR3QZ8k",aulas:[
+    {nome:"Aula 1: Proteínas",temas:["Tema 1: Síntese Proteica","Tema 2: Aminoácidos","Tema 3: Whey e Creatina","Tema 4: Timing","Tema 5: Doses"]},
+    {nome:"Aula 2: Carboidratos",temas:["Tema 1: Glicogênio","Tema 2: Pré e Pós Treino","Tema 3: Índice Glicêmico","Tema 4: Refil","Tema 5: Estratégias"]},
+    {nome:"Aula 3: Gorduras",temas:["Tema 1: Hormônios","Tema 2: Ômega 3","Tema 3: Inflamação","Tema 4: Fontes","Tema 5: Doses"]},
+    {nome:"Aula 4: Micronutrientes",temas:["Tema 1: Vitaminas","Tema 2: Minerais","Tema 3: Antioxidantes","Tema 4: Deficiências","Tema 5: Suplementação"]},
+    {nome:"Aula 5: Exames",temas:["Tema 1: Sangue","Tema 2: Hormonal","Tema 3: Interpretação","Tema 4: Quando Pedir","Tema 5: Encaminhar"]},
+  ]},
+ 9:{nome:"Módulo 9: Estratégias de Cutting",video:"j3PdVh1j7e0",aulas:[
+    {nome:"Aula 1: CUTTING",temas:["Tema 1: Déficit Calórico","Tema 2: Preservar Massa","Tema 3: Cardio","Tema 4: Treino","Tema 5: Monitoramento"]},
+    {nome:"Aula 2: Nutrição Cutting",temas:["Tema 1: Ajuste de Macros","Tema 2: Fome","Tema 3: Refeed","Tema 4: Diet Break","Tema 5: Adesão"]},
+    {nome:"Aula 3: Treino Cutting",temas:["Tema 1: Manter Força","Tema 2: Volume","Tema 3: HIIT","Tema 4: Recuperação","Tema 5: Overtraining"]},
+    {nome:"Aula 4: Platô",temas:["Tema 1: Causas","Tema 2: Quebra de Platô","Tema 3: Reverse Diet","Tema 4: Ajustes","Tema 5: Paciência"]},
+    {nome:"Aula 5: Finalização",temas:["Tema 1: Últimas 4 Semanas","Tema 2: Água e Sódio","Tema 3: Carbo Up","Tema 4: Resultados","Tema 5: Manutenção"]},
+  ]},
+10:{nome:"Módulo 10: Saúde Mental e Hábitos",video:"k4_RvR3QZ8k",aulas:[
+    {nome:"Aula 1: Hábitos",temas:["Tema 1: Formação de Hábito","Tema 2: Gatilhos","Tema 3: Rotina","Tema 4: Constância","Tema 5: Longo Prazo"]},
+    {nome:"Aula 2: Sono",temas:["Tema 1: Qualidade do Sono","Tema 2: Recuperação","Tema 3: Hormônios","Tema 4: Higiene do Sono","Tema 5: Estratégias"]},
+    {nome:"Aula 3: Ansiedade e Corpo",temas:["Tema 1: Imagem Corporal","Tema 2: Autoestima","Tema 3: Comparação","Tema 4: Redes Sociais","Tema 5: Apoio"]},
+    {nome:"Aula 4: Sustentabilidade",temas:["Tema 1: 80/20","Tema 2: Flexibilidade","Tema 3: Equilíbrio","Tema 4: Vida Social","Tema 5: Resultado Duradouro"]},
+    {nome:"Aula 5: Acompanhamento",temas:["Tema 1: Consultas","Tema 2: Feedback","Tema 3: Ajustes","Tema 4: Motivação","Tema 5: Encerramento"]},
+  ]},
+11:{nome:"Módulo 11: Estágio e Prática Supervisionada",video:"j3PdVh1j7e0",aulas:[
+    {nome:"Aula 1: Estágio 100h",temas:["Tema 1: Atendimento Real","Tema 2: Supervisão","Tema 3: Casos","Tema 4: Relatório","Tema 5: Avaliação"]},
+    {nome:"Aula 2: Empreendedorismo",temas:["Tema 1: Abrir Negócio","Tema 2: Marketing","Tema 3: Vendas","Tema 4: Gestão","Tema 5: Escala"]},
+    {nome:"Aula 3: Autoridade",temas:["Tema 1: Marca Pessoal","Tema 2: Conteúdo","Tema 3: Redes Sociais","Tema 4: Networking","Tema 5: Referência"]},
+    {nome:"Aula 4: Certificação",temas:["Tema 1: Prova Final","Tema 2: 220h","Tema 3: Carta Recomendação","Tema 4: Acesso Vitalício","Tema 5: Formatura"]},
+    {nome:"Aula 5: Programa Parceria",temas:["Tema 1: Critérios","Tema 2: Professor K-TP","Tema 3: 50% Comissão","Tema 4: Gravação de Aulas","Tema 5: Seu Nome na Plataforma"]},
+  ]}
+};
+
+const QUESTOES={
+ 1:[{q:"1. Os 4 pilares do K-TP 360° são:",o:["Medico, Nutri, Ortopedia, Terapeuta","Treino, Dieta, Cardio, Sono","Proteina, Carbo, Gordura, Agua","Força, Hipertrofia, Resistência, Potência"],r:0},
+     {q:"2. Fase 1 do ano é:",o:["BULKING","CUTTING","OFF SEASON","MAINTENANCE"],r:2},
+     {q:"3. Certificação total:",o:["100h","150h","220h","300h"],r:2},
+     {q:"4. Objetivo do OFF SEASON:",o:["Perder gordura","Ganhar massa","Adaptação e aumentar ingestão","Definição"],r:2},
+     {q:"5. Programa de Parceria dá:",o:["10% comissão","50% comissão vitalícia","Certificado extra","Nada"],r:1}],
+ 2:[{q:"1. Superávit calórico é usado em:",o:["Cutting","Bulking","Maintenance","Off Season"],r:1},
+     {q:"2. TMB significa:",o:["Taxa Metabólica Basal","Treino Muscular Basal","Teste de Massa Corporal","Total Metabólico Basico"],r:0},
+     {q:"3. Proteína serve para:",o:["Energia rápida","Construção muscular","Hidratação","Gordura"],r:1},
+     {q:"4. Encaminhar para médico quando:",o:["Paciente quer emagrecer","Sinais de patologia","Não gosta do treino","Falta de tempo"],r:1},
+     {q:"5. Hidratação ideal:",o:["500ml","1L","2L a 3L","Não precisa"],r:2}]
+};
+for(let i=3;i<=11;i++){QUESTOES[i]=QUESTOES[1]}
+
+let estado={aula:null,tema:1,pagina:1,respostas:{},concluidas:JSON.parse(localStorage.getItem('ktp_v360')||'[]'),temasOK:JSON.parse(localStorage.getItem('ktp_temas_v360')||'{}')};
+const $=s=>document.querySelector(s);const $$=s=>document.querySelectorAll(s);
+
+function montarMenu(){
+  const wrap=$('#menuModulos');wrap.innerHTML='';
+  Object.keys(DADOS).forEach(m=>{
+    const mod=DADOS[m];let aulas='';
+    mod.aulas.forEach((aulaObj,i)=>{const id=`M${m}-A${i+1}`;const ok=estado.concluidas.includes(id);aulas+=`<div class="aula locked ${ok?'completed':''}" data-id="${id}">${i+1}. ${aulaObj.nome}</div>`});
+    const concluidasMod=estado.concluidas.filter(x=>x.startsWith(`M${m}-`)).length;
+    wrap.innerHTML+=`<div class="modulo" id="mod${m}"><div class="modulo-head">${mod.nome}<span>${concluidasMod}/${mod.aulas.length}</span></div><div class="aulas">${aulas}</div></div>`;
+  });
+  $$('.modulo-head').forEach(el=>el.onclick=()=>el.parentElement.classList.toggle('open'));
+  $$('.aula').forEach(el=>el.onclick=()=>!el.classList.contains('locked')&&carregarAula(el.dataset.id));
+}
+
+function carregarAula(id){
+  estado.aula=id;estado.tema=1;estado.pagina=1;estado.respostas={};$('#tabAula').click();
+  const [m,a]=id.replace('M','').split('-A').map(Number);
+  const mod=DADOS[m];const aulaObj=mod.aulas[a-1];
+  $('#videoWrap').innerHTML=`<iframe src="https://www.youtube.com/embed/${mod.video}" allowfullscreen></iframe>`;
+  let nav='';aulaObj.temas.forEach((t,i)=>{const ok=estado.temasOK[id]?.includes(i+1);nav+=`<button class="tema-btn ${i===0?'active':''} ${ok?'completed':''}" data-t="${i+1}">${t}</button>`});
+  $('#conteudoAula').innerHTML=`<div class="breadcrumb">Localização: <b>${mod.nome}</b> > <b>${aulaObj.nome}</b> > <b id="bcTema">${aulaObj.temas[0]}</b> > <b id="bcPag">Página 1: Objetivo</b></div><div class="chips"><span class="chip">${mod.nome}</span><span class="chip gray">${aulaObj.nome}</span></div><h2>${mod.nome} > ${aulaObj.nome}</h2><div class="tema-nav">${nav}</div><div id="paginaArea"></div>`;
+  $$('.tema-btn').forEach(b=>b.onclick=()=>trocarTema(+b.dataset.t));renderPagina();
+  $$('.aula').forEach(x=>x.classList.remove('active'));$(`[data-id="${id}"]`).classList.add('active');
+  const idx=(m-1)*5+(a-1);$('#btnAnt').disabled=idx===0;$('#btnProx').disabled=true;$('#btnConcluir').disabled=true;if(window.innerWidth<1100)toggleMenu(false);
+}
+
+function trocarTema(t){estado.tema=t;estado.pagina=1;estado.respostas={};$$('.tema-btn').forEach((b,i)=>b.classList.toggle('active',i+1===t));const[m,a]=estado.aula.replace('M','').split('-A').map(Number);$('#bcTema').innerText=DADOS[m].aulas[a-1].temas[t-1];renderPagina()}
+function trocarPagina(p){estado.pagina=p;$$('.p-btn').forEach((b,i)=>b.class
+function trocarTema(t){estado.tema=t;estado.pagina=1;estado.respostas={};$$('.tema-btn').forEach((b,i)=>b.classList.toggle('active',i+1===t));const[m,a]=estado.aula.replace('M','').split('-A').map(Number);$('#bcTema').innerText=DADOS[m].aulas[a-1].temas[t-1];renderPagina()}
+
+function trocarPagina(p){estado.pagina=p;$$('.p-btn').forEach((b,i)=>b.classList.toggle('active',i+1===p));const tit=['Objetivo','Materiais','Preparação','Execução','Finalização'];$('#bcPag').innerText=`Página ${p}: ${tit[p-1]}`;renderPagina()}
+
+function renderPagina(){
+  const[m,a]=estado.aula.replace('M','').split('-A').map(Number);
+  const mod=DADOS[m];const aulaObj=mod.aulas[a-1];const temaNome=aulaObj.temas[estado.tema-1];
+  const tit=['Objetivo','Materiais','Preparação','Execução','Finalização'];
+  let html='';
+  for(let p=1;p<=5;p++){
+    let extra='';
+    if(p===5&&estado.tema===5&&!estado.concluidas.includes(estado.aula)){
+      extra=`<div class="avaliacao"><h3>📝 Exercício de Avaliação: ${temaNome}</h3><p>Acerte 70% ou mais para liberar a próxima aula. Sem limite de tentativas.</p><div id="q"></div><button class="btn primary" id="env">Enviar Avaliação</button><div id="res"></div></div>`;
+    }
+    html+=`<div class="pagina" style="display:${p===estado.pagina?'block':'none'}"><h4>Página ${p} – ${tit[p-1]}</h4><p>[CONTEÚDO] ${mod.nome} | ${aulaObj.nome} | ${temaNome} | Página ${p} – ${tit[p-1]}.</p>${extra}</div>`;
+  }
+  let btns='<div class="pagina-nav">';for(let p=1;p<=5;p++){btns+=`<button class="p-btn ${p===estado.pagina?'active':''}" data-p="${p}">${p}</button>`}btns+='</div>';
+  $('#paginaArea').innerHTML=btns+html;
+  $$('.p-btn').forEach(b=>b.onclick=()=>trocarPagina(+b.dataset.p));
+  if($('#env')){carregarQuestoes(m)}
+}
+function carregarQuestoes(m){
+  const qs=QUESTOES[m];let h='';
+  qs.forEach((q,i)=>{h+=`<div class="questao"><p>${q.q}</p>`;q.o.forEach((op,j)=>h+=`<div class="opcao" data-q="${i}" data-o="${j}">${String.fromCharCode(65+j)}) ${op}</div>`);h+='</div>'});
+  $('#q').innerHTML=h;
+  $$('.opcao').forEach(o=>o.onclick=()=>{const qi=+o.dataset.q,oi=+o.dataset.o;estado.respostas[qi]=oi;$$('.opcao[data-q="'+qi+'"]').forEach(x=>x.classList.remove('selecionada'));o.classList.add('selecionada')});
+  $('#env').onclick=corrigir;
+}
+function corrigir(){
+  const[m]=estado.aula.replace('M','').split('-A').map(Number);
+  const qs=QUESTOES[m];let ac=0;
+  qs.forEach((q,i)=>{const r=estado.respostas[i];if(r===q.r)ac++;$$('.opcao[data-q="'+i+'"]').forEach((o,j)=>{o.classList.remove('correta','errada');if(j===q.r)o.classList.add('correta');else if(j===r&&r!==q.r)o.classList.add('errada')})});
+  const pct=Math.round(ac/qs.length*100);const ok=pct>=70;
+  $('#res').innerHTML=`<div class="resultado ${ok?'aprovado':'reprovado'}">${ok?'APROVADO':'REPROVADO'}: ${ac}/${qs.length} acertos = ${pct}%</div>${ok?'<button class="btn primary" id="prox">Próxima Aula →</button>':'<button class="btn primary" id="ref">Refazer Avaliação</button>'}`;
+  if(ok){
+    estado.temasOK[estado.aula]=estado.temasOK[estado.aula]||[];if(!estado.temasOK[estado.aula].includes(5))estado.temasOK[estado.aula].push(5);
+    localStorage.setItem('ktp_temas_v360',JSON.stringify(estado.temasOK));
+    $('#btnProx').disabled=false;$('#btnConcluir').disabled=false;
+  }else{
+    $('#ref').onclick=()=>{estado.respostas={};$('#res').innerHTML='';carregarQuestoes(m)}
+  }
+  $('#prox').onclick=proximaAula;
+}
+function concluirAula(){if(!estado.aula)return;if(!estado.concluidas.includes(estado.aula))estado.concluidas.push(estado.aula);localStorage.setItem('ktp_v360',JSON.stringify(estado.concluidas));montarMenu()}
+function proximaAula(){const[m,a]=estado.aula.replace('M','').split('-A').map(Number);const idx=(m-1)*5+(a-1);if(idx<54)carregarAula(`M${Math.floor((idx+1)/5)+1}-A${(idx+1)%5+1}`)}
+function anteriorAula(){const[m,a]=estado.aula.replace('M','').split('-A').map(Number);const idx=(m-1)*5+(a-1);if(idx>0)carregarAula(`M${Math.floor((idx-1)/5)+1}-A${(idx-1)%5+1}`)}
+function abrirTab(n){$$('.tab').forEach(t=>t.classList.remove('active'));$('#tab'+n).classList.add('active');$('#tab-cronograma').style.display=n==='Cron'?'block':'none';$('#tab-aula').style.display=n==='Aula'?'block':'none'}
+function toggleMenu(){const s=$('#sidebar'),o=$('#overlay');const open=s.style.transform==='translateX(0px)';s.style.transform=open?'translateX(-100%)':'translateX(0px)';o.classList.toggle('show',!open)}
+$('#btnMenu').onclick=toggleMenu;$('#overlay').onclick=toggleMenu;$('#tabCron').onclick=()=>abrirTab('Cron');$('#tabAula').onclick=()=>abrirTab('Aula');$('#btnAnt').onclick=anteriorAula;$('#btnProx').onclick=proximaAula;$('#btnConcluir').onclick=concluirAula;montarMenu();
+</script>
+
+</body>
+</html>
