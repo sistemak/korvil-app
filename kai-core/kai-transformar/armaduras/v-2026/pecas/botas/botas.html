@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>GARRAS DE POUSO</title>
+<style>
+:root{--c:#00FFFF;--garra:#C0C0C0;--ima:#00FF88}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;padding:15px}
+.bota{width:120px;height:100px;background:linear-gradient(#222,#000);border:3px solid var(--c);border-radius:20px 20px 5px 5px;position:relative}
+.garra{position:absolute;width:15px;height:40px;background:var(--garra);bottom:-30px;border-radius:0 0 10px 10px;transition:.3s}
+.g1{left:15px} .g2{left:45px} .g3{left:75px} .g4{right:15px}
+.garra.ativa{background:var(--ima);box-shadow:0 0 15px var(--ima);height:50px}
+</style></head>
+<body>
+<h2>GARRAS DE POUSO K-1</h2>
+<div class="bota">
+  <div class="garra g1"></div><div class="garra g2"></div><div class="garra g3"></div><div class="garra g4"></div>
+</div>
+<p>Ímã: <span id="ima">OFF</span> | Tração: <span id="tracao">100</span>%</p>
+<button onclick="ativar()">ATIVAR GARRAS</button> <button onclick="ima()">MODO ÍMÃ</button>
+<script>
+let im= false;
+function ativar(){document.querySelectorAll('.garra').forEach(g=>g.classList.add('ativa'));setTimeout(()=>document.querySelectorAll('.garra').forEach(g=>g.classList.remove('ativa')),2000)}
+function ima(){im=!im; document.getElementById('ima').innerText=im?'ON':'OFF';}
+</script></body></html>
