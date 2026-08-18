@@ -9,11 +9,11 @@ SÓ LEMBRETE FALSO
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GEMINI DIRETO NA TELA</title>
+<title>GEMINI + GITHUB SALVOS</title>
 <style>
 body{background:#050505;color:#00ff88;font-family:Consolas,monospace;padding:15px;max-width:800px;margin:auto}
 h2{color:#00ff88;text-align:center}
-.desc{background:#001100;border:1px dashed #00ff88;padding:10px;margin:10px 0;border-radius:5px;font-size:12px}
+.desc{background:#001100;border:1px dashed #00ff88;padding:10px;margin:10px 0;border-radius:5px;font-size:12px;white-space:pre-wrap}
 input,textarea,button{width:100%;padding:12px;margin:8px 0;background:#111;border:1px solid #00ff88;color:#00ff88;border-radius:5px;font-family:inherit;box-sizing:border-box}
 button{cursor:pointer;font-weight:bold;background:#00ff88;color:#000;font-size:16px}
 button:hover{background:#00cc66}
@@ -23,43 +23,45 @@ button:hover{background:#00cc66}
 </style>
 </head>
 <body>
-<h2>🔥 GEMINI DIRETO - SEM ACTIONS 🔥</h2>
+<h2>🔥 GEMINI + GITHUB SALVOS 🔥</h2>
 
-<div class="desc">
-<b>LEMBRETE:</b><br>
-1. Cole seu AQ_TOKEN real aqui embaixo<br>
-2. Exemplo pra lembrar:<br>
-   AQ: A.Q.Ab8RN6KM3JxwVREVm5IC8VzULdYgSc32nuWshnxC_BjnUMhh2w<br>
-   GH: g.hp_2QIJJlBAS2TXg3bPN3HN7yuipxabw42V5MyO<br>
-<i>São falsos! Só pra tu lembrar o formato</i>
-</div>
+<div class="desc"><b>LEMBRETE - TOKENS DE EXEMPLO:</b>
+IA GEMINI: A.Q.Ab8RN6JaDwr0O_UzNIpdnsqTIA7li4zymx1K2gSz_OSouKr-Uw
+Github token g.hp_2QIJJlBAS2TXg3bPN3HN7yuipxabw42V5MyO
+SÃO FALSOS! COLE OS SEUS REAIS ABAIXO</div>
 
-<label>1. Cole seu AQ_TOKEN aqui:</label>
+<label>1. Cole seu AQ_TOKEN:</label>
 <input id="aqtoken" type="password" placeholder="A.Q.xxxxxxxxxxxxxxxx">
-<button onclick="salvarAQ()">SALVAR AQ_TOKEN</button>
+
+<label>2. Cole seu GH_TOKEN:</label>
+<input id="ghtoken" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+
+<button onclick="salvarTudo()">SALVAR OS 2 TOKENS</button>
 <div id="status"></div>
 
-<label>2. Digite o Prompt:</label>
+<label>3. Digite o Prompt:</label>
 <textarea id="prompt" rows="5">Faça um site de vendas moderno</textarea>
 <button onclick="chamarGemini()">ENVIAR PRA IA</button>
 
-<label>3. Resposta do Gemini:</label>
+<label>4. Resposta do Gemini:</label>
 <div id="resposta">Aguardando...</div>
 
 <script>
-// Carrega token salvo quando abre a página
+// Carrega os 2 tokens salvos quando abre a página
 window.onload = function(){
-  const salvo = localStorage.getItem('aq');
-  if(salvo){
-    document.getElementById('aqtoken').value = salvo;
-    document.getElementById('status').innerHTML = '<span class="ok">✅ Token já carregado do navegador</span>';
-  }
+  const aq = localStorage.getItem('aq');
+  const gh = localStorage.getItem('gh');
+  if(aq) document.getElementById('aqtoken').value = aq;
+  if(gh) document.getElementById('ghtoken').value = gh;
+  if(aq || gh) document.getElementById('status').innerHTML = '<span class="ok">✅ Tokens já carregados do navegador</span>';
 }
 
-function salvarAQ(){
-  const val = document.getElementById('aqtoken').value;
-  localStorage.setItem('aq', val);
-  document.getElementById('status').innerHTML = '<span class="ok">✅ AQ_TOKEN salvo! Não precisa colar de novo</span>';
+function salvarTudo(){
+  const aq = document.getElementById('aqtoken').value;
+  const gh = document.getElementById('ghtoken').value;
+  localStorage.setItem('aq', aq);
+  localStorage.setItem('gh', gh);
+  document.getElementById('status').innerHTML = '<span class="ok">✅ AQ_TOKEN e GH_TOKEN salvos! Próxima vez já abre com eles</span>';
 }
 
 async function chamarGemini(){
