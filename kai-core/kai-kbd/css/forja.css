@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#010409;--painel:#0d1117;--painel2:#161b22;--ciano:#00f0ff;--neon:#00ffcc;--verde:#00ff66;--magenta:#ff00ff;--texto:#c9d1d9;--borda:rgba(0,240,255,0.3);--glow:0 0 10px var(--ciano);}
+body{background:radial-gradient(ellipse at top, #001122 0%, #010409 100%);color:var(--texto);height:100vh;overflow:hidden;font-family:'JetBrains Mono';font-size:14px;}
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,240,255,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,0.03)1px,transparent 1px);background-size:40px 40px;z-index:-2;}
+#barra-abas{position:fixed;top:0;left:0;right:0;height:40px;background:var(--painel);border-bottom:1px solid var(--borda);display:flex;align-items:center;padding:0 10px;z-index:9998;}
+.aba{padding:8px 16px;margin-right:2px;background:transparent;border:none;color:var(--texto);border-bottom:2px solid transparent;cursor:pointer;font-size:12px;font-weight:500;font-family:'Orbitron';}
+.aba.ativa{background:var(--painel2);color:var(--ciano);border-bottom:2px solid var(--ciano);}
+.aba-menu{margin-left:auto;display:flex;gap:6px;}
+.aba-menu button{padding:6px 10px;background:var(--painel2);border:1px solid var(--borda);color:var(--ciano);border-radius:4px;font-size:11px;cursor:pointer;font-family:'Orbitron';}
+#forja-app{display:flex;height:calc(50vh - 40px);gap:8px;padding:8px;margin-top:40px;}
+.painel-glass{background:var(--painel2);border:1px solid var(--borda);border-radius:6px;}
+#painel-esquerdo{width:400px;padding:12px;overflow:auto;}
+.logo{text-align:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--borda);}
+.logo h1{font-size:20px;font-weight:900;color:var(--ciano);font-family:'Orbitron';text-shadow:var(--glow);}
+.tag-kai{font-size:10px;color:var(--verde);letter-spacing:2px;font-family:'Orbitron';}
+.barra-comando{display:flex;gap:6px;margin-bottom:10px;}
+#btnVoz{padding:8px 12px;background:linear-gradient(90deg,var(--magenta),var(--ciano));border:none;color:#000;font-weight:900;border-radius:4px;cursor:pointer;}
+#btnVoz.gravando{animation:piscarVoz 0.8s infinite;}
+@keyframes piscarVoz{0%,100%{opacity:1;}50%{opacity:0.4;}}
+#comandoUnificado{flex:1;padding:8px;background:#000;color:var(--verde);border:1px solid var(--verde);border-radius:4px;font-family:'JetBrains Mono';}
+.btn-neon{padding:10px;cursor:pointer;font-weight:700;font-size:12px;background:linear-gradient(180deg,#1f6feb, #1158c7);color:#fff;border:1px solid #1f6feb;border-radius:6px;font-family:'Orbitron';}
+#editor-area{flex:1;display:flex;flex-direction:column;gap:8px;}
+#editor{flex:1;background:#000;color:var(--verde);padding:16px;border:1px solid var(--borda);border-radius:6px;font-family:'JetBrains Mono';font-size:14px;line-height:1.6;resize:none;-webkit-user-select:text;user-select:text;}
+#visualizador{height:calc(50vh - 50px);margin:0 8px;display:flex;flex-direction:column;}
+#preview-header{padding:8px;background:var(--painel);border-bottom:1px solid var(--borda);font-family:'Orbitron';font-size:12px;color:var(--ciano);}
+#preview-container{flex:1;background:#fff;border-radius:0 0 6px 6px;overflow:auto;}
+#barraStatus{position:fixed;bottom:0;left:0;right:0;height:28px;background:var(--painel);border-top:1px solid var(--borda);display:flex;align-items:center;justify-content:space-around;font-size:11px;}
+
+/* K-AI 3X MAIOR DOUTORADO */
+#cubo-kai-container{position:fixed;bottom:40px;left:15px;width:210px;height:210px;z-index:10000;perspective:1200px;}
+#cubo-kai{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:girarCubo4D 15s linear infinite;cursor:pointer;}
+@keyframes girarCubo4D{0%{transform:rotateX(0) rotateY(0);}100%{transform:rotateX(360deg) rotateY(360deg);}}
+.face{position:absolute;width:210px;height:210px;background:rgba(13,17,23,0.9);border:2px solid var(--ciano);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--verde);font-size:48px;text-shadow:var(--glow);backdrop-filter:blur(5px);}
+.frente{transform:translateZ(105px);}.tras{transform:rotateY(180deg) translateZ(105px);}
+.direita{transform:rotateY(90deg) translateZ(105px);}.esquerda{transform:rotateY(-90deg) translateZ(105px);}
+.topo{transform:rotateX(90deg) translateZ(105px);}.base{transform:rotateX(-90deg) translateZ(105px);}
+
+/* MINI MENU DO KAI */
+#menu-kai{position:absolute;bottom:220px;left:0;width:280px;background:var(--painel);border:2px solid var(--ciano);border-radius:8px;padding:12px;display:none;box-shadow:var(--glow);}
+#menu-kai.ativo{display:block;}
+.header-kai{font-family:'Orbitron';color:var(--ciano);margin-bottom:10px;text-align:center;font-size:14px;}
+#menu-kai button{width:100%;padding:8px;margin-bottom:6px;background:#000;border:1px solid var(--borda);color:var(--neon);border-radius:4px;cursor:pointer;text-align:left;}
+#menu-kai button:hover{border-color:var(--ciano);background:var(--painel2);}
+#respostaKai{margin-top:10px;padding:8px;background:#000;border-radius:4px;font-size:12px;color:var(--verde);max-height:120px;overflow:auto;}
+
+#mouse-virtual{position:fixed;width:20px;height:20px;background:radial-gradient(circle,var(--verde),transparent);border:1px solid var(--verde);border-radius:50%;pointer-events:none;z-index:10001;box-shadow:0 0 20px var(--verde);}
+#canvasCGM{position:fixed;bottom:260px;left:15px;width:200px;height:150px;border:1px solid var(--verde);border-radius:6px;z-index:9999;display:none;}
+#editor, input, textarea, select{-webkit-user-select:text;user-select:text;}
