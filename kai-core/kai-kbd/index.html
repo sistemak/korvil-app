@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAI-KBD MODO FORJA</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<style>
+  :root { --verde:#00ff88; --bg:#0A0A0A; --card:#1A1A1A; --borda:#333; }
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Arial; }
+  body { background:var(--bg); color:#eee; height:100vh; display:flex; flex-direction:column; }
+  header { background:#111; padding:10px 20px; border-bottom:2px solid var(--verde); }
+  header h1 { color:var(--verde); font-size:18px; }
+
+.main { display:flex; flex:1; gap:10px; padding:10px; overflow:hidden; }
+.formulario { width:35%; background:var(--card); border-radius:10px; padding:15px; overflow-y:auto; border:1px solid var(--borda); }
+.formulario h2 { color:var(--verde); font-size:14px; margin-bottom:10px; border-bottom:1px solid var(--borda); padding-bottom:5px; }
+.bloco { margin-bottom:15px; }
+.bloco label { font-size:12px; color:#aaa; }
+  input, select, textarea { width:100%; padding:8px; margin-top:4px; background:#0A0A0A; color:#fff; border:1px solid var(--borda); border-radius:5px; }
+.botoes { display:flex; gap:5px; flex-wrap:wrap; }
+.botoes button { flex:1; padding:8px; background:var(--verde); color:#000; border:none; border-radius:5px; cursor:pointer; font-weight:bold; font-size:12px; }
+.botoes button.sec { background:#333; color:#fff; }
+.botoes button.danger { background:#ff4444; color:#fff; }
+.botoes button.download { background:#00aaff; }
+.item { padding:6px; margin:3px 0; background:#222; border-radius:4px; cursor:pointer; font-size:13px; }
+.item.pasta { border-left:3px solid var(--verde); }
+.item.ativo { background:#004422; }
+
+.programacao { width:65%; display:flex; flex-direction:column; background:var(--card); border-radius:10px; padding:15px; border:1px solid var(--borda); }
+.programacao h2 { color:var(--verde); font-size:14px; margin-bottom:10px; }
+  #editor { flex:1; width:100%; background:#000; color:#00ff88; border:1px solid var(--borda); border-radius:5px; padding:10px; font-family:Consolas; font-size:13px; resize:none; }
+
+.preview { height:30vh; background:#111; border-top:2px solid var(--verde); padding:10px; }
+.preview h2 { color:var(--verde); font-size:14px; margin-bottom:5px; }
+  #visor { width:100%; height:calc(100% - 25px); background:#fff; border:none; border-radius:5px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚒️ KAI-KBD MODO FORJA | Banco de Dados Geral KORVIL</h1>
+</header>
+
+<div class="main">
+  <div class="formulario">
+    <h2>📋 FORMULÁRIO DE CONTROLE</h2>
+    <div class="bloco">
+      <label>Setor / Área / Serviço</label>
+      <select id="setor">
+        <option>Setor: Frontend</option>
+        <option>Setor: Backend</option>
+        <option>Setor: Banco de Dados</option>
+        <option>Área: Design</option>
+        <option>Área: Marketing</option>
+        <option>Serviço: API</option>
+        <option>Serviço: Deploy</option>
+      </select>
+      <input type="text" id="nomeProjeto" placeholder="Nome do Projeto: ex: kai-core">
+    </div>
+
+    <div class="bloco">
+      <h2>📁 ESTRUTURA DE PASTAS E ARQUIVOS</h2>
+      <div class="botoes">
+        <button onclick="addPasta('root')">+ Pasta</button>
+        <button onclick="addArquivo('root')" class="sec">+ Arquivo</button>
+      </div>
+      <div id="arvore"></div>
+    </div>
+
+    <div class="bloco">
+      <h2>⚙️ AÇÕES</h2>
+      <div class="botoes">
+        <button onclick="criar()">Criar</button>
+        <button onclick="atualizar()" class="sec">Atualizar</button>
+        <button onclick="editar()" class="sec">Editar</button>
+        <button onclick="deletar()" class="danger">Deletar</button>
+      </div>
+      <div class="botoes" style="margin-top:8px">
+        <button onclick="baixarZip()" class="download">⬇️ BAIXAR ZIP AGORA</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="programacao">
+    <h2>💻 TELA DE PROGRAMAÇÃO</h2>
+    <select id="arquivoSelecionado" onchange="carregarArquivo()">
+      <option value="">Selecione um arquivo para editar</option>
+    </select>
+    <textarea id="editor" placeholder="Digite aqui: HTML, CSS, JS, JSON, Código..."></textarea>
+  </div>
+</div>
+
+<div class="preview">
+  <h2>👁️ VISUALIZADOR EM TEMPO REAL</h2>
+  <iframe id="visor"></iframe>
+</div>
+
+<script>
+let idCounter = 0;
+const raiz = { id: 'root', tipo: 'pasta', nome: 'kai-kbd', filhos: [] };
+let arquivoAtual = null;
+
+function addPasta(paiId) {
+  const nome = prompt("Nome da pasta:");
+  if(!nome) return;
+  const nova = { id: 'p' + idCounter++, tipo: 'pasta', nome, filhos: [] };
+  acharPai(raiz, paiId).filhos.push(nova);
+  render();
+}
+
+function addArquivo(paiId) {
+  const nome = prompt("Nome do arquivo: ex index.html, foto.jpg, script.js");
+  if(!nome) return;
+  const nova = { id: 'a' + idCounter++, tipo: 'arquivo', nome, texto: '', blob: null };
+  acharPai(raiz, paiId).filhos.push(nova);
+  render();
+  atualizarSelect();
+}
+
+function excluir(paiId, id) {
+  if(!confirm("Excluir?")) return;
+  const pai = acharPai(raiz, paiId);
+  pai.filhos = pai.filhos.filter(f => f.id!== id);
+  if(arquivoAtual?.id === id) { arquivoAtual = null; document.getElementById('editor').value = ''; }
+  render();
+}
+
+function acharPai(no, id) {
+  if(no.id === id) return no;
+  for(const f of no.filhos) if(f.tipo==='pasta'){ const r = acharPai(f,id); if(r) return r; }
+}
+
+function salvarTexto(e, item){ item.texto = e.target.value; atualizarPreview(); }
+function anexarArquivo(e, item){ item.blob = e.target.files[0]; }
+
+function render(no = raiz, el = document.getElementById('arvore'), isRoot = true) {
+  if(isRoot) el.innerHTML = '';
+  no.filhos.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'item ' + (item.tipo==='pasta'?'pasta':'') + (arquivoAtual?.id === item.id? ' ativo' : '');
+
+    if(item.tipo==='pasta'){
+      div.innerHTML = `
+        <div class="botoes" style="margin-bottom:5px">
+          <b>📁 ${item.nome}</b>
+          <button onclick="addPasta('${item.id}')">+ Sub</button>
+          <button onclick="addArquivo('${item.id}')" class="sec">+ Arq</button>
+          <button onclick="excluir('${no.id}','${item.id}')" class="danger">X</button>
+        </div>
+        <div id="c-${item.id}" style="margin-left:15px"></div>
+      `;
+      el.appendChild(div);
+      render(item, div.querySelector(`#c-${item.id}`), false);
+    } else {
+      div.innerHTML = `<b onclick="selecionar('${item.id}')">📄 ${item.nome}</b> <button onclick="excluir('${no.id}','${item.id}')" class="danger" style="float:right;padding:2px 6px">X</button>`;
+      el.appendChild(div);
+    }
+  });
+}
+
+function atualizarSelect(){
+  const sel = document.getElementById('arquivoSelecionado');
+  sel.innerHTML = '<option value="">Selecione um arquivo para editar</option>';
+  function listar(no){
+    no.filhos.forEach(f=>{
+      if(f.tipo==='arquivo') sel.innerHTML += `<option value="${f.id}">${f.nome}</option>`;
+      if(f.tipo==='pasta') listar(f);
+    })
+  }
+  listar(raiz);
+}
+
+function selecionar(id){
+  function achar(no){
+    for(const f of no.filhos){
+      if(f.id === id) return f;
+      if(f.tipo==='pasta'){ const r = achar(f); if(r) return r; }
+    }
+  }
+  arquivoAtual = achar(raiz);
+  if(arquivoAtual){
+    document.getElementById('editor').value = arquivoAtual.texto;
+    document.getElementById('arquivoSelecionado').value = arquivoAtual.id;
+    render();
+  }
+}
+
+function carregarArquivo(){
+  const id = document.getElementById('arquivoSelecionado').value;
+  if(id) selecionar(id);
+}
+
+document.getElementById('editor').oninput = function(){
+  if(arquivoAtual){
+    arquivoAtual.texto = this.value;
+    atualizarPreview();
+  }
+}
+
+function atualizarPreview(){
+  const visor = document.getElementById('visor');
+  function acharIndex(no){
+    for(const f of no.filhos){
+      if(f.nome==='index.html') return f.texto;
+      if(f.tipo==='pasta'){ const r = acharIndex(f); if(r) return r; }
+    }
+  }
+  const html = acharIndex(raiz) || '<body style="background:#0A0A0A;color:#00ff88;text-align:center;padding:50px"><h1>Aguardando index.html</h1></body>';
+  visor.srcdoc = html;
+}
+
+function criar(){ raiz.nome = document.getElementById('nomeProjeto').value || 'kai-kbd'; alert('Projeto "'+raiz.nome+'" Criado'); }
+function atualizar(){ alert('Projeto Atualizado'); }
+function editar(){ alert('Selecione um arquivo na lista para Editar'); }
+function deletar(){ if(confirm('Deletar tudo?')){ raiz.filhos=[]; arquivoAtual=null; render(); atualizarSelect(); document.getElementById('editor').value=''; atualizarPreview(); } }
+
+async function baixarZip(){
+  const zip = new JSZip();
+  async function percorrer(no, pasta){
+    for(const item of no.filhos){
+      if(item.tipo==='pasta'){
+        const sub = pasta.folder(item.nome);
+        await percorrer(item, sub);
+      } else {
+        if(item.blob) pasta.file(item.nome, item.blob);
+        else pasta.file(item.nome, item.texto);
+      }
+    }
+  }
+  await percorrer(raiz, zip);
+  const blob = await zip.generateAsync({type:"blob"});
+  saveAs(blob, "kai-kbd.zip"); // NOME FIXO
+  alert("kai-kbd.zip baixado com sucesso!");
+}
+
+render();
+atualizarPreview();
+</script>
+</body>
+</html>
