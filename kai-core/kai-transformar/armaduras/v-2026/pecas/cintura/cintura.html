@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>NÚCLEO K-AI V-2026</title>
+<style>
+:root{--c:#00FFFF;--nucleo:#00FF88;--alerta:#FF3B30}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;padding:15px;display:flex;align-items:center;justify:center;flex-direction:column}
+@keyframes pulsar{0%,100%{box-shadow:0 0 20px var(--nucleo)}50%{box-shadow:0 0 50px var(--nucleo)}}
+h2{text-shadow:0 0 10px var(--c)}
+.nucleo{width:200px;height:80px;background:radial-gradient(circle, #00FF88, #001a10);border:3px solid var(--nucleo);border-radius:20px;position:relative;animation:pulsar 2s infinite}
+.porta{position:absolute;width:8px;height:8px;background:var(--c);border-radius:50%;top:35px}
+.p1{left:20px} .p2{left:60px} .p3{left:100px} .p4{left:140px} .p5{right:20px}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:400px;margin:15px 0}
+.card{background:rgba(0,255,255,.08);border:1px solid var(--c);border-radius:8px;padding:8px;font-size:10px;text-align:center}
+.card.alerta{background:rgba(255,59,48,.2);border-color:var(--alerta)}
+.btn{padding:6px 10px;background:#0d1a20;border:2px solid var(--c);color:var(--c);border-radius:6px;margin:3px;cursor:pointer;font-weight:900;font-size:10px}
+.log{width:400px;height:100px;background:#001015;border:1px solid var(--c);padding:8px;font-size:9px;overflow-y:auto;border-radius:8px}
+</style></head>
+<body>
+<h2>NÚCLEO K-AI V-2026</h2>
+<p>CÉREBRO CENTRAL | COSTURA 2.048 SENSORES</p>
+
+<div class="nucleo">
+  <div class="porta p1"></div><div class="porta p2"></div><div class="porta p3"></div>
+  <div class="porta p4"></div><div class="porta p5"></div>
+</div>
+
+<div class="grid">
+  <div class="card"><div>PROCESSAMENTO</div><div id="cpu">42%</div></div>
+  <div class="card"><div>ENERGIA TOTAL</div><div id="energia">100%</div></div>
+  <div class="card"><div>SENSORES ATIVOS</div><div id="sensores">2048</div></div>
+  <div class="card"><div>SUPERIOR</div><div id="sup">ONLINE</div></div>
+  <div class="card"><div>INFERIOR</div><div id="inf">ONLINE</div></div>
+  <div class="card"><div>PENUGEM</div><div id="penu">SINCRONIZADA</div></div>
+</div>
+
+<div>
+  <button class="btn" onclick="modoCombate()">MODO COMBATE</button>
+  <button class="btn" onclick="modoFurtivo()">MODO FURTIVO</button>
+  <button class="btn" onclick="diagnostico()">DIAGNÓSTICO</button>
+</div>
+
+<div class="log" id="log">> NÚCLEO K-AI: Inicializando...<br></div>
+
+<script>
+let cpu=42, energia=100, sensores=2048;
+
+// RECEBE DADOS DE TODAS AS PENAS E PEÇAS
+window.addEventListener('message', e=>{
+  if(e.data.tipo==='sensor'){
+    log(`NÚCLEO: ${e.data.regiao} detectou ${e.data.ameaca}`);
+    cpu += 1;
+    // AUTO RESPOSTA
+    if(e.data.ameaca==='perigo'){
+      document.getElementById('sup').parentElement.classList.add('alerta');
+      postar('corvonas', {acao:'alerta'});
+    }
+  }
+  if(e.data.tipo==='pelvis'){ log(`NÚCLEO: Pélvis executou ${e.data.acao}`); }
+  if(e.data.tipo==='dorso'){ energia -= 2; }
+});
+
+function log(t){document.getElementById('log').innerHTML+=`> ${t}<br>`;}
+
+function modoCombate(){
+  cpu=85; energia-=10;
+  log('NÚCLEO: Modo combate. Prioridade CORVONAS + GARRAS');
+  postar('todos', {modo:'combate'});
+  if(window.parent.falar) window.parent.falar('Modo combate ativado');
+  atualizar();
+}
+
+function modoFurtivo(){
+  cpu=20; energia-=5;
+  log('NÚCLEO: Modo furtivo. Penugem em baixa emissão');
+  postar('todos', {modo:'furtivo'});
+  atualizar();
+}
+
+function diagnostico(){
+  log('NÚCLEO: Rodando diagnóstico completo...');
+  postar('todos', {acao:'diag'});
+}
+
+function postar(destino, dados){
+  if(window.parent.postMessage) window.parent.postMessage({destino:destino, ...dados},'*');
+}
+
+function atualizar(){
+  document.getElementById('cpu').innerText=cpu+'%';
+  document.getElementById('energia').innerText=Math.round(energia)+'%';
+  document.getElementById('sensores').innerText=sensores;
+  if(cpu>80) document.getElementById('cpu').parentElement.classList.add('alerta');
+}
+
+setInterval(()=>{ if(cpu>42) cpu-=0.5; if(energia<100) energia+=0.2; atualizar(); },500);
+log('NÚCLEO K-AI: Online. Conectado a todas as peças');
+</script></body></html>
