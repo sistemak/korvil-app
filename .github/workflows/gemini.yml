@@ -1,0 +1,28 @@
+name: Gemini Proxy
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Prompt do usuario'
+        required: true
+
+jobs:
+  run-gemini:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Chamar Gemini
+        run: |
+          curl -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?access_token=${{ secrets.GEMINI_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d "{\"contents\":[{\"parts\":[{\"text\":\"${{ github.event.inputs.prompt }}\"}]}" \
+          -o resultado.json
+          
+      - name: Salvar resultado
+        run: |
+          cat resultado.json > resultado.txt
+          
+      - name: Commit resultado
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Resultado Gemini"
+          file_pattern: resultado.txt
