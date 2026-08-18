@@ -1,40 +1,47 @@
-name: Gemini Proxy
+name: Gemini + Github JUNTOS
+
 on:
-  workflow_dispatch:
-    inputs:
-      prompt:
-        description: 'Prompt do usuario'
-        required: true
+  workflow_dispatch: # pra rodar manual em Actions
+  push:
+    branches: [ main ] # ou roda automático quando der push
 
 jobs:
-  run-gemini:
+  rodar-ia:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - name: Checkout
+      - name: Baixar o código
         uses: actions/checkout@v4
-        
-      - name: Separar Tokens
-        id: t
+
+      - name: Separar os 2 tokens do secret TOKENS
+        id: tokens
         run: |
-          echo "AQ=$(echo '${{ secrets.GH_TOKEN }}' | sed -n '1p')" >> $GITHUB_OUTPUT
-          echo "GH=$(echo '${{ secrets.GH_TOKEN }}' | sed -n '2p')" >> $GITHUB_OUTPUT
-          
-      - name: Chamar Gemini
+          # Pega AQ_TOKEN = antes do ###
+          AQ=$(echo "${{ secrets.TOKENS }}" | awk -F'###' '{print $1}')
+          # Pega GH_TOKEN = depois do ###
+          GH=$(echo "${{ secrets.TOKENS }}" | awk -F'###' '{print $2}')
+          echo "aq=$AQ" >> $GITHUB_OUTPUT
+          echo "gh=$GH" >> $GITHUB_OUTPUT
+
+      - name: Chamar Gemini IA
+        env:
+          AQ_TOKEN: ${{ steps.tokens.outputs.aq }}
         run: |
-          curl -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent" \
-          -H "Authorization: Bearer ${{ steps.t.outputs.AQ }}" \
+          echo "Mandando prompt pro Gemini..."
+          curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$AQ_TOKEN" \
           -H "Content-Type: application/json" \
-          -d "{\"contents\":[{\"parts\":[{\"text\":\"${{ github.event.inputs.prompt }}\"}]}" \
-          -o resultado.json
-          
-      - name: Salvar resultado
+          -d '{"contents":[{"parts":[{"text":"Gere um README.md em portugues para este repositorio. Seja criativo."}]}]}' \
+          | jq -r '.candidates[0].content.parts[0].text' > README_GERADO.md
+
+          cat README_GERADO.md
+
+      - name: Commitar no Github com GH_TOKEN
+        env:
+          GH_TOKEN: ${{ steps.tokens.outputs.gh }}
         run: |
-          jq -r '.candidates[0].content.parts[0].text' resultado.json > resultado.txt 2>/dev/null || cat resultado.json > resultado.txt
-          
-      - name: Commit resultado
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Resultado Gemini"
-          file_pattern: resultado.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:$GH_TOKEN@github.com/${{ github.repository }}
+          mv README_GERADO.md README.md
+          git add README.md
+          git commit -m "🤖 IA Gemini gerou README automaticamente" || echo "Nada pra commitar"
+          git push
