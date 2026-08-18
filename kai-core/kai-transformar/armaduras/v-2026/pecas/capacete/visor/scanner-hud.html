@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>MARK 42 HUD</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{overflow:hidden;background:#000;font-family:'Orbitron';color:#00f5ff}
+#video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1}
+
+/* ELEMENTOS HUD */
+.hud{position:absolute;z-index:2;border:2px solid #00f5ff;background:rgba(0,245,255,0.1);backdrop-filter:blur(5px)}
+.canto{width:150px;height:150px}
+#topLeft{top:20px;left:20px;border-right:none;border-bottom:none}
+#topRight{top:20px;right:20px;border-left:none;border-bottom:none}
+#botLeft{bottom:20px;left:20px;border-right:none;border-top:none}
+#botRight{bottom:20px;right:20px;border-left:none;border-top:none}
+
+#mira{position:absolute;top:50%;left:50%;width:100px;height:100px;transform:translate(-50%,-50%);z-index:3}
+#mira::before,#mira::after{content:'';position:absolute;background:#00f5ff;box-shadow:0 0 10px #00f5ff}
+#mira::before{top:50%;left:0;width:100%;height:2px;transform:translateY(-50%)}
+#mira::after{top:0;left:50%;width:2px;height:100%;transform:translateX(-50%)}
+
+.painel{position:absolute;z-index:4;padding:10px;font-size:12px}
+#status{top:50px;left:50%;transform:translateX(-50%);text-align:center;font-size:16px;text-shadow:0 0 10px #00f5ff}
+#energia{bottom:100px;left:20px;width:200px;height:20px;border:2px solid #00f5ff}
+#barra{height:100%;width:100%;background:#00f5ff;box-shadow:0 0 20px #00f5ff;animation:pulso 2s infinite}
+#alvo{top:200px;right:20px;width:250px}
+@keyframes pulso{0%,100%{opacity:1}50%{opacity:0.5}}
+.item{margin:5px 0}
+</style>
+</head>
+<body>
+<div id="status">MARK 42 - SISTEMA ONLINE</div>
+
+<!-- CÂMERA FRONTAL -->
+<video id="video" autoplay playsinline></video>
+
+<!-- 4 CANTOS DO HUD -->
+<div id="topLeft" class="hud canto"></div>
+<div id="topRight" class="hud canto"></div>
+<div id="botLeft" class="hud canto"></div>
+<div id="botRight" class="hud canto"></div>
+
+<!-- MIRA CENTRAL -->
+<div id="mira"></div>
+
+<!-- PAINEL ENERGIA -->
+<div id="energia" class="hud">
+  <div>ENERGIA DO REATOR</div>
+  <div id="barra"></div>
+</div>
+
+<!-- PAINEL ALVO -->
+<div id="alvo" class="hud painel">
+  <div class="item">> SCANNER: ATIVO</div>
+  <div class="item" id="pessoas">> ALVOS: 0</div>
+  <div class="item" id="distancia">> DISTÂNCIA: --</div>
+  <div class="item" id="emocao">> STATUS: ANALISANDO</div>
+</div>
+
+<script>
+// 1. LIGA CÂMERA FRONTAL
+navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}}).then(stream=>{
+  document.getElementById('video').srcObject = stream;
+});
+
+// 2. SIMULA SCANNER DO TONY
+let energia = 100;
+setInterval(()=>{
+  // Diminui e aumenta energia
+  energia += (Math.random() - 0.5) * 2;
+  if(energia > 100) energia = 100;
+  if(energia < 80) energia = 80;
+  document.getElementById('barra').style.width = energia + '%';
+
+  // Detecta "pessoas" aleatório pra simular
+  const numPessoas = Math.floor(Math.random() * 3);
+  document.getElementById('pessoas').innerText = `> ALVOS: ${numPessoas}`;
+
+  const dist = Math.floor(Math.random() * 10) + 1;
+  document.getElementById('distancia').innerText = `> DISTÂNCIA: ${dist}m`;
+
+  const emocoes = ['CALMO','ALERTA','FELIZ','FOCADO'];
+  const emocao = emocoes[Math.floor(Math.random() * 4)];
+  document.getElementById('emocao').innerText = `> STATUS: ${emocao}`;
+}, 1000);
+
+// 3. COMANDO DE VOZ
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if(SpeechRecognition){
+  const rec = new SpeechRecognition();
+  rec.lang = 'pt-BR'; rec.continuous = true;
+  rec.onresult = (e)=>{
+    const cmd = e.results[e.results.length-1][0].transcript.toLowerCase();
+    if(cmd.includes('jarvis')){
+      falar('A disposição senhor');
+      document.getElementById('status').innerText = 'JARVIS: A DISPOSIÇÃO SENHOR';
+    }
+    if(cmd.includes('escanear')){
+      falar('Escaneando ambiente');
+    }
+  }
+  rec.start();
+}
+
+function falar(txt){
+  const s = new SpeechSynthesisUtterance(txt);
+  s.lang = 'pt-BR'; speechSynthesis.speak(s);
+}
+</script>
+</body>
+</html>
