@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>ALAS CORAX V-2026</title>
+<style>
+:root{--c:#00FFFF;--pena:#A8FFE6;--prop:#00FF88}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;padding:15px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+@keyframes bater{0%,100%{transform:rotateX(0deg)}50%{transform:rotateX(20deg)}}
+@keyframes planar{0%,100%{transform:rotateX(5deg)}50%{transform:rotateX(-5deg)}}
+h2{letter-spacing:3px;text-shadow:0 0 10px var(--c)}
+.asa{width:200px;height:300px;background:linear-gradient(180deg,rgba(0,255,255,.2),transparent);border:2px solid var(--c);border-radius:20px 100px 20px 100px;position:relative;margin:10px;display:inline-block;transform-origin:top}
+.asa.esq{animation:bater 2s infinite} .asa.dir{animation:bater 2s infinite .1s}
+.pena{position:absolute;width:8px;height:40px;background:var(--pena);border-radius:4px;bottom:0}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:420px;margin:15px 0}
+.card{background:rgba(0,255,255,.08);border:1px solid var(--c);border-radius:10px;padding:10px;font-size:11px;text-align:center}
+.btn{padding:8px 14px;background:#0d1a20;border:2px solid var(--c);color:var(--c);border-radius:8px;margin:4px;cursor:pointer;font-weight:900;font-size:11px}
+.log{width:420px;height:80px;background:#001015;border:1px solid var(--c);padding:8px;font-size:10px;overflow-y:auto;border-radius:8px}
+</style></head>
+<body>
+<h2>ALAS CORAX V-2026</h2>
+<p>SISTEMA DE PLANEIO + ESTABILIZAÇÃO</p>
+
+<div>
+  <div class="asa esq" id="asaE"></div>
+  <div class="asa dir" id="asaD"></div>
+</div>
+
+<div class="grid">
+  <div class="card"><div>MODO</div><div id="modo">RECOLHIDO</div></div>
+  <div class="card"><div>VENTO</div><div id="vento">0 km/h</div></div>
+  <div class="card"><div>ALTITUDE</div><div id="alt">0 m</div></div>
+  <div class="card"><div>PROPULSOR</div><div id="prop">OFF</div></div>
+  <div class="card"><div>ESTABILIDADE</div><div id="stab">100%</div></div>
+  <div class="card"><div>ENERGIA</div><div id="energia">--</div></div>
+</div>
+
+<div>
+  <button class="btn" onclick="setModo('planar')">PLANAR</button>
+  <button class="btn" onclick="setModo('bater')">BATIDA</button>
+  <button class="btn" onclick="setModo('freio')">FREIO AÉREO</button>
+  <button class="btn" onclick="propulsor()">PROPULSOR</button>
+</div>
+
+<div class="log" id="log">> ALAS: Aguardando sinal do DORSO<br></div>
+
+<script>
+let modo='recolhido', vento=0, altitude=0, propulsorOn=false;
+let energiaDorso = 100;
+
+// RECEBE COMANDO DO DORSO
+window.addEventListener('message', e=>{
+  if(e.data.tipo==='asas'){
+    if(e.data.status){ setModo('planar'); }
+    else{ setModo('recolhido'); }
+  }
+  if(e.data.tipo==='energia') energiaDorso = e.data.valor;
+});
+
+function log(t){document.getElementById('log').innerHTML+=`> ${t}<br>`;}
+
+function setModo(m){
+  modo=m;
+  document.getElementById('modo').innerText=m.toUpperCase();
+  
+  if(m==='recolhido'){
+    document.getElementById('asaE').style.animation='none';
+    document.getElementById('asaD').style.animation='none';
+    log('ALAS: Recolhidas');
+  }
+  if(m==='planar'){
+    document.getElementById('asaE').style.animation='planar 3s infinite';
+    document.getElementById('asaD').style.animation='planar 3s infinite';
+    log('ALAS: Modo planador ativado');
+  }
+  if(m==='bater'){
+    document.getElementById('asaE').style.animation='bater 1s infinite';
+    document.getElementById('asaD').style.animation='bater 1s infinite';
+    log('ALAS: Batida para impulso');
+  }
+  if(m==='freio'){
+    document.getElementById('asaE').style.animation='planar 0.5s infinite';
+    document.getElementById('asaD').style.animation='planar 0.5s infinite';
+    log('ALAS: Freio aéreo ativado');
+  }
+}
+
+function propulsor(){
+  propulsorOn = !propulsorOn;
+  document.getElementById('prop').innerText = propulsorOn ? 'ON' : 'OFF';
+  log(`ALAS: Propulsor silencioso ${propulsorOn ? 'ativado' : 'desligado'}`);
+  if(window.parent.falar) window.parent.falar(propulsorOn ? 'Propulsão' : 'Propulsão off');
+}
+
+setInterval(()=>{
+  // SIMULA SENSORES
+  vento = Math.floor(Math.random()*30);
+  altitude += modo==='bater' ? 1 : modo==='planar' ? 0.2 : -0.5;
+  if(altitude<0) altitude=0;
+  
+  document.getElementById('vento').innerText=vento+' km/h';
+  document.getElementById('alt').innerText=Math.round(altitude)+' m';
+  document.getElementById('energia').innerText=Math.round(energiaDorso)+'%';
+  
+  // AUTO ESTABILIDADE
+  if(vento>20) document.getElementById('stab').innerText='85%';
+  else document.getElementById('stab').innerText='100%';
+},500);
+
+log('ALAS CORAX: Sistema de voo online');
+</script>
+</body></html>
