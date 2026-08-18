@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>FONES KORVIL NEURAL</title>
+<style>
+:root{--c:#00FFFF;--ok:#00FF88;--alerta:#FF3B30}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:15px}
+@keyframes pulso{0%,100%{box-shadow:0 0 10px var(--c)}50%{box-shadow:0 0 30px var(--c)}}
+h2{text-shadow:0 0 10px var(--c)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:400px}
+.card{background:rgba(0,255,255,.08);border:2px solid var(--c);border-radius:10px;padding:10px;text-align:center;font-size:11px}
+.barra{width:100%;max-width:400px;height:12px;background:#0d1a20;border:2px solid var(--c);border-radius:10px;margin:5px 0}
+.barra-fill{height:100%;background:var(--c);border-radius:8px;transition:width .1s}
+.btn{padding:8px;background:#0d1a20;border:2px solid var(--c);color:var(--c);border-radius:8px;margin:4px;cursor:pointer;font-weight:900;font-size:11px}
+.btn.ativo{background:var(--ok);color:#000}
+.log{width:100%;max-width:400px;height:80px;background:#001015;border:1px solid var(--c);padding:6px;font-size:10px;overflow-y:auto;border-radius:8px}
+.tag{background:var(--c);color:#000;padding:2px 5px;border-radius:4px;font-size:9px;margin:2px;display:inline-block}
+</style></head>
+<body>
+<h2>CENTRAL NEURAL K-AI</h2>
+<p>FONES + ANC + VOZ + HÁPTICO</p>
+
+<div class="log" id="logIA">> K-AI: Sistema Neural Online<br></div>
+
+<div class="grid">
+  <div class="card"><div>ANC</div><div id="ancStatus" class="tag">ON</div></div>
+  <div class="card"><div>VOZ</div><div id="vozStatus" class="tag">ESPERANDO</div></div>
+  <div class="card"><div>DB INT</div><div id="dbInt">0 dB</div></div>
+  <div class="card"><div>DB EXT</div><div id="dbExt">0 dB</div></div>
+  <div class="card"><div>VIBRAÇÃO</div><div id="vibStatus">PRONTA</div></div>
+  <div class="card"><div>LINK</div><div id="linkStatus">BOCA+VISOR</div></div>
+</div>
+
+<div class="barra"><div class="barra-fill" id="dbBarInt" style="width:0%;background:var(--ok)"></div></div>
+<div class="barra"><div class="barra-fill" id="dbBarExt" style="width:0%"></div></div>
+
+<div>
+  <button class="btn ativo" onclick="iniciarFones()">ATIVAR</button>
+  <button class="btn" onclick="toggleANC()">ANC</button>
+  <button class="btn" onclick="toggleVoz()">VOZ</button>
+  <button class="btn" onclick="toggleVibra()">VIBRA</button>
+</div>
+
+<script>
+let audioContext, micStream, ativo=false, anc=true, vozAtiva=true, vibraAtiva=true;
+let recognition, noiseGate, inverter;
+let comandos = {
+  'atacar':()=>dispararBoca('ataque'),
+  'defender':()=>dispararBoca('defesa'),
+  'voar':()=>dispararBoca('propulsor'),
+  'banshee':()=>dispararBoca('banshee'),
+  'visor térmico':()=>mudarVisor('termico'),
+  'visor raio x':()=>mudarVisor('raiox'),
+  'visor zoom':()=>mudarVisor('zoom'),
+  'silencio':()=>setANC(false),
+  'proteger':()=>setANC(true),
+  'falar':(txt)=>falarComBoca(txt)
+}
+window.parent.fonesStatus = false;
+window.parent.fonesANC = true;
+window.parent.dbBoca = 0;
+
+function log(t){document.getElementById('logIA').innerHTML+=`> ${t}<br>`; document.getElementById('logIA').scrollTop=9999;}
+
+function iniciarFones(){
+  if(ativo) return; ativo=true; window.parent.fonesStatus=true;
+  if(!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  
+  navigator.mediaDevices.getUserMedia({audio:true}).then(s => {
+    micStream = s;
+    const source = audioContext.createMediaStreamSource(s);
+    const gainNode = audioContext.createGain(); gainNode.gain.value = 3.0;
+    const noiseSupressor = audioContext.createBiquadFilter(); noiseSupressor.type="highpass"; noiseSupressor.frequency.value=300;
+    const compressor = audioContext.createDynamicsCompressor();
+    compressor.threshold.value=-24; compressor.ratio.value=12;
+    
+    // ANC: CANCELA A BOCA
+    noiseGate = audioContext.createGain();
+    inverter = audioContext.createGain(); inverter.gain.value=-1.0;
+    if(window.parent.document.getElementById('audio')){
+      const bocaSource = audioContext.createMediaElementSource(window.parent.document.getElementById('audio'));
+      bocaSource.connect(inverter).connect(noiseGate).connect(audioContext.destination);
+    }
+    
+    source.connect(noiseSupressor).connect(gainNode).connect(compressor).connect(audioContext.destination);
+    const analyser = audioContext.createAnalyser(); compressor.connect(analyser);
+    medirDB(analyser);
+    iniciarReconhecimentoVoz();
+    log('Fones ANC + Voz + Vibração Ativos');
+  }).catch(e=>log('Erro Mic: '+e));
+}
+
+function medirDB(analyser){
+  const data=new Uint8Array(analyser.frequencyBinCount);
+  function loop(){
+    analyser.getByteFrequencyData(data);
+    let avg=data.reduce((a,b)=>a+b)/data.length;
+    let dbInt=Math.round(avg/2.5);
+    let dbExt=window.parent.dbBoca||0;
+    
+    document.getElementById('dbInt').innerText=dbInt+' dB';
+    document.getElementById('dbExt').innerText=dbExt+' dB';
+    document.getElementById('dbBarInt').style.width=Math.min(dbInt*2,100)+'%';
+    document.getElementById('dbBarExt').style.width=Math.min(dbExt*2,100)+'%';
+    
+    if(anc && dbExt>70){ noiseGate.gain.value=1.0; vibrar(50); }
+    else{ noiseGate.gain.value=0; }
+    
+    window.parent.atualizarDB(dbInt);
+    requestAnimationFrame(loop);
+  } loop();
+}
+
+// RECONHECIMENTO DE VOZ
+function iniciarReconhecimentoVoz(){
+  if(!('webkitSpeechRecognition' in window)) return log('Voz não suportada');
+  recognition = new webkitSpeechRecognition();
+  recognition.continuous=true; recognition.lang='pt-BR';
+  recognition.onresult=e=>{
+    const txt=e.results[e.results.length-1][0].transcript.toLowerCase();
+    document.getElementById('vozStatus').innerText=txt;
+    log('Comando: '+txt);
+    analisarComando(txt);
+  }
+  recognition.start();
+}
+
+function analisarComando(txt){
+  for(let cmd in comandos){
+    if(txt.includes(cmd)){
+      comandos[cmd](txt.replace(cmd,''));
+      vibrar(100);
+      if(window.parent.falar) window.parent.falar('Comando '+cmd+' executado');
+      return;
+    }
+  }
+}
+
+// AÇÕES CONJUGADAS
+function dispararBoca(modo){
+  if(window.parent.mostrarPeca) window.parent.mostrarPeca('boca');
+  setTimeout(()=>{ 
+    if(window.parent.document.getElementById('btnGrito')) 
+      window.parent.document.getElementById('btnGrito').dispatchEvent(new Event('mousedown'));
+    setTimeout(()=>window.parent.document.getElementById('btnGrito').dispatchEvent(new Event('mouseup')),800);
+  },300);
+  log(`Boca: Modo ${modo} disparado por voz`);
+}
+
+function mudarVisor(modo){
+  if(window.parent.mostrarPeca) window.parent.mostrarPeca('visor');
+  if(window.parent.atualizarTexto) window.parent.atualizarTexto(`VISOR: ${modo.toUpperCase()}`);
+  log(`Visor: ${modo}`);
+}
+
+function falarComBoca(txt){
+  if(window.parent.falar) window.parent.falar(txt);
+  log(`K-AI Falando: ${txt}`);
+}
+
+function vibrar(ms){ 
+  if(vibraAtiva && navigator.vibrate){ 
+    navigator.vibrate(ms); 
+    document.getElementById('vibStatus').innerText='ATIVANDO'; 
+    setTimeout(()=>document.getElementById('vibStatus').innerText='PRONTA',ms); 
+  } 
+}
+
+function toggleANC(){ anc=!anc; window.parent.fonesANC=anc; document.getElementById('ancStatus').innerText=anc?'ON':'OFF'; log('ANC '+ (anc?'ON':'OFF')); }
+function toggleVoz(){ vozAtiva=!vozAtiva; if(vozAtiva) recognition.start(); else recognition.stop(); log('Voz '+ (vozAtiva?'ON':'OFF')); }
+function toggleVibra(){ vibraAtiva=!vibraAtiva; log('Vibração '+ (vibraAtiva?'ON':'OFF')); }
+
+window.addEventListener('message', e=>{
+  if(e.data.tipo==='dbBoca') window.parent.dbBoca=e.data.valor;
+  if(e.data.tipo==='alerta') { vibrar(300); log('ALERTA: '+e.data.msg); }
+});
+</script>
+</body></html>
