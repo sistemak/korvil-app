@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>PATELA KORVIL</title>
+<style>
+:root{--c:#00FFFF;--impacto:#FF3B30}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;padding:15px}
+.patela{width:50px;height:50px;background:var(--c);border-radius:50%;border:3px solid #fff}
+.perigo{background:var(--impacto)}
+</style></head>
+<body>
+<h2>PATELAS K-1</h2>
+<div class="patela" id="pat"></div>
+<p>Impacto: <span id="g">0</span> G | Status: <span id="status">OK</span></p>
+<script>
+function impacto(valor){
+  document.getElementById('g').innerText=valor;
+  if(valor>5){document.getElementById('pat').classList.add('perigo');document.getElementById('status').innerText='IMPACTO'}
+  setTimeout(()=>{document.getElementById('pat').classList.remove('perigo');document.getElementById('status').innerText='OK'},1000);
+}
+</script></body></html>
