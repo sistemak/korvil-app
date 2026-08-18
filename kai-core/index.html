@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>K-AI | KORVIL ARTIFICIAL INTELLIGENCE v-2026.42</title>
+
+  <!-- Biblioteca Three.js para o Holograma 3D -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+
+  <style>
+    :root {
+      --c: #00FFFF;
+      --c2: #A8FFE6;
+      --bg: #000000;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Segoe UI', Roboto, sans-serif; }
+
+    /* TELA DE BOAS-VINDAS / CAPA PARA ABRIR O K-AI */
+    #welcomeScreen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #000;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s ease;
+    }
+    #welcomeScreen h1 {
+      color: var(--c);
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 15px var(--c);
+      text-align: center;
+    }
+    .btn-abrir-kai {
+      background: transparent;
+      border: 2px solid var(--c);
+      color: var(--c);
+      padding: 15px 40px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+      transition: all 0.3s ease;
+    }
+    .btn-abrir-kai:hover {
+      background: var(--c);
+      color: #000;
+      box-shadow: 0 0 30px var(--c);
+      transform: scale(1.05);
+    }
+
+    .phone { width: 100%; height: 100dvh; position: relative; background: #000; }
+
+    /* HUD Header & Status */
+    .status { height: 36px; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 0 18px; font-size: 14px; font-weight: 700; color: var(--c); border-bottom: 2px solid var(--c); z-index: 5; position: relative; }
+    .header { height: 50px; background: rgba(0,0,0,.9); display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--c); z-index: 5; position: relative; }
+    .header .titulo { color: var(--c); font-weight: 900; letter-spacing: 2px; font-size: 14px; }
+
+    /* SETAS DE NAVEGAÇÃO */
+    .arrow { position: absolute; z-index: 1000; pointer-events: auto; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+    .arrow svg { width: 50px; height: 50px; stroke: var(--c); stroke-width: 3.5; filter: drop-shadow(0 0 15px var(--c)); }
+    .arrow-down { top: 90px; left: 50%; transform: translateX(-50%); }
+    .arrow-right { top: 50%; right: 10px; transform: translateY(-50%); }
+    .arrow-left { top: 50%; left: 10px; transform: translateY(-50%); }
+    .arrow-up { bottom: 85px; left: 50%; transform: translateX(-50%); }
+
+    /* HOLOGRAMA 3D & TELA DE OUTPUT */
+    #hologramaContainer { position: absolute; top: 86px; bottom: 70px; left: 0; right: 0; overflow: hidden; }
+    #canvas3d { width: 100%; height: 100%; display: block; }
+    #outputScreen { position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%); color: var(--c); font-size: 18px; font-weight: 900; text-align: center; z-index: 50; pointer-events: none; text-shadow: 0 0 20px var(--c); width: 90%; }
+
+    /* CONTAINER DO CHAT SOBREPOSTO */
+    .chat-container { position: absolute; bottom: 80px; left: 10px; right: 10px; max-height: 35%; overflow-y: auto; z-index: 40; display: flex; flex-direction: column; gap: 8px; padding-right: 5px; }
+    .msg { padding: 8px 12px; border-radius: 8px; font-size: 13px; max-width: 85%; word-break: break-word; line-height: 1.4; }
+    .user-msg { background: rgba(0, 255, 255, 0.15); border: 1px solid var(--c); color: #fff; align-self: flex-end; }
+    .kai-msg { background: rgba(0, 0, 0, 0.85); border: 1px solid var(--c2); color: var(--c2); align-self: flex-start; }
+
+    /* FOOTER CONTROLES */
+    .footer { height: 70px; background: rgba(0,0,0,.95); display: flex; align-items: center; padding: 0 12px; gap: 8px; border-top: 2px solid var(--c); position: absolute; bottom: 0; left: 0; right: 0; z-index: 999; }
+    .footer input { flex: 1; height: 48px; background: #0a1419; border: 2px solid var(--c); border-radius: 24px; padding: 0 16px; color: #fff; font-size: 14px; font-weight: 700; outline: none; }
+    .footer .btn { width: 48px; height: 48px; border-radius: 50%; background: var(--c); color: #000; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; cursor: pointer; border: 2px solid var(--c); transition: 0.2s; }
+    .footer .btn.listening { background: #ff0055; border-color: #ff0055; color: #fff; animation: pulse 1s infinite; }
+
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+
+    /* MENUS PAINÉIS */
+    .menu { position: fixed; top: 0; left: -100%; width: 85%; max-width: 340px; height: 100%; background: linear-gradient(180deg, #0a0f14 0%, #000000 100%); border-right: 2px solid var(--c); z-index: 1001; transition: left .3s ease; overflow-y: auto; padding-bottom: 80px; }
+    .menu.right { left: auto; right: -100%; border-right: none; border-left: 2px solid var(--c); transition: right .3s ease; }
+    .menu.open { left: 0; }
+    .menu.right.open { right: 0; }
+    .menu-top { position: fixed; top: -200px; left: 0; width: 100%; height: 180px; background: rgba(0,0,0,.95); border-bottom: 2px solid var(--c); z-index: 1001; transition: top .3s ease; }
+    .menu-top.open { top: 36px; }
+    .menu-bottom { position: fixed; bottom: -120px; left: 0; width: 100%; height: 120px; background: rgba(0,0,0,.95); border-top: 2px solid var(--c); z-index: 1001; transition: bottom .3s ease; }
+    .menu-bottom.open { bottom: 0; }
+
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.75); z-index: 1000; display: none; }
+    .overlay.show { display: block; }
+
+    /* ESTILOS DE ITEM DE MENU */
+    .sideHeader { height: 70px; background: linear-gradient(135deg, #00FFFF, #A8FFE6); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; color: #000; font-weight: 900; font-size: 16px; }
+    .sideHeader .modo { background: #000; color: #00FFFF; padding: 4px 10px; border-radius: 12px; font-size: 11px; border: 1px solid #00FFFF; }
+    .sideSection { padding: 12px 0; border-bottom: 1px solid #132e36; }
+    .sideTitle { padding: 8px 20px; font-size: 11px; color: #A8FFE6; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+    .sideItem { padding: 12px 20px; font-size: 13px; color: #00FFFF; cursor: pointer; border-left: 4px solid transparent; display: flex; justify-content: space-between; align-items: center; }
+    .sideItem:hover { background: #132e36; border-left-color: #00FFFF; }
+
+    /* PEÇAS DE ARMADURA GRID */
+    .peca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 20px; }
+    .peca-btn { background: rgba(0,255,255,.1); border: 1px solid #00FFFF; color: #00FFFF; padding: 8px; font-size: 10px; cursor: pointer; text-align: center; border-radius: 4px; font-weight: 700; }
+    .peca-btn:hover, .peca-btn.ativa { background: #00FFFF; color: #000; }
+
+    /* ABAS */
+    .tab-bar { display: flex; border-bottom: 2px solid #00FFFF; }
+    .tab-btn { flex: 1; background: transparent; border: none; color: #00FFFF; padding: 10px; cursor: pointer; font-weight: 700; font-size: 11px; border-bottom: 3px solid transparent; }
+    .tab-btn.active { background: rgba(0,255,255,.1); border-bottom-color: #00FFFF; color: #fff; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- TELA INICIAL / BOTÃO ABRIR K-AI -->
+<div id="welcomeScreen">
+  <h1>K-AI KORVIL</h1>
+  <button class="btn-abrir-kai" onclick="abrirKai()">ABRIR K-AI</button>
+</div>
+
+<div class="phone">
+
+  <!-- STATUS & CABEÇALHO -->
+  <div class="status">
+    <div id="hora">00:00</div>
+    <span>KORVIL 5G 🔋 100%</span>
+  </div>
+  <div class="header">
+    <div class="titulo">K-AI KORVIL ARTIFICIAL INTELLIGENCE</div>
+  </div>
+
+  <!-- SETAS DIRECIONAIS -->
+  <div class="arrow arrow-down" onclick="openMenu('top')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="arrow arrow-right" onclick="openMenu('right')"><svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6"/></svg></div>
+  <div class="arrow arrow-left" onclick="openMenu('left')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6"/></svg></div>
+  <div class="arrow arrow-up" onclick="openMenu('bottom')"><svg viewBox="0 0 24 24" fill="none"><path d="M18 15l-6-6-6 6"/></svg></div>
+
+  <div class="overlay" id="overlay" onclick="closeAllMenus()"></div>
+
+  <!-- MENU TOP (AÇÕES RÁPIDAS / HUD) -->
+  <div class="menu-top" id="menuTop">
+    <div style="padding:20px; color:#00FFFF; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+      <button onclick="showOutput('SCAN ATIVO')" style="background:transparent; border:1px solid #00FFFF; color:#00FFFF; padding:12px; cursor:pointer; font-weight:700;">SCAN</button>
+      <button onclick="showOutput('RADAR 360°')" style="background:transparent; border:1px solid #00FFFF; color:#00FFFF; padding:12px; cursor:pointer; font-weight:700;">RADAR</button>
+      <button onclick="showOutput('0 ALERTAS')" style="background:transparent; border:1px solid #00FFFF; color:#00FFFF; padding:12px; cursor:pointer; font-weight:700;">ALERTAS</button>
+    </div>
+  </div>
+
+  <!-- MENU LEFT (DIAGNÓSTICO & TRANSFORMAÇÃO DE ARMADURA) -->
+  <div class="menu" id="menuLeft">
+    <div class="sideHeader">
+      <div>K-AI</div>
+      <div class="modo">MODO CHEFE</div>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="openTab('estat', this)">ESTATÍSTICAS</button>
+      <button class="tab-btn" onclick="openTab('transformar', this)">K-AI TRANSFORMAR</button>
+    </div>
+
+    <div id="tab-estat" class="tab-content active">
+      <div class="sideSection">
+        <div class="sideTitle">DIAGNÓSTICO TÁTICO</div>
+        <div class="sideItem">ALVOS <b id="alvos">0</b></div>
+        <div class="sideItem">RADAR <b>ATIVO</b></div>
+        <div class="sideItem">ENERGIA <b>100%</b></div>
+      </div>
+    </div>
+
+    <div id="tab-transformar" class="tab-content">
+      <div class="sideSection">
+        <div class="sideTitle">K-AI TRANSFORMAR</div>
+        <div class="sideItem" onclick="ativarTransformacao()">🔮 TRANSFORMAÇÃO</div>
+        <div class="sideItem" onclick="carregarArmaduraCompleta()">🛡️ ARMADURAS</div>
+      </div>
+      <div class="sideSection">
+        <div class="sideTitle">SELECIONAR PEÇA (17)</div>
+        <div class="peca-grid" id="gridPecas"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MENU RIGHT (VOZ, NAVEGAÇÃO E SISTEMA) -->
+  <div class="menu right" id="menuRight">
+    <div class="sideHeader">
+      <div>K-AI</div>
+      <div class="modo">NAVEGAÇÃO</div>
+    </div>
+    <div class="sideSection">
+      <div class="sideTitle">CONFIGURAÇÃO DE VOZ</div>
+      <div class="sideItem" onclick="showOutput('VOZ: CORVO CIBERNÉTICO')">1. Corvo Cibernético M</div>
+      <div class="sideItem" onclick="showOutput('VOZ: JARVIS CLÁSSICO')">2. Jarvis Clássico M</div>
+    </div>
+    <div class="sideSection">
+      <div class="sideTitle">1. NAVEGAR - SETORES KORVIL</div>
+      <div class="sideItem" onclick="goPage('sistema k')">1. Sistema K</div>
+      <div class="sideItem" onclick="goPage('ktp')">2. K-TP</div>
+      <div class="sideItem" onclick="goPage('kafortunado')">3. K-AFORTUNADO</div>
+      <div class="sideItem" onclick="goPage('kalma')">4. K-ALMA</div>
+      <div class="sideItem" onclick="goPage('central')">5. Central KORVIL</div>
+    </div>
+    <div class="sideSection">
+      <div class="sideTitle">2. CRIAR</div>
+      <div class="sideItem" onclick="KAI_UI.executar('criar post')">Criar Post</div>
+      <div class="sideItem" onclick="showOutput('CRIANDO IMAGEM IA...')">Criar Imagem IA</div>
+    </div>
+    <div class="sideSection">
+      <div class="sideTitle">3. SISTEMA</div>
+      <div class="sideItem" onclick="KAI_UI.executar('hora')">Horas</div>
+      <div class="sideItem" onclick="KAI_UI.executar('status')">Estatísticas</div>
+      <div class="sideItem" onclick="KAI_UI.executar('o que você lembra')">Buscar Memória</div>
+    </div>
+  </div>
+
+  <!-- MENU BOTTOM (ENTRADA RÁPIDA DE COMANDO) -->
+  <div class="menu-bottom" id="menuBottom">
+    <div style="padding:20px; color:#00FFFF;">
+      <input type="text" id="inputBottom" placeholder="Comando rápido para o K-AI..." style="width:100%; height:45px; background:#0a1419; border:2px solid #00FFFF; color:#fff; padding:0 12px; border-radius:8px; font-weight:700;">
+    </div>
+  </div>
+
+  <!-- HOLOGRAMA 3D & OUTPUT DE MENSAGENS -->
+  <div id="hologramaContainer">
+    <canvas id="canvas3d"></canvas>
+    <div id="outputScreen">K-AI ONLINE</div>
+    <div class="chat-container" id="chat"></div>
+  </div>
+
+  <!-- RODAPÉ DE COMANDOS -->
+  <div class="footer">
+    <div class="btn" id="attachBtn" onclick="KAI_UI.anexarArquivo()" title="Anexar">📎</div>
+    <input type="text" id="userInput" placeholder="Mensagem para K-AI..." autocomplete="off">
+    <div class="btn" id="micBtn" onclick="KAI_UI.toggleMic()" title="Voz Contínua">🎤</div>
+    <div class="btn" id="btnSend" onclick="KAI_UI.enviarTexto()">➤</div>
+  </div>
+
+</div>
+
+<!-- INTEGRANDO MOTOR JS DO K-AI -->
+<script>
+  // CONFIGURAÇÃO GLOBAL
+  window.KAI_CONFIG = { autoOuvir: false };
+
+  // ROTAS EXTERNAS KORVIL
+  const PAGINAS = {
+    'sistema k': 'https://korvilp-sudo.github.io/korvil-app/sections/sistemak/index.html',
+    'ktp': 'https://korvilp-sudo.github.io/korvil-app/sections/ktp/index.html',
+    'kafortunado': 'https://korvilp-sudo.github.io/korvil-app/sections/kafortunado/index.html',
+    'kalma': 'https://korvilp-sudo.github.io/korvil-app/sections/kalma/index.html',
+    'central': 'https://korvilp-sudo.github.io/korvil-app/sections/centralkorvil/index.html'
+  };
+
+  const PECAS = [
+    'ante-bracos','bracos','peitoral','costas','pelvis',
+    'femur','patela','tibia','botas','luvas',
+    'capacete','corvonas','ombros','abdomen','maos',
+    'pescoco','cintura'
+  ];
+
+  // FUNÇÃO PARA ABRIR O K-AI A PARTIR DA TELA INICIAL
+  function abrirKai() {
+    const welcome = document.getElementById('welcomeScreen');
+    welcome.style.opacity = '0';
+    setTimeout(() => {
+      welcome.style.display = 'none';
+      // Inicia o motor após o clique para garantir liberação de áudio/contexto no navegador
+      KAI_UI.init();
+    }, 500);
+  }
+
+  // ===== 1. CÉREBRO K-AI (9 GAVETAS) =====
+  const KAI_BRAIN = {
+    async processarComando(cmdOriginal) {
+      if (!cmdOriginal || !cmdOriginal.trim()) return;
+
+      const cmd = cmdOriginal.toLowerCase().trim();
+      let resposta = "";
+
+      // CONTROLE DE OUvinte E MEMÓRIA
+      if (cmd.includes("parar de ouvir")) {
+        window.KAI_CONFIG.autoOuvir = false;
+        if (KAI_UI.recognition) KAI_UI.recognition.stop();
+        resposta = "Modo manual ativado Chefe.";
+      }
+      else if (cmd.includes("voltar a ouvir")) {
+        window.KAI_CONFIG.autoOuvir = true;
+        if (KAI_UI.recognition) KAI_UI.recognition.start();
+        resposta = "Voltando a ouvir comandos.";
+      }
+      else if (cmd.includes("lembre") || cmd.includes("salvar na memória")) {
+        const texto = cmdOriginal.replace(/lembre|salvar na memória/gi, '').trim();
+        resposta = window.KAI_MEMORY ? window.KAI_MEMORY.salvarMemoriaImportante(texto) : "Informação gravada na memória.";
+      }
+      else if (cmd.includes("o que você lembra") || cmd.includes("buscar na memória")) {
+        const termo = cmdOriginal.replace(/o que você lembra|buscar na memória/gi, '').trim();
+        resposta = window.KAI_MEMORY ? window.KAI_MEMORY.buscarNaMemoria(termo) : "Nenhum registro localizado.";
+      }
+
+      // ROTEADOR DAS GAVETAS
+      else if ((cmd.includes("vai") || cmd.includes("abrir")) && window.Navega) {
+        resposta = window.Navega.ir(cmd);
+      }
+      else if (cmd.includes("cria") && window.Cria) {
+        resposta = await window.Cria.executar(cmd);
+      }
+      else if ((cmd.includes("copia") || cmd.includes("resuma") || cmd.includes("analisa") || cmd.includes("traduz")) && window.Copia) {
+        resposta = await window.Copia.executar(cmd);
+      }
+      else if (cmd.includes("hora") || cmd.includes("data") || cmd.includes("status")) {
+        resposta = `Horário do sistema: ${new Date().toLocaleTimeString('pt-BR')}. Status: 100% Operacional.`;
+      }
+      else if ((cmd.includes("buscar") || cmd.includes("pesquisar")) && window.Busca) {
+        resposta = await window.Busca.executar(cmd);
+      }
+      else if ((cmd.includes("calcular") || cmd.includes("somar") || cmd.includes("dividir") || cmd.includes("multiplicar") || cmd.includes("%")) && window.Calculo) {
+        resposta = await window.Calculo.executar(cmd);
+      }
+      else if ((cmd.includes("postar") || cmd.includes("instagram") || cmd.includes("social")) && window.Social) {
+        resposta = await window.Social.executar(cmd);
+      }
+      else if ((cmd.includes("lead") || cmd.includes("venda") || cmd.includes("crm")) && window.Vendas) {
+        resposta = await window.Vendas.executar(cmd);
+      }
+      else if ((cmd.includes("aula") || cmd.includes("curso") || cmd.includes("estudar")) && window.Educacao) {
+        resposta = await window.Educacao.executar(cmd);
+      }
+      else {
+        // FALLBACK PARA SERVIDOR / API GEMINI
+        try {
+          const res = await fetch('/api/kai/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: cmdOriginal })
+          });
+          const data = await res.json();
+          resposta = data.reply || `Comando recebido: "${cmdOriginal}".`;
+        } catch(e) {
+          resposta = `Comando processado: "${cmdOriginal}". K-AI pronto.`;
+        }
+      }
+
+      KAI_UI.falar(resposta);
+    }
+  };
+
+  // ===== 2. INTERFACE, CENA 3D E VOZ (KAI_UI) =====
+  const KAI_UI = {
+    scene: null, camera: null, renderer: null, nucleo: null, ring1: null, ring2: null, recognition: null, chat: null,
+
+    init() {
+      this.chat = document.getElementById('chat');
+      this.iniciarCena3D();
+      this.iniciarReconhecimento();
+      this.eventos();
+      this.falar("K-AI online. Modo Chefe ativo. Pronto para comandos.");
+    },
+
+    iniciarCena3D() {
+      const canvas = document.getElementById('canvas3d');
+      if (!canvas || typeof THREE === 'undefined') return;
+
+      this.scene = new THREE.Scene();
+      this.camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+      this.renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+
+      this.nucleo = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(1.6, 2),
+        new THREE.MeshPhongMaterial({ color: 0x00f5ff, emissive: 0x00f5ff, emissiveIntensity: 0.6, transparent: true, opacity: 0.85 })
+      );
+      this.scene.add(this.nucleo);
+
+      this.ring1 = new THREE.Mesh(
+        new THREE.TorusGeometry(2.3, 0.06, 16, 100),
+        new THREE.MeshBasicMaterial({ color: 0x00f5ff, wireframe: true })
+      );
+      this.ring2 = new THREE.Mesh(
+        new THREE.TorusGeometry(2.3, 0.06, 16, 100),
+        new THREE.MeshBasicMaterial({ color: 0x00f5ff, wireframe: true })
+      );
+      this.ring2.rotation.x = Math.PI / 2;
+
+      this.scene.add(this.ring1, this.ring2);
+
+      const light = new THREE.PointLight(0x00f5ff, 2, 50);
+      light.position.set(5, 5, 5);
+      this.scene.add(light);
+
+      this.camera.position.z = 5;
+      this.animate();
+    },
+
+    animate() {
+      requestAnimationFrame(() => this.animate());
+      if (this.nucleo) {
+        this.nucleo.rotation.x += 0.008;
+        this.nucleo.rotation.y += 0.015;
+        this.ring1.rotation.y += 0.02;
+        this.ring2.rotation.z += 0.015;
+        this.renderer.render(this.scene, this.camera);
+      }
+    },
+
+    pulsarCore() {
+      if (this.nucleo) {
+        this.nucleo.material.emissiveIntensity = 1.5;
+        setTimeout(() => { if (this.nucleo) this.nucleo.material.emissiveIntensity = 0.6; }, 300);
+      }
+    },
+
+    addMsg(tipo, texto) {
+      if (!this.chat) return;
+      const div = document.createElement('div');
+      div.className = 'msg ' + (tipo === 'kai' ? 'kai-msg' : 'user-msg');
+      div.innerHTML = tipo === 'user' ? `<b>Você:</b> ${texto}` : `<b>K-AI:</b> ${texto.replace(/\n/g, '<br>')}`;
+      this.chat.appendChild(div);
+      this.chat.scrollTop = this.chat.scrollHeight;
+    },
+
+    iniciarReconhecimento() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
+
+      this.recognition = new SpeechRecognition();
+      this.recognition.lang = 'pt-BR';
+      this.recognition.continuous = true;
+      this.recognition.interimResults = false;
+
+      this.recognition.onresult = (e) => {
+        const cmd = e.results[e.results.length - 1][0].transcript;
+        if (cmd.length > 2) {
+          document.getElementById('userInput').value = cmd;
+          this.enviarTexto();
+        }
+      };
+
+      this.recognition.onend = () => {
+        if (window.KAI_CONFIG.autoOuvir) {
+          try { this.recognition.start(); } catch (err) {}
+        }
+      };
+
+      if (window.KAI_CONFIG.autoOuvir) try { this.recognition.start(); } catch (e) {}
+    },
+
+    toggleMic() {
+      window.KAI_CONFIG.autoOuvir = !window.KAI_CONFIG.autoOuvir;
+      const micBtn = document.getElementById('micBtn');
+      if (micBtn) micBtn.classList.toggle('listening', window.KAI_CONFIG.autoOuvir);
+
+      if (!window.KAI_CONFIG.autoOuvir && this.recognition) this.recognition.stop();
+      else if (window.KAI_CONFIG.autoOuvir && this.recognition) this.recognition.start();
+    },
+
+    falar(texto) {
+      this.addMsg('kai', texto);
+      showOutput(texto.length > 30 ? texto.substring(0, 30) + "..." : texto);
+
+      if (!('speechSynthesis' in window)) return;
+      speechSynthesis.cancel();
+
+      const utter = new SpeechSynthesisUtterance(texto.replace(/[\#\*\_\`]/g, ''));
+      utter.lang = 'pt-BR';
+      utter.pitch = 0.6; // Voz Corvo grave
+      utter.rate = 0.95;
+      utter.volume = 1;
+      utter.onstart = () => this.pulsarCore();
+
+      speechSynthesis.speak(utter);
+    },
+
+    enviarTexto() {
+      const input = document.getElementById('userInput');
+      if (!input || !input.value.trim()) return;
+
+      const val = input.value;
+      this.addMsg('user', val);
+      input.value = "";
+      KAI_BRAIN.processarComando(val);
+    },
+
+    executar(cmd) {
+      closeAllMenus();
+      this.addMsg('user', cmd);
+      KAI_BRAIN.processarComando(cmd);
+    },
+
+    anexarArquivo() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = "image/*,.pdf,.txt,.doc,.docx";
+      input.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        this.addMsg('user', `📎 Arquivo: ${file.name}`);
+        this.falar(`Arquivo ${file.name} recebido e pronto para análise.`);
+      };
+      input.click();
+    },
+
+    eventos() {
+      window.addEventListener('resize', () => {
+        const canvas = document.getElementById('canvas3d');
+        if (this.camera && this.renderer && canvas) {
+          this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
+          this.camera.updateProjectionMatrix();
+          this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        }
+      });
+
+      document.getElementById('userInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') this.enviarTexto();
+      });
+
+      const inputBottom = document.getElementById('inputBottom');
+      if (inputBottom) {
+        inputBottom.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            const val = inputBottom.value;
+            inputBottom.value = "";
+            closeAllMenus();
+            this.addMsg('user', val);
+            KAI_BRAIN.processarComando(val);
+          }
+        });
+      }
+    }
+  };
+
+  // NAVEGAÇÃO DE MENUS E PAINÉIS
+  function openMenu(side) {
+    closeAllMenus();
+    document.getElementById('overlay').classList.add('show');
+    if (side === 'left') document.getElementById('menuLeft').classList.add('open');
+    if (side === 'right') document.getElementById('menuRight').classList.add('open');
+    if (side === 'top') document.getElementById('menuTop').classList.add('open');
+    if (side === 'bottom') document.getElementById('menuBottom').classList.add('open');
+  }
+
+  function closeAllMenus() {
+    document.querySelectorAll('.menu, .menu-top, .menu-bottom').forEach(m => m.classList.remove('open'));
+    document.getElementById('overlay').classList.remove('show');
+  }
+
+  function openTab(tab, btn) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function showOutput(text) {
+    const out = document.getElementById('outputScreen');
+    if (!out) return;
+    out.innerText = text;
+    setTimeout(() => { out.innerText = 'K-AI ONLINE'; }, 3000);
+  }
+
+  function goPage(p) {
+    if (PAGINAS[p]) window.location.href = PAGINAS[p];
+  }
+
+  // GERENCIAMENTO DE ARMADURAS
+  function ativarTransformacao() {
+    showOutput('TRANSFORMAÇÃO ATIVADA');
+    closeAllMenus();
+    KAI_UI.falar("Visor tático ativado. Módulo de armadura v-2026 pronto.");
+  }
+
+  function carregarArmaduraCompleta() {
+    showOutput('CARREGANDO ARMADURA v-2026');
+    closeAllMenus();
+    document.querySelectorAll('.peca-btn').forEach(b => b.classList.remove('ativa'));
+    KAI_UI.falar("Carregando armadura v-2026 completa.");
+  }
+
+  function carregarPeca(nome) {
+    document.querySelectorAll('.peca-btn').forEach(b => b.classList.remove('ativa'));
+    const btn = document.querySelector(`[data-peca="${nome}"]`);
+    if (btn) btn.classList.add('ativa');
+    showOutput(`PEÇA: ${nome.toUpperCase()}`);
+    closeAllMenus();
+    KAI_UI.falar(`Equipando peça ${nome}.`);
+  }
+
+  // INICIALIZAÇÃO DE ELEMENTOS VISUAIS AO CARREGAR A PÁGINA
+  window.addEventListener('load', () => {
+    // Relógio HUD
+    setInterval(() => {
+      document.getElementById('hora').innerText = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }, 1000);
+
+    // Gerar botões de peças no Grid
+    const grid = document.getElementById('gridPecas');
+    if (grid) {
+      PECAS.forEach(p => {
+        const btn = document.createElement('div');
+        btn.className = 'peca-btn';
+        btn.dataset.peca = p;
+        btn.innerText = p.toUpperCase();
+        btn.onclick = () => carregarPeca(p);
+        grid.appendChild(btn);
+      });
+    }
+  });
+
+  // EXPOSIÇÃO GLOBAL
+  window.KAI_BRAIN = KAI_BRAIN;
+  window.KAI_UI = KAI_UI;
+</script>
+
+</body>
+</html>
