@@ -1,49 +1,91 @@
-<!-- IA GEMINI: A.Q.Ab8RN6KM3JxwVREVm5IC8VzULdYgSc32nuWshnxC_BjnUMhh2w
-Github token g.hp_2QIJJlBAS2TXg3bPN3HN7yuipxabw42V5MyO -->
+<!--
+IA GEMINI: A.Q.Ab8RN6KM3JxwVREVm5IC8VzULdYgSc32nuWshnxC_BjnUMhh2w
+Github token g.hp_2QIJJlBAS2TXg3bPN3HN7yuipxabw42V5MyO
+SÓ LEMBRETE FALSO
+-->
 
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>FORJA AQ + GH</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEMINI DIRETO NA TELA</title>
 <style>
-body{background:#000;color:#0f0;font-family:monospace;padding:15px}
-input,textarea,button{width:100%;padding:12px;margin:8px 0;background:#111;border:1px solid #0f0;color:#0f0}
-button{background:#0f0;color:#000;font-weight:bold;cursor:pointer}
-#log{border:1px solid #0f0;padding:10px;height:300px;overflow:auto}
+body{background:#050505;color:#00ff88;font-family:Consolas,monospace;padding:15px;max-width:800px;margin:auto}
+h2{color:#00ff88;text-align:center}
+.desc{background:#001100;border:1px dashed #00ff88;padding:10px;margin:10px 0;border-radius:5px;font-size:12px}
+input,textarea,button{width:100%;padding:12px;margin:8px 0;background:#111;border:1px solid #00ff88;color:#00ff88;border-radius:5px;font-family:inherit;box-sizing:border-box}
+button{cursor:pointer;font-weight:bold;background:#00ff88;color:#000;font-size:16px}
+button:hover{background:#00cc66}
+#resposta{border:1px solid #00ff88;padding:15px;min-height:350px;background:#000;border-radius:5px;white-space:pre-wrap}
+.loading{color:#ffff00}
+.ok{color:#00ff00}
 </style>
 </head>
 <body>
-<h2>FORJA GEMINI - 2 CAMPOS</h2>
-<input id="aq" type="password" placeholder="Cole o AQ... aqui">
-<input id="gh" type="password" placeholder="Cole o ghp_... aqui embaixo">
-<button onclick="salvar()">SALVAR OS 2</button>
-<textarea id="p" rows="4">Faça um site de vendas</textarea>
-<button onclick="enviar()">ENVIAR PRA IA</button>
-<div id="log"></div>
+<h2>🔥 GEMINI DIRETO - SEM ACTIONS 🔥</h2>
+
+<div class="desc">
+<b>LEMBRETE:</b><br>
+1. Cole seu AQ_TOKEN real aqui embaixo<br>
+2. Exemplo pra lembrar:<br>
+   AQ: A.Q.Ab8RN6KM3JxwVREVm5IC8VzULdYgSc32nuWshnxC_BjnUMhh2w<br>
+   GH: g.hp_2QIJJlBAS2TXg3bPN3HN7yuipxabw42V5MyO<br>
+<i>São falsos! Só pra tu lembrar o formato</i>
+</div>
+
+<label>1. Cole seu AQ_TOKEN aqui:</label>
+<input id="aqtoken" type="password" placeholder="A.Q.xxxxxxxxxxxxxxxx">
+<button onclick="salvarAQ()">SALVAR AQ_TOKEN</button>
+<div id="status"></div>
+
+<label>2. Digite o Prompt:</label>
+<textarea id="prompt" rows="5">Faça um site de vendas moderno</textarea>
+<button onclick="chamarGemini()">ENVIAR PRA IA</button>
+
+<label>3. Resposta do Gemini:</label>
+<div id="resposta">Aguardando...</div>
 
 <script>
-function salvar(){
-  localStorage.setItem('t', document.getElementById('aq').value + '\n' + document.getElementById('gh').value);
-  alert("2 Tokens salvos!");
+// Carrega token salvo quando abre a página
+window.onload = function(){
+  const salvo = localStorage.getItem('aq');
+  if(salvo){
+    document.getElementById('aqtoken').value = salvo;
+    document.getElementById('status').innerHTML = '<span class="ok">✅ Token já carregado do navegador</span>';
+  }
 }
 
-async function enviar(){
-  const tudo = localStorage.getItem('t').split('\n');
-  const GH = tudo[1]; // linha 2 é o GH_TOKEN
-  
-  const owner = location.hostname.split('.')[0];
-  const repo = location.pathname.split('/')[1];
-  
-  document.getElementById('log').innerText = "Enviando...";
-  
-  await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Gemini%20Proxy/dispatches`, {
-    method: 'POST',
-    headers: {'Authorization': 'Bearer ' + GH},
-    body: JSON.stringify({ref: "main", inputs: {prompt: document.getElementById('p').value}})
-  });
-  
-  document.getElementById('log').innerText = "✅ Enviado!\n\nVá em ACTIONS > Gemini Proxy > resultado.txt";
+function salvarAQ(){
+  const val = document.getElementById('aqtoken').value;
+  localStorage.setItem('aq', val);
+  document.getElementById('status').innerHTML = '<span class="ok">✅ AQ_TOKEN salvo! Não precisa colar de novo</span>';
+}
+
+async function chamarGemini(){
+  const AQ = localStorage.getItem('aq');
+  if(!AQ) return alert("Salve o AQ_TOKEN primeiro");
+
+  const prompt = document.getElementById('prompt').value;
+  const div = document.getElementById('resposta');
+  div.innerHTML = '<span class="loading">Pensando...</span>';
+
+  try {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${AQ}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        contents: [{parts: [{text: prompt}]}]
+      })
+    });
+
+    const data = await r.json();
+    const texto = data.candidates[0].content.parts[0].text;
+    div.innerText = texto;
+
+  } catch(e) {
+    div.innerText = "❌ ERRO: " + e.message + "\n\nVerifique se o AQ_TOKEN está certo";
+  }
 }
 </script>
 </body>
