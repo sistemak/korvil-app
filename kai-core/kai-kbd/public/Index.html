@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KAI KBD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #0a0a0a; color: #fff; font-family: system-ui; }
+   .card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px; }
+   .btn { background: #3b82f6; padding: 10px 20px; border-radius: 8px; border: none; color: white; cursor: pointer; }
+   .btn:hover { background: #2563eb; }
+   .btn-destructive { background: #ef4444; }
+  </style>
+</head>
+<body class="p-6">
+  <div class="max-w-5xl mx-auto">
+    
+    <header class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">KAI KBD</h1>
+      <div class="flex gap-2">
+        <button class="btn" id="voiceBtn">🎤 Ativar Voz</button>
+        <button class="btn" onclick="syncGithub()">📦 Sync GitHub</button>
+      </div>
+    </header>
+
+    <!-- Card Voz -->
+    <div class="card mb-4">
+      <h2 class="text-xl font-semibold mb-3">⚡ Assistente de Voz</h2>
+      <p class="text-sm text-gray-400 mb-3" id="status">Status: Parado</p>
+      <div class="bg-[#0f0f0f] p-4 rounded-lg min-h-[100px]">
+        <p id="transcript" class="text-sm">Fale algo e aparecerá aqui...</p>
+      </div>
+    </div>
+
+    <!-- Card DB -->
+    <div class="card mb-4">
+      <h2 class="text-xl font-semibold mb-3">🗄️ korvil-db</h2>
+      <p class="text-sm text-gray-400">Conectado em: /data/korvil-db/</p>
+      <p class="text-sm text-gray-400" id="lastSync">Último sync: Nunca</p>
+    </div>
+
+    <!-- Links -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a href="/admin" class="btn text-center">Admin</a>
+      <a href="/recycle-bin" class="btn text-center">Lixeira</a>
+      <a href="/forge" class="btn text-center">Forge</a>
+      <a href="/k-ai" class="btn text-center">K-AI</a>
+    </div>
+
+  </div>
+
+  <script>
+    // VOZ
+    let isListening = false;
+    let recognition;
+    
+    const voiceBtn = document.getElementById('voiceBtn');
+    const status = document.getElementById('status');
+    const transcript = document.getElementById('transcript');
+
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.lang = 'pt-BR';
+      recognition.continuous = true;
+      recognition.onresult = (e) => {
+        transcript.innerText = e.results[e.results.length-1][0].transcript;
+      }
+    }
+
+    voiceBtn.onclick = () => {
+      if (!recognition) return alert('Seu navegador não suporta voz');
+      
+      if (isListening) {
+        recognition.stop();
+        voiceBtn.innerText = '🎤 Ativar Voz';
+        voiceBtn.classList.remove('btn-destructive');
+        status.innerText = 'Status: Parado';
+      } else {
+        recognition.start();
+        voiceBtn.innerText = '🛑 Parar Voz';
+        voiceBtn.classList.add('btn-destructive');
+        status.innerText = 'Status: Ouvindo...';
+      }
+      isListening =!isListening;
+    }
+
+    // SYNC GITHUB
+    function syncGithub() {
+      document.getElementById('lastSync').innerText = 'Último sync: ' + new Date().toLocaleString('pt-BR');
+      alert('Simulando sync com GitHub...');
+    }
+  </script>
+</body>
+</html>
