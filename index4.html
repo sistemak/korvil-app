@@ -1,5 +1,5 @@
-<!-- IA GEMINI: A.Q.Ab8RN6KM3JxwVREVm5IC8VzULdYgSc32nuWshnxC_BjnUMhh2w 
-Github token  g.hp_2QIJJlBAS2TXg3bPN3HN7yuipxabw42V5MyO  -->
+<!-- IA GEMINI: A.Q.Ab8RN6KM3JxwVREVm5IC8VzULdYgSc32nuWshnxC_BjnUMhh2w
+Github token g.hp_2QIJJlBAS2TXg3bPN3HN7yuipxabw42V5MyO -->
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -39,15 +39,15 @@ function salvarGH(){
 async function enviar(){
   const GH = localStorage.getItem('gh');
   if(!GH) return alert("Salve o GH_TOKEN primeiro");
-  
+
   const log = document.getElementById('log');
   log.innerText = "Enviando pro Action...\n";
-  
+
   // Pega owner e repo da URL do GitHub Pages
   const parts = location.hostname.split('.');
   const owner = parts[0];
   const repo = location.pathname.split('/')[1];
-  
+
   const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Gemini%20Proxy/dispatches`, {
     method: 'POST',
     headers: {
@@ -59,7 +59,7 @@ async function enviar(){
       inputs: {prompt: document.getElementById('prompt').value}
     })
   });
-  
+
   if(r.status === 204) {
     log.innerText = "✅ ENVIADO COM SUCESSO!\n\nPasso 1: Vá na aba ACTIONS do repo\nPasso 2: Clique em 'Gemini Proxy' rodando\nPasso 3: Espere 15 segundos\nPasso 4: A resposta vai estar no arquivo resultado.txt";
   } else {
