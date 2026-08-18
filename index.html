@@ -5,144 +5,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FORJA - Sistema igual PC - sistemak/korvil-app</title>
+<title>FORJA PC - Windows Explorer - sistemak</title>
 <style>
-:root{--neon:#00f0ff;--bg:#0a0a0a;--panel:#121212;--item:#1a1a1a;--border:#2a2a2a;--border-hover:#00f0ff;--text:#e0e0e0;--text-dim:#888}
+:root{--neon:#0078d4;--bg:#202020;--panel:#2b2b2b;--item:#323232;--item-hover:#3a3a3a;--border:#3f3f3f;--text:#ffffff;--text-dim:#a0a0a0;--sel:#0078d4;--sel-bg:rgba(0,120,212,.2)}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;width:100%;background:var(--bg)!important;color:var(--text);font-family:'Segoe UI', Consolas, monospace;overflow:hidden;user-select:none}
+html,body{height:100%;width:100%;background:var(--bg)!important;color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;user-select:none;font-size:13px}
 body{display:flex;flex-direction:column}
-#forja-header{height:48px;min-height:48px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;flex-shrink:0}
-.logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#00f0ff,#0080ff);display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:14px}
-.btn{border:1px solid var(--border);background:var(--item);color:var(--text);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:11px;display:inline-flex;align-items:center;gap:6px;min-height:32px;transition:.15s}
-.btn:hover{border-color:var(--border-hover);background:#1f1f1f}
-.btn.ac{border-color:var(--neon);color:var(--neon);background:rgba(0,240,255,.1)}
-.btn.neon{background:var(--neon);color:#000;font-weight:700;border-color:var(--neon)}
-.btn.danger{border-color:#ff4a4a;color:#ff7a7a}
-.badge{font-size:10px;background:var(--item);border:1px solid var(--border);color:var(--text-dim);padding:4px 10px;border-radius:20px}
-.badge.warn{background:#ffcc00;color:#000;border-color:#ffcc00;font-weight:700}
-#app{flex:1;display:flex;overflow:hidden;min-height:0;width:100%}
+#forja-header{height:48px;min-height:48px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0}
+.logo{width:32px;height:32px;background:#0078d4;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+.btn{border:1px solid var(--border);background:var(--item);color:var(--text);padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:6px;min-height:32px}
+.btn:hover{background:var(--item-hover);border-color:#555}
+.btn.primary{background:var(--sel);color:#fff;border-color:var(--sel)}
+.btn.neon{background:#00f0ff;color:#000;font-weight:700;border-color:#00f0ff}
+.badge{font-size:11px;background:var(--item);border:1px solid var(--border);color:var(--text-dim);padding:4px 10px;border-radius:12px}
+#app{flex:1;display:flex;overflow:hidden;min-height:0}
 #left,#right{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;background:var(--bg);position:relative}
 #left{border-right:1px solid var(--border)}
-.top{padding:8px 10px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px;align-items:center;flex-shrink:0}
-.top b{font-size:11px;color:var(--text);font-weight:600}
-.toolbar{padding:6px 10px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:center;flex-shrink:0;font-size:11px}
-.checkbox-all{width:16px;height:16px;accent-color:var(--neon);cursor:pointer}
-.stage{flex:1;overflow:auto;min-height:0;padding:8px;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;align-content:start;background:var(--bg)}
-.stage.list-view{grid-template-columns:1fr;gap:2px}
-.item{background:var(--item);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;position:relative;transition:.12s}
-.stage.list-view.item{flex-direction:row;align-items:center;border-radius:6px;height:42px}
-.item:hover{border-color:#3a3a3a;background:#1f1f1f}
-.item.selected{border-color:var(--neon);background:rgba(0,240,255,.08);box-shadow:inset 0 0 0 1px var(--neon)}
-.item.selected::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--neon)}
-.item.drop-target{border-color:#00ff88!important;background:rgba(0,255,136,.1)!important}
-.item.folder-card{border-left:3px solid #ffcc00}
-.item-preview{width:100%;height:72px;background:#0f0f0f;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:28px}
-.stage.list-view.item-preview{width:42px;height:42px;font-size:18px;border-right:1px solid var(--border)}
-.item-info{padding:8px;flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
-.stage.list-view.item-info{flex-direction:row;align-items:center;gap:8px}
-.item-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
-.item-path{font-size:10px;opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-dim)}
-.item-check{position:absolute;top:6px;left:6px;width:16px;height:16px;accent-color:var(--neon);display:none}
-.item:hover.item-check,.item.selected.item-check{display:block}
-.stage.list-view.item-check{position:static;display:block;margin-left:8px}
-.dropzone{position:absolute;inset:8px;border:2px dashed var(--neon);border-radius:12px;background:rgba(0,240,255,.06);z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px;pointer-events:none;color:var(--neon)}
+.top{padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.toolbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--border);font-size:12px;flex-shrink:0}
+.toolbar.sep{width:1px;height:20px;background:var(--border)}
+.path-bar{flex:1;background:var(--item);border:1px solid var(--border);border-radius:4px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:12px}
+.path-bar span{cursor:pointer;padding:2px 6px;border-radius:3px}
+.path-bar span:hover{background:var(--item-hover)}
+.stage{flex:1;overflow:auto;min-height:0;background:var(--bg);padding:4px}
+.list-header{display:flex;align-items:center;padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-dim);font-weight:600;gap:12px;position:sticky;top:0;z-index:2}
+.list-header div{cursor:pointer}
+.list-header div:hover{color:var(--text)}
+.item-row{display:flex;align-items:center;padding:0 12px;height:36px;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;gap:12px;transition:.08s}
+.item-row:hover{background:var(--item-hover)}
+.item-row.selected{background:var(--sel-bg);color:#fff}
+.item-row.selected.item-name{color:#fff}
+.item-row.drop-target{background:rgba(0,255,136,.15)!important;border:1px dashed #00ff88!important}
+.item-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.item-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
+.item-type{width:80px;color:var(--text-dim);font-size:11px;flex-shrink:0}
+.item-size{width:80px;color:var(--text-dim);font-size:11px;text-align:right;flex-shrink:0}
+.item-date{width:120px;color:var(--text-dim);font-size:11px;flex-shrink:0}
+.check{width:16px;height:16px;accent-color:var(--sel);cursor:pointer;flex-shrink:0}
+.grid-view{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;padding:12px}
+.grid-item{background:var(--item);border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;position:relative}
+.grid-item:hover{border-color:#555;background:var(--item-hover)}
+.grid-item.selected{border-color:var(--sel);background:var(--sel-bg)}
+.grid-item.grid-icon{font-size:36px}
+.grid-item.grid-name{font-size:11px;text-align:center;word-break:break-all;max-width:100%}
+.grid-item.grid-check{position:absolute;top:6px;left:6px}
+.dropzone{position:absolute;inset:8px;border:2px dashed var(--sel);border-radius:8px;background:rgba(0,120,212,.1);z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px;pointer-events:none;color:var(--sel);font-weight:600}
 .dropzone.show{display:flex;pointer-events:auto}
 #repoViewFallback{flex:1;overflow:auto;background:var(--bg);display:flex;flex-direction:column;min-height:0}
-.repo-breadcrumb{padding:8px 10px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap;font-size:11px;flex-shrink:0;align-items:center}
-.repo-breadcrumb span{cursor:pointer;color:var(--text);padding:4px 10px;border-radius:6px;background:var(--item);border:1px solid var(--border)}
-.repo-breadcrumb span:hover{border-color:var(--neon);color:var(--neon)}
+.repo-breadcrumb{padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;gap:4px;flex-wrap:wrap;font-size:12px;flex-shrink:0;align-items:center}
+.repo-breadcrumb span{cursor:pointer;padding:4px 8px;border-radius:4px;background:var(--item);border:1px solid var(--border)}
+.repo-breadcrumb span:hover{border-color:var(--sel);background:var(--item-hover)}
 .repo-list{flex:1;overflow:auto;min-height:0}
-.repo-row{padding:0 10px;height:42px;background:var(--item);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer}
-.repo-row:hover{background:#1f1f1f}
-.repo-row.selected-right{background:rgba(0,240,255,.08);border-left:3px solid var(--neon)}
-.repo-row.drop-target{background:rgba(0,255,136,.1)!important;border:1px solid #00ff88!important}
-.repo-row.folder-row{border-left:3px solid #ffcc00}
+.repo-row{padding:0 12px;height:36px;background:var(--bg);border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:12px;font-size:12px;cursor:pointer}
+.repo-row:hover{background:var(--item-hover)}
+.repo-row.selected-right{background:var(--sel-bg);border-left:3px solid var(--sel)}
+.repo-row.drop-target{background:rgba(0,255,136,.15)!important;border:1px dashed #00ff88!important}
 #githubFrame{flex:1;width:100%;border:0;background:#0d1117;display:flex;min-height:0}
-#liveViewer{height:38%;min-height:220px;max-height:60%;border-top:1px solid var(--border);background:var(--panel);display:flex;flex-direction:column;flex-shrink:0}
-.viewer-top{height:36px;min-height:36px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:11px;gap:8px;flex-shrink:0}
+#liveViewer{height:36%;min-height:200px;max-height:55%;border-top:1px solid var(--border);background:var(--panel);display:flex;flex-direction:column;flex-shrink:0}
+.viewer-top{height:36px;min-height:36px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:12px;gap:8px;flex-shrink:0}
 .viewer-content{flex:1;display:flex;overflow:hidden;min-height:0}
 .viewer-preview{flex:1;background:var(--bg);display:flex;overflow:hidden;min-width:0}
 #liveSiteFrame{width:100%;height:100%;border:0;background:var(--bg);flex:1}
-#log{height:36px;min-height:36px;background:var(--panel);border-top:1px solid var(--border);overflow:auto;padding:6px 12px;font-size:10px;color:var(--text-dim);flex-shrink:0;font-family:Consolas}
-input.in{background:var(--item);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:11px;outline:none;min-height:32px}
-input.in:focus{border-color:var(--neon)}
+#log{height:32px;min-height:32px;background:var(--panel);border-top:1px solid var(--border);overflow:auto;padding:6px 12px;font-size:10px;color:var(--text-dim);flex-shrink:0;font-family:Consolas}
+input.in{background:var(--item);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:12px;outline:none;min-height:32px}
+input.in:focus{border-color:var(--sel)}
 #editModal{position:fixed;inset:0;background:var(--bg);z-index:200;display:none;flex-direction:column}
 .edit-layout{flex:1;display:flex;overflow:hidden;min-height:0}
 .edit-code{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--bg);min-width:0}
 .edit-render{flex:1.2;display:flex;flex-direction:column;background:var(--bg);min-width:0}
-.edit-header{height:40px;min-height:40px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:11px;flex-shrink:0}
+.edit-header{height:40px;min-height:40px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:12px;flex-shrink:0}
 #editArea{flex:1;width:100%;background:var(--bg);color:var(--text);border:0;padding:14px;font-size:13px;font-family:Consolas,monospace;resize:none;outline:none;white-space:pre;overflow:auto}
 #editLiveFrame{flex:1;width:100%;border:0;background:var(--bg);min-height:0}
-#ctxMenu{position:fixed;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:4px;min-width:240px;z-index:400;display:none;flex-direction:column;gap:2px;box-shadow:0 8px 24px rgba(0,0,0,.6)}
-.ctx-item{padding:10px 12px;border-radius:6px;font-size:12px;cursor:pointer;display:flex;gap:10px;align-items:center}
+#ctxMenu{position:fixed;background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:4px;min-width:260px;z-index:400;display:none;flex-direction:column;gap:2px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.ctx-item{padding:8px 12px;border-radius:4px;font-size:12px;cursor:pointer;display:flex;gap:10px;align-items:center}
 .ctx-item:hover{background:var(--item)}
-.ctx-item kbd{margin-left:auto;background:var(--item);border:1px solid var(--border);padding:2px 6px;border-radius:4px;font-size:10px;color:var(--text-dim)}
-::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:10px}::-webkit-scrollbar-thumb:hover{background:#3a3a3a}
-#duplicateWarn{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#ffcc00;color:#000;padding:10px 18px;border-radius:8px;font-size:12px;font-weight:600;z-index:500;display:none;box-shadow:0 4px 20px rgba(0,0,0,.4)}
-.status-bar{padding:4px 12px;background:var(--panel);border-top:1px solid var(--border);display:flex;gap:12px;font-size:10px;color:var(--text-dim);flex-shrink:0}
+.ctx-item kbd{margin-left:auto;background:var(--item);border:1px solid var(--border);padding:2px 6px;border-radius:3px;font-size:10px;color:var(--text-dim)}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:#3f3f3f;border-radius:5px}::-webkit-scrollbar-thumb:hover{background:#4f4f4f}
+#duplicateWarn{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#ffcc00;color:#000;padding:10px 18px;border-radius:6px;font-size:12px;font-weight:600;z-index:500;display:none;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.status-bar{padding:4px 12px;background:var(--panel);border-top:1px solid var(--border);display:flex;gap:16px;font-size:11px;color:var(--text-dim);flex-shrink:0}
 </style>
 </head>
 <body>
 
 <div id="forja-header">
-  <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+  <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
     <div class="logo">F</div>
-    <b style="font-size:13px;font-weight:600">Explorador de Arquivos - FORJA</b>
-    <span class="badge" id="syncBadge">PC: Ctrl+A, Ctrl+C, Ctrl+V, Del, F2</span>
+    <b style="font-size:14px;font-weight:600">Explorador de Arquivos</b>
+    <span class="badge" id="syncBadge">Ctrl+A todos • Ctrl+C copiar • Ctrl+V colar • Del excluir • F2 renomear</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center">
-    <button class="btn" onclick="toggleView()">⊞ Lista/Grade</button>
-    <button class="btn ac" onclick="document.getElementById('folder').click()">📁 Pasta</button>
-    <button class="btn ac" onclick="document.getElementById('f').click()">+ Arquivo</button>
+    <button class="btn" onclick="toggleView()">⊞ Grade/Lista</button>
+    <button class="btn" onclick="document.getElementById('folder').click()">📁 Pasta</button>
+    <button class="btn" onclick="document.getElementById('f').click()">+ Arquivo</button>
   </div>
 </div>
 
 <div id="app">
   <div id="left">
     <div class="top">
-      <input type="checkbox" class="checkbox-all" id="checkAllLeft" onclick="toggleSelectAllLeft(this.checked)">
-      <b>ESQ: Este Computador</b>
-      <span id="selCount" class="badge">0 selecionados</span>
+      <input type="checkbox" class="check" id="checkAllLeft" onclick="toggleSelectAllLeft(this.checked)" title="Selecionar todos (Ctrl+A)">
+      <b>Este Computador - ESQ</b>
+      <button class="btn primary" onclick="selecionarTodos()" style="margin-left:8px">☑ Selecionar todos</button>
+      <span id="selCount" class="badge">0 itens selecionados</span>
       <div style="margin-left:auto;display:flex;gap:6px">
         <button class="btn" onclick="moverEsqParaDir()">→ DIR <kbd>F5</kbd></button>
-        <button class="btn danger" onclick="excluirSelecionadosEsq()">🗑️ <kbd>Del</kbd></button>
+        <button class="btn" onclick="copySelection()">⎘ Copiar <kbd>Ctrl+C</kbd></button>
       </div>
     </div>
     <div class="toolbar">
-      <span>📁</span>
-      <span id="leftPath">/ - Arraste aqui - Clique, Ctrl+clique, Shift+clique igual Windows</span>
-      <span style="margin-left:auto">🖱️ Clique direito menu</span>
+      <div class="path-bar"><span>🏠</span><span>/</span><span id="leftPath">Este Computador - Arraste pra qualquer lugar exato</span></div>
+      <div class="sep"></div>
+      <span>🖱️ Direito = menu</span>
     </div>
-    <div class="stage" id="sLeft"></div>
-    <div class="status-bar"><span id="leftStatus">0 itens</span><span>•</span><span>Ctrl+A todos, Ctrl+clique individual, Shift+clique intervalo</span></div>
+    <div class="list-header">
+      <input type="checkbox" class="check" style="visibility:hidden">
+      <div style="width:20px"></div>
+      <div style="flex:1" onclick="sortBy('name')">Nome ↕️</div>
+      <div style="width:80px" onclick="sortBy('type')">Tipo</div>
+      <div style="width:80px;text-align:right" onclick="sortBy('size')">Tamanho</div>
+      <div style="width:120px" onclick="sortBy('date')">Modificado</div>
+    </div>
+    <div class="stage" id="sLeft" style="display:block;padding:0"></div>
+    <div class="status-bar"><span id="leftStatus">0 itens</span><span id="leftSelStatus">• 0 selecionados</span><span style="margin-left:auto">Ctrl+A todos, Ctrl+clique individual, Shift+clique intervalo, F2 renomeia, Del exclui</span></div>
     <div class="dropzone" id="dropEsq"><h3>📁 Soltar aqui</h3><p>Qualquer pasta/arquivo - exato onde soltar</p></div>
   </div>
 
   <div id="right">
-    <div class="top" style="flex-direction:column;align-items:flex-start;gap:6px">
+    <div class="top" style="flex-direction:column;align-items:flex-start;gap:8px">
       <div style="display:flex;gap:6px;flex-wrap:wrap;width:100%;align-items:center">
-        <b style="font-size:11px">DIR: Repositório</b>
+        <b style="font-size:12px">Repositório - DIR</b>
         <input id="ghO" class="in" value="sistemak" style="width:70px">
         <input id="ghR" class="in" value="korvil-app" style="width:90px">
         <input id="REPO_TOKEN" type="password" class="in" placeholder="REPO_TOKEN" style="flex:1;min-width:120px">
-        <button class="btn ac" onclick="saveCfg()">Salvar</button>
+        <button class="btn" onclick="saveCfg()">Salvar</button>
         <button class="btn neon" onclick="abrirGithubOriginal()">▶ GITHUB ORIGINAL</button>
-        <button class="btn ac" onclick="toggleFallback()">📁 EXPLORER COM 🗑️</button>
+        <button class="btn" onclick="toggleFallback()">📁 EXPLORER COM 🗑️</button>
         <button class="btn" onclick="carregarDadosRepo()">🔄 Atualizar</button>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;width:100%;align-items:center">
-        <input type="checkbox" class="checkbox-all" id="checkAllRight" onclick="toggleSelectAllRight(this.checked)">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;align-items:center">
+        <input type="checkbox" class="check" id="checkAllRight" onclick="toggleSelectAllRight(this.checked)" title="Selecionar todos DIR (Ctrl+A)">
+        <button class="btn primary" onclick="selecionarTodosDir()">☑ Selecionar todos DIR</button>
         <span id="selCountRight" class="badge">0 selecionados DIR</span>
         <button class="btn" onclick="moverDirParaEsq()">← ESQ <kbd>F6</kbd></button>
-        <button class="btn danger" onclick="excluirSelecionadosDir()">🗑️ <kbd>Del</kbd></button>
-        <span style="margin-left:auto;font-size:10px;opacity:.6" id="currentPathDisplay">sistemak/korvil-app</span>
+        <span style="margin-left:auto;font-size:11px;opacity:.7" id="currentPathDisplay">sistemak/korvil-app - Repo como antes</span>
       </div>
     </div>
     <iframe id="githubFrame" src="https://github.com/sistemak/korvil-app" style="flex:1;width:100%;border:0;background:#0d1117;display:flex;min-height:0"></iframe>
     <div id="repoViewFallback" style="flex:1;min-height:0;display:none;background:var(--bg);flex-direction:column">
       <div class="repo-breadcrumb" id="breadcrumb"><span onclick="navegarPara('')">🏠 root</span></div>
       <div class="repo-list" id="repoList" style="flex:1;overflow:auto"></div>
-      <div class="status-bar"><span id="rightStatus">0 itens DIR</span><span>•</span><span>Arraste pra qualquer pasta exata</span></div>
+      <div class="status-bar"><span id="rightStatus">0 itens DIR</span></div>
     </div>
     <div class="dropzone" id="dropDir"><h3>📁 Soltar aqui no repo</h3><p>Exato onde soltar - já salva no sistemak/korvil-app</p></div>
   </div>
@@ -152,25 +164,25 @@ input.in:focus{border-color:var(--neon)}
 
 <div id="liveViewer">
   <div class="viewer-top">
-    <div style="display:flex;gap:8px;align-items:center;flex:1;min-width:0">
-      <span style="font-weight:600">🔨 Preview</span>
-      <span style="opacity:.5">F2 renomeia, Ctrl+C copia, Ctrl+V cola, Del exclui, Ctrl+A todos, Esc desseleciona</span>
+    <div style="display:flex;gap:12px;align-items:center;flex:1;min-width:0">
+      <span style="font-weight:600">Preview</span>
+      <span style="opacity:.6;font-size:11px">F2 renomeia • Ctrl+C copia • Ctrl+V cola • Ctrl+X recorta • Del exclui • Ctrl+A todos • Esc desseleciona • Arrasta pra qualquer lugar exato</span>
     </div>
-    <span id="viewerType" class="badge">PC</span>
+    <span id="viewerType" class="badge">PC Explorer</span>
   </div>
   <div class="viewer-content">
     <div class="viewer-preview"><iframe id="liveSiteFrame"></iframe></div>
   </div>
-  <div id="log">[LOG] Sistema igual PC - Windows Explorer - Ctrl+A, Ctrl+C, Ctrl+V, Del, F2 - Repo como antes</div>
+  <div id="log">[LOG] Windows Explorer - CSS igual PC - Repo como antes - sistemak</div>
 </div>
 
 <div id="ctxMenu"></div>
-<div id="editModal"><div class="edit-layout"><div class="edit-code"><div class="edit-header"><span>🔨 <span id="editFileName"></span></span><div style="display:flex;gap:6px"><button class="btn ac" onclick="salvarEdicao()">💾 Salvar Ctrl+S</button><button class="btn" onclick="document.getElementById('editModal').style.display='none'">✕</button></div></div><textarea id="editArea" oninput="renderInstant()"></textarea></div><div class="edit-render"><div class="edit-header" style="background:var(--neon);color:#000"><span style="font-weight:700">👁️ Preview</span></div><iframe id="editLiveFrame"></iframe></div></div></div>
+<div id="editModal"><div class="edit-layout"><div class="edit-code"><div class="edit-header"><span>📄 <span id="editFileName"></span></span><div style="display:flex;gap:6px"><button class="btn primary" onclick="salvarEdicao()">💾 Salvar Ctrl+S</button><button class="btn" onclick="document.getElementById('editModal').style.display='none'">✕ Fechar</button></div></div><textarea id="editArea" oninput="renderInstant()"></textarea></div><div class="edit-render"><div class="edit-header" style="background:var(--sel);color:#fff"><span style="font-weight:600">👁️ Visualização</span></div><iframe id="editLiveFrame"></iframe></div></div></div>
 
 <input type="file" id="f" hidden multiple><input type="file" id="folder" hidden webkitdirectory multiple>
 
 <script>
-let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set(), currentPath="", arquivoEditando=null, lastSelectedIndex=-1, clipboard=null, clipboardAction=null, isListView=false;
+let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set(), currentPath="", arquivoEditando=null, lastSelectedIndex=-1, clipboard=null, clipboardAction=null, isGridView=false;
 let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-cfg')||'{}');}catch(e){cfg={}}
 if(!cfg.owner) cfg.owner='sistemak'; if(!cfg.repo) cfg.repo='korvil-app';
 ghO.value=cfg.owner; ghR.value=cfg.repo; document.getElementById('REPO_TOKEN').value=cfg.REPO_TOKEN||'';
@@ -187,7 +199,6 @@ function showDuplicateWarn(msg){
   w.innerText='⚠️ Já existe no mesmo lugar: '+msg;
   w.style.display='block';
   setTimeout(()=>w.style.display='none', 4000);
-  log(`DUPLICADO: ${msg}`);
 }
 const fEl=document.getElementById('f'), folderEl=document.getElementById('folder');
 fEl.onchange=e=>{ if(e.target.files.length) handleFiles(e.target.files); e.target.value=''; };
@@ -233,8 +244,8 @@ async function handleDataTransferItems(items, targetFolder){
   }
   return files.length;
 }
-async function carregarTudo(){ ativos=await getAll(); renderLeft(); renderLiveSite(); document.getElementById('leftStatus').innerText=`${ativos.length} itens - ${getPastasUnicas().length} pastas`; }
-function toggleView(){ isListView=!isListView; document.getElementById('sLeft').classList.toggle('list-view', isListView); renderLeft(); }
+async function carregarTudo(){ ativos=await getAll(); renderLeft(); renderLiveSite(); document.getElementById('leftStatus').innerText=`${ativos.length} itens • ${getPastasUnicas().length} pastas`; document.getElementById('leftSelStatus').innerText=`• ${selecionados.size} selecionados`; }
+function toggleView(){ isGridView=!isGridView; renderLeft(); }
 function toggleSelectAllLeft(checked){
   const pastas=getPastasUnicas();
   const all=[...pastas.map(p=>'folder:'+p.path),...ativos.map(a=>a.id)];
@@ -246,25 +257,39 @@ function toggleSelectAllRight(checked){
   const all=items.map(i=>i.fullPath);
   if(checked) all.forEach(p=>selecionadosDir.add(p)); else selecionadosDir.clear();
   renderRepo();
-  document.getElementById('selCountRight').innerText=`${selecionadosDir.size} selecionados DIR`;
 }
 function renderLeft(){
-  const sL=document.getElementById('sLeft'); sL.innerHTML='';
+  const sL=document.getElementById('sLeft');
   document.getElementById('selCount').innerText=`${selecionados.size} selecionados`;
   document.getElementById('checkAllLeft').checked=selecionados.size>0 && selecionados.size===getPastasUnicas().length+ativos.length;
+  document.getElementById('leftSelStatus').innerText=`• ${selecionados.size} selecionados`;
   const pastas=getPastasUnicas();
-  const listaCompleta=[...pastas.map(p=>({isFolder:true, path:p.path, name:p.path.split('/').pop()+'/', count:p.count})),...ativos];
-  if(listaCompleta.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.5;padding:32px"><div style="font-size:48px">📁</div><div style="margin-top:12px">Pasta vazia</div><div style="font-size:11px;opacity:.6;margin-top:6px">Arraste arquivos ou pastas aqui<br>Ctrl+A seleciona todos, Ctrl+clique individual</div></div>`; return; }
-  listaCompleta.forEach((o, idx)=>{
-    if(o.isFolder){
-      const div=document.createElement('div'); div.className='item folder-card'+(selecionados.has('folder:'+o.path)?' selected':''); div.draggable=true; div.dataset.folder=o.path; div.dataset.index=idx;
-      div.innerHTML=`<input type="checkbox" class="item-check" ${selecionados.has('folder:'+o.path)?'checked':''}><div class="item-preview">📁</div><div class="item-info"><div class="item-name">${o.name}</div><div class="item-path">${o.path}/ • ${o.count} itens</div></div>`;
-      div.querySelector('.item-check').onclick=(e)=>{ e.stopPropagation(); const key='folder:'+o.path; if(e.target.checked) selecionados.add(key); else selecionados.delete(key); renderLeft(); };
-      div.addEventListener('dragenter', e=>{ e.preventDefault(); div.classList.add('drop-target'); });
-      div.addEventListener('dragover', e=>{ e.preventDefault(); div.classList.add('drop-target'); });
-      div.addEventListener('dragleave', e=>{ if(!div.contains(e.relatedTarget)) div.classList.remove('drop-target'); });
-      div.addEventListener('drop', async e=>{
-        e.preventDefault(); div.classList.remove('drop-target');
+  const listaCompleta=[...pastas.map(p=>({isFolder:true, path:p.path, name:p.path.split('/').pop()+'/', count:p.count, date:'', size:'', type:'Pasta'})),...ativos.map(a=>({isFolder:false, id:a.id, path:a.path, name:a.name, size:(a.size/1024).toFixed(1)+' KB', date:new Date(a.date).toLocaleDateString(), type:a.ext||'Arquivo'}))];
+  if(listaCompleta.length===0){ sL.innerHTML=`<div style="text-align:center;opacity:.5;padding:40px"><div style="font-size:48px">📁</div><div style="margin-top:12px">Esta pasta está vazia</div><div style="font-size:11px;opacity:.6;margin-top:8px">Arraste arquivos ou pastas aqui<br>Ctrl+A seleciona todos, Ctrl+clique individual, Shift+clique intervalo<br>F2 renomeia, Del exclui, Ctrl+C copia</div></div>`; return; }
+  if(isGridView){
+    sL.className='stage grid-view'; sL.innerHTML='';
+    listaCompleta.forEach((o, idx)=>{
+      const div=document.createElement('div'); div.className='grid-item'+(o.isFolder?(selecionados.has('folder:'+o.path)?' selected':''):(selecionados.has(o.id)?' selected':'')); div.draggable=true;
+      div.innerHTML=`<input type="checkbox" class="grid-check check" ${o.isFolder?(selecionados.has('folder:'+o.path)?'checked':''):(selecionados.has(o.id)?'checked':'')}><div class="grid-icon">${o.isFolder?'📁':'📄'}</div><div class="grid-name">${o.name}</div>`;
+      div.onclick=(e)=>{ handleClickLeft(e, o, idx); };
+      div.ondragstart=e=>{ if(o.isFolder){ e.dataTransfer.setData('from','left'); e.dataTransfer.setData('folder',o.path); } else { const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id); e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id])); } };
+      sL.appendChild(div);
+    });
+  } else {
+    sL.className='stage'; sL.style.display='block'; sL.style.padding='0'; sL.innerHTML='';
+    listaCompleta.forEach((o, idx)=>{
+      const isFolder=o.isFolder;
+      const key=isFolder?'folder:'+o.path:o.id;
+      const isSel=selecionados.has(key);
+      const row=document.createElement('div'); row.className='item-row'+(isSel?' selected':''); row.draggable=true; row.dataset.index=idx;
+      row.innerHTML=`<input type="checkbox" class="check" ${isSel?'checked':''}><div class="item-icon">${isFolder?'📁':'📄'}</div><div class="item-name">${o.name}</div><div class="item-type">${o.type}</div><div class="item-size">${o.size||''}</div><div class="item-date">${o.date||''}</div>`;
+      row.querySelector('.check').onclick=(e)=>{ e.stopPropagation(); if(e.target.checked) selecionados.add(key); else selecionados.delete(key); renderLeft(); };
+      row.addEventListener('dragenter', e=>{ if(isFolder){ e.preventDefault(); row.classList.add('drop-target'); } });
+      row.addEventListener('dragover', e=>{ if(isFolder){ e.preventDefault(); row.classList.add('drop-target'); } });
+      row.addEventListener('dragleave', e=>{ if(!row.contains(e.relatedTarget)) row.classList.remove('drop-target'); });
+      row.addEventListener('drop', async e=>{
+        if(!isFolder) return;
+        e.preventDefault(); row.classList.remove('drop-target');
         const from=e.dataTransfer.getData('from');
         const targetFolder=o.path;
         if(e.dataTransfer.files && e.dataTransfer.files.length>0 &&!from){
@@ -276,82 +301,58 @@ function renderLeft(){
             if(targetFolder.startsWith(folder+'/')){ showDuplicateWarn(`Não pode mover pasta pra dentro dela mesma`); return; }
             const arqs=getArquivosDaPasta(folder);
             const folderName=folder.split('/').pop();
-            let dup=0;
             for(let a of arqs){
               const rel=a.path===folder?'':a.path.slice(folder.length+1);
               const newPath=rel? targetFolder+'/'+folderName+'/'+rel : targetFolder+'/'+folderName;
-              if(ativos.some(x=>x.path===newPath && x.id!==a.id)) dup++; else { a.path=newPath; await save(a); }
+              if(ativos.some(x=>x.path===newPath && x.id!==a.id)) continue;
+              a.path=newPath; await save(a);
             }
-            if(dup>0) showDuplicateWarn(`${dup} já existe(m) em ${targetFolder}/`);
             await carregarTudo();
           } else if(ids.length>0){
-            let dup=0;
             for(let id of ids){
               const a=ativos.find(x=>x.id===id); if(a){
                 const newPath=targetFolder+'/'+a.name;
-                if(ativos.some(x=>x.path===newPath && x.id!==a.id)) dup++; else { a.path=newPath; await save(a); }
+                if(ativos.some(x=>x.path===newPath && x.id!==a.id)) continue;
+                a.path=newPath; await save(a);
               }
             }
-            if(dup>0) showDuplicateWarn(`${dup} já existe(m) no mesmo lugar`);
             await carregarTudo();
           }
         }
       });
-      div.ondragstart=e=>{ e.dataTransfer.setData('from','left'); e.dataTransfer.setData('folder',o.path); };
-      div.onclick=(e)=>{
-        if(e.target.classList.contains('item-check')) return;
-        if(e.ctrlKey||e.metaKey){
-          const key='folder:'+o.path;
-          if(selecionados.has(key)) selecionados.delete(key); else selecionados.add(key);
-        } else if(e.shiftKey && lastSelectedIndex>=0){
-          const all=[...pastas.map(p=>'folder:'+p.path),...ativos.map(a=>a.id)];
-          const start=Math.min(lastSelectedIndex, idx); const end=Math.max(lastSelectedIndex, idx);
-          for(let i=start;i<=end;i++){ if(all[i]) selecionados.add(all[i]); }
-        } else {
-          if(selecionados.size===1 && selecionados.has('folder:'+o.path)) selecionados.clear(); else { selecionados.clear(); selecionados.add('folder:'+o.path); }
-        }
-        lastSelectedIndex=idx;
-        renderLeft();
-      };
-      div.oncontextmenu=e=>{ e.preventDefault(); showCtxMenuLeft(e.clientX, e.clientY, 'folder:'+o.path); };
-      sL.appendChild(div);
-    } else {
-      const div=document.createElement('div'); div.className='item'+(selecionados.has(o.id)?' selected':''); div.draggable=true; div.dataset.id=o.id; div.dataset.index=idx;
-      div.innerHTML=`<input type="checkbox" class="item-check" ${selecionados.has(o.id)?'checked':''}><div class="item-preview">📄</div><div class="item-info"><div class="item-name">${o.name}</div><div class="item-path">${o.path}</div></div>`;
-      div.querySelector('.item-check').onclick=(e)=>{ e.stopPropagation(); if(e.target.checked) selecionados.add(o.id); else selecionados.delete(o.id); renderLeft(); };
-      div.ondragstart=e=>{
-        const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id);
-        e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id]));
-        try{ const url=URL.createObjectURL(o.blob); e.dataTransfer.setData('DownloadURL', `${o.type||'application/octet-stream'}:${o.name}:${url}`); }catch{}
-      };
-      div.onclick=(e)=>{
-        if(e.target.classList.contains('item-check')) return;
-        if(e.ctrlKey||e.metaKey){
-          if(selecionados.has(o.id)) selecionados.delete(o.id); else selecionados.add(o.id);
-        } else if(e.shiftKey && lastSelectedIndex>=0){
-          const pastas=getPastasUnicas();
-          const all=[...pastas.map(p=>'folder:'+p.path),...ativos.map(a=>a.id)];
-          const start=Math.min(lastSelectedIndex, idx); const end=Math.max(lastSelectedIndex, idx);
-          for(let i=start;i<=end;i++){ if(all[i]) selecionados.add(all[i]); }
-        } else {
-          if(selecionados.size===1 && selecionados.has(o.id)) selecionados.clear(); else { selecionados.clear(); selecionados.add(o.id); }
-        }
-        lastSelectedIndex=idx;
-        renderLeft();
-      };
-      div.ondblclick=()=>abrirEditorComId(o.id);
-      div.oncontextmenu=e=>{ e.preventDefault(); showCtxMenuLeft(e.clientX, e.clientY, o.id); };
-      sL.appendChild(div);
-    }
-  });
+      row.ondragstart=e=>{ if(isFolder){ e.dataTransfer.setData('from','left'); e.dataTransfer.setData('folder',o.path); } else { const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id); e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id])); try{ const url=URL.createObjectURL(ativos.find(x=>x.id===o.id)?.blob); e.dataTransfer.setData('DownloadURL', `application/octet-stream:${o.name}:${url}`); }catch{} } };
+      row.onclick=(e)=>{ if(e.target.classList.contains('check')) return; handleClickLeft(e, o, idx); };
+      row.ondblclick=()=>{ if(!isFolder) abrirEditorComId(o.id); else { const arqs=getArquivosDaPasta(o.path); if(arqs[0]) abrirEditorComId(arqs[0].id); } };
+      row.oncontextmenu=e=>{ e.preventDefault(); showCtxMenuLeft(e.clientX, e.clientY, key); };
+      sL.appendChild(row);
+    });
+  }
+}
+function handleClickLeft(e, o, idx){
+  const key=o.isFolder?'folder:'+o.path:o.id;
+  if(e.ctrlKey||e.metaKey){
+    if(selecionados.has(key)) selecionados.delete(key); else selecionados.add(key);
+  } else if(e.shiftKey && lastSelectedIndex>=0){
+    const pastas=getPastasUnicas();
+    const all=[...pastas.map(p=>'folder:'+p.path),...ativos.map(a=>a.id)];
+    const start=Math.min(lastSelectedIndex, idx); const end=Math.max(lastSelectedIndex, idx);
+    for(let i=start;i<=end;i++){ if(all[i]) selecionados.add(all[i]); }
+  } else {
+    if(selecionados.size===1 && selecionados.has(key)) selecionados.clear(); else { selecionados.clear(); selecionados.add(key); }
+  }
+  lastSelectedIndex=idx;
+  renderLeft();
 }
 function showCtxMenuLeft(x,y,id){
   const ctx=document.getElementById('ctxMenu');
   ctx.innerHTML=`
-    <div class="ctx-item" onclick="abrirEditorComId('${id}');hideCtx()">✏️ Abrir <kbd>Enter</kbd></div>
+    <div class="ctx-item" onclick="abrirEditorComId('${id}');hideCtx()">📂 Abrir <kbd>Enter</kbd></div>
     <div class="ctx-item" onclick="renomearSelecionado('${id}');hideCtx()">✏️ Renomear <kbd>F2</kbd></div>
+    <div style="height:1px;background:var(--border);margin:4px 0"></div>
     <div class="ctx-item" onclick="copySelection();hideCtx()">⎘ Copiar <kbd>Ctrl+C</kbd></div>
     <div class="ctx-item" onclick="cutSelection();hideCtx()">✂️ Recortar <kbd>Ctrl+X</kbd></div>
+    <div class="ctx-item" onclick="pasteSelection('');hideCtx()">📋 Colar <kbd>Ctrl+V</kbd></div>
+    <div style="height:1px;background:var(--border);margin:4px 0"></div>
     <div class="ctx-item" onclick="moverEsqParaDir();hideCtx()">→ Mover pra DIR <kbd>F5</kbd></div>
     <div class="ctx-item" style="color:#ff7a7a" onclick="excluirSelecionadosEsq();hideCtx()">🗑️ Excluir <kbd>Del</kbd></div>
   `;
@@ -362,11 +363,11 @@ document.addEventListener('click', e=>{ if(!e.target.closest('#ctxMenu')) hideCt
 function renomearSelecionado(id){
   if(id.startsWith('folder:')){
     const path=id.slice(7);
-    const novo=prompt('Renomear pasta:', path.split('/').pop());
+    const novo=prompt('Renomear pasta (F2 igual PC):', path.split('/').pop());
     if(novo){
       const parent=path.split('/').slice(0,-1).join('/');
       const novoPath=(parent?parent+'/':'')+novo;
-      if(ativos.some(a=>a.path===novoPath || a.path.startsWith(novoPath+'/'))){ showDuplicateWarn(`Já existe ${novoPath} no mesmo lugar`); return; }
+      if(ativos.some(a=>a.path===novoPath || a.path.startsWith(novoPath+'/'))){ showDuplicateWarn(`Já existe ${novoPath}`); return; }
       const arqs=getArquivosDaPasta(path);
       arqs.forEach(async a=>{
         const rel=a.path===path?'':a.path.slice(path.length+1);
@@ -378,19 +379,19 @@ function renomearSelecionado(id){
   } else {
     const o=ativos.find(a=>a.id===id);
     if(o){
-      const novo=prompt('Renomear arquivo:', o.name);
+      const novo=prompt('Renomear arquivo (F2 igual PC):', o.name);
       if(novo){
         const dir=o.path.split('/').slice(0,-1).join('/');
         const novoPath=(dir?dir+'/':'')+novo;
-        if(ativos.some(a=>a.path===novoPath && a.id!==o.id)){ showDuplicateWarn(`Já existe ${novoPath} no mesmo lugar`); return; }
+        if(ativos.some(a=>a.path===novoPath && a.id!==o.id)){ showDuplicateWarn(`Já existe ${novoPath}`); return; }
         o.name=novo; o.path=novoPath;
         save(o).then(()=>carregarTudo());
       }
     }
   }
 }
-function copySelection(){ clipboard=[...selecionados]; clipboardAction='copy'; log(`PC: Ctrl+C - ${clipboard.length} copiados`); }
-function cutSelection(){ clipboard=[...selecionados]; clipboardAction='cut'; log(`PC: Ctrl+X - ${clipboard.length} recortados`); }
+function copySelection(){ clipboard=[...selecionados]; clipboardAction='copy'; log(`Ctrl+C - ${clipboard.length} copiados`); }
+function cutSelection(){ clipboard=[...selecionados]; clipboardAction='cut'; log(`Ctrl+X - ${clipboard.length} recortados`); }
 async function pasteSelection(targetFolder){
   if(!clipboard) return;
   let dup=0;
@@ -426,7 +427,7 @@ async function pasteSelection(targetFolder){
     }
   }
   if(clipboardAction==='cut') clipboard=null;
-  if(dup>0) showDuplicateWarn(`${dup} já existe(m) no mesmo lugar - não duplicado`);
+  if(dup>0) showDuplicateWarn(`${dup} já existe(m) - não duplicado`);
   await carregarTudo();
 }
 function selecionarTodos(){
@@ -446,7 +447,7 @@ function abrirEditor(){
 function renderInstant(){
   const txt=document.getElementById('editArea').value;
   const frame=document.getElementById('editLiveFrame');
-  try{ if(txt.trim().startsWith('<') || txt.includes('<html')) frame.srcdoc=txt; else frame.srcdoc=`<pre style="white-space:pre-wrap;color:#e0e0e0;background:#0a0a0a;padding:12px">${txt.replace(/</g,'&lt;')}</pre>`; }catch(e){ frame.srcdoc=`Erro: ${e.message}`; }
+  try{ if(txt.trim().startsWith('<') || txt.includes('<html')) frame.srcdoc=txt; else frame.srcdoc=`<pre style="white-space:pre-wrap;color:#fff;background:#202020;padding:12px">${txt.replace(/</g,'&lt;')}</pre>`; }catch(e){ frame.srcdoc=`Erro: ${e.message}`; }
   if(arquivoEditando){ arquivoEditando.blob=new Blob([txt],{type:'text/html'}); renderLiveSite(); }
 }
 async function salvarEdicao(){
@@ -467,7 +468,7 @@ async function renderLiveSite(){
   const liveFrame=document.getElementById('liveSiteFrame');
   const indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html'));
   if(indexFile){ let html=await indexFile.blob.text(); liveFrame.srcdoc=html; return; }
-  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#0a0a0a;color:#e0e0e0;padding:12px;font-family:Segoe UI">FORJA - ${ativos.length} itens - PC: Ctrl+A, F2, Del, Ctrl+C/V/X</body></html>`;
+  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#202020;color:#fff;padding:12px;font-family:Segoe UI">FORJA - ${ativos.length} itens - PC Explorer</body></html>`;
 }
 
 // === REPO COMO ANTES - NÃO MEXIDO ===
@@ -520,7 +521,7 @@ function renderRepo(){
   const parts=currentPath?currentPath.split('/').filter(Boolean):[]; let htmlCrumb=`<span onclick="navegarPara('')">🏠 root</span>`; let acc=""; parts.forEach(p=>{ acc+=(acc?"/":"")+p; htmlCrumb+=`<span style="opacity:.3">/</span><span onclick="navegarPara('${acc}')">${p}</span>`; });
   breadcrumb.innerHTML=htmlCrumb+`<span style="margin-left:auto;opacity:.5">${selecionadosDir.size} sel</span>`;
   const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia</div>'; return; }
-  listEl.innerHTML=""; if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const d=document.createElement('div'); d.className='repo-row'; d.innerHTML=`<span>📁..</span>`; d.onclick=()=>navegarPara(up); listEl.appendChild(d); }
+  listEl.innerHTML=""; if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const d=document.createElement('div'); d.className='repo-row'; d.innerHTML=`<span>📁.. voltar</span>`; d.onclick=()=>navegarPara(up); listEl.appendChild(d); }
   items.forEach(item=>{
     const row=document.createElement('div'); row.className='repo-row'+(item.isFolder?' folder-row':'')+(selecionadosDir.has(item.fullPath)?' selected-right':''); row.dataset.path=item.fullPath;
     if(item.isFolder){
@@ -569,13 +570,8 @@ function renderRepo(){
       });
       row.onclick=()=>navegarPara(item.fullPath);
     } else {
-      row.innerHTML=`<div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1"><input type="checkbox" ${selecionadosDir.has(item.fullPath)?'checked':''} onclick="event.stopPropagation();toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"> 📄 ${item.name}</div><div style="display:flex;gap:4px"><button class="btn" style="padding:4px 8px" onclick="event.stopPropagation();abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">Abrir</button></div>`;
-      row.onclick=(e)=>{
-        if(e.target.tagName==='INPUT') return;
-        if(e.ctrlKey||e.metaKey) toggleDir(item.fullPath);
-        else { if(selecionadosDir.size===1 && selecionadosDir.has(item.fullPath)) selecionadosDir.clear(); else { selecionadosDir.clear(); selecionadosDir.add(item.fullPath); } renderRepo(); }
-        document.getElementById('selCountRight').innerText=`${selecionadosDir.size} selecionados DIR`;
-      };
+      row.innerHTML=`<div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1"><input type="checkbox" class="check" ${selecionadosDir.has(item.fullPath)?'checked':''} onclick="event.stopPropagation();toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"> 📄 ${item.name}</div><div style="display:flex;gap:4px"><button class="btn" style="padding:4px 8px" onclick="event.stopPropagation();abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">Abrir</button></div>`;
+      row.onclick=(e)=>{ if(e.target.tagName==='INPUT') return; if(e.ctrlKey||e.metaKey) toggleDir(item.fullPath); else { if(selecionadosDir.size===1 && selecionadosDir.has(item.fullPath)) selecionadosDir.clear(); else { selecionadosDir.clear(); selecionadosDir.add(item.fullPath); } renderRepo(); } document.getElementById('selCountRight').innerText=`${selecionadosDir.size} selecionados DIR`; };
     }
     listEl.appendChild(row);
   });
@@ -598,11 +594,11 @@ async function moverEsqParaDir(){
     try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{}
     await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${targetPath}`,content:b64,sha})});
   }
-  if(dup>0) showDuplicateWarn(`${dup} arquivo(s) já existe(m) no mesmo lugar em DIR`);
+  if(dup>0) showDuplicateWarn(`${dup} já existe(m) no mesmo lugar em DIR`);
   await carregarDadosRepo();
 }
 async function moverDirParaEsq(){ if(selecionadosDir.size===0) return; for(let p of [...selecionadosDir]) await puxarArquivo(p); selecionadosDir.clear(); renderRepo(); }
-function excluirSelecionadosEsq(){ if(selecionados.size===0) return; if(!confirm(`Excluir ${selecionados.size} itens? (Del)`)) return; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); arqs.forEach(a=>delDB(a.id)); } else delDB(key); } selecionados.clear(); setTimeout(()=>carregarTudo(),200); }
+function excluirSelecionadosEsq(){ if(selecionados.size===0) return; if(!confirm(`Excluir ${selecionados.size} itens? (Del igual PC)`)) return; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); arqs.forEach(a=>delDB(a.id)); } else delDB(key); } selecionados.clear(); setTimeout(()=>carregarTudo(),200); }
 function excluirSelecionadosDir(){}
 function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-cfg',JSON.stringify(cfg)); carregarDadosRepo(); abrirGithubOriginal(); }
 function setupDropZones(){
@@ -634,54 +630,27 @@ function selecionarTodosDir(){
 }
 setupDropZones();
 
-// === ATALHOS DE TECLAS DE PC COMO PEDIU ===
 document.addEventListener('keydown', e=>{
-  const activeIsInput=e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA';
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='a' &&!activeIsInput){
+  const isInput=e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA';
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='a' &&!isInput){
     e.preventDefault();
-    if(document.getElementById('repoViewFallback').style.display!=='none'){
-      toggleSelectAllRight(true);
-    } else {
-      toggleSelectAllLeft(true);
-    }
-    log('PC: Ctrl+A - Selecionar todos');
+    if(document.getElementById('repoViewFallback').style.display!=='none') toggleSelectAllRight(true);
+    else toggleSelectAllLeft(true);
   }
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='c' &&!activeIsInput){
-    e.preventDefault(); copySelection();
-  }
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='x' &&!activeIsInput){
-    e.preventDefault(); cutSelection();
-  }
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='v' &&!activeIsInput){
-    e.preventDefault(); pasteSelection(currentPath||'');
-  }
-  if(e.key==='Delete' &&!activeIsInput){
-    e.preventDefault();
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='c' &&!isInput){ e.preventDefault(); copySelection(); }
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='x' &&!isInput){ e.preventDefault(); cutSelection(); }
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='v' &&!isInput){ e.preventDefault(); pasteSelection(currentPath||''); }
+  if(e.key==='Delete' &&!isInput){
     if(selecionados.size>0) excluirSelecionadosEsq();
-    if(selecionadosDir.size>0) excluirSelecionadosDir();
   }
-  if(e.key==='F2' &&!activeIsInput){
+  if(e.key==='F2' &&!isInput){
     e.preventDefault();
-    if(selecionados.size===1){
-      const id=[...selecionados][0];
-      renomearSelecionado(id);
-    }
+    if(selecionados.size===1){ const id=[...selecionados][0]; renomearSelecionado(id); }
   }
-  if(e.key==='F5' &&!activeIsInput){
-    e.preventDefault(); moverEsqParaDir();
-  }
-  if(e.key==='F6' &&!activeIsInput){
-    e.preventDefault(); moverDirParaEsq();
-  }
-  if(e.key==='Escape'){
-    selecionados.clear(); selecionadosDir.clear();
-    renderLeft(); renderRepo();
-    hideCtx();
-  }
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){
-    e.preventDefault();
-    if(document.getElementById('editModal').style.display==='flex') salvarEdicao();
-  }
+  if(e.key==='F5' &&!isInput){ e.preventDefault(); moverEsqParaDir(); }
+  if(e.key==='F6' &&!isInput){ e.preventDefault(); moverDirParaEsq(); }
+  if(e.key==='Escape'){ selecionados.clear(); selecionadosDir.clear(); renderLeft(); renderRepo(); hideCtx(); }
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); if(document.getElementById('editModal').style.display==='flex') salvarEdicao(); }
 });
 </script>
 </body>
