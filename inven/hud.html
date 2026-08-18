@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>IRON MAN HUD - Camera Real</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;overflow:hidden;font-family:'Orbitron',monospace;color:#00f0ff}
+#cam{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+#overlay{position:fixed;inset:0;pointer-events:none}
+.vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,.8) 100%);pointer-events:none}
+.scanline{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,240,255,.03) 3px);pointer-events:none}
+
+/* CIRCULOS */
+.circle{position:absolute;border-radius:50%;border:1px solid currentColor}
+.c-blue{color:#00e5ff;box-shadow:0 0 15px #00e5ff, inset 0 0 15px rgba(0,229,255,.3)}
+.c-red{color:#ff0a3a;box-shadow:0 0 15px #ff0a3a, inset 0 0 10px rgba(255,10,58,.3)}
+
+@keyframes rot{to{transform:rotate(360deg)}}
+@keyframes rotRev{to{transform:rotate(-360deg)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.05)}}
+
+/* Top left */
+.top-left{position:absolute;top:20px;left:20px;display:flex;gap:12px}
+.tl{width:42px;height:42px;border-radius:50%;border:2px solid #00e5ff;display:flex;align-items:center;justify-content:center;position:relative}
+.tl::after{content:'';position:absolute;inset:6px;border:1px dashed rgba(0,229,255,.6);border-radius:50%;animation:rot 3s linear infinite}
+.tl.red{border-color:#ff0a3a;color:#ff0a3a}
+.tl.red::after{border-color:rgba(255,10,58,.6);animation:rotRev 2s linear infinite}
+
+/* Bottom left big */
+.bl-big{position:absolute;left:18px;bottom:18px;width:128px;height:128px}
+.bl-big .outer{position:absolute;inset:0;border:3px solid #00e5ff;border-radius:50%;border-top-color:transparent;border-left-color:transparent;animation:rot 1.5s linear infinite;box-shadow:0 0 20px #00e5ff}
+.bl-big .inner{position:absolute;inset:18px;border:1px solid rgba(0,229,255,.8);border-radius:50%}
+.bl-big .inner2{position:absolute;inset:32px;border:2px solid #00e5ff;border-radius:50%;animation:pulse 2s ease-in-out infinite}
+.bl-big .core{position:absolute;inset:52px;background:radial-gradient(circle,#00e5ff,transparent);border-radius:50%;opacity:.8}
+
+/* Bottom right small blue */
+.br-small{position:absolute;right:24px;bottom:24px;width:52px;height:52px;border:2px solid #00e5ff;border-radius:50%;animation:pulse 2s infinite;box-shadow:0 0 15px #00e5ff}
+.br-small::before{content:'';position:absolute;inset:8px;border:1px solid #00e5ff;border-radius:50%;animation:rot 2s linear infinite}
+
+/* Right side red */
+.right-panel{position:absolute;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:18px}
+.r-circle{width:88px;height:88px;border:2px solid #ff0a3a;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 20px rgba(255,10,58,.6), inset 0 0 20px rgba(255,10,58,.2)}
+.r-circle::before{content:'';position:absolute;inset:-6px;border:1px dashed rgba(255,10,58,.5);border-radius:50%;animation:rot 4s linear infinite}
+.r-circle::after{content:'';position:absolute;inset:6px;border:1px solid rgba(255,10,58,.4);border-radius:50%}
+.r-circle.big{width:132px;height:132px;border-width:3px}
+.r-circle .r-text{font-size:42px;font-weight:900;color:#ff0a3a;text-shadow:0 0 10px #ff0a3a}
+.r-circle.big .r-text{font-size:54px}
+.r-label{font-family:'Share Tech Mono';font-size:10px;color:#ff0a3a;letter-spacing:2px;margin-top:-8px}
+.r-line{width:1px;height:38px;background:linear-gradient(to bottom,#ff0a3a,transparent)}
+
+/* Central frame */
+.center-frame{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:72%;height:62%;border:1px solid rgba(0,229,255,.5);box-shadow:0 0 30px rgba(0,229,255,.15), inset 0 0 40px rgba(0,229,255,.05)}
+.center-frame::before{content:'';position:absolute;top:-1px;left:-1px;width:24px;height:24px;border-top:2px solid #00e5ff;border-left:2px solid #00e5ff}
+.center-frame::after{content:'';position:absolute;bottom:-1px;right:-1px;width:24px;height:24px;border-bottom:2px solid #00e5ff;border-right:2px solid #00e5ff}
+
+/* Red connecting lines - like video */
+.data-line{position:absolute;height:1px;background:#ff0a3a;transform-origin:left}
+.data-box{position:absolute;border:1px solid #ff0a3a;padding:4px 8px;background:rgba(255,10,58,.08);font-family:'Share Tech Mono';font-size:9px;color:#ff6b86;letter-spacing:1px}
+
+/* Hologram canvas */
+#holo{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:460px;height:280px;pointer-events:none}
+
+/* RAHUL Text */
+.rahul{position:absolute;left:50%;top:50%;transform:translate(-50%,-10%);font-size:5vw;font-weight:900;letter-spacing:4px;display:flex;gap:8px;opacity:0;animation:showRahul 12s ease-in-out infinite}
+.rahul span:first-child{color:#ff0a3a;text-shadow:0 0 20px #ff0a3a}
+.rahul span:last-child{color:#00e5ff;text-shadow:0 0 20px #00e5ff}
+@keyframes showRahul{0%,55%{opacity:0;transform:translate(-50%,20%) scale(.9)}60%,85%{opacity:1;transform:translate(-50%,-10%) scale(1)}90%,100%{opacity:0}}
+
+#startBtn{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;background:rgba(0,0,0,.8);border:2px solid #00e5ff;color:#00e5ff;padding:18px 36px;font-family:'Orbitron';font-size:16px;letter-spacing:3px;cursor:pointer;box-shadow:0 0 30px #00e5ff;backdrop-filter:blur(10px);pointer-events:auto}
+#startBtn:hover{background:rgba(0,229,255,.15)}
+
+.info{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-family:'Share Tech Mono';font-size:9px;color:rgba(0,229,255,.6);letter-spacing:2px}
+</style>
+</head>
+<body>
+<video id="cam" autoplay muted playsinline></video>
+<button id="startBtn">▶ ATIVAR VISOR - TOQUE AQUI</button>
+
+<div id="overlay">
+  <div class="vignette"></div>
+  <div class="scanline"></div>
+  <canvas id="holo"></canvas>
+
+  <div class="top-left">
+    <div class="tl"><div style="width:8px;height:8px;background:#00e5ff;border-radius:50%;box-shadow:0 0 8px #00e5ff"></div></div>
+    <div class="tl red"><span style="font-size:14px;font-weight:900">X</span></div>
+  </div>
+
+  <div class="center-frame">
+    <div class="data-box" style="top:-26px;left:0">PROFILE // 001</div>
+    <div class="data-box" style="top:-26px;right:0">DATA SOURCE: CAM_LIVE</div>
+  </div>
+
+  <div class="bl-big">
+    <div class="outer"></div>
+    <div class="inner"></div>
+    <div class="inner2"></div>
+    <div class="core"></div>
+  </div>
+
+  <div class="br-small"></div>
+
+  <div class="right-panel">
+    <div class="r-circle"><span class="r-text">R</span></div>
+    <div class="r-label">SCAN // 06</div>
+    <div class="r-line"></div>
+    <div class="r-circle big"><span class="r-text">R</span></div>
+    <div class="r-label">RAHUL CHILLALE</div>
+    <div class="r-line" style="height:60px"></div>
+    <div class="r-circle" style="width:62px;height:62px"><span class="r-text" style="font-size:28px">●</span></div>
+  </div>
+
+  <!-- linhas vermelhas conectoras -->
+  <div class="data-line" style="right:156px;top:42%;width:80px;transform:rotate(-12deg)"></div>
+  <div class="data-box" style="right:240px;top:39%">OBJECT_ID: 4421</div>
+  <div class="data-line" style="right:156px;top:58%;width:110px;transform:rotate(14deg)"></div>
+  <div class="data-box" style="right:270px;top:58%">SYS // ONLINE</div>
+
+  <div class="rahul"><span>RAHUL</span><span>CHILLALE</span></div>
+
+  <div class="info">J.A.R.V.I.S HUD v4.2 • REC ● • 60FPS • CAM LIVE</div>
+</div>
+
+<script>
+const video = document.getElementById('cam');
+const btn = document.getElementById('startBtn');
+const canvas = document.getElementById('holo');
+const ctx = canvas.getContext('2d');
+
+function resize(){ canvas.width=460*2; canvas.height=280*2; canvas.style.width='460px'; canvas.style.height='280px'; ctx.scale(2,2); }
+resize();
+
+let buildings=[];
+for(let i=0;i<14;i++){
+  buildings.push({x: Math.random()*400+30, w: 10+Math.random()*18, h: 20+Math.random()*90, off: Math.random()*100})
+}
+
+let t=0;
+function drawHolo(){
+  ctx.clearRect(0,0,460,280);
+  t+=0.015;
+  ctx.strokeStyle='rgba(0,255,157,0.9)';
+  ctx.lineWidth=1;
+  ctx.shadowBlur=12; ctx.shadowColor='#00ff9d';
+  // grid chão
+  ctx.beginPath();
+  for(let y=200;y<260;y+=12){
+    ctx.moveTo(0,y); ctx.lineTo(460,y);
+  }
+  ctx.stroke();
+  ctx.shadowBlur=0;
+
+  // prédios wireframe rotacionando
+  buildings.forEach((b,i)=>{
+    let sway = Math.sin(t*1.2 + b.off*0.1)*2;
+    let x = b.x + sway;
+    let baseY = 200;
+    let h = b.h + Math.sin(t*2 + i)*6;
+
+    ctx.strokeStyle=`rgba(0,255,${150+i*8},${0.8+Math.sin(t+i)*0.2})`;
+    ctx.lineWidth=1.2;
+    ctx.strokeRect(x, baseY - h, b.w, h);
+    // topo
+    ctx.beginPath();
+    ctx.moveTo(x, baseY - h);
+    ctx.lineTo(x + b.w*0.4, baseY - h - 8);
+    ctx.lineTo(x + b.w*1.4, baseY - h - 8);
+    ctx.lineTo(x + b.w, baseY - h);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x + b.w*0.4, baseY - h - 8);
+    ctx.lineTo(x + b.w*0.4, baseY - h - 8 + h);
+    ctx.stroke();
+
+    // pontos dados
+    ctx.fillStyle='rgba(0,255,157,0.8)';
+    if(Math.random()>0.7) ctx.fillRect(x+2, baseY - h - 10 + Math.random()*6, 2, 2);
+  });
+
+  // scan line
+  let sy = 80 + Math.sin(t*1.5)*60;
+  ctx.strokeStyle='rgba(0,229,255,0.6)'; ctx.beginPath(); ctx.moveTo(0,sy); ctx.lineTo(460,sy); ctx.stroke();
+
+  requestAnimationFrame(drawHolo);
+}
+drawHolo();
+
+async function startCam(){
+  try{
+    const s = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}},audio:false});
+    video.srcObject=s;
+    btn.style.display='none';
+  }catch(e){
+    alert('Erro câmera: '+e.message+'\nUse HTTPS e permita câmera. No iPhone use Safari.');
+  }
+}
+btn.addEventListener('click', startCam);
+// tenta auto
+startCam().catch(()=>{});
+</script>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+</html>
+
+
