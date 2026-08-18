@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FORJA COMPLETO - PC Explorer - sistemak/korvil-app</title>
+<title>FORJA COMPLETO IGUAL NAS DUAS TELAS - sistemak/korvil-app</title>
 <style>
 :root{--neon:#0078d4;--bg:#202020;--panel:#2b2b2b;--item:#323232;--item-hover:#3a3a3a;--border:#3f3f3f;--text:#ffffff;--text-dim:#a0a0a0;--sel:#0078d4;--sel-bg:rgba(0,120,212,.2)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -21,32 +21,34 @@ body{display:flex;flex-direction:column}
 #app{flex:1;display:flex;overflow:hidden;min-height:0}
 #left,#right{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;background:var(--bg);position:relative}
 #left{border-right:1px solid var(--border)}
+#left.active,#right.active{outline:2px solid var(--sel);outline-offset:-2px}
 .top{padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap}
-.toolbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--border);font-size:12px;flex-shrink:0}
-.path-bar{flex:1;background:var(--item);border:1px solid var(--border);border-radius:4px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:12px}
+.toolbar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--border);font-size:12px;flex-shrink:0;flex-wrap:wrap}
+.path-bar{flex:1;background:var(--item);border:1px solid var(--border);border-radius:4px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:12px;min-width:0}
 .list-header{display:flex;align-items:center;padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-dim);font-weight:600;gap:12px;position:sticky;top:0;z-index:2}
 .item-row{display:flex;align-items:center;padding:0 12px;height:36px;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;gap:12px;transition:.08s}
 .item-row:hover{background:var(--item-hover)}
 .item-row.selected{background:var(--sel-bg);color:#fff}
 .item-row.drop-target{background:rgba(0,255,136,.15)!important;border:1px dashed #00ff88!important}
 .item-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.item-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
-.item-type{width:80px;color:var(--text-dim);font-size:11px;flex-shrink:0}
-.item-size{width:80px;color:var(--text-dim);font-size:11px;text-align:right;flex-shrink:0}
-.item-date{width:120px;color:var(--text-dim);font-size:11px;flex-shrink:0}
+.item-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;min-width:0}
+.item-type{width:70px;color:var(--text-dim);font-size:11px;flex-shrink:0}
+.item-size{width:70px;color:var(--text-dim);font-size:11px;text-align:right;flex-shrink:0}
+.item-date{width:110px;color:var(--text-dim);font-size:11px;flex-shrink:0}
 .check{width:16px;height:16px;accent-color:var(--sel);cursor:pointer;flex-shrink:0}
 .dropzone{position:absolute;inset:8px;border:2px dashed var(--sel);border-radius:8px;background:rgba(0,120,212,.1);z-index:20;display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px;pointer-events:none;color:var(--sel);font-weight:600}
 .dropzone.show{display:flex;pointer-events:auto}
 #repoViewFallback{flex:1;overflow:auto;background:var(--bg);display:flex;flex-direction:column;min-height:0}
 .repo-breadcrumb{padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;gap:4px;flex-wrap:wrap;font-size:12px;flex-shrink:0;align-items:center}
 .repo-breadcrumb span{cursor:pointer;padding:4px 8px;border-radius:4px;background:var(--item);border:1px solid var(--border)}
+.repo-list{flex:1;overflow:auto;min-height:0}
 .repo-row{padding:0 12px;height:36px;background:var(--bg);border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:12px;font-size:12px;cursor:pointer}
 .repo-row:hover{background:var(--item-hover)}
 .repo-row.selected-right{background:var(--sel-bg);border-left:3px solid var(--sel)}
 .repo-row.drop-target{background:rgba(0,255,136,.15)!important;border:1px dashed #00ff88!important}
 .repo-row.folder-row{border-left:3px solid #ffcc00}
 #githubFrame{flex:1;width:100%;border:0;background:#0d1117;display:flex;min-height:0}
-#liveViewer{height:36%;min-height:200px;max-height:55%;border-top:1px solid var(--border);background:var(--panel);display:flex;flex-direction:column;flex-shrink:0}
+#liveViewer{height:32%;min-height:180px;max-height:50%;border-top:1px solid var(--border);background:var(--panel);display:flex;flex-direction:column;flex-shrink:0}
 .viewer-top{height:36px;min-height:36px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:12px;gap:8px;flex-shrink:0}
 .viewer-content{flex:1;display:flex;overflow:hidden;min-height:0}
 .viewer-preview{flex:1;background:var(--bg);display:flex;overflow:hidden;min-width:0}
@@ -74,8 +76,8 @@ input.in{background:var(--item);border:1px solid var(--border);color:var(--text)
 <div id="forja-header">
   <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
     <div class="logo">F</div>
-    <b style="font-size:14px;font-weight:600">FORJA COMPLETO - PC Explorer</b>
-    <span class="badge" id="syncBadge">Ctrl+A todos • F2 renomeia • Del exclui • Commit fix</span>
+    <b style="font-size:14px;font-weight:600">FORJA - Igual nas duas telas</b>
+    <span class="badge" id="syncBadge">Clique na tela pra ativar - atalhos iguais PC</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center">
     <button class="btn" onclick="document.getElementById('folder').click()">📁 Pasta</button>
@@ -84,60 +86,69 @@ input.in{background:var(--item);border:1px solid var(--border);color:var(--text)
 </div>
 
 <div id="app">
-  <div id="left">
+  <div id="left" class="active" onclick="setActivePanel('left')">
     <div class="top">
-      <input type="checkbox" class="check" id="checkAllLeft" onclick="toggleSelectAllLeft(this.checked)" title="Selecionar todos (Ctrl+A)">
-      <b>ESQ: Este Computador</b>
+      <input type="checkbox" class="check" id="checkAllLeft" onclick="toggleSelectAllLeft(this.checked)" title="Selecionar todos ESQ (Ctrl+A)">
+      <b>ESQ: Local</b>
       <button class="btn primary" onclick="selecionarTodos()">☑ Todos</button>
       <span id="selCount" class="badge">0 selecionados</span>
-      <div style="margin-left:auto;display:flex;gap:6px">
+      <div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn" onclick="moverEsqParaDir()">→ DIR F5</button>
-        <button class="btn" onclick="copySelection()">⎘ Ctrl+C</button>
+        <button class="btn" onclick="copySelection()">⎘ C Ctrl+C</button>
+        <button class="btn" onclick="cutSelection()">✂️ X Ctrl+X</button>
+        <button class="btn" onclick="pasteSelection('')">📋 V Ctrl+V</button>
+        <button class="btn" onclick="renomearSelecionadoAtual()">✏️ F2</button>
+        <button class="btn" style="border-color:#ff7a7a;color:#ff7a7a" onclick="excluirSelecionadosEsq()">🗑️ Del</button>
       </div>
     </div>
     <div class="toolbar">
-      <div class="path-bar"><span>🏠</span><span>/</span><span id="leftPath">Arraste pasta inteira exata pra qualquer lugar</span></div>
+      <div class="path-bar"><span>🏠</span><span id="leftPath">ESQ - Pasta exata - arraste pra qualquer lugar</span></div>
     </div>
     <div class="list-header">
       <input type="checkbox" class="check" style="visibility:hidden">
       <div style="width:20px"></div>
       <div style="flex:1">Nome</div>
-      <div style="width:80px">Tipo</div>
-      <div style="width:80px;text-align:right">Tamanho</div>
-      <div style="width:120px">Modificado</div>
+      <div style="width:70px">Tipo</div>
+      <div style="width:70px;text-align:right">Tamanho</div>
+      <div style="width:110px">Modificado</div>
     </div>
     <div class="stage" id="sLeft" style="display:block;padding:0"></div>
-    <div class="status-bar"><span id="leftStatus">0 itens</span><span id="leftSelStatus">• 0 selecionados</span><span style="margin-left:auto">Ctrl+A, Ctrl+clique, Shift+clique, F2, Del, Ctrl+C/V</span></div>
-    <div class="dropzone" id="dropEsq"><h3>📁 Soltar aqui - exato onde soltar</h3></div>
+    <div class="status-bar"><span id="leftStatus">0 itens</span><span id="leftSelStatus">• 0 selecionados</span><span style="margin-left:auto">Ativo: Ctrl+A todos, Ctrl+clique, Shift+clique, F2, Del, Ctrl+C/X/V</span></div>
+    <div class="dropzone" id="dropEsq"><h3>📁 Soltar aqui ESQ - exato onde soltar</h3></div>
   </div>
 
-  <div id="right">
+  <div id="right" onclick="setActivePanel('right')">
     <div class="top" style="flex-direction:column;align-items:flex-start;gap:8px">
       <div style="display:flex;gap:6px;flex-wrap:wrap;width:100%;align-items:center">
         <b style="font-size:12px">DIR: Repositório - COMO ANTES</b>
         <input id="ghO" class="in" value="sistemak" style="width:70px">
         <input id="ghR" class="in" value="korvil-app" style="width:90px">
-        <input id="REPO_TOKEN" type="password" class="in" placeholder="REPO_TOKEN com permissão repo" style="flex:1;min-width:160px">
+        <input id="REPO_TOKEN" type="password" class="in" placeholder="REPO_TOKEN repo" style="flex:1;min-width:140px">
         <button class="btn" onclick="saveCfg()">Salvar</button>
         <button class="btn neon" onclick="abrirGithubOriginal()">▶ GITHUB ORIGINAL</button>
         <button class="btn" onclick="toggleFallback()">📁 EXPLORER COM 🗑️</button>
-        <button class="btn" onclick="carregarDadosRepo()">🔄 Atualizar</button>
+        <button class="btn" onclick="carregarDadosRepo()">🔄</button>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;align-items:center">
-        <input type="checkbox" class="check" id="checkAllRight" onclick="toggleSelectAllRight(this.checked)">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;width:100%;align-items:center">
+        <input type="checkbox" class="check" id="checkAllRight" onclick="toggleSelectAllRight(this.checked)" title="Selecionar todos DIR (Ctrl+A)">
         <button class="btn primary" onclick="selecionarTodosDir()">☑ Todos DIR</button>
         <span id="selCountRight" class="badge">0 selecionados DIR</span>
         <button class="btn" onclick="moverDirParaEsq()">← ESQ F6</button>
-        <span style="margin-left:auto;font-size:11px;opacity:.7" id="currentPathDisplay">sistemak/korvil-app - Commit fix branch main</span>
+        <button class="btn" onclick="copySelectionDir()">⎘ C Ctrl+C</button>
+        <button class="btn" onclick="cutSelectionDir()">✂️ X Ctrl+X</button>
+        <button class="btn" onclick="pasteSelectionDir()">📋 V Ctrl+V</button>
+        <button class="btn" onclick="renomearSelecionadoDir()">✏️ F2</button>
+        <button class="btn" style="border-color:#ff7a7a;color:#ff7a7a" onclick="excluirSelecionadosDir()">🗑️ Del</button>
+        <span style="margin-left:auto;font-size:11px;opacity:.7" id="currentPathDisplay">sistemak/korvil-app</span>
       </div>
     </div>
     <iframe id="githubFrame" src="https://github.com/sistemak/korvil-app" style="flex:1;width:100%;border:0;background:#0d1117;display:flex;min-height:0"></iframe>
     <div id="repoViewFallback" style="flex:1;min-height:0;display:none;background:var(--bg);flex-direction:column">
       <div class="repo-breadcrumb" id="breadcrumb"><span onclick="navegarPara('')">🏠 root</span></div>
       <div class="repo-list" id="repoList" style="flex:1;overflow:auto"></div>
-      <div class="status-bar"><span id="rightStatus">0 itens DIR</span></div>
+      <div class="status-bar"><span id="rightStatus">0 itens DIR</span><span id="rightSelStatus">• 0 selecionados DIR</span><span style="margin-left:auto">Ativo: Ctrl+A, Ctrl+clique, Shift+clique, F2, Del, Ctrl+C/X/V iguais ESQ</span></div>
     </div>
-    <div class="dropzone" id="dropDir"><h3>📁 Soltar aqui no repo - já salva na main e Pages atualiza</h3></div>
+    <div class="dropzone" id="dropDir"><h3>📁 Soltar aqui DIR - exato onde soltar - branch main Pages atualiza</h3></div>
   </div>
 </div>
 
@@ -146,15 +157,14 @@ input.in{background:var(--item);border:1px solid var(--border);color:var(--text)
 <div id="liveViewer">
   <div class="viewer-top">
     <div style="display:flex;gap:12px;align-items:center;flex:1;min-width:0">
-      <span style="font-weight:600">🔨 Preview - Log de commits</span>
-      <span style="opacity:.6;font-size:11px">Fix: branch main + SHA + base64 UTF8 + aviso duplicado</span>
+      <span style="font-weight:600">🔨 Log - Commits fix branch main</span>
+      <span style="opacity:.6;font-size:11px">Clique na tela ESQ ou DIR pra ativar - atalhos iguais nas duas - F2, Del, Ctrl+A/C/X/V, F5/F6</span>
     </div>
-    <span id="viewerType" class="badge">PC Fix</span>
   </div>
   <div class="viewer-content">
     <div class="viewer-preview"><iframe id="liveSiteFrame"></iframe></div>
   </div>
-  <div id="log">[LOG] Fix commits falhando sozinho + Pages não atualiza - agora com branch main explícito</div>
+  <div id="log">[LOG] Funções iguais nas duas telas - atalhos PC certos - clique na tela pra ativar</div>
 </div>
 
 <div id="ctxMenu"></div>
@@ -163,7 +173,7 @@ input.in{background:var(--item);border:1px solid var(--border);color:var(--text)
 <input type="file" id="f" hidden multiple><input type="file" id="folder" hidden webkitdirectory multiple>
 
 <script>
-let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set(), currentPath="", arquivoEditando=null, lastSelectedIndex=-1, clipboard=null, clipboardAction=null;
+let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set(), currentPath="", arquivoEditando=null, lastSelectedIndex=-1, lastSelectedIndexDir=-1, clipboard=null, clipboardAction=null, clipboardIsDir=false, activePanel='left';
 let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-cfg')||'{}');}catch(e){cfg={}}
 if(!cfg.owner) cfg.owner='sistemak'; if(!cfg.repo) cfg.repo='korvil-app';
 ghO.value=cfg.owner; ghR.value=cfg.repo; document.getElementById('REPO_TOKEN').value=cfg.REPO_TOKEN||'';
@@ -181,6 +191,12 @@ function showDuplicateWarn(msg){
   w.style.display='block';
   setTimeout(()=>w.style.display='none', 4000);
   log(`DUPLICADO: ${msg}`);
+}
+function setActivePanel(panel){
+  activePanel=panel;
+  document.getElementById('left').classList.toggle('active', panel==='left');
+  document.getElementById('right').classList.toggle('active', panel==='right');
+  document.getElementById('syncBadge').innerText=`Ativo: ${panel.toUpperCase()} - Ctrl+A todos, F2 renomeia, Del exclui, Ctrl+C/X/V`;
 }
 const fEl=document.getElementById('f'), folderEl=document.getElementById('folder');
 fEl.onchange=e=>{ if(e.target.files.length) handleFiles(e.target.files); e.target.value=''; };
@@ -228,7 +244,7 @@ async function handleDataTransferItems(items, targetFolder){
 }
 async function carregarTudo(){ ativos=await getAll(); renderLeft(); renderLiveSite(); document.getElementById('leftStatus').innerText=`${ativos.length} itens • ${getPastasUnicas().length} pastas`; document.getElementById('leftSelStatus').innerText=`• ${selecionados.size} selecionados`; }
 
-// === FIX COMMIT FALHA + PAGES NÃO ATUALIZA ===
+// === FIX COMMIT ===
 function toBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
 async function toBase64FromBlob(blob){
   const buf = await blob.arrayBuffer();
@@ -239,41 +255,22 @@ async function toBase64FromBlob(blob){
 }
 async function githubPutFile(path, blobOrText, message){
   const REPO_TOKEN = getREPO_TOKEN();
-  if(!REPO_TOKEN){ alert('REPO_TOKEN vazio - precisa token com permissão repo'); return false; }
+  if(!REPO_TOKEN){ alert('REPO_TOKEN vazio'); return false; }
   const owner = ghO.value.trim();
   const repo = ghR.value.trim();
   const encodedPath = path.split('/').map(p=>encodeURIComponent(p)).join('/');
-
   let sha = null;
   try{
     const check = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}?ref=main`, {
       headers:{Authorization:`token ${REPO_TOKEN}`, Accept:'application/vnd.github.v3+json'}
     });
-    if(check.ok){
-      const data = await check.json();
-      sha = data.sha;
-    } else if(check.status!==404){
-      const err = await check.text();
-      log(`❌ Falha checar ${path}: ${check.status} ${err.slice(0,300)}`);
-      if(check.status===401) showDuplicateWarn(`REPO_TOKEN inválido/expirado`);
-      if(check.status===403) showDuplicateWarn(`Token sem permissão repo - marque repo em github.com/settings/tokens`);
-      return false;
-    }
-  }catch(e){
-    log(`❌ Erro rede checar ${path}: ${e.message}`);
-    return false;
-  }
-
+    if(check.ok){ const data = await check.json(); sha = data.sha; }
+    else if(check.status!==404){ const err = await check.text(); log(`❌ Falha checar ${path}: ${check.status}`); return false; }
+  }catch(e){ log(`❌ Erro rede ${path}: ${e.message}`); return false; }
   let contentB64;
-  if(typeof blobOrText === 'string'){
-    contentB64 = toBase64(blobOrText);
-  } else {
-    contentB64 = await toBase64FromBlob(blobOrText);
-  }
-
+  if(typeof blobOrText === 'string'){ contentB64 = toBase64(blobOrText); } else { contentB64 = await toBase64FromBlob(blobOrText); }
   const body = { message: message, content: contentB64, branch: "main" };
   if(sha) body.sha = sha;
-
   try{
     const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}`, {
       method:'PUT',
@@ -281,20 +278,30 @@ async function githubPutFile(path, blobOrText, message){
       body: JSON.stringify(body)
     });
     const resData = await res.json();
-    if(!res.ok){
-      log(`❌ COMMIT FALHOU ${path}: ${res.status} ${JSON.stringify(resData).slice(0,600)}`);
-      if(res.status===409) showDuplicateWarn(`Conflito SHA em ${path} - clique 🔄 Atualizar e tente de novo`);
-      if(res.status===401) showDuplicateWarn(`REPO_TOKEN inválido`);
-      if(res.status===403) showDuplicateWarn(`Token sem permissão repo`);
-      if(res.status===422) showDuplicateWarn(`Arquivo >1MB ou path inválido: ${path}`);
-      return false;
-    }
-    log(`✅ Commit OK: ${path} -> main - Pages atualiza em 30-60s`);
+    if(!res.ok){ log(`❌ COMMIT FALHOU ${path}: ${res.status}`); if(res.status===401) showDuplicateWarn(`Token inválido`); if(res.status===403) showDuplicateWarn(`Token sem permissão repo`); return false; }
+    log(`✅ Commit OK: ${path} -> main`);
     return true;
-  }catch(e){
-    log(`❌ Erro commit ${path}: ${e.message}`);
-    return false;
-  }
+  }catch(e){ log(`❌ Erro commit ${path}: ${e.message}`); return false; }
+}
+async function githubDeleteFile(path, message){
+  const REPO_TOKEN = getREPO_TOKEN();
+  if(!REPO_TOKEN) return false;
+  const owner = ghO.value.trim();
+  const repo = ghR.value.trim();
+  const encodedPath = path.split('/').map(p=>encodeURIComponent(p)).join('/');
+  try{
+    const check = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}?ref=main`, {
+      headers:{Authorization:`token ${REPO_TOKEN}`}
+    });
+    if(!check.ok) return false;
+    const data = await check.json();
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}`, {
+      method:'DELETE',
+      headers:{Authorization:`token ${REPO_TOKEN}`, 'Content-Type':'application/json'},
+      body: JSON.stringify({message: message, sha: data.sha, branch: "main"})
+    });
+    return res.ok;
+  }catch(e){ return false; }
 }
 
 function toggleSelectAllLeft(checked){
@@ -316,14 +323,14 @@ function renderLeft(){
   document.getElementById('leftSelStatus').innerText=`• ${selecionados.size} selecionados`;
   const pastas=getPastasUnicas();
   const listaCompleta=[...pastas.map(p=>({isFolder:true, path:p.path, name:p.path.split('/').pop()+'/', count:p.count, date:'', size:'', type:'Pasta'})),...ativos.map(a=>({isFolder:false, id:a.id, path:a.path, name:a.name, size:(a.size/1024).toFixed(1)+' KB', date:new Date(a.date).toLocaleDateString(), type:a.ext||'Arquivo'}))];
-  if(listaCompleta.length===0){ sL.innerHTML=`<div style="text-align:center;opacity:.5;padding:40px"><div style="font-size:48px">📁</div><div style="margin-top:12px">Esta pasta está vazia</div><div style="font-size:11px;opacity:.6;margin-top:8px">Arraste arquivos ou pastas aqui<br>Ctrl+A todos, Ctrl+clique individual, Shift+clique intervalo</div></div>`; return; }
+  if(listaCompleta.length===0){ sL.innerHTML=`<div style="text-align:center;opacity:.5;padding:40px"><div style="font-size:48px">📁</div><div style="margin-top:12px">Esta pasta está vazia</div><div style="font-size:11px;opacity:.6;margin-top:8px">Arraste aqui - Ctrl+A todos, F2 renomeia, Del exclui</div></div>`; return; }
   sL.innerHTML='';
   listaCompleta.forEach((o, idx)=>{
     const key=o.isFolder?'folder:'+o.path:o.id;
     const isSel=selecionados.has(key);
     const row=document.createElement('div'); row.className='item-row'+(isSel?' selected':''); row.draggable=true; row.dataset.index=idx;
     row.innerHTML=`<input type="checkbox" class="check" ${isSel?'checked':''}><div class="item-icon">${o.isFolder?'📁':'📄'}</div><div class="item-name">${o.name}</div><div class="item-type">${o.type}</div><div class="item-size">${o.size||''}</div><div class="item-date">${o.date||''}</div>`;
-    row.querySelector('.check').onclick=(e)=>{ e.stopPropagation(); if(e.target.checked) selecionados.add(key); else selecionados.delete(key); renderLeft(); };
+    row.querySelector('.check').onclick=(e)=>{ e.stopPropagation(); if(e.target.checked) selecionados.add(key); else selecionados.delete(key); renderLeft(); setActivePanel('left'); };
     if(o.isFolder){
       row.addEventListener('dragenter', e=>{ e.preventDefault(); row.classList.add('drop-target'); });
       row.addEventListener('dragover', e=>{ e.preventDefault(); row.classList.add('drop-target'); });
@@ -338,7 +345,7 @@ function renderLeft(){
           const idsStr=e.dataTransfer.getData('ids'); let ids=[]; try{ids=JSON.parse(idsStr);}catch{ids=[];}
           const folder=e.dataTransfer.getData('folder');
           if(folder && folder!==targetFolder){
-            if(targetFolder.startsWith(folder+'/')){ showDuplicateWarn(`Não pode mover pasta pra dentro dela mesma`); return; }
+            if(targetFolder.startsWith(folder+'/')){ showDuplicateWarn(`Não pode mover pra dentro dela mesma`); return; }
             const arqs=getArquivosDaPasta(folder);
             const folderName=folder.split('/').pop();
             for(let a of arqs){
@@ -370,6 +377,7 @@ function renderLeft(){
     }
     row.onclick=(e)=>{
       if(e.target.classList.contains('check')) return;
+      setActivePanel('left');
       if(e.ctrlKey||e.metaKey){
         if(selecionados.has(key)) selecionados.delete(key); else selecionados.add(key);
       } else if(e.shiftKey && lastSelectedIndex>=0){
@@ -383,7 +391,7 @@ function renderLeft(){
       renderLeft();
     };
     row.ondblclick=()=>{ if(!o.isFolder) abrirEditorComId(o.id); };
-    row.oncontextmenu=e=>{ e.preventDefault(); showCtxMenuLeft(e.clientX, e.clientY, key); };
+    row.oncontextmenu=e=>{ e.preventDefault(); setActivePanel('left'); showCtxMenuLeft(e.clientX, e.clientY, key); };
     sL.appendChild(row);
   });
 }
@@ -405,9 +413,13 @@ function showCtxMenuLeft(x,y,id){
 function hideCtx(){ document.getElementById('ctxMenu').style.display='none'; }
 document.addEventListener('click', e=>{ if(!e.target.closest('#ctxMenu')) hideCtx(); });
 function renomearSelecionado(id){
+  if(!id){
+    if(selecionados.size!==1){ showDuplicateWarn(`Selecione 1 item pra renomear com F2`); return; }
+    id=[...selecionados][0];
+  }
   if(id.startsWith('folder:')){
     const path=id.slice(7);
-    const novo=prompt('Renomear pasta (F2 igual PC):', path.split('/').pop());
+    const novo=prompt('Renomear pasta (F2):', path.split('/').pop());
     if(novo){
       const parent=path.split('/').slice(0,-1).join('/');
       const novoPath=(parent?parent+'/':'')+novo;
@@ -434,10 +446,78 @@ function renomearSelecionado(id){
     }
   }
 }
-function copySelection(){ clipboard=[...selecionados]; clipboardAction='copy'; log(`Ctrl+C - ${clipboard.length} copiados`); }
-function cutSelection(){ clipboard=[...selecionados]; clipboardAction='cut'; log(`Ctrl+X - ${clipboard.length} recortados`); }
+function renomearSelecionadoAtual(){ renomearSelecionado(); }
+function renomearSelecionadoDir(id){
+  if(!id){
+    if(selecionadosDir.size!==1){ showDuplicateWarn(`Selecione 1 item DIR pra renomear com F2`); return; }
+    id=[...selecionadosDir][0];
+  }
+  const novoNome=prompt('Renomear no DIR (F2) - novo nome:', id.split('/').pop());
+  if(!novoNome) return;
+  const dir=id.split('/').slice(0,-1).join('/');
+  const novoPath=(dir?dir+'/':'')+novoNome;
+  if(repoCache.some(r=>r.path===novoPath)){ showDuplicateWarn(`Já existe ${novoPath} no DIR`); return; }
+  (async()=>{
+    const isFolder=repoCache.some(r=>r.path.startsWith(id+'/'));
+    if(isFolder){
+      const files=repoCache.filter(r=>r.path.startsWith(id+'/') && r.type==='blob');
+      for(let f of files){
+        const newFilePath=novoPath + f.path.slice(id.length);
+        const contentRes=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${f.path.split('/').map(encodeURIComponent).join('/')}?ref=main`, {headers:{Authorization:`token ${getREPO_TOKEN()}`}});
+        if(!contentRes.ok) continue;
+        const data=await contentRes.json();
+        await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${newFilePath.split('/').map(encodeURIComponent).join('/')}`, {method:'PUT', headers:{Authorization:`token ${getREPO_TOKEN()}`, 'Content-Type':'application/json'}, body: JSON.stringify({message:`FORJA RENAME DIR: ${f.path} -> ${newFilePath}`, content:data.content, branch:"main"})});
+        await githubDeleteFile(f.path, `FORJA DELETE OLD: ${f.path}`);
+        await new Promise(r=>setTimeout(r,400));
+      }
+    } else {
+      const contentRes=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${id.split('/').map(encodeURIComponent).join('/')}?ref=main`, {headers:{Authorization:`token ${getREPO_TOKEN()}`}});
+      if(contentRes.ok){
+        const data=await contentRes.json();
+        await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${novoPath.split('/').map(encodeURIComponent).join('/')}`, {method:'PUT', headers:{Authorization:`token ${getREPO_TOKEN()}`, 'Content-Type':'application/json'}, body: JSON.stringify({message:`FORJA RENAME: ${id} -> ${novoPath}`, content:data.content, branch:"main"})});
+        await githubDeleteFile(id, `FORJA DELETE OLD: ${id}`);
+      }
+    }
+    setTimeout(()=>carregarDadosRepo(),1500);
+  })();
+}
+function copySelection(){ clipboard=[...selecionados]; clipboardAction='copy'; clipboardIsDir=false; log(`Ctrl+C ESQ - ${clipboard.length} copiados`); }
+function cutSelection(){ clipboard=[...selecionados]; clipboardAction='cut'; clipboardIsDir=false; log(`Ctrl+X ESQ - ${clipboard.length} recortados`); }
+function copySelectionDir(){ clipboard=[...selecionadosDir]; clipboardAction='copy'; clipboardIsDir=true; log(`Ctrl+C DIR - ${clipboard.length} copiados`); }
+function cutSelectionDir(){ clipboard=[...selecionadosDir]; clipboardAction='cut'; clipboardIsDir=true; log(`Ctrl+X DIR - ${clipboard.length} recortados`); }
 async function pasteSelection(targetFolder){
   if(!clipboard) return;
+  if(clipboardIsDir){
+    // colar DIR -> ESQ ou DIR -> DIR
+    if(activePanel==='left'){
+      for(let path of clipboard){
+        await puxarArquivo(path);
+        if(clipboardAction==='cut'){
+          await githubDeleteFile(path, `FORJA CUT: ${path}`);
+        }
+      }
+      if(clipboardAction==='cut') clipboard=null;
+      setTimeout(()=>carregarDadosRepo(),1500);
+    } else {
+      // DIR -> DIR dentro de outra pasta
+      for(let path of clipboard){
+        const fileName=path.split('/').pop();
+        const newPath=targetFolder? targetFolder+'/'+fileName : fileName;
+        if(repoCache.some(r=>r.path===newPath)){ showDuplicateWarn(`Já existe ${newPath}`); continue; }
+        const contentRes=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=main`, {headers:{Authorization:`token ${getREPO_TOKEN()}`}});
+        if(!contentRes.ok) continue;
+        const data=await contentRes.json();
+        await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${newPath.split('/').map(encodeURIComponent).join('/')}`, {method:'PUT', headers:{Authorization:`token ${getREPO_TOKEN()}`, 'Content-Type':'application/json'}, body: JSON.stringify({message:`FORJA COPY DIR: ${path} -> ${newPath}`, content:data.content, branch:"main"})});
+        if(clipboardAction==='cut'){
+          await githubDeleteFile(path, `FORJA CUT: ${path}`);
+        }
+        await new Promise(r=>setTimeout(r,400));
+      }
+      if(clipboardAction==='cut') clipboard=null;
+      setTimeout(()=>carregarDadosRepo(),1500);
+    }
+    return;
+  }
   let dup=0;
   for(let key of clipboard){
     if(key.startsWith('folder:')){
@@ -474,11 +554,43 @@ async function pasteSelection(targetFolder){
   if(dup>0) showDuplicateWarn(`${dup} já existe(m) - não duplicado`);
   await carregarTudo();
 }
+async function pasteSelectionDir(){
+  if(!clipboard) return;
+  if(!clipboardIsDir){
+    // ESQ -> DIR
+    for(let key of clipboard){
+      if(key.startsWith('folder:')){
+        const path=key.slice(7);
+        const arqs=getArquivosDaPasta(path);
+        const folderName=path.split('/').pop();
+        for(let a of arqs){
+          const rel=a.path===path?'':a.path.slice(path.length+1);
+          const targetPath=currentPath? currentPath+'/'+folderName+'/'+rel : folderName+'/'+rel;
+          if(repoCache.some(r=>r.path===targetPath)) continue;
+          let txt=await a.blob.text();
+          await githubPutFile(targetPath, txt, `FORJA PASTE ESQ->DIR: ${targetPath}`);
+          await new Promise(r=>setTimeout(r,300));
+        }
+      } else {
+        const a=ativos.find(x=>x.id===key); if(a){
+          const targetPath=currentPath? currentPath+'/'+a.path : a.path;
+          if(repoCache.some(r=>r.path===targetPath)) continue;
+          let txt=await a.blob.text();
+          await githubPutFile(targetPath, txt, `FORJA PASTE ESQ->DIR: ${targetPath}`);
+          await new Promise(r=>setTimeout(r,300));
+        }
+      }
+    }
+    setTimeout(()=>carregarDadosRepo(),1500);
+  } else {
+    await pasteSelection(currentPath||'');
+  }
+}
 function selecionarTodos(){
   const pastas=getPastasUnicas();
   const all=[...pastas.map(p=>'folder:'+p.path),...ativos.map(a=>a.id)];
   if(all.every(id=>selecionados.has(id))) selecionados.clear(); else all.forEach(id=>selecionados.add(id));
-  renderLeft();
+  renderLeft(); setActivePanel('left');
 }
 function abrirEditorComId(id){ const o=ativos.find(a=>a.id===id); if(o){ arquivoEditando=o; abrirEditor(); } }
 function abrirEditor(){
@@ -502,18 +614,16 @@ async function salvarEdicao(){
   await carregarTudo(); document.getElementById('editModal').style.display='none';
   document.getElementById('liveSiteFrame').srcdoc=novoTexto;
   const success = await githubPutFile(arquivoEditando.path, novoTexto, `FORJA EDIT: ${arquivoEditando.path}`);
-  if(success){
-    setTimeout(()=>carregarDadosRepo(), 2000);
-  }
+  if(success){ setTimeout(()=>carregarDadosRepo(), 2000); }
 }
 async function renderLiveSite(){
   const liveFrame=document.getElementById('liveSiteFrame');
   const indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html'));
   if(indexFile){ let html=await indexFile.blob.text(); liveFrame.srcdoc=html; return; }
-  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#202020;color:#fff;padding:12px">FORJA - ${ativos.length} itens - PC Explorer Fix</body></html>`;
+  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#202020;color:#fff;padding:12px">FORJA - ${ativos.length} itens - Igual nas duas telas</body></html>`;
 }
 
-// === REPO COMO ANTES - NÃO MEXIDO - CÓDIGO ORIGINAL INTACTO ===
+// === REPO COMO ANTES - NÃO MEXIDO ===
 function abrirGithubOriginal(){
   const owner=document.getElementById('ghO').value||'sistemak';
   const repo=document.getElementById('ghR').value||'korvil-app';
@@ -522,7 +632,7 @@ function abrirGithubOriginal(){
   document.getElementById('githubFrame').style.display='flex';
   document.getElementById('repoViewFallback').style.display='none';
   document.getElementById('githubFrame').src=url;
-  document.getElementById('currentPathDisplay').innerText=url+` • branch main fix`;
+  document.getElementById('currentPathDisplay').innerText=url;
   carregarDadosRepo();
 }
 function toggleFallback(){
@@ -546,7 +656,8 @@ async function carregarDadosRepo(){
     if(!r.ok) r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/git/trees/master?recursive=1`,{headers:h});
     const data=await r.json(); repoCache=data.tree||[];
     if(document.getElementById('repoViewFallback').style.display!=='none') renderRepo();
-    document.getElementById('rightStatus').innerText=`${repoCache.length} itens DIR - branch main`;
+    document.getElementById('rightStatus').innerText=`${repoCache.length} itens DIR`;
+    document.getElementById('rightSelStatus').innerText=`• ${selecionadosDir.size} selecionados DIR`;
   }catch(e){}
 }
 function getTreeForPath(prefix){
@@ -562,12 +673,13 @@ function renderRepo(){
   const breadcrumb=document.getElementById('breadcrumb'); const listEl=document.getElementById('repoList');
   const parts=currentPath?currentPath.split('/').filter(Boolean):[]; let htmlCrumb=`<span onclick="navegarPara('')">🏠 root</span>`; let acc=""; parts.forEach(p=>{ acc+=(acc?"/":"")+p; htmlCrumb+=`<span style="opacity:.3">/</span><span onclick="navegarPara('${acc}')">${p}</span>`; });
   breadcrumb.innerHTML=htmlCrumb+`<span style="margin-left:auto;opacity:.5">${selecionadosDir.size} sel</span>`;
-  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia</div>'; return; }
-  listEl.innerHTML=""; if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const d=document.createElement('div'); d.className='repo-row'; d.innerHTML=`<span>📁.. voltar</span>`; d.onclick=()=>navegarPara(up); listEl.appendChild(d); }
-  items.forEach(item=>{
-    const row=document.createElement('div'); row.className='repo-row'+(item.isFolder?' folder-row':'')+(selecionadosDir.has(item.fullPath)?' selected-right':''); row.dataset.path=item.fullPath;
+  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia - arraste pasta exata aqui</div>'; return; }
+  listEl.innerHTML=""; if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const d=document.createElement('div'); d.className='repo-row'; d.innerHTML=`<span>📁.. voltar</span>`; d.onclick=()=>{ setActivePanel('right'); navegarPara(up); }; listEl.appendChild(d); }
+  items.forEach((item, idx)=>{
+    const row=document.createElement('div'); row.className='repo-row'+(item.isFolder?' folder-row':'')+(selecionadosDir.has(item.fullPath)?' selected-right':''); row.dataset.path=item.fullPath; row.dataset.index=idx;
     if(item.isFolder){
-      row.innerHTML=`<div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">📁 ${item.name}/</div><div style="display:flex;gap:4px"><button class="btn" style="padding:4px 8px" onclick="event.stopPropagation();navegarPara('${item.fullPath}')">Abrir</button></div>`;
+      row.innerHTML=`<input type="checkbox" class="check" ${selecionadosDir.has(item.fullPath)?'checked':''}><div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">📁 ${item.name}/</div><div style="display:flex;gap:4px"><button class="btn" style="padding:4px 8px" onclick="event.stopPropagation();setActivePanel('right');navegarPara('${item.fullPath}')">Abrir</button></div>`;
+      row.querySelector('.check').onclick=(e)=>{ e.stopPropagation(); setActivePanel('right'); if(e.target.checked) selecionadosDir.add(item.fullPath); else selecionadosDir.delete(item.fullPath); renderRepo(); };
       row.addEventListener('dragenter', e=>{ e.preventDefault(); row.classList.add('drop-target'); });
       row.addEventListener('dragover', e=>{ e.preventDefault(); row.classList.add('drop-target'); });
       row.addEventListener('dragleave', e=>{ if(!row.contains(e.relatedTarget)) row.classList.remove('drop-target'); });
@@ -580,7 +692,7 @@ function renderRepo(){
             const targetPath=file.webkitRelativePath? targetFolder+'/'+file.webkitRelativePath : targetFolder+'/'+file.name;
             if(repoCache.some(r=>r.path===targetPath)){ showDuplicateWarn(`DIR já tem ${targetPath}`); continue; }
             const txt=await file.text();
-            await githubPutFile(targetPath, txt, `FORJA: ${targetPath}`);
+            await githubPutFile(targetPath, txt, `FORJA DROP: ${targetPath}`);
           }
           setTimeout(()=>carregarDadosRepo(), 1500);
         } else if(from==='left'){
@@ -610,26 +722,67 @@ function renderRepo(){
           }
         }
       });
-      row.onclick=()=>navegarPara(item.fullPath);
+      row.onclick=(e)=>{
+        if(e.target.tagName==='INPUT' || e.target.tagName==='BUTTON') return;
+        setActivePanel('right');
+        if(e.ctrlKey||e.metaKey){
+          if(selecionadosDir.has(item.fullPath)) selecionadosDir.delete(item.fullPath); else selecionadosDir.add(item.fullPath);
+        } else if(e.shiftKey && lastSelectedIndexDir>=0){
+          const all=getTreeForPath(currentPath).map(i=>i.fullPath);
+          const start=Math.min(lastSelectedIndexDir, idx); const end=Math.max(lastSelectedIndexDir, idx);
+          for(let i=start;i<=end;i++){ if(all[i]) selecionadosDir.add(all[i]); }
+        } else {
+          if(selecionadosDir.size===1 && selecionadosDir.has(item.fullPath)) selecionadosDir.clear(); else { selecionadosDir.clear(); selecionadosDir.add(item.fullPath); }
+        }
+        lastSelectedIndexDir=idx;
+        renderRepo();
+      };
     } else {
-      row.innerHTML=`<div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1"><input type="checkbox" class="check" ${selecionadosDir.has(item.fullPath)?'checked':''} onclick="event.stopPropagation();toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"> 📄 ${item.name}</div><div style="display:flex;gap:4px"><button class="btn" style="padding:4px 8px" onclick="event.stopPropagation();abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">Abrir</button></div>`;
-      row.onclick=(e)=>{ if(e.target.tagName==='INPUT') return; if(e.ctrlKey||e.metaKey) toggleDir(item.fullPath); else { if(selecionadosDir.size===1 && selecionadosDir.has(item.fullPath)) selecionadosDir.clear(); else { selecionadosDir.clear(); selecionadosDir.add(item.fullPath); } renderRepo(); } document.getElementById('selCountRight').innerText=`${selecionadosDir.size} selecionados DIR`; };
+      row.innerHTML=`<div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1"><input type="checkbox" class="check" ${selecionadosDir.has(item.fullPath)?'checked':''} onclick="event.stopPropagation();toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"> 📄 ${item.name}</div><div style="display:flex;gap:4px"><button class="btn" style="padding:4px 8px" onclick="event.stopPropagation();setActivePanel('right');abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">Abrir</button></div>`;
+      row.onclick=(e)=>{
+        if(e.target.tagName==='INPUT' || e.target.tagName==='BUTTON') return;
+        setActivePanel('right');
+        if(e.ctrlKey||e.metaKey) toggleDir(item.fullPath);
+        else {
+          if(selecionadosDir.size===1 && selecionadosDir.has(item.fullPath)) selecionadosDir.clear(); else { selecionadosDir.clear(); selecionadosDir.add(item.fullPath); }
+          renderRepo();
+        }
+        lastSelectedIndexDir=idx;
+      };
     }
+    row.oncontextmenu=e=>{ e.preventDefault(); setActivePanel('right'); showCtxMenuDir(e.clientX, e.clientY, item.fullPath, item.isFolder); };
     listEl.appendChild(row);
   });
+  document.getElementById('checkAllRight').checked=selecionadosDir.size>0 && selecionadosDir.size===getTreeForPath(currentPath).length;
+  document.getElementById('selCountRight').innerText=`${selecionadosDir.size} selecionados DIR`;
+  document.getElementById('rightSelStatus').innerText=`• ${selecionadosDir.size} selecionados DIR`;
 }
-function toggleDir(path){ if(selecionadosDir.has(path)) selecionadosDir.delete(path); else selecionadosDir.add(path); renderRepo(); document.getElementById('selCountRight').innerText=`${selecionadosDir.size} selecionados DIR`; document.getElementById('checkAllRight').checked=selecionadosDir.size>0 && selecionadosDir.size===getTreeForPath(currentPath).length; }
+function showCtxMenuDir(x,y,fullPath,isFolder){
+  const ctx=document.getElementById('ctxMenu');
+  ctx.innerHTML=`
+    <div class="ctx-item" onclick="abrirEditorRepo('${fullPath}');hideCtx()">📂 Abrir <kbd>Enter</kbd></div>
+    <div class="ctx-item" onclick="renomearSelecionadoDir('${fullPath}');hideCtx()">✏️ Renomear <kbd>F2</kbd></div>
+    <div style="height:1px;background:var(--border);margin:4px 0"></div>
+    <div class="ctx-item" onclick="copySelectionDir();hideCtx()">⎘ Copiar <kbd>Ctrl+C</kbd></div>
+    <div class="ctx-item" onclick="cutSelectionDir();hideCtx()">✂️ Recortar <kbd>Ctrl+X</kbd></div>
+    <div class="ctx-item" onclick="pasteSelectionDir();hideCtx()">📋 Colar <kbd>Ctrl+V</kbd></div>
+    <div style="height:1px;background:var(--border);margin:4px 0"></div>
+    <div class="ctx-item" onclick="moverDirParaEsq();hideCtx()">← Mover pra ESQ <kbd>F6</kbd></div>
+    <div class="ctx-item" style="color:#ff7a7a" onclick="excluirSelecionadosDir();hideCtx()">🗑️ Excluir <kbd>Del</kbd></div>
+  `;
+  ctx.style.left=x+'px'; ctx.style.top=y+'px'; ctx.style.display='flex';
+}
+function toggleDir(path){ setActivePanel('right'); if(selecionadosDir.has(path)) selecionadosDir.delete(path); else selecionadosDir.add(path); renderRepo(); }
 async function puxarArquivo(path){
-  const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path.split('/').map(encodeURIComponent).join('/'))}?ref=main`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const blob=new Blob([new Uint8Array([...binary].map(c=>c.charCodeAt(0)))]);
+  const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=main`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const blob=new Blob([new Uint8Array([...binary].map(c=>c.charCodeAt(0)))]);
   if(ativos.some(a=>a.path===path)){ showDuplicateWarn(`ESQ já tem ${path}`); return; }
   await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob}); await carregarTudo(); }catch(e){} }
-async function abrirEditorRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path.split('/').map(encodeURIComponent).join('/'))}?ref=main`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); document.getElementById('editFileName').innerText=path; document.getElementById('editArea').value=binary; document.getElementById('editModal').style.display='flex'; arquivoEditando={path:path,name:path.split('/').pop(),isRepo:true,sha:d.sha,blob:new Blob([binary])}; renderInstant(); }catch(e){} }
+async function abrirEditorRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${path.split('/').map(encodeURIComponent).join('/')}?ref=main`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); document.getElementById('editFileName').innerText=path; document.getElementById('editArea').value=binary; document.getElementById('editModal').style.display='flex'; arquivoEditando={path:path,name:path.split('/').pop(),isRepo:true,sha:d.sha,blob:new Blob([binary])}; renderInstant(); }catch(e){} }
 async function moverEsqParaDir(){
-  if(selecionados.size===0){ log('Nada selecionado'); return; }
+  if(selecionados.size===0){ log('Nada selecionado ESQ'); return; }
   const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){alert('REPO_TOKEN vazio');return;}
   let arquivos=[]; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const p=key.slice(7); arquivos.push(...getArquivosDaPasta(p)); } else { const o=ativos.find(a=>a.id===key); if(o) arquivos.push(o); } }
   arquivos=[...new Map(arquivos.map(a=>[a.path,a])).values()];
-
   let ok=0, fail=0, dup=0;
   for(let obj of arquivos){
     let targetPath=currentPath? currentPath+'/'+obj.path : obj.path;
@@ -639,22 +792,33 @@ async function moverEsqParaDir(){
     if(success) ok++; else fail++;
     await new Promise(r=>setTimeout(r, 300));
   }
-  if(dup>0) showDuplicateWarn(`${dup} já existe(m) - não duplicado`);
-  if(fail>0) showDuplicateWarn(`${fail} falhou - veja log - token precisa ter permissão repo`);
-  if(ok>0){
-    log(`✅ ${ok} commitados em main - Pages atualiza em 30-60s`);
-    setTimeout(()=>carregarDadosRepo(), 1500);
-    setTimeout(()=>carregarDadosRepo(), 4000);
-  }
+  if(dup>0) showDuplicateWarn(`${dup} já existe(m) DIR`);
+  if(fail>0) showDuplicateWarn(`${fail} falhou - token repo?`);
+  if(ok>0){ log(`✅ ${ok} -> main - Pages 30-60s`); setTimeout(()=>carregarDadosRepo(), 1500); setTimeout(()=>carregarDadosRepo(), 4000); }
 }
-async function moverDirParaEsq(){ if(selecionadosDir.size===0) return; for(let p of [...selecionadosDir]) await puxarArquivo(p); selecionadosDir.clear(); renderRepo(); }
-function excluirSelecionadosEsq(){ if(selecionados.size===0) return; if(!confirm(`Excluir ${selecionados.size} itens? (Del igual PC)`)) return; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); arqs.forEach(a=>delDB(a.id)); } else delDB(key); } selecionados.clear(); setTimeout(()=>carregarTudo(),200); }
-function excluirSelecionadosDir(){}
+async function moverDirParaEsq(){ if(selecionadosDir.size===0){ log('Nada selecionado DIR'); return; } for(let p of [...selecionadosDir]) await puxarArquivo(p); selecionadosDir.clear(); renderRepo(); }
+function excluirSelecionadosEsq(){ if(selecionados.size===0) return; if(!confirm(`Excluir ${selecionados.size} itens ESQ? (Del)`)) return; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); arqs.forEach(a=>delDB(a.id)); } else delDB(key); } selecionados.clear(); setTimeout(()=>carregarTudo(),200); }
+async function excluirSelecionadosDir(){
+  if(selecionadosDir.size===0) return;
+  if(!confirm(`Excluir ${selecionadosDir.size} itens DIR do repo? (Del) - vai commitar delete na main e Pages atualiza`)) return;
+  let ok=0;
+  for(let path of [...selecionadosDir]){
+    const files=repoCache.filter(r=>r.path===path || r.path.startsWith(path+'/'));
+    for(let f of files.filter(r=>r.type==='blob')){
+      const success=await githubDeleteFile(f.path, `FORJA DELETE: ${f.path}`);
+      if(success) ok++;
+      await new Promise(r=>setTimeout(r,400));
+    }
+  }
+  showDuplicateWarn(`${ok} excluído(s) DIR - Pages atualiza em 30-60s`);
+  selecionadosDir.clear();
+  setTimeout(()=>carregarDadosRepo(),2000);
+}
 function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-cfg',JSON.stringify(cfg)); carregarDadosRepo(); abrirGithubOriginal(); }
 function setupDropZones(){
   const zones=[{el:document.getElementById('left'), drop:document.getElementById('dropEsq'), target:'esq'}, {el:document.getElementById('right'), drop:document.getElementById('dropDir'), target:'dir'}];
   zones.forEach(({el, drop, target})=>{
-    el.addEventListener('dragenter', e=>{ e.preventDefault(); drop.classList.add('show'); });
+    el.addEventListener('dragenter', e=>{ e.preventDefault(); drop.classList.add('show'); setActivePanel(target==='esq'?'left':'right'); });
     el.addEventListener('dragover', e=>{ e.preventDefault(); drop.classList.add('show'); });
     el.addEventListener('dragleave', e=>{ if(!el.contains(e.relatedTarget)) drop.classList.remove('show'); });
     el.addEventListener('drop', async e=>{
@@ -664,7 +828,7 @@ function setupDropZones(){
         if(e.dataTransfer.items && e.dataTransfer.items[0].webkitGetAsEntry){ await handleDataTransferItems(e.dataTransfer.items, currentPath||''); } else await handleFiles(e.dataTransfer.files);
         if(target==='dir'){ const ids=[...ativos].slice(-e.dataTransfer.files.length).map(a=>a.id); const old=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=old; renderLeft(); }
       } else if(from){
-        if(target==='esq' && from==='right'){ for(let p of [...selecionadosDir]) await puxarArquivo(p); selecionadosDir.clear(); }
+        if(target==='esq' && from==='right'){ for(let p of [...selecionadosDir]) await puxarArquivo(p); selecionadosDir.clear(); renderRepo(); }
         if(target==='dir' && from==='left'){
           const idsStr=e.dataTransfer.getData('ids'); let ids=[]; try{ids=JSON.parse(idsStr);}catch{ids=[];} const folder=e.dataTransfer.getData('folder'); if(folder){ const old=new Set(selecionados); selecionados=new Set(['folder:'+folder]); await moverEsqParaDir(); selecionados=old; renderLeft(); } else if(ids.length){ const old=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=old; renderLeft(); }
         }
@@ -676,29 +840,98 @@ function selecionarTodosDir(){
   const items=getTreeForPath(currentPath);
   const all=items.map(i=>i.fullPath);
   if(all.every(p=>selecionadosDir.has(p))) selecionadosDir.clear(); else all.forEach(p=>selecionadosDir.add(p));
-  renderRepo(); document.getElementById('selCountRight').innerText=`${selecionadosDir.size} selecionados DIR`;
+  renderRepo(); setActivePanel('right');
 }
 setupDropZones();
 
+// === ATALHOS FUNCIONANDO CERTOS - IGUAIS NAS DUAS TELAS ===
 document.addEventListener('keydown', e=>{
-  const isInput=e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA';
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='a' &&!isInput){
+  const isInput=e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA' || e.target.id==='editArea';
+  if(isInput && e.key!=='Escape') return;
+
+  // Ctrl+A = selecionar todos na tela ativa - igual PC
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='a'){
     e.preventDefault();
-    if(document.getElementById('repoViewFallback').style.display!=='none') toggleSelectAllRight(true);
-    else toggleSelectAllLeft(true);
+    if(activePanel==='right'){
+      toggleSelectAllRight(true);
+      log('Ctrl+A DIR - todos selecionados');
+    } else {
+      toggleSelectAllLeft(true);
+      log('Ctrl+A ESQ - todos selecionados');
+    }
+    return;
   }
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='c' &&!isInput){ e.preventDefault(); copySelection(); }
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='x' &&!isInput){ e.preventDefault(); cutSelection(); }
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='v' &&!isInput){ e.preventDefault(); pasteSelection(currentPath||''); }
-  if(e.key==='Delete' &&!isInput){ if(selecionados.size>0) excluirSelecionadosEsq(); }
-  if(e.key==='F2' &&!isInput){
+  // Ctrl+C = copiar - igual PC
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='c'){
     e.preventDefault();
-    if(selecionados.size===1){ const id=[...selecionados][0]; renomearSelecionado(id); }
+    if(activePanel==='right') copySelectionDir(); else copySelection();
+    return;
   }
-  if(e.key==='F5' &&!isInput){ e.preventDefault(); moverEsqParaDir(); }
-  if(e.key==='F6' &&!isInput){ e.preventDefault(); moverDirParaEsq(); }
-  if(e.key==='Escape'){ selecionados.clear(); selecionadosDir.clear(); renderLeft(); renderRepo(); hideCtx(); }
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); if(document.getElementById('editModal').style.display==='flex') salvarEdicao(); }
+  // Ctrl+X = recortar - igual PC
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='x'){
+    e.preventDefault();
+    if(activePanel==='right') cutSelectionDir(); else cutSelection();
+    return;
+  }
+  // Ctrl+V = colar - igual PC
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='v'){
+    e.preventDefault();
+    if(activePanel==='right') pasteSelectionDir(); else pasteSelection(currentPath||'');
+    log(`Ctrl+V ${activePanel.toUpperCase()} - colar`);
+    return;
+  }
+  // Delete = excluir na tela ativa - igual PC
+  if(e.key==='Delete'){
+    e.preventDefault();
+    if(activePanel==='right'){
+      if(selecionadosDir.size>0) excluirSelecionadosDir();
+    } else {
+      if(selecionados.size>0) excluirSelecionadosEsq();
+    }
+    return;
+  }
+  // F2 = renomear - igual PC
+  if(e.key==='F2'){
+    e.preventDefault();
+    if(activePanel==='right') renomearSelecionadoDir(); else renomearSelecionado();
+    return;
+  }
+  // F5 = mover ESQ->DIR - igual PC (F5 atualizar/mover)
+  if(e.key==='F5'){
+    e.preventDefault();
+    if(activePanel==='left') moverEsqParaDir(); else carregarDadosRepo();
+    return;
+  }
+  // F6 = mover DIR->ESQ
+  if(e.key==='F6'){
+    e.preventDefault();
+    moverDirParaEsq();
+    return;
+  }
+  // Escape = desselecionar tudo - igual PC
+  if(e.key==='Escape'){
+    selecionados.clear(); selecionadosDir.clear();
+    renderLeft(); renderRepo(); hideCtx();
+    log('Esc - desselecionado tudo');
+    return;
+  }
+  // Enter = abrir - igual PC
+  if(e.key==='Enter'){
+    e.preventDefault();
+    if(activePanel==='left' && selecionados.size===1){
+      const id=[...selecionados][0];
+      if(!id.startsWith('folder:')) abrirEditorComId(id);
+    } else if(activePanel==='right' && selecionadosDir.size===1){
+      const path=[...selecionadosDir][0];
+      if(!repoCache.some(r=>r.path===path && r.type==='tree')) abrirEditorRepo(path);
+      else navegarPara(path);
+    }
+    return;
+  }
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){
+    e.preventDefault();
+    if(document.getElementById('editModal').style.display==='flex') salvarEdicao();
+  }
 });
 </script>
 </body>
