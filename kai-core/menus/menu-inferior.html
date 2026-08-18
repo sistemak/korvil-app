@@ -1,0 +1,24 @@
+
+<div class="menu-inferior">
+  <button onclick="startVoice(event)" class="btn-mic">🎤</button>
+  <input type="text" id="inputMenu" placeholder="Mensagem para K-AI..." onkeydown="if(event.key==='Enter'){event.preventDefault();send()}">
+  <button onclick="send()" class="btn-send">➤</button>
+  <div class="quick-cmds">
+    <span onclick="executar('status')">STATUS</span>
+    <span onclick="executar('scan')">SCAN</span>
+    <span onclick="abrirTransformacao()">TRANSFORMAR</span>
+  </div>
+</div>
+
+<style>
+.menu-inferior{position:absolute;bottom:0;left:0;width:100%;height:95px;
+  background:linear-gradient(0deg,#0d1a20,#000);border-top:2px solid #00FFFF;
+  display:flex;align-items:center;padding:0 16px;gap:14px;z-index:100}
+#inputMenu{flex:1;height:65px;background:linear-gradient(145deg,#132e36,#0a1419);
+  border:2.5px solid #00FFFF;border-radius:32px;padding:0 24px;color:#fff;font-size:17px;font-weight:700;outline:none}
+.btn-mic,.btn-send{width:65px;height:65px;border-radius:50%;
+  background:linear-gradient(145deg,#00FFFF,#A8FFE6);color:#000;display:flex;
+  align-items:center;justify-content:center;font-size:28px;font-weight:900;cursor:pointer;border:2.5px solid #00FFFF}
+.quick-cmds{position:absolute;bottom:100px;left:20px;display:flex;gap:10px}
+.quick-cmds span{color:#00FFFF;font-size:11px;border:1px solid #00FFFF;padding:4px 8px;cursor:pointer;border-radius:4px}
+</style>
