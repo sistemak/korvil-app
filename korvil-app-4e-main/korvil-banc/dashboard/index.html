@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KORVIL BANC - Dashboard</title>
+  <style>
+    /* ============ Tema: preto #050505 + neon #00f5ff ============ */
+    :root {
+      --bg: #050505;
+      --surface: #0d0d0f;
+      --surface-2: #131318;
+      --border: #1f1f26;
+      --neon: #00f5ff;
+      --neon-dim: rgba(0, 245, 255, 0.15);
+      --text: #e8e8ea;
+      --muted: #7a7a85;
+      --danger: #ff4d5e;
+      --ok: #22e6a1;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    a { color: var(--neon); }
+
+    /* ---------- Login ---------- */
+    #login-view {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 1.5rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    .login-card { width: 100%; max-width: 380px; }
+    .brand {
+      font-size: 1.6rem; font-weight: 800; letter-spacing: 2px;
+      color: var(--neon); text-shadow: 0 0 18px var(--neon-dim); text-align: center;
+    }
+    .brand small { display:block; color: var(--muted); font-size: .7rem; letter-spacing: 4px; font-weight:600; margin-top:.35rem;}
+    label { display:block; font-size:.8rem; color: var(--muted); margin: 1rem 0 .35rem; text-transform: uppercase; letter-spacing:1px;}
+    input, select {
+      width: 100%; padding: .75rem .9rem;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); font-size: .95rem; outline: none;
+    }
+    input:focus, select:focus { border-color: var(--neon); box-shadow: 0 0 0 3px var(--neon-dim); }
+    .btn {
+      width: 100%; margin-top: 1.4rem; padding: .8rem;
+      background: var(--neon); color: #001417; border: none; border-radius: 10px;
+      font-weight: 700; font-size: .95rem; cursor: pointer; letter-spacing:.5px;
+      transition: transform .05s ease, box-shadow .2s ease;
+    }
+    .btn:hover { box-shadow: 0 0 22px var(--neon-dim); }
+    .btn:active { transform: translateY(1px); }
+    .erro { color: var(--danger); font-size: .85rem; margin-top: .8rem; min-height: 1rem; }
+    .dica { color: var(--muted); font-size: .75rem; margin-top: .5rem; text-align:center;}
+
+    /* ---------- App ---------- */
+    #app-view { display: none; }
+    header.topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+      background: var(--surface); position: sticky; top: 0; z-index: 10;
+    }
+    header .brand { font-size: 1.2rem; text-align: left; }
+    .logout { background: transparent; border: 1px solid var(--border); color: var(--muted);
+      padding: .5rem .9rem; border-radius: 8px; cursor: pointer; font-size:.8rem;}
+    .logout:hover { border-color: var(--danger); color: var(--danger); }
+    main { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
+
+    /* Cards de saldo */
+    .grid { display: grid; gap: 1rem; }
+    .saldo-grid { grid-template-columns: repeat(2, 1fr); margin-bottom: 1.5rem; }
+    @media (min-width: 780px) { .saldo-grid { grid-template-columns: repeat(4, 1fr); } }
+    .metric { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem; }
+    .metric .label { font-size:.72rem; color: var(--muted); text-transform: uppercase; letter-spacing:1px; }
+    .metric .value { font-size: 1.5rem; font-weight: 800; margin-top: .4rem; }
+    .metric.destaque { border-color: var(--neon); box-shadow: 0 0 20px var(--neon-dim); }
+    .metric.destaque .value { color: var(--neon); }
+
+    /* Filtro + tabela */
+    .toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; margin-bottom: 1rem; }
+    .toolbar h2 { font-size: 1rem; margin-right:auto; letter-spacing:.5px; }
+    .toolbar select { width: auto; min-width: 180px; }
+    .table-wrap { background: var(--surface); border:1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    th, td { padding: .8rem 1rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    th { color: var(--muted); text-transform: uppercase; font-size:.7rem; letter-spacing:1px; }
+    tbody tr:hover { background: var(--surface-2); }
+    td:last-child, th:last-child { text-align: right; }
+    .pill { padding: .2rem .6rem; border-radius: 999px; font-size:.72rem; font-weight:700; letter-spacing:.5px; }
+    .pill.RECEIVED, .pill.CONFIRMED { background: rgba(34,230,161,.12); color: var(--ok); }
+    .pill.PENDING { background: rgba(122,122,133,.15); color: var(--muted); }
+    .pill.OVERDUE, .pill.FAILED { background: rgba(255,77,94,.12); color: var(--danger); }
+    .empty { text-align:center; color: var(--muted); padding: 2rem; }
+    .mod-tag { font-size:.72rem; color: var(--neon); text-transform: uppercase; letter-spacing:1px; }
+  </style>
+</head>
+<body>
+  <!-- ==================== TELA DE LOGIN ==================== -->
+  <section id="login-view">
+    <div class="card login-card">
+      <div class="brand">KORVIL BANC<small>BANCO DIGITAL INTERNO</small></div>
+      <form id="login-form">
+        <label for="usuario">Usuario</label>
+        <input id="usuario" type="text" autocomplete="username" required />
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" autocomplete="current-password" required />
+        <button class="btn" type="submit">Entrar</button>
+        <div class="erro" id="login-erro"></div>
+        <div class="dica">Dica: use qualquer usuario + senha: 123456 ou xxxxxx</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ==================== APP (apos login) ==================== -->
+  <section id="app-view">
+    <header class="topbar">
+      <div class="brand">KORVIL BANC</div>
+      <button class="logout" id="logout-btn">Sair</button>
+    </header>
+    <main>
+      <!-- Cards de saldo -->
+      <div class="grid saldo-grid" id="saldo-cards">
+        <div class="metric destaque"><div class="label">Saldo Disponivel</div><div class="value" id="m-disponivel">R$ 0,00</div></div>
+        <div class="metric"><div class="label">Recebido (liquido)</div><div class="value" id="m-liquido">R$ 0,00</div></div>
+        <div class="metric"><div class="label">Repassado</div><div class="value" id="m-repassado">R$ 0,00</div></div>
+        <div class="metric"><div class="label">Pendente</div><div class="value" id="m-pendente">R$ 0,00</div></div>
+      </div>
+
+      <!-- Filtro por modulo -->
+      <div class="toolbar">
+        <h2>Ultimas Cobrancas</h2>
+        <select id="filtro-modulo">
+          <option value="">Todos os modulos</option>
+          <option value="PIX">PIX</option>
+          <option value="BOLETO">BOLETO</option>
+          <option value="CARTAO">CARTAO</option>
+        </select>
+      </div>
+
+      <!-- Tabela -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th><th>Cliente</th><th>Modulo</th><th>Tipo</th><th>Status</th><th>Valor</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-cobrancas">
+            <tr><td colspan="6" class="empty">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </section>
+
+  <script>
+    // ============ Configuracao / estado ============
+    const TOKEN_KEY = "korvil_token";
+    const SENHA_SECRETA = "xxxxxx"; // SUA SENHA MESTRA
+
+    // Formata numero em BRL
+    const brl = (n) => (Number(n) || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    // Formata data
+    const fmtData = (d) => new Date(d).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+
+    // DADOS FAKES PRA TESTAR NO GITHUB PAGES
+    const DADOS_FAKE = {
+      saldo: { saldoDisponivel: 12500.50, totalLiquido: 50000, totalRepassado: 37499.50, totalPendente: 1200 },
+      movimentacoes: [
+        {criadoEm: new Date(), cliente: {nome: "Joao Silva"}, modulo: "PIX", tipo: "RECEBIDO", status: "CONFIRMED", valor: 500},
+        {criadoEm: new Date(Date.now() - 86400000), cliente: {nome: "Maria Souza"}, modulo: "BOLETO", tipo: "PAGO", status: "PENDING", valor: 1200},
+        {criadoEm: new Date(Date.now() - 172800000), cliente: {nome: "Empresa XYZ"}, modulo: "CARTAO", tipo: "RECEBIDO", status: "FAILED", valor: 890.90},
+      ]
+    }
+
+    // ============ Login ============
+    const loginForm = document.getElementById("login-form");
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const erroEl = document.getElementById("login-erro");
+      erroEl.textContent = "";
+
+      const usuario = document.getElementById("usuario").value;
+      const senha = document.getElementById("senha").value;
+
+      // REGRA: aceita qualquer usuario + senha normal OU senha mestra xxxxxx
+      if(senha === "123456" || senha === SENHA_SECRETA) {
+        localStorage.setItem(TOKEN_KEY, "token_fake_123");
+        entrarApp();
+      } else {
+        erroEl.textContent = "Usuario ou senha invalidos";
+      }
+    });
+
+    // ============ Logout ============
+    function logout() {
+      localStorage.removeItem(TOKEN_KEY);
+      document.getElementById("app-view").style.display = "none";
+      document.getElementById("login-view").style.display = "flex";
+    }
+    document.getElementById("logout-btn").addEventListener("click", logout);
+
+    // ============ Carrega dados do app ============
+    function entrarApp() {
+      document.getElementById("login-view").style.display = "none";
+      document.getElementById("app-view").style.display = "block";
+      carregarTudo();
+    }
+
+    function carregarTudo() {
+      const modulo = document.getElementById("filtro-modulo").value;
+      let linhas = DADOS_FAKE.movimentacoes;
+      if(modulo) linhas = linhas.filter(l => l.modulo === modulo);
+
+      // Saldo
+      document.getElementById("m-disponivel").textContent = brl(DADOS_FAKE.saldo.saldoDisponivel);
+      document.getElementById("m-liquido").textContent = brl(DADOS_FAKE.saldo.totalLiquido);
+      document.getElementById("m-repassado").textContent = brl(DADOS_FAKE.saldo.totalRepassado);
+      document.getElementById("m-pendente").textContent = brl(DADOS_FAKE.saldo.totalPendente);
+
+      // Tabela
+      const tbody = document.getElementById("tbody-cobrancas");
+      if (!linhas.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhuma cobranca encontrada.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = linhas.map((c) => `
+        <tr>
+          <td>${fmtData(c.criadoEm)}</td>
+          <td>${c.cliente?.nome || "-"}</td>
+          <td><span class="mod-tag">${c.modulo}</span></td>
+          <td>${c.tipo}</td>
+          <td><span class="pill ${c.status}">${c.status}</span></td>
+          <td>${brl(c.valor)}</td>
+        </tr>
+      `).join("");
+    }
+
+    // Refiltra ao mudar o select
+    document.getElementById("filtro-modulo").addEventListener("change", carregarTudo);
+
+    // ============ Auto-login se ja tiver token ============
+    if (localStorage.getItem(TOKEN_KEY)) {
+      entrarApp();
+    }
+  </script>
+</body>
+</html>
