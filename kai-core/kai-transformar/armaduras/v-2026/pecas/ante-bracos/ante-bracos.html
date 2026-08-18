@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>ANTEBRAÇO KORVIL</title>
+<style>
+:root{--c:#00FFFF;--canhao:#FF3B30}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;padding:15px}
+.ante{width:60px;height:120px;background:linear-gradient(#222,#000);border:2px solid var(--c);border-radius:10px;position:relative}
+.tela{width:50px;height:40px;background:#001015;border:1px solid var(--c);margin:5px;font-size:8px;padding:2px}
+.canhao{width:40px;height:15px;background:var(--canhao);margin:5px;border-radius:5px}
+</style></head>
+<body>
+<h2>ANTEBRAÇO K-1</h2>
+<div class="ante">
+  <div class="tela" id="hud">K-AI ONLINE</div>
+  <div class="canhao"></div>
+</div>
+<button onclick="disparar()">DISPARAR PULSO</button> <button onclick="hud()">HUD</button>
+<script>
+function disparar(){document.querySelector('.canhao').style.background='#FFF'; setTimeout(()=>document.querySelector('.canhao').style.background='var(--canhao)',200)}
+function hud(){document.getElementById('hud').innerText='MAPA 360°\nENERGIA 100%'}
+</script></body></html>
