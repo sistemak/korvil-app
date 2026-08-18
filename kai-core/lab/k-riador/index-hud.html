@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>KORVIL K-AI v4.2</title>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000;overflow:hidden;font-family:'Orbitron',monospace;color:#00f7ff}
+
+  /* FIX: VIDEO PRECISA ESTAR VISIVEL */
+  #camera{
+    position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;
+    transform:scaleX(-1);background:#000;z-index:1
+  }
+  #canvas{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    transform:scaleX(-1);z-index:2;pointer-events:none
+  }
+
+.panel{position:absolute;z-index:3;border:2px solid #00f7ff;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);color:#00f7ff;padding:10px 14px;border-radius:8px;font-size:11px;font-weight:700;box-shadow:0 0 20px rgba(0,247,255,0.4)}
+.panel.active{border-color:#00ff88;box-shadow:0 0 30px #00ff88;animation:pulse 0.5s}
+  @keyframes pulse{50%{transform:scale(1.05)}}
+.top{top:3%}.left{left:2%}.right{right:2%}
+
+  #pointer{position:absolute;width:24px;height:24px;z-index:4;display:none}
+.octa{width:100%;height:100%;border:2px solid #00f7ff;transform:rotate(45deg);box-shadow:0 0 15px #00f7ff;animation:spin 2s linear infinite}
+  @keyframes spin{100%{transform:rotate(405deg)}}
+
+  /* GUIA */
+  #guia{position:absolute;bottom:0;left:0;width:100%;z-index:5;background:rgba(0,0,0,0.95);border-top:2px solid #00f7ff}
+.tabs{display:flex}
+.tab{flex:1;padding:10px;text-align:center;cursor:pointer;border-right:1px solid #00334d;font-size:12px}
+.tab.active{background:#00f7ff;color:#000}
+.comandos{display:none;padding:10px;max-height:160px;overflow-y:auto}
+.comandos.active{display:block}
+.cmd-btn{width:100%;background:rgba(0,247,255,0.1);border:1px solid #00f7ff;color:#00f7ff;padding:8px;margin:4px 0;text-align:left;cursor:pointer;border-radius:5px;font-size:11px;font-family:'Orbitron'}
+.cmd-btn:hover{background:rgba(0,247,255,0.3)}
+
+  #log{position:absolute;bottom:190px;left:2%;z-index:3;width:75%;font-size:11px;background:rgba(0,0,0,0.8);border:1px solid #00f7ff;padding:10px;border-radius:6px}
+  #instrucao{color:#00ff88;font-weight:900;margin-bottom:5px}
+  #erro{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;background:#ff0044;color:#fff;padding:20px;border-radius:10px;display:none;text-align:center}
+</style>
+</head>
+<body>
+
+<video id="camera" autoplay playsinline muted></video>
+<canvas id="canvas"></canvas>
+<div id="pointer"><div class="octa"></div></div>
+<div id="erro"></div>
+
+<div id="p1" class="panel top left"><div>KORVIL K-AI v4.2</div><div>STATUS: <span id="status">INICIANDO</span></div><div>MOUSE: <span id="mouse">OFF</span></div></div>
+<div id="p2" class="panel top right"><div>CMD: <span id="cmd">AGUARDANDO</span></div></div>
+<div id="log"><div id="instrucao">AGUARDE A CÂMERA</div>Permitir acesso à câmera</div>
+
+<!-- GUIA -->
+<div id="guia">
+  <div class="tabs">
+    <div class="tab active" onclick="mostrarAba('olhos',this)">OLHOS</div>
+    <div class="tab" onclick="mostrarAba('sobrancelhas',this)">SOBRANCELHAS</div>
+    <div class="tab" onclick="mostrarAba('boca',this)">BOCA</div>
+    <div class="tab" onclick="mostrarAba('cabeca',this)">CABEÇA</div>
+  </div>
+  <div id="olhos" class="comandos active">
+    <button class="cmd-btn" onclick="mostrarInstrucao('PISCA OLHO ESQ', 'Pisque 1x com SEU olho esquerdo. <b>Ação:</b> Liga/Desliga Mouse')">Piscar Olho Esquerdo</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('PISCA OLHO DIR', 'Pisque 1x com SEU olho direito. <b>Ação:</b> Tirar Print')">Piscar Olho Direito</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('PISCA OS 2', 'Pisque com os 2 olhos juntos. <b>Ação:</b> Modo Foco')">Piscar Os 2 Olhos</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('OLHAR CIMA', 'Olhe pra cima 2s. <b>Ação:</b> Scanner')">Olhar pra Cima 2s</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('PISCA 2X', 'Pisque 2x seguidas olho esq. <b>Ação:</b> Modo Combate')">Piscar 2x Esquerdo</button>
+  </div>
+  <div id="sobrancelhas" class="comandos">
+    <button class="cmd-btn" onclick="mostrarInstrucao('2 SOBRANCELHAS', 'Levante as 2. <b>Ação:</b> Menu')">Levantar 2 Sobrancelhas</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('SOBRANCELHA ESQ', 'Levante só a esq. <b>Ação:</b> Painel Armas')">Levantar Sobrancelha Esq</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('SOBRANCELHA DIR', 'Levante só a dir. <b>Ação:</b> Painel Escudo')">Levantar Sobrancelha Dir</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('FRANZIR', 'Franza as 2. <b>Ação:</b> Stealth')">Franzir as 2</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('PISCA SOBRANCELHA', 'Levante/baixe 2x. <b>Ação:</b> Trocar Tema')">Piscar Sobrancelha 2x</button>
+  </div>
+  <div id="boca" class="comandos">
+    <button class="cmd-btn" onclick="mostrarInstrucao('BOCA ABERTA', 'Abra a boca. <b>Ação:</b> Zoom 2x')">Abrir a Boca</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('SORRIR', 'Sorria. <b>Ação:</b> Tirar Foto')">Sorrir</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('BOCA O', 'Boca em O. <b>Ação:</b> Gravar Voz')">Boca em "O"</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('MORDER', 'Morda lábio. <b>Ação:</b> Pausar')">Morder Lábio</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('ESTALAR', 'Sorria + boca. <b>Ação:</b> Som ON/OFF')">Estalar Língua</button>
+  </div>
+  <div id="cabeca" class="comandos">
+    <button class="cmd-btn" onclick="mostrarInstrucao('CABEÇA ESQ', 'Incline cabeça esq. <b>Ação:</b> Painel Esq')">Inclinar Cabeça Esq</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('CABEÇA DIR', 'Incline cabeça dir. <b>Ação:</b> Painel Dir')">Inclinar Cabeça Dir</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('CABEÇA SIM', 'Balançe SIM. <b>Ação:</b> Confirmar')">Balançar Cabeça "SIM"</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('CABEÇA NÃO', 'Balançe NÃO. <b>Ação:</b> Cancelar')">Balançar Cabeça "NÃO"</button>
+    <button class="cmd-btn" onclick="mostrarInstrucao('OLHAR BAIXO', 'Olhe baixo 2s. <b>Ação:</b> Teclado')">Olhar pra Baixo 2s</button>
+  </div>
+</div>
+
+<script>
+const video=document.getElementById('camera'), canvas=document.getElementById('canvas'), ctx=canvas.getContext('2d');
+let mouseOn=false, lastCmd=0, cameraOK=false;
+
+// 1. LIGAR CÂMERA COM TRATAMENTO DE ERRO
+async function iniciarCamera(){
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user', width:1280, height:720}});
+    video.srcObject = stream;
+    video.onloadedmetadata = ()=>{video.play();cameraOK=true;document.getElementById('status').innerText='ONLINE';document.getElementById('log').innerHTML='<div id="instrucao">CÂMERA OK</div>Clique nos comandos abaixo pra testar'}
+  }catch(err){
+    document.getElementById('erro').style.display='block';
+    document.getElementById('erro').innerHTML=`ERRO CÂMERA<br>${err.name}<br>Clique e permita o acesso`;
+    document.getElementById('status').innerText='ERRO';
+  }
+}
+iniciarCamera();
+
+// 2. FACE MESH
+const faceMesh=new FaceMesh({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${f}`});
+faceMesh.setOptions({maxNumFaces:1,refineLandmarks:true,minDetectionConfidence:0.5});
+faceMesh.onResults(onResults);
+
+video.addEventListener('play', ()=>{
+  new Camera(video,{onFrame:async()=>{if(cameraOK) await faceMesh.send({image:video})}}).start();
+});
+
+function mostrarAba(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.comandos').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');document.getElementById(id).classList.add('active');
+}
+function mostrarInstrucao(titulo, texto){
+  document.getElementById('log').innerHTML = `<div id="instrucao">TESTE AGORA: ${titulo}</div>${texto}`;
+}
+function feedback(msg){
+  if(Date.now()-lastCmd<700) return; lastCmd=Date.now();
+  document.getElementById('cmd').innerText=msg;
+  document.getElementById('p1').classList.add('active');
+  setTimeout(()=>document.getElementById('p1').classList.remove('active'),500);
+}
+
+function onResults(res){
+  if(!cameraOK) return;
+  canvas.width=video.videoWidth;canvas.height=video.videoHeight;ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(!res.multiFaceLandmarks?.length){feedback("ROSTO NÃO ENCONTRADO");return}
+  const lm=res.multiFaceLandmarks[0];
+
+  // LANDMARKS
+  const eyeL=lm[145], eyeTopL=lm[159]; // SEU OLHO ESQ
+  const eyeR=lm[374], eyeTopR=lm[386]; // SEU OLHO DIR
+  const browL=lm[70], browR=lm[300];
+  const mouthOpen=lm[14].y-lm[13].y;
+  const headX=lm[1].x;
+
+  let blinkL=eyeL.y-eyeTopL.y, blinkR=eyeR.y-eyeTopR.y;
+  let browUpL=lm[52].y-browL.y, browUpR=lm[282].y-browR.y;
+
+  // OLHOS
+  if(blinkL<0.006){mouseOn=!mouseOn;document.getElementById('mouse').innerText=mouseOn?'ON':'OFF';document.getElementById('status').innerText=mouseOn?'ONLINE':'STANDBY';feedback(mouseOn?"MOUSE ATIVADO":"MOUSE DESATIVADO");document.getElementById('pointer').style.display=mouseOn?'block':'none';}
+  if(blinkR<0.006){feedback("PRINT SALVO");}
+  if(blinkL<0.006 && blinkR<0.006){feedback("MODO FOCO");}
+  if(lm[1].y<0.3){feedback("SCANNER ATIVO");}
+
+  // SOBRANCELHAS
+  if(browUpL>0.022 && browUpR>0.022){feedback("MENU");}
+  if(browUpL>0.022 && browUpR<0.014){feedback("PAINEL ARMAS");}
+  if(browUpR>0.022 && browUpL<0.014){feedback("PAINEL ESCUDO");}
+  if(browUpL<0.006 && browUpR<0.006){feedback("STEALTH");}
+
+  // BOCA
+  if(mouthOpen>0.04){canvas.style.transform='scaleX(-1) scale(1.15)'}else{canvas.style.transform='scaleX(-1)'}
+  if(mouthOpen>0.1){feedback("FOTO")}
+
+  // CABEÇA
+  if(headX<0.44){feedback("PAINEL ESQUERDO");}
+  if(headX>0.56){feedback("PAINEL DIREITO");}
+
+  // DESENHAR PONTEIRO HOLOGRAFICO
+  if(mouseOn){
+    const eye=lm[468]; const x=(1-eye.x)*canvas.width; const y=eye.y*canvas.height;
+    document.getElementById('pointer').style.left=(x-12)+'px';document.getElementById('pointer').style.top=(y-12)+'px';
+    ctx.strokeStyle='#00ff88';ctx.lineWidth=3;ctx.shadowBlur=20;ctx.shadowColor='#00ff88';
+    ctx.beginPath();ctx.moveTo(x,y-12);ctx.lineTo(x+12,y);ctx.lineTo(x,y+12);ctx.lineTo(x-12,y);ctx.closePath();
+    ctx.moveTo(x,y-12);ctx.lineTo(x,y+12);ctx.moveTo(x-12,y);ctx.lineTo(x+12,y);ctx.stroke();
+  }
+}
+</script>
+</body>
+</html>
