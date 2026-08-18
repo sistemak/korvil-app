@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K-AI ORIGINAL | ADMIN & SYSTEM CONTROL</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    :root {
+      --c: #00FFFF;
+      --c2: #A8FFE6;
+      --bg: #000000;
+      --panel: rgba(10, 20, 25, 0.85);
+      --border: #132e36;
+      --danger: #ff3366;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
+    body { background: var(--bg); color: var(--c); overflow-x: hidden; min-height: 100vh; padding-bottom: 40px; }
+
+    /* CANVAS 3D BACKGROUND */
+    #canvas3d { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+    /* OVERLAY UI SUPERIOR */
+    .ui-top { position: relative; z-index: 10; display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 2px solid var(--c); background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); }
+    .logo { font-size: 24px; font-weight: 900; letter-spacing: 4px; text-shadow: 0 0 20px var(--c); }
+    .logo span { color: var(--c2); font-size: 11px; letter-spacing: 2px; display: block; margin-top: 4px; }
+    .modo { font-size: 11px; font-weight: 900; padding: 6px 14px; border: 1px solid #00ff88; border-radius: 20px; background: rgba(0, 255, 136, 0.1); color: #00ff88; box-shadow: 0 0 15px #00ff88; }
+
+    /* PAINEL GRID ADMINISTRATIVO */
+    .admin-container { position: relative; z-index: 10; padding: 20px; max-width: 1200px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 25px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; backdrop-filter: blur(15px); display: flex; flex-direction: column; gap: 12px; box-shadow: 0 0 15px rgba(0, 255, 255, 0.1); }
+    .card h2 { color: var(--c2); font-size: 13px; font-weight: 800; border-bottom: 1px solid var(--border); padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+
+    .stat-row { display: flex; justify-content: space-between; font-size: 12px; color: #ccc; }
+    .stat-val { color: var(--c); font-weight: bold; }
+
+    .btn { background: rgba(0, 255, 255, 0.1); border: 1px solid var(--c); color: var(--c); padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 700; text-align: center; transition: 0.2s; font-size: 11px; }
+    .btn:hover { background: var(--c); color: #000; box-shadow: 0 0 15px var(--c); }
+    .btn-danger { border-color: var(--danger); color: var(--danger); }
+    .btn-danger:hover { background: var(--danger); color: #fff; box-shadow: 0 0 15px var(--danger); }
+
+    textarea { width: 100%; height: 110px; background: #000; border: 1px solid var(--border); border-radius: 6px; color: var(--c2); padding: 10px; font-family: monospace; font-size: 11px; resize: none; outline: none; }
+
+    /* SEÇÃO DE CHAT E COMANDO DE VOZ */
+    .chat-section { position: relative; z-index: 10; width: 100%; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+    .chat { width: 100%; background: rgba(0,0,0,0.85); border: 1px solid var(--c); border-radius: 15px; padding: 18px; max-height: 200px; overflow-y: auto; backdrop-filter: blur(15px); box-shadow: 0 0 20px rgba(0, 255, 255, 0.15); }
+    .msg { margin: 8px 0; font-size: 13px; line-height: 1.4; }
+    .msg.user { color: var(--c2); text-align: right; }
+    .msg.kai { color: var(--c); }
+
+    .mic-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .mic { width: 80px; height: 80px; border: 3px solid var(--c); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; cursor: pointer; transition: .3s; box-shadow: 0 0 30px var(--c); background: rgba(0, 255, 255, 0.05); }
+    .mic:hover { transform: scale(1.08); box-shadow: 0 0 50px var(--c); }
+    .mic.listening { animation: pulse 0.8s infinite; background: rgba(0, 255, 255, 0.3); }
+    @keyframes pulse { 0%, 100% { box-shadow: 0 0 30px var(--c); } 50% { box-shadow: 0 0 80px var(--c2); } }
+
+    .status-text { font-size: 12px; text-align: center; color: var(--c2); }
+  </style>
+</head>
+<body>
+
+  <!-- BACKGROUND 3D JARVIS CORE -->
+  <canvas id="canvas3d"></canvas>
+
+  <!-- HEADER HUD -->
+  <div class="ui-top">
+    <div class="logo">
+      K-AI CORE
+      <span>ORIGINAL - MODO ADMINISTRADOR</span>
+    </div>
+    <div id="sysClock" style="font-weight: bold; font-size: 14px;">00:00:00</div>
+    <div class="modo">MODO: ADMIN ILIMITADO</div>
+  </div>
+
+  <!-- CONTAINER DE GERENCIAMENTO ADMIN -->
+  <div class="admin-container">
+    <div class="grid">
+      <!-- CARD STATUS DO SERVIDOR -->
+      <div class="card">
+        <h2>Status do Servidor</h2>
+        <div class="stat-row"><span>Motor Local:</span> <span class="stat-val">Ativo (v2.0)</span></div>
+        <div class="stat-row"><span>Conexão API Gemini:</span> <span class="stat-val" id="apiStatus">Verificando...</span></div>
+        <div class="stat-row"><span>Status Núcleo 3D:</span> <span class="stat-val">Sincronizado</span></div>
+        <button class="btn" onclick="testConnection()">Testar Conexão API</button>
+      </div>
+
+      <!-- CARD GESTÃO DE MEMÓRIA -->
+      <div class="card">
+        <h2>Memória do Sistema</h2>
+        <textarea id="memContent" placeholder="Carregando registros de memória..."></textarea>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn" style="flex: 1;" onclick="saveMemory()">Salvar Registros</button>
+          <button class="btn btn-danger" onclick="clearMemory()">Limpar Memória</button>
+        </div>
+      </div>
+
+      <!-- CARD CONTROLE DE COMANDOS -->
+      <div class="card">
+        <h2>Ações de Controle</h2>
+        <button class="btn" onclick="processarComando('status')">Verificar Diagnóstico</button>
+        <button class="btn" onclick="processarComando('abrir app')">Abrir App Principal</button>
+        <button class="btn btn-danger" onclick="processarComando('shutdown')">Solicitar Desligamento</button>
+      </div>
+    </div>
+
+    <!-- SEÇÃO CHAT E VOZ -->
+    <div class="chat-section">
+      <div class="chat" id="chat"></div>
+
+      <div class="mic-wrapper">
+        <div class="mic" id="micBtn">🎙️</div>
+        <div class="status-text" id="statusText">Clique no microfone para falar</div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop></audio>
+
+  <script>
+    // ===== RELÓGIO DO SISTEMA =====
+    setInterval(() => {
+      document.getElementById('sysClock').innerText = new Date().toLocaleTimeString('pt-BR');
+    }, 1000);
+
+    // ===== TESTE DE CONEXÃO COM A API =====
+    async function testConnection() {
+      const statusEl = document.getElementById('apiStatus');
+      statusEl.innerText = 'Testando...';
+      try {
+        const res = await fetch('/api/kai/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: 'ping' })
+        });
+        if (res.ok) {
+          statusEl.innerText = 'Online (200 OK)';
+        } else {
+          statusEl.innerText = 'Erro ' + res.status;
+        }
+      } catch (e) {
+        statusEl.innerText = 'Offline / Local';
+      }
+    }
+
+    // ===== GESTÃO DE MEMÓRIA (LOCALSTORAGE) =====
+    function loadMemory() {
+      const mem = localStorage.getItem('KAI_MEMORIA') || '{"historico": [], "fatos": {}}';
+      try {
+        document.getElementById('memContent').value = JSON.stringify(JSON.parse(mem), null, 2);
+      } catch(e) {
+        document.getElementById('memContent').value = mem;
+      }
+    }
+
+    function saveMemory() {
+      try {
+        const raw = document.getElementById('memContent').value;
+        JSON.parse(raw);
+        localStorage.setItem('KAI_MEMORIA', raw);
+        falar("Memória do sistema atualizada com sucesso.");
+      } catch (e) {
+        alert('Erro: JSON inválido na área de memória.');
+      }
+    }
+
+    function clearMemory() {
+      if (confirm('Tem certeza que deseja apagar a memória local do K-AI?')) {
+        localStorage.removeItem('KAI_MEMORIA');
+        loadMemory();
+        falar("Memória local do K-AI apagada.");
+      }
+    }
+
+    // ===== CONTROLE DE RECONHECIMENTO E SÍNTESE DE VOZ =====
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const synth = window.speechSynthesis;
+    let recognition;
+    let isListening = false;
+
+    const micBtn = document.getElementById('micBtn');
+    const chat = document.getElementById('chat');
+    const statusText = document.getElementById('statusText');
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'pt-BR';
+      recognition.continuous = false;
+
+      recognition.onstart = () => {
+        isListening = true;
+        micBtn.classList.add('listening');
+        statusText.innerText = 'K-AI ouvindo comandos...';
+      };
+
+      recognition.onend = () => {
+        isListening = false;
+        micBtn.classList.remove('listening');
+        statusText.innerText = 'Clique no microfone para falar';
+      };
+
+      recognition.onresult = (e) => {
+        const cmd = e.results[0][0].transcript.toLowerCase();
+        addMsg('user', cmd);
+        processarComando(cmd);
+      };
+    }
+
+    micBtn.onclick = () => {
+      if (!isListening && recognition) {
+        try { recognition.start(); } catch(e) {}
+      }
+    };
+
+    function addMsg(tipo, texto) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + tipo;
+      div.innerText = tipo === 'user' ? 'Você: ' + texto : 'K-AI: ' + texto;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function falar(texto) {
+      addMsg('kai', texto);
+      if (!synth) return;
+      synth.cancel();
+      const utter = new SpeechSynthesisUtterance(texto);
+      utter.lang = 'pt-BR';
+      utter.rate = 1.05;
+      utter.pitch = 1.1;
+      synth.speak(utter);
+    }
+
+    // ===== RENDERIZAÇÃO 3D DO NÚCLEO JARVIS =====
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas3d'), antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const geometry = new THREE.IcosahedronGeometry(1.8, 2);
+    const material = new THREE.MeshPhongMaterial({
+      color: 0x00FFFF,
+      emissive: 0x00FFFF,
+      emissiveIntensity: 0.6,
+      shininess: 120,
+      transparent: true,
+      opacity: 0.85
+    });
+    const nucleo = new THREE.Mesh(geometry, material);
+    scene.add(nucleo);
+
+    const ringGeo = new THREE.TorusGeometry(2.5, 0.08, 16, 100);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x00FFFF, wireframe: true });
+    const ring1 = new THREE.Mesh(ringGeo, ringMat);
+    const ring2 = new THREE.Mesh(ringGeo, ringMat);
+    ring2.rotation.x = Math.PI / 2;
+    scene.add(ring1, ring2);
+
+    const light1 = new THREE.PointLight(0x00FFFF, 2.5, 50);
+    light1.position.set(5, 5, 5);
+    const light2 = new THREE.PointLight(0xA8FFE6, 1.5, 50);
+    light2.position.set(-5, -5, -5);
+    scene.add(light1, light2);
+
+    camera.position.z = 6;
+
+    const particles = new THREE.Points(
+      new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(Array(4000).fill().map(() => (Math.random() - 0.5) * 25), 3)),
+      new THREE.PointsMaterial({ color: 0x00FFFF, size: 0.025 })
+    );
+    scene.add(particles);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      nucleo.rotation.x += 0.008;
+      nucleo.rotation.y += 0.015;
+      ring1.rotation.y += 0.02;
+      ring2.rotation.z += 0.015;
+      particles.rotation.y += 0.0008;
+      material.emissiveIntensity = 0.5 + Math.sin(Date.now() * 0.003) * 0.2;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // ===== CÉREBRO ADMIN & PROCESSADOR DE COMANDOS =====
+    function processarComando(cmd) {
+      if (cmd.includes('olá') || cmd.includes('k-ai')) {
+        falar('K-AI Original online. Acesso total liberado, Korvil. Como posso auxiliar?');
+      } else if (cmd.includes('horas')) {
+        falar('Horário KORVIL: ' + new Date().toLocaleTimeString('pt-BR'));
+      } else if (cmd.includes('data')) {
+        falar('Data de hoje: ' + new Date().toLocaleDateString('pt-BR'));
+      } else if (cmd.includes('editar sistema')) {
+        falar('Modo de edição ativado. Qual sistema deseja modificar?');
+      } else if (cmd.includes('criar')) {
+        falar('Modo criação ativo. Me diga o que quer criar agora.');
+      } else if (cmd.includes('corvo')) {
+        falar('Iniciando protocolo do Corvo. Mascote KORVIL online.');
+      } else if (cmd.includes('abrir app')) {
+        falar('Abrindo painel KORVIL');
+        window.open('../index.html', '_blank');
+      } else if (cmd.includes('shutdown')) {
+        falar('Requer confirmação de voz para desligar o sistema.');
+      } else if (cmd.includes('status')) {
+        falar('Todos os sistemas KORVIL operando em 100%. Núcleo estável.');
+      } else {
+        falar('Comando recebido. Executando diretriz no modo Admin.');
+      }
+    }
+
+    // ===== EVENTOS DE INICIALIZAÇÃO E RESIZE =====
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    window.onload = () => {
+      testConnection();
+      loadMemory();
+      setTimeout(() => falar('K-AI Original inicializado. Todos os sistemas KORVIL operando em Modo Administrador.'), 1500);
+    };
+  </script>
+</body>
+</html>
