@@ -1,0 +1,90 @@
+// ==============================================================
+// KORVIL BANC - Schema Prisma (SQLite)
+// Tabelas: Cliente, Cobranca, Repasse, Log
+// ==============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------------
+// Cliente pagador (sincronizado com o Asaas)
+// ------------------------------------------------------------
+model Cliente {
+  id            String     @id @default(cuid())
+  asaasId       String?    @unique // id do customer no Asaas
+  nome          String
+  email         String?
+  cpfCnpj       String?
+  telefone      String?
+  criadoEm      DateTime   @default(now())
+  atualizadoEm  DateTime   @updatedAt
+
+  cobrancas     Cobranca[]
+}
+
+// ------------------------------------------------------------
+// Cobranca dinamica (billingType UNDEFINED no Asaas)
+// ------------------------------------------------------------
+model Cobranca {
+  id            String     @id @default(cuid())
+  asaasId       String?    @unique // id do payment no Asaas
+  clienteId     String
+  cliente       Cliente    @relation(fields: [clienteId], references: [id])
+
+  modulo        String     // k-th, whatsapp, kai, geral, afiliados
+  tipo          String     // ASSINATURA | UNICO | INSCRICAO
+  metodoPgto    String?    // PIX | CREDIT_CARD | BOLETO (definido pelo cliente no checkout Asaas)
+  parcelas      Int        @default(1)
+
+  valor         Float      // valor bruto
+  valorLiquido  Float?     // valor liquido recebido (apos taxas)
+
+  status        String     @default("PENDING") // PENDING | RECEIVED | CONFIRMED | OVERDUE | REFUNDED
+  invoiceUrl    String?    // link de pagamento do Asaas
+  descricao     String?
+
+  criadoEm      DateTime   @default(now())
+  pagoEm        DateTime?
+
+  repasse       Repasse?
+}
+
+// ------------------------------------------------------------
+// Repasse: transferencia do valor liquido via Pix para o KORVIL
+// ------------------------------------------------------------
+model Repasse {
+  id            String     @id @default(cuid())
+  cobrancaId    String     @unique
+  cobranca      Cobranca   @relation(fields: [cobrancaId], references: [id])
+
+  asaasId       String?    // id da transferencia no Asaas
+  pixKey        String     // chave Pix de destino
+  valor         Float      // valor transferido
+
+  // D+0 para Pix, D+30 para Cartao
+  agendadoPara  DateTime
+  status        String     @default("SCHEDULED") // SCHEDULED | PROCESSING | DONE | FAILED
+  tentativa     Int        @default(0)
+  erro          String?
+
+  criadoEm      DateTime   @default(now())
+  concluidoEm   DateTime?
+}
+
+// ------------------------------------------------------------
+// Log: registro de todos os eventos do sistema
+// ------------------------------------------------------------
+model Log {
+  id          String   @id @default(cuid())
+  nivel       String   @default("info") // info | warn | error
+  origem      String   // api | webhook | queue | asaas | whatsapp
+  evento      String
+  detalhe     String?  // JSON serializado
+  criadoEm    DateTime @default(now())
+}
