@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>K-RIADOR - Baixar ZIP</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<style>
+  body { background:#0A0A0A; color:#eee; font-family: Arial; padding:20px; max-width:900px; margin:auto; }
+  h1 { color:#00ff88; text-align:center; }
+ .topo { background:#111; padding:15px; border-radius:10px; margin-bottom:20px; text-align:center; }
+ .card { background:#1A1A1A; padding:12px; border-radius:8px; margin:8px 0; border-left:3px solid #333; }
+ .pasta { border-left:3px solid #00ff88; }
+  input, textarea { width:100%; padding:8px; margin:5px 0; background:#222; color:#fff; border:1px solid #444; border-radius:5px; }
+  button { padding:9px 14px; margin:4px; background:#00ff88; color:#000; border:none; border-radius:5px; cursor:pointer; font-weight:bold; }
+  button.danger { background:#ff4444; color:#fff; }
+  button.sec { background:#333; color:#fff; }
+ .botoes { display:flex; gap:5px; flex-wrap:wrap; align-items:center; }
+</style>
+</head>
+<body>
+
+<h1>📦 K-RIADOR DE ZIP</h1>
+
+<div class="topo">
+  <p>1. Crie pastas e arquivos 2. Adicione conteúdo 3. Baixe o ZIP</p>
+  <button onclick="addPasta('root')">📁 Nova Pasta</button>
+  <button onclick="addArquivo('root')" class="sec">📄 Novo Arquivo</button>
+  <button onclick="baixarZip()" style="background:#00aaff">⬇️ BAIXAR ZIP AGORA</button>
+</div>
+
+<div id="estrutura"></div>
+
+<script>
+let idCounter = 0;
+const raiz = { id: 'root', tipo: 'pasta', nome: 'meu-projeto', filhos: [] };
+
+function addPasta(paiId) {
+  const nome = prompt("Nome da pasta:");
+  if(!nome) return;
+  const nova = { id: 'p' + idCounter++, tipo: 'pasta', nome, filhos: [] };
+  acharPai(raiz, paiId).filhos.push(nova);
+  render();
+}
+
+function addArquivo(paiId) {
+  const nome = prompt("Nome do arquivo: ex index.html, foto.jpg, script.js");
+  if(!nome) return;
+  const nova = { id: 'a' + idCounter++, tipo: 'arquivo', nome, texto: '', blob: null };
+  acharPai(raiz, paiId).filhos.push(nova);
+  render();
+}
+
+function excluir(paiId, id) {
+  if(!confirm("Excluir?")) return;
+  const pai = acharPai(raiz, paiId);
+  pai.filhos = pai.filhos.filter(f => f.id!== id);
+  render();
+}
+
+function acharPai(no, id) {
+  if(no.id === id) return no;
+  for(const f of no.filhos) if(f.tipo==='pasta'){ const r = acharPai(f,id); if(r) return r; }
+}
+
+function salvarTexto(e, item){ item.texto = e.target.value; }
+function anexarArquivo(e, item){ item.blob = e.target.files[0]; }
+
+function render(no = raiz, el = document.getElementById('estrutura'), isRoot = true) {
+  if(isRoot) el.innerHTML = '';
+  no.filhos.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'card ' + (item.tipo==='pasta'?'pasta':'');
+
+    if(item.tipo==='pasta'){
+      div.innerHTML = `
+        <div class="botoes">
+          <b>📁 ${item.nome}</b>
+          <button onclick="addPasta('${item.id}')">+ Subpasta</button>
+          <button onclick="addArquivo('${item.id}')" class="sec">+ Arquivo</button>
+          <button onclick="excluir('${no.id}','${item.id}')" class="danger">X</button>
+        </div>
+        <div id="c-${item.id}" style="margin-left:15px"></div>
+      `;
+      el.appendChild(div);
+      render(item, div.querySelector(`#c-${item.id}`), false);
+    } else {
+      div.innerHTML = `
+        <div class="botoes">
+          <b>📄 ${item.nome}</b>
+          <button onclick="excluir('${no.id}','${item.id}')" class="danger">X</button>
+        </div>
+        <label>Conteúdo Texto/Código:</label>
+        <textarea rows="4" oninput="salvarTexto(event, item)" placeholder="Cole código aqui...">${item.texto}</textarea>
+        <label>Ou Anexar Arquivo: img, video, pdf...</label>
+        <input type="file" onchange="anexarArquivo(event, item)">
+        <small style="color:#00ff88">${item.blob? 'Anexado: '+item.blob.name : ''}</small>
+      `;
+      el.appendChild(div);
+    }
+  });
+}
+
+async function baixarZip(){
+  const zip = new JSZip();
+  async function percorrer(no, pasta){
+    for(const item of no.filhos){
+      if(item.tipo==='pasta'){
+        const sub = pasta.folder(item.nome);
+        await percorrer(item, sub);
+      } else {
+        if(item.blob) pasta.file(item.nome, item.blob);
+        else pasta.file(item.nome, item.texto);
+      }
+    }
+  }
+  await percorrer(raiz, zip);
+  const blob = await zip.generateAsync({type:"blob"});
+  saveAs(blob, raiz.nome + ".zip");
+  alert("ZIP baixado com sucesso!");
+}
+
+render();
+</script>
+</body>
+</html>
