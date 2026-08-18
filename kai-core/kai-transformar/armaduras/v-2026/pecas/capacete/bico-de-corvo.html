@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BICO KORVIL CENTRAL</title>
+<style>
+:root{--c:#00FFFF;--alerta:#FF3B30}
+body{margin:0;background:#000;color:var(--c);font-family:'Segoe UI';display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px}
+@keyframes scan{0%{background-position:0 0}100%{background-position:100% 100%}}
+h2{text-shadow:0 0 10px var(--c)}
+.status-box{width:90%;max-width:500px;background:rgba(0,20,30,.8);border:2px solid var(--c);border-radius:12px;padding:15px;margin:15px 0}
+.status-linha{display:flex;justify-content:space-between;margin:8px 0;font-size:14px}
+.btn{padding:14px 20px;background:linear-gradient(90deg,#0d1a20,#001f2f);border:2px solid var(--c);color:var(--c);border-radius:10px;margin:8px;font-weight:900;cursor:pointer;width:90%;max-width:500px;transition:.2s}
+.btn:hover{box-shadow:0 0 20px var(--c)}
+.log{height:100px;overflow-y:auto;background:#001015;border:1px solid var(--c);padding:10px;font-size:12px;border-radius:8px}
+</style></head>
+<body>
+<h2>SISTEMA BICO KORVIL v-2026</h2>
+<p>CENTRAL DE COMANDO NEURAL</p>
+
+<div class="status-box">
+  <div class="status-linha"><span>NARIZ:</span><span id="statusNariz">ONLINE</span></div>
+  <div class="status-linha"><span>BOCA:</span><span id="statusBoca">ONLINE</span></div>
+  <div class="status-linha"><span>FONES:</span><span id="statusFones">DESCONECTADO</span></div>
+  <div class="status-linha"><span>INTEGRIDADE:</span><span id="integridade">100%</span></div>
+</div>
+
+<button class="btn" onclick="abrir('nariz')">ACESSAR SISTEMA NASAL</button>
+<button class="btn" onclick="abrir('boca')">ACESSAR SISTEMA BUCAL</button>
+<button class="btn" onclick="diagnostico()">RODAR DIAGNÓSTICO COMPLETO</button>
+<button class="btn" onclick="modoVoo()">MODO VOO: SINCRONIZAR</button>
+
+<div class="log" id="logIA">> K-AI: Sistema iniciado...<br></div>
+
+<script>
+let log = document.getElementById('logIA');
+function addLog(txt){ log.innerHTML += `> ${txt}<br>`; log.scrollTop = log.scrollHeight; }
+
+function abrir(p){ 
+  if(window.parent.mostrarPeca) window.parent.mostrarPeca(p); 
+  addLog(`Acessando ${p.toUpperCase()}`);
+  if(window.parent.falar) window.parent.falar(`Abrindo ${p}`);
+}
+
+function diagnostico(){
+  addLog('Rodando diagnostico...');
+  let i = 100 - Math.random()*5;
+  document.getElementById('integridade').innerText = Math.round(i)+'%';
+  addLog(`Integridade: ${Math.round(i)}%. Todos sistemas OK`);
+}
+
+function modoVoo(){
+  addLog('SINCRONIZANDO: Nariz + Boca + Asas + Propulsor');
+  if(window.parent.atualizarTexto) window.parent.atualizarTexto('MODO VOO: BANSHEE ATIVO');
+  if(window.parent.falar) window.parent.falar('Modo Voo Banshee ativado. Segurança auditiva ligada');
+  // Sinal pros fones cancelarem
+  window.parent.fonesANC = true;
+}
+
+// Simula conexão com fones
+setInterval(()=>{
+  if(window.parent.fonesStatus) document.getElementById('statusFones').innerText = 'ANC ATIVO';
+}, 1000);
+</script>
+</body></html>
