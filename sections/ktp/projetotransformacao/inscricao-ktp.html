@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="pt-br"><head><meta charset="UTF-8"><title>Inscrição KTP</title>
+<style>
+body{background:#000;color:#00f5ff;font-family:'Orbitron',sans-serif;padding:20px}
+input,select{width:95%;padding:12px;margin:8px 0;background:#001a33;border:1px solid #00f5ff;color:#fff;border-radius:8px}
+button{padding:15px;width:100%;background:#00f5ff;color:#000;border:none;border-radius:10px;font-weight:900;font-size:16px;margin-top:10px}
+#log{background:#001a33;padding:10px;margin-top:15px;border-radius:8px;font-size:12px}
+</style></head>
+<body>
+<h1>INSCRIÇÃO PROJETO TRANSFORMAÇÃO</h1>
+<input id="nome" placeholder="Nome Completo">
+<input id="tel" placeholder="Telefone">
+<select id="plano"><option>PRESENCIAL</option><option>ONLINE</option></select>
+<button onclick="salvarLocal()">1. SALVAR LOCAL</button>
+<button onclick="enviarGithub()" style="background:#00ff88">2. ENVIAR PRO GITHUB</button>
+<div id="log"></div>
+
+<script>
+const TOKEN = "https://raw.githubusercontent.com/${REPO}/main/${ARQ}?t=${Date.now()"; // Cole 1x só
+const REPO = "korvilp-sudo/korvil-app";
+const PASTA = "sections/ktp/projetotransformacao/projetos/2026/";
+let log = (m)=>document.getElementById('log').innerHTML += m+'<br>';
+
+function salvarLocal(){
+  let alunos = JSON.parse(localStorage.getItem('alunos_ktp') || '[]');
+  const novo = {nome:document.getElementById('nome').value, tel:document.getElementById('tel').value, plano:document.getElementById('plano').value, data:new Date().toLocaleString()};
+  alunos.push(novo);
+  localStorage.setItem('alunos_ktp', JSON.stringify(alunos));
+  log('✅ Salvo local: '+novo.nome);
+  document.getElementById('nome').value='';
+}
+
+async function enviarGithub(){
+  let alunos = JSON.parse(localStorage.getItem('alunos_ktp') || '[]');
+  if(alunos.length==0) return alert('Sem alunos pra enviar');
+
+  log('Buscando cronograma atual...');
+  let cronograma = {};
+  try{
+    const res = await fetch(`https://raw.githubusercontent.com/${REPO}/main/${PASTA}cronograma.json`);
+    cronograma = await res.json();
+  }catch(e){}
+
+  let ultimoNum = Math.max(...Object.keys(cronograma).map(k=>parseInt(k.replace(/\D/g,'')) || 0));
+
+  for(const aluno of alunos){
+    ultimoNum++;
+    const id = "aluno" + ultimoNum;
+    cronograma[id] = {nome:aluno.nome, tel:aluno.tel, plano:aluno.plano, status:"Ativo", data_cadastro:aluno.data};
+    log('Criando: '+id+'.json');
+    await salvarArquivo(`${PASTA}${id}.json`, cronograma[id]);
+  }
+
+  log('Atualizando cronograma.json...');
+  await salvarArquivo(`${PASTA}cronograma.json`, cronograma);
+
+  localStorage.removeItem('alunos_ktp');
+  log('✅ TUDO ENVIADO! Limpei a fila local');
+  alert('FINALIZADO! Arquivos criados');
+}
+
+async function salvarArquivo(caminho, dados){
+  let sha = null;
+  try{
+    const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${caminho}`, {headers:{Authorization:`token ${TOKEN}`}});
+    if(res.ok) sha = (await res.json()).sha;
+  }catch(e){}
+
+  await fetch(`https://api.github.com/repos/${REPO}/contents/${caminho}`,{
+    method:'PUT', headers:{Authorization:`token ${TOKEN}`},
+    body:JSON.stringify({message:`Update ${caminho}`, content:btoa(unescape(encodeURIComponent(JSON.stringify(dados, null, 2)))), sha:sha})
+  });
+}
+</script></body></html>
