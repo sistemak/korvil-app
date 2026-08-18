@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-AI VISOR v-2026.26 FINAL</title>
+<style>
+:root{--c:#00FFFF;--c2:#00FFD5;--glow:#00FFFF}
+body{margin:0;background:#000;overflow:hidden;font-family:'Segoe UI',Roboto;user-select:none}
+video,canvas{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:all.4s ease}
+
+/* OCTAEDRO PULSANTE */
+.hud-octa{position:absolute;top:10%;left:5%;width:180px;height:180px;z-index:10;animation:pulseOcta 2s infinite;pointer-events:none}
+@keyframes pulseOcta{0%,100%{filter:drop-shadow(0 0 20px var(--glow))}50%{filter:drop-shadow(0 0 40px var(--glow))}}
+.hud-linha{position:absolute;top:50%;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);box-shadow:0 0 10px var(--c);animation:scan 3s linear infinite}
+@keyframes scan{0%{top:0}100%{top:100%}}
+.hud-top{position:absolute;top:20px;width:100%;text-align:center;color:var(--c);font-weight:900;font-size:14px;letter-spacing:4px;text-shadow:0 0 20px var(--glow);z-index:10}
+.hud-info{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);color:var(--c2);font-weight:700;font-size:16px;text-shadow:0 0 15px var(--glow);z-index:10;background:rgba(0,20,30,.8);padding:8px 20px;border-radius:20px;border:1px solid var(--c)}
+.hud-camera{position:absolute;top:50px;right:20px;color:var(--c);font-size:10px;font-weight:700;z-index:10;text-shadow:0 0 8px var(--glow)}
+.hud-dica{position:absolute;top:70px;right:20px;color:#5a8a96;font-size:9px;z-index:10}
+
+/* BARRA ICONES OCTAEDRO */
+.barra-icones{position:absolute;left:15px;top:50%;transform:translateY(-50%);z-index:15;display:flex;flex-direction:column;gap:14px}
+.icone-peca{
+  width:55px;height:55px;background:rgba(0,255,255,.05);
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  border:2px solid var(--c);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:.3s;
+  box-shadow:0 0 20px var(--glow)40; animation:pulseIcon 3s infinite
+}
+@keyframes pulseIcon{0%,100%{box-shadow:0 0 20px var(--glow)40}50%{box-shadow:0 0 35px var(--glow)80}}
+.icone-peca:hover{background:var(--c);color:#000;transform:scale(1.15)}
+.icone-peca.ativo{background:var(--c);color:#000;box-shadow:0 0 50px var(--glow);animation:none}
+
+/* MINI MENU OCTAEDRO */
+.mini-menu{
+  position:absolute;top:50%;right:20px;transform:translateY(-50%);width:310px;
+  background:linear-gradient(180deg,rgba(0,255,255,.05),rgba(0,0,0,.9));
+  clip-path: polygon(5% 0%, 95% 0%, 100% 10%, 100% 90%, 95% 100%, 5% 100%, 0% 90%, 0% 10%);
+  border:2px solid var(--c2);padding:18px;z-index:15;box-shadow:0 0 40px var(--glow)60;display:none
+}
+.mini-menu.open{display:block;animation:fadeInOcta.4s}
+@keyframes fadeInOcta{from{opacity:0;transform:translateY(-50%) scale(.8)} to{opacity:1;transform:translateY(-50%) scale(1)}}
+.mini-title{color:var(--c2);font-size:17px;font-weight:900;text-align:center;margin-bottom:4px;text-shadow:0 0 15px var(--glow)}
+.mini-caminho{color:#5a8a96;font-size:10px;text-align:center;margin-bottom:12px;border-bottom:1px solid var(--c)30;padding-bottom:8px}
+.mini-btn{
+  background:rgba(0,255,255,.08);clip-path: polygon(5% 0%, 95% 0%, 100% 30%, 100% 70%, 95% 100%, 5% 100%, 0% 70%, 0% 30%);
+  border:1px solid var(--c);color:var(--c);padding:11px 14px;margin:7px 0;cursor:pointer;font-size:12px;font-weight:700;transition:.2s;text-align:left
+}
+.mini-btn:hover{background:var(--c);color:#000;box-shadow:0 0 20px var(--glow)}
+.mini-btn.ativo{background:var(--c);color:#000;box-shadow:0 0 30px var(--glow)}
+.mini-close{position:absolute;top:8px;right:12px;color:var(--c);font-size:22px;cursor:pointer;text-shadow:0 0 10px var(--glow)}
+.mini-status{color:var(--c2);font-size:10px;margin-top:8px;text-align:center}
+
+.btn-fechar{
+  position:absolute;bottom:20px;right:20px;background:#000;
+  clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+  border:2px solid var(--c);color:var(--c);padding:14px 28px;font-weight:900;cursor:pointer;box-shadow:0 0 25px var(--glow);z-index:10
+}
+
+/* EFEITOS REAIS */
+.zoom{transform:scale(2.5)}.raiox{filter: invert(1) hue-rotate(180deg) contrast(250%)}
+.termico{filter: hue-rotate(160deg) saturate(4) contrast(180%)}.noturno{filter: brightness(2.5) hue-rotate(170deg)}
+.combate{filter: contrast(140%) brightness(1.2)}@keyframes shake{0%{transform:translate(1px,1px)}50%{transform:translate(-2px,-1px)}100%{transform:translate(1px,-1px)}}.shake{animation:shake.1s infinite}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
+<script src="mini-menu.js"></script> <!-- PUXA O BANCO DE DADOS -->
+</head>
+<body>
+<video id="video" autoplay playsinline></video>
+<canvas id="canvas"></canvas>
+
+<svg class="hud-octa" viewBox="0 0 100 100">
+  <polygon points="50,5 95,38 82,95 18,95 5,38" fill="none" stroke="#00FFFF" stroke-width="1.5"/>
+</svg>
+
+<div class="hud-linha"></div>
+<div class="hud-top">K-AI VISOR v-2026.26 | PROTOCOLO: SAY KORVIL</div>
+<div class="hud-camera" id="hudCamera">CÂMERA: TRASEIRA</div>
+<div class="hud-dica">TOQUE 2X NA TELA PARA TROCAR CÂMERA</div>
+<div class="hud-info" id="hudTexto">SCANEANDO...</div>
+
+<div class="barra-icones" id="barraIcones"></div>
+
+<div class="mini-menu" id="miniMenu">
+  <span class="mini-close" onclick="K_VISOR.fecharMiniMenu()">×</span>
+  <div id="miniConteudo"></div>
+</div>
+<div id="miniMenuContainer"></div>
+
+<button class="btn-fechar" onclick="K_VISOR.sairVisor()">SAIR</button>
+
+<script>
+const K_VISOR = {
+  video: document.getElementById('video'),
+  canvas: document.getElementById('canvas'),
+  ctx: document.getElementById('canvas').getContext('2d'),
+  modelFace: null,
+  pecaAtual: 'visor',
+  stream: null,
+  usandoCameraFrontal: false,
+  ultimoToque: 0,
+
+  iniciar: async function(){
+    // CARREGA O HTML DO MENU
+    fetch('mini-menu.html').then(res => res.text()).then(data => {
+      document.getElementById('miniMenuContainer').innerHTML = data;
+    });
+
+    this.modelFace = await blazeface.load();
+    document.getElementById('barraIcones').innerHTML = K_MINI_MENU.montarBarraIcones(); // PUXA DO JS
+    this.abrirPeca('visor');
+    this.trocarCamera();
+    this.detectar();
+    document.addEventListener('dblclick', ()=>this.trocarCamera());
+    document.addEventListener('touchend', (e)=>{let agora = new Date().getTime(); if(agora - this.ultimoToque < 300){this.trocarCamera();} this.ultimoToque = agora;});
+  },
+
+  trocarCamera: async function(){
+    this.usandoCameraFrontal =!this.usandoCameraFrontal;
+    if(this.stream) this.stream.getTracks().forEach(track => track.stop());
+    let facing = this.usandoCameraFrontal? "user" : "environment";
+    this.stream = await navigator.mediaDevices.getUserMedia({video: { facingMode: facing }});
+    this.video.srcObject = this.stream;
+    document.getElementById('hudCamera').innerText = `CÂMERA: ${this.usandoCameraFrontal? 'FRONTAL' : 'TRASEIRA'}`;
+  },
+
+  abrirPeca: function(peca){
+    this.pecaAtual = peca;
+    document.querySelectorAll('.icone-peca').forEach(i=>i.classList.remove('ativo'));
+    document.querySelector(`.icone-peca[onclick="K_VISOR.abrirPeca('${peca}')"]`)?.classList.add('ativo');
+    document.getElementById('miniConteudo').innerHTML = K_MINI_MENU.montarHTML(peca); // PUXA DO JS
+    document.getElementById('miniMenu').classList.add('open');
+  },
+
+  executar: function(id){
+    document.querySelectorAll('.mini-btn').forEach(b=>b.classList.remove('ativo'));
+    document.getElementById(`btn-${id}`)?.classList.add('ativo');
+    this.video.className = ''; document.body.classList.remove('shake');
+
+    if(this.pecaAtual === 'visor'){
+      switch(id){
+        case 'raiox': this.video.classList.add('raiox'); break;
+        case 'zoom': this.video.classList.toggle('zoom'); break;
+        case 'termico': this.video.classList.add('termico'); break;
+        case 'noturno': this.video.classList.add('noturno'); break;
+        case 'combate': this.video.classList.add('combate'); break;
+      }
+    }
+    this.atualizarTexto(`${this.pecaAtual} > ${id}`);
+    document.querySelector('.mini-status').innerText = "Executado: " + id;
+  },
+
+  fecharMiniMenu: function(){document.getElementById('miniMenu').classList.remove('open')},
+  atualizarTexto: function(txt){document.getElementById('hudTexto').innerText=txt},
+
+  detectar: async function(){
+    const faces = await this.modelFace.estimateFaces(this.video, false);
+    this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+    faces.forEach(face => {
+      const [x,y] = face.topLeft; const [x2,y2] = face.bottomRight;
+      this.ctx.strokeStyle = '#00FFFF'; this.ctx.lineWidth = 2; this.ctx.shadowBlur=15;
+      this.ctx.strokeRect(x,y,x2-x,y2-y);
+      this.atualizarTexto('ALVO: HUMANO');
+    });
+    if(faces.length === 0) this.atualizarTexto('SCANEANDO...');
+    requestAnimationFrame(()=>this.detectar());
+  },
+
+  sairVisor: function(){
+    this.video.className=''; if(this.stream) this.stream.getTracks().forEach(track => track.stop());
+    if(window.parent.fecharVisor)window.parent.fecharVisor()
+  }
+}
+
+K_VISOR.iniciar();
+</script>
+</body>
+</html>
