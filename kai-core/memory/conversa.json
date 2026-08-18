@@ -1,0 +1,31 @@
+{
+  "usuarioId": "chefe_01",
+  "ultimaAtualizacao": "2026-08-09T21:47:00.000Z",
+  "historico": [
+    {
+      "id": "msg_001",
+      "timestamp": "2026-08-09T21:40:00.000Z",
+      "autor": "kai",
+      "conteudo": "Sistemas online. Olá Chefe. K-AI pronto.",
+      "tipo": "sistema"
+    },
+    {
+      "id": "msg_002",
+      "timestamp": "2026-08-09T21:42:15.000Z",
+      "autor": "user",
+      "conteudo": "Status do sistema",
+      "tipo": "texto"
+    },
+    {
+      "id": "msg_003",
+      "timestamp": "2026-08-09T21:42:16.000Z",
+      "autor": "kai",
+      "conteudo": "Diagnóstico do Sistema K-AI:\n• Status: Online (4G/5G)\n• Processamento: 8 núcleos de CPU\n• Memória Estimada: 8 GB",
+      "tipo": "texto",
+      "acaoExecutada": {
+        "tipo": "NOTIFICAR",
+        "sucesso": true
+      }
+    }
+  ]
+}
