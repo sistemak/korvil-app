@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>HOLOGRAM CORE 6.0 OMEGA - 1000000%</title>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@700;900&family=Orbitron:wght@900&display=swap');
+:root {
+  --c1:#00F0FF; --c2:#9D00FF; --c3:#FF00E5; --c4:#00FF00; --c5:#FFAA00;
+}
+* {margin:0;padding:0;box-sizing:border-box;user-select:none}
+body {
+  background:radial-gradient(ellipse at center, #020210 0%, #000 100%);
+  height:100vh;overflow:hidden;font-family:'Rajdhani',sans-serif;color:#FFF;
+  perspective:6000px;
+}
+
+.scene {
+  width:100%;height:100%;position:relative;transform-style:preserve-3d;
+  transition:transform 0.05s linear
+}
+
+.grid {
+  position:absolute;width:500%;height:500%;top:-200%;left:-200%;
+  background-image:linear-gradient(rgba(0,240,255,0.1) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(0,240,255,0.1) 1px, transparent 1px);
+  background-size:100px 100px;transform:rotateX(80deg) translateZ(-1000px);
+  animation:gridFlow 40s linear infinite
+}
+
+.core {
+  position:absolute;top:50%;left:50%;width:800px;height:800px;
+  transform:translate(-50%,-50%) rotateX(60deg);transform-style:preserve-3d
+}
+.ring {
+  position:absolute;border-radius:50%;border:5px solid;
+  animation:ringSpin var(--t) linear infinite;box-shadow:0 0 60px currentColor
+}
+.ring:nth-child(1){width:100%;height:100%;border-color:var(--c1);--t:18s}
+.ring:nth-child(2){width:88%;height:88%;top:6%;left:6%;border-color:var(--c2);--t:12s;animation-direction:reverse}
+.ring:nth-child(3){width:76%;height:76%;top:12%;left:12%;border-color:var(--c3);--t:9s}
+.ring:nth-child(4){width:64%;height:64%;top:18%;left:18%;border-color:var(--c4);--t:6s;animation-direction:reverse}
+.ring:nth-child(5){width:52%;height:52%;top:24%;left:24%;border-color:var(--c5);--t:4s}
+
+.data-sphere {
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, rgba(0,240,255,0.9), transparent 60%),
+             radial-gradient(circle at 70% 70%, rgba(157,0,255,0.9), transparent 60%),
+             radial-gradient(circle at 50% 50%, rgba(255,170,0,0.5), transparent 70%);
+  box-shadow:0 0 400px var(--c1), inset 0 0 200px var(--c2);
+  animation:spherePulse 3s ease-in-out infinite;cursor:grab
+}
+.data-sphere.dragging {cursor:grabbing;animation:none}
+
+.dna-container {
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) translateZ(400px);
+  width:600px;height:1000px;transform-style:preserve-3d;opacity:0;transition:2.5s
+}
+.dna-container.show {opacity:1;animation:dnaFloat 12s ease-in-out infinite}
+.base-pair {
+  position:absolute;width:12px;height:12px;border-radius:50%;
+  box-shadow:0 0 40px currentColor;transition:0.2s
+}
+
+.galaxy {
+  position:absolute;top:50%;left:50%;width:1600px;height:1600px;
+  transform:translate(-50%,-50%) translateZ(-600px);opacity:0;transition:3s;
+  background:radial-gradient(circle, rgba(157,0,255,0.3) 0%, transparent 70%);
+  border-radius:50%;animation:galaxySpin 100s linear infinite
+}
+.galaxy.show {opacity:0.8}
+
+.matrix {
+  position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:2s
+}
+.matrix.ativo {opacity:0.2}
+.matrix-column {
+  position:absolute;top:-100%;color:var(--c4);font-family:'Orbitron';font-size:18px;
+  animation:matrixFall var(--t) linear infinite;text-shadow:0 0 15px var(--c4)
+}
+
+.hud {
+  position:absolute;top:0;right:-600px;width:600px;height:100%;
+  background:linear-gradient(135deg, rgba(0,10,30,0.7), rgba(30,0,50,0.7));
+  backdrop-filter:blur(50px);border-left:4px solid var(--c1);
+  transition:1.2s cubic-bezier(0.16,1,0.3,1);padding:60px;
+  display:flex;flex-direction:column;gap:20px;z-index:10;overflow-y:auto
+}
+.hud.open {right:0}
+.hud h1 {font-size:40px;color:var(--c1);text-shadow:0 0 40px var(--c1)}
+.status {font-size:20px;color:var(--c4)}
+.hud-btn {
+  padding:24px;background:linear-gradient(135deg, rgba(0,240,255,0.15), rgba(157,0,255,0.15));
+  border:3px solid var(--c1);color:var(--c1);border-radius:18px;font-size:22px;
+  cursor:pointer;transition:0.4s;font-weight:900
+}
+.hud-btn:hover {transform:translateX(-20px) scale(1.08);box-shadow:0 0 80px var(--c1)}
+
+.cmd {
+  position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
+  display:flex;gap:25px;background:rgba(0,0,0,0.8);padding:25px;border-radius:30px;
+  border:4px solid var(--c1);backdrop-filter:blur(40px);z-index:10
+}
+.cmd-btn {
+  width:100px;height:100px;border-radius:50%;background:radial-gradient(circle, var(--c1), #001122);
+  border:0;color:#000;font-weight:900;cursor:pointer;font-size:16px;
+  transition:0.3s;box-shadow:0 0 50px var(--c1)
+}
+
+#videoInput {
+  position:absolute;bottom:20px;right:20px;width:280px;height:210px;
+  border:4px solid var(--c1);border-radius:20px;opacity:0.4;z-index:5
+}
+.gesto-info {
+  position:absolute;top:20px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.8);padding:20px 40px;border-radius:25px;
+  border:3px solid var(--c1);font-size:22px;text-align:center;z-index:10
+}
+
+.particle {
+  position:absolute;width:6px;height:6px;background:var(--c1);border-radius:50%;
+  pointer-events:none;animation:particle 30s linear infinite
+}
+.scan {
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  background:linear-gradient(transparent 49%, rgba(0,240,255,0.15) 50%, transparent 51%);
+  animation:scan 3s linear infinite;pointer-events:none
+}
+
+@keyframes gridFlow {100%{transform:rotateX(80deg) translateZ(-1000px) translateY(100px)}}
+@keyframes ringSpin {100%{transform:rotateZ(360deg)}}
+@keyframes spherePulse {50%{transform:translate(-50%,-50%) scale(1.4)}}
+@keyframes dnaFloat {50%{transform:translate(-50%,-50%) translateZ(400px) rotateY(30deg)}}
+@keyframes galaxySpin {100%{transform:translate(-50%,-50%) translateZ(-600px) rotateZ(360deg)}}
+@keyframes particle {0%{transform:translateY(100vh)} 100%{transform:translateY(-100vh)}}
+@keyframes scan {0%{transform:translateY(-100%)} 100%{transform:translateY(100%)}}
+@keyframes matrixFall {0%{transform:translateY(-100%)} 100%{transform:translateY(100vh)}}
+</style>
+</head>
+<body>
+
+<video id="videoInput" autoplay muted playsinline></video>
+<div class="gesto-info" id="gestoInfo">🤚 ATIVE A WEBCAM</div>
+<div class="scan"></div>
+<div class="matrix" id="matrix"></div>
+
+<div class="scene" id="scene">
+  <div class="grid"></div>
+  <div class="core">
+    <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
+    <div class="data-sphere" id="sphere"></div>
+  </div>
+  <div class="dna-container" id="dna"></div>
+  <div class="galaxy" id="galaxy"></div>
+</div>
+
+<div class="hud" id="hud">
+  <h1>HOLOGRAM CORE 6.0 OMEGA</h1>
+  <div class="status" id="status">STATUS: STANDBY</div>
+  <div style="font-size:16px;color:var(--c1)">
+    GESTOS 2 MÃOS:<br>
+    👌 PINÇA = DNA<br>
+    ✋ ABERTA = GALAXIA<br>
+    ✊ PUNHO = RESET<br>
+    👆 APONTAR = ARRASTAR ESFERA<br>
+    🤝 2 MÃOS = MEGAZORD
+  </div>
+  <button class="hud-btn" onclick="spawnDNA()">🧬 DNA</button>
+  <button class="hud-btn" onclick="spawnGalaxy()">🌌 GALAXIA</button>
+  <button class="hud-btn" onclick="ativarMatrix()">💻 MATRIX</button>
+  <button class="hud-btn" onclick="megazord()">⚡ MEGAZORD</button>
+  <button class="hud-btn" onclick="energyPulse()">⚡ PULSO</button>
+  <button class="hud-btn" onclick="voiceMode()">🎙️ VOZ</button>
+  <button class="hud-btn" onclick="resetScene()">🔄 RESET</button>
+</div>
+
+<div class="cmd">
+  <button class="cmd-btn" onmousedown="rotate(-1,0)" onmouseup="stopRotate()">◀</button>
+  <button class="cmd-btn" onclick="toggleHUD()">MENU</button>
+  <button class="cmd-btn" onmousedown="rotate(1,0)" onmouseup="stopRotate()">▶</button>
+</div>
+
+<script>
+let rotX = 60, rotY = 0, rotating = false, voice = true;
+let draggingSphere = false;
+const scene = document.getElementById('scene');
+const sphere = document.getElementById('sphere');
+const falas = window.speechSynthesis;
+
+// 500 PARTICULAS
+for(let i=0;i<500;i++){
+  let p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random()*100+'%';
+  p.style.animationDelay = Math.random()*30+'s';
+  p.style.animationDuration = 20 + Math.random()*15+'s';
+  p.style.background = ['#00F0FF','#9D00FF','#FF00E5','#00FF00','#FFAA00'][Math.floor(Math.random()*5)];
+  document.body.appendChild(p);
+}
+
+function updateScene(){ scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`; }
+function rotate(x,y){ rotating = setInterval(()=>{ rotY += x*4; rotX += y*4; updateScene(); }, 16); }
+function stopRotate(){ clearInterval(rotating) }
+
+let dragging = false;
+document.addEventListener('mousedown', ()=>dragging=true);
+document.addEventListener('mouseup', ()=>dragging=false);
+document.addEventListener('mousemove', e=>{ if(dragging &&!draggingSphere){ rotY += e.movementX * 0.7; rotX -= e.movementY * 0.7; updateScene(); }});
+
+sphere.addEventListener('mousedown', ()=>{draggingSphere=true; sphere.classList.add('dragging')});
+document.addEventListener('mouseup', ()=>{draggingSphere=false; sphere.classList.remove('dragging')});
+document.addEventListener('mousemove', e=>{ if(draggingSphere){ rotY += e.movementX * 0.3; rotX -= e.movementY * 0.3; updateScene(); }});
+
+function toggleHUD(){ document.getElementById('hud').classList.toggle('open'); speak('Menu Omega aberto'); }
+function speak(text){ if(!voice) return; falas.cancel(); let msg = new SpeechSynthesisUtterance(text); msg.lang='pt-BR'; msg.rate=1.2; msg.pitch=1.4; falas.speak(msg); }
+
+function spawnDNA(){
+  const dna = document.getElementById('dna'); dna.innerHTML = ''; dna.classList.add('show');
+  document.getElementById('status').innerText = 'STATUS: DNA OMEGA ATIVO'; speak('DNA Omega ativado');
+  for(let i=0;i<80;i++){
+    let b1 = document.createElement('div'), b2 = document.createElement('div');
+    b1.className = b2.className = 'base-pair';
+    b1.style.background = '#00F0FF'; b2.style.background = '#FF00E5';
+    let y = i*12, angle = i*0.45;
+    b1.style.top = b2.style.top = y+'px';
+    b1.style.left = 300 + Math.sin(angle)*200 + 'px';
+    b2.style.left = 300 - Math.sin(angle)*200 + 'px';
+    b1.style.transform = `rotateY(${angle}rad) translateZ(20px)`;
+    b2.style.transform = `rotateY(${angle+Math.PI}rad) translateZ(20px)`;
+    dna.appendChild(b1); dna.appendChild(b2);
+  }
+}
+
+function spawnGalaxy(){
+  document.getElementById('galaxy').classList.add('show');
+  document.getElementById('status').innerText = 'STATUS: GALAXIA OMEGA'; speak('Galaxia Omega');
+}
+
+function ativarMatrix(){
+  document.getElementById('matrix').classList.add('ativo');
+  document.getElementById('status').innerText = 'STATUS: MATRIX ATIVA';
+  speak('Matrix ativada');
+  const matrix = document.getElementById('matrix'); matrix.innerHTML = '';
+  for(let i=0;i<60;i++){
+    let col = document.createElement('div');
+    col.className = 'matrix-column';
+    col.style.left = i*1.66 + '%';
+    col.style.setProperty('--t', 4 + Math.random()*8 + 's');
+    col.innerText = '01011010100111010100110101001101'.split('').join('\n');
+    matrix.appendChild(col);
+  }
+}
+
+function megazord(){
+  spawnDNA(); spawnGalaxy(); ativarMatrix();
+  document.getElementById('status').innerText = 'STATUS: MEGAZORD ATIVADO';
+  speak('Megazord ativado. Poder maximo');
+  energyPulse();
+}
+
+function energyPulse(){
+  document.getElementById('status').innerText = 'STATUS: PULSO OMEGA';
+  speak('Pulso Omega');
+  sphere.style.animation = 'spherePulse 0.1s ease-in-out 8';
+  setTimeout(()=>{sphere.style.animation = 'spherePulse 3s ease-in-out infinite'}, 1000);
+}
+
+function voiceMode(){ voice =!voice; speak(voice? 'Voz ativada' : 'Voz desativada'); }
+
+function resetScene(){
+  document.getElementById('dna').classList.remove('show');
+  document.getElementById('galaxy').classList.remove('show');
+  document.getElementById('matrix').classList.remove('ativo');
+  document.getElementById('status').innerText = 'STATUS: STANDBY';
+  speak('Reset completo'); rotX=60; rotY=0; updateScene();
+}
+
+// ===== RECONHECIMENTO 2 MÃOS =====
+const videoElement = document.getElementById('videoInput');
+const gestoInfo = document.getElementById('gestoInfo');
+
+const hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+hands.setOptions({maxNumHands: 2, modelComplexity: 1, minDetectionConfidence: 0.7, minTrackingConfidence: 0.7});
+
+hands.onResults(results => {
+  if (results.multiHandLandmarks.length > 0) {
+    if(results.multiHandLandmarks.length == 2){
+      gestoInfo.innerText = '🤝 GESTO: 2 MÃOS - MEGAZORD';
+      megazord();
+      return;
+    }
+
+    const landmarks = results.multiHandLandmarks[0];
+    const thumbTip = landmarks[4], indexTip = landmarks[8], middleTip = landmarks[12];
+    const distPinca = Math.hypot(thumbTip.x - indexTip.x, thumbTip.y - indexTip.y);
+
+    if(distPinca < 0.04){
+      gestoInfo.innerText = '👌 PINÇA - DNA';
+      if(!document.getElementById('dna').classList.contains('show')) spawnDNA();
+    }
+    else if(indexTip.y < landmarks[6].y){
+      gestoInfo.innerText = '👆 APONTAR - ARRASTAR';
+      rotY += (indexTip.x - 0.5) * 10;
+      rotX -= (indexTip.y - 0.5) * 10;
+      updateScene();
+    }
+    else if(indexTip.y < landmarks[6].y && middleTip.y < landmarks[10].y){
+      gestoInfo.innerText = '✋ ABERTA - GALAXIA';
+      if(!document.getElementById('galaxy').classList.contains('show')) spawnGalaxy();
+    }
+    else {
+      gestoInfo.innerText = '✊ PUNHO - RESET';
+      resetScene();
+    }
+  } else {
+    gestoInfo.innerText = '🤚 MOSTRE SUA MÃO';
+  }
+});
+
+const camera = new Camera(videoElement, {onFrame: async () => { await hands.send({image: videoElement}); }, width: 640, height: 480});
+camera.start();
+
+updateScene();
+window.onload = ()=>{ speak('Hologram Core 6.0 Omega iniciado. 1000000 por cento') };
+</script>
+
+</body></html>
