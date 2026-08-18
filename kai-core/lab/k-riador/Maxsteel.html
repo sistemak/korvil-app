@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>MAX STEEL + STEEL - TURBO ENERGY LINK</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box}
+body {
+  background:radial-gradient(circle at center, #1a0800 0%, #000 100%);
+  display:flex;justify-content:center;align-items:center;height:100vh;
+  overflow:hidden;perspective:2500px;font-family:'Orbitron',sans-serif;
+}
+
+/* FUNDO */
+.bg-energy {position:absolute;width:300%;height:300%;background:radial-gradient(circle, rgba(255,102,0,0.15) 0%, transparent 70%);
+  transform:rotateX(75deg) translateZ(-800px);animation:energyPulse 6s ease-in-out infinite}
+
+/* TURBO RELÓGIO */
+.turbo-watch {
+  width:450px;height:450px;border-radius:50%;position:relative;z-index:5;
+  background:conic-gradient(from 0deg, #FFCC00, #FF6600, #FF0000, #00CCFF, #FFCC00);
+  box-shadow:0 0 500px #FF6600, inset 0 0 250px #FF6600;
+  animation:turboSpin 8s infinite linear;border:10px solid #FF6600;cursor:pointer;
+}
+.turbo-watch.link {animation:turboLink 2s infinite, turboSpin 1s infinite linear; box-shadow:0 0 600px #00CCFF}
+.turbo-core {
+  width:250px;height:250px;border-radius:50%;background:#000;position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;
+  color:#FFCC00;font-weight:900;font-size:40px;text-shadow:0 0 40px #FFCC00;border:6px solid #FF6600
+}
+.turbo-nivel {position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:100px;color:#FFF;font-weight:900;text-shadow:0 0 60px #FFCC00}
+
+/* HOLOGRAMA STEEL */
+.steel-holo {
+  position:absolute;left:100px;bottom:150px;width:350px;height:350px;
+  opacity:0;transition:1.5s;transform:scale(0.5) translateX(-100px)
+}
+.steel-holo.ativo {opacity:1;transform:scale(1) translateX(0)}
+.steel-avatar {
+  width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle, rgba(0,200,255,0.3) 0%, rgba(0,100,200,0.1) 70%);
+  border:4px solid #00CCFF;box-shadow:0 0 150px #00CCFF;
+  animation:steelFloat 4s ease-in-out infinite;display:flex;align-items:center;justify-content:center;
+  font-size:120px;filter:drop-shadow(0 0 60px #00CCFF)
+}
+.steel-fala {
+  position:absolute;bottom:-80px;width:400px;background:rgba(0,200,255,0.15);
+  border:2px solid #00CCFF;border-radius:20px;padding:15px;color:#00CCFF;
+  backdrop-filter:blur(20px);text-align:center;font-size:16px;opacity:0;transition:0.5s
+}
+.steel-fala.ativo {opacity:1}
+
+/* HOLOGRAMA TURBO FOGO */
+.holo-turbo {position:absolute;bottom:500px;width:800px;height:800px;opacity:0;
+  transition:1.5s;transform:scale(0.2)}
+.holo-turbo.ativo {opacity:1;transform:scale(1)}
+.chama {position:absolute;width:60px;height:120px;background:linear-gradient(#FFCC00, #FF6600, #FF0000);
+  border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;filter:blur(10px) drop-shadow(0 0 50px #FF6600);
+  animation:chamaFloat 3s infinite}
+
+/* HOLOGRAMA FUSÃO TURBO ENERGY LINK */
+.fusao-link {
+  position:absolute;bottom:400px;width:900px;height:900px;opacity:0;pointer-events:none;
+  transition:2s;transform:scale(0.3)
+}
+.fusao-link.ativo {opacity:1;transform:scale(1)}
+.fusao-core {
+  width:100%;height:100%;border-radius:50%;
+  background:conic-gradient(from 0deg, #00CCFF, #FF6600, #FFCC00, #00CCFF);
+  box-shadow:0 0 400px #00CCFF, 0 0 400px #FF6600;
+  animation:fusaoGiro 3s infinite linear
+}
+.fusao-texto {
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:80px;color:#FFF;font-weight:900;text-shadow:0 0 80px #FFF
+}
+
+/* RAIO DE LINK */
+.raio-link {
+  position:absolute;left:250px;bottom:300px;width:4px;height:0;
+  background:linear-gradient(#00CCFF, #FF6600);box-shadow:0 0 30px #00CCFF;
+  transition:1.5s;transform-origin:bottom
+}
+.raio-link.ativo {height:400px}
+
+/* PAINEL TURBO */
+.painel-turbo {
+  position:absolute;right:60px;width:380px;background:rgba(255,102,0,0.08);
+  border:3px solid #FF6600;border-radius:30px;padding:30px;backdrop-filter:blur(30px);
+  transform:translateX(500px);transition:1.2s
+}
+.painel-turbo.ativo {transform:translateX(0)}
+.btn-turbo {
+  width:100%;padding:18px;margin:12px 0;background:linear-gradient(90deg, #FF6600, #FF0000);
+  border:0;color:#FFF;border-radius:15px;font-weight:900;cursor:pointer;
+  transition:0.4s;font-size:18px;box-shadow:0 0 40px rgba(255,102,0,0.4)
+}
+.btn-turbo:hover {transform:scale(1.1) translateX(-15px);box-shadow:0 0 80px #FF6600}
+.btn-link {
+  background:linear-gradient(90deg, #00CCFF, #FF6600);margin-top:25px;
+  box-shadow:0 0 60px #00CCFF
+}
+
+/* BARRA TURBO */
+.turbo-barra {
+  position:absolute;top:40px;width:600px;height:50px;background:#110400;
+  border:4px solid #FF6600;border-radius:25px;overflow:hidden
+}
+.turbo-fill {
+  height:100%;width:20%;background:linear-gradient(90deg, #00CCFF, #FFCC00, #FF6600, #FF0000);
+  box-shadow:0 0 40px #FF6600;transition:1s;animation:turboGlow 2s infinite
+}
+
+/* TELA TURBO */
+.turbo-screen {
+  position:absolute;top:0;left:0;width:100%;height:100%;background:#000;
+  display:none;justify-content:center;align-items:center;flex-direction:column;z-index:99
+}
+.turbo-screen.ativo {display:flex}
+.turbo-screen h1 {color:#FFCC00;font-size:100px;text-shadow:0 0 100px #FF6600}
+
+@keyframes energyPulse {50%{transform:rotateX(75deg) translateZ(-800px) scale(1.2)}}
+@keyframes turboSpin {100%{transform:rotateZ(360deg)}}
+@keyframes turboLink {0%,100%{border-color:#00CCFF} 50%{border-color:#FF6600}}
+@keyframes steelFloat {50%{transform:translateY(-20px)}}
+@keyframes chamaFloat {50%{transform:translateY(-40px) scale(1.2)}}
+@keyframes turboGlow {50%{box-shadow:0 0 80px #FF6600}}
+@keyframes fusaoGiro {100%{transform:rotateZ(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="bg-energy"></div>
+<div class="turbo-barra"><div class="turbo-fill" id="turboBar"></div></div>
+
+<!-- RAIO DE LINK -->
+<div class="raio-link" id="raioLink"></div>
+
+<!-- HOLOGRAMA STEEL -->
+<div class="steel-holo" id="steelHolo">
+  <div class="steel-avatar">🤖</div>
+  <div class="steel-fala" id="steelFala">Max, estou pronto!</div>
+</div>
+
+<!-- HOLOGRAMA TURBO -->
+<div class="holo-turbo" id="holoTurbo"></div>
+
+<!-- FUSÃO TURBO ENERGY LINK -->
+<div class="fusao-link" id="fusaoLink">
+  <div class="fusao-core"></div>
+  <div class="fusao-texto">TURBO ENERGY LINK</div>
+</div>
+
+<!-- PAINEL -->
+<div class="painel-turbo" id="painel">
+  <h2 style="color:#FFCC00;text-shadow:0 0 30px #FF6600">N-TECH TURBO MODOS</h2>
+  <button class="btn-turbo" onclick="ativarTurbo('TURBO FORÇA', '💪')">TURBO FORÇA</button>
+  <button class="btn-turbo" onclick="ativarTurbo('TURBO VELOCIDADE', '💨')">TURBO VELOCIDADE</button>
+  <button class="btn-turbo" onclick="ativarTurbo('TURBO ENERGIA', '⚡')">TURBO ENERGIA</button>
+  <button class="btn-turbo" onclick="ativarTurbo('TURBO VÔO', '🚀')">TURBO VÔO</button>
+  <button class="btn-turbo" onclick="ativarTurbo('TURBO MÁXIMO', '🔥')">TURBO MÁXIMO</button>
+  <button class="btn-turbo" onclick="steelAnalise()">ANÁLISE STEEL</button>
+  <button class="btn-turbo btn-link" onclick="turboEnergyLink()">TURBO ENERGY LINK</button>
+</div>
+
+<!-- RELÓGIO -->
+<div class="turbo-watch" id="turboWatch" onclick="ativarSistema()">
+  <div class="turbo-core">N-TECH</div>
+  <div class="turbo-nivel" id="nivel">T1</div>
+</div>
+
+<!-- TELA TURBO -->
+<div class="turbo-screen" id="turboScreen">
+  <h1 id="turboText">TURBO ATIVADO</h1>
+</div>
+
+<audio id="sndTurbo" src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0YQAAAAA="></audio>
+
+<script>
+let turboNivel = 1;
+let sistemaAtivo = false;
+let linkAtivo = false;
+const falas = window.speechSynthesis;
+
+function falar(texto, tom=1) {
+  let msg = new SpeechSynthesisUtterance(texto);
+  msg.lang = 'pt-BR'; msg.rate = 1; msg.pitch = tom;
+  falas.speak(msg);
+}
+
+function steelFalar(texto) {
+  document.getElementById('steelFala').innerText = texto;
+  document.getElementById('steelFala').classList.add('ativo');
+  falar(texto, 1.3);
+  setTimeout(()=>{document.getElementById('steelFala').classList.remove('ativo')}, 4000);
+}
+
+function ativarSistema() {
+  sistemaAtivo = !sistemaAtivo;
+  document.getElementById('painel').classList.toggle('ativo');
+  document.getElementById('steelHolo').classList.toggle('ativo');
+  document.getElementById('sndTurbo').play();
+  
+  if(sistemaAtivo) {
+    steelFalar('Sistema N-Tech online. Pronto pra ação, Max!');
+  } else {
+    steelFalar('Sistema desativado.');
+  }
+}
+
+function turboEnergyLink() {
+  if(!sistemaAtivo) ativarSistema();
+  if(linkAtivo) return;
+  
+  linkAtivo = true;
+  document.getElementById('sndTurbo').play();
+  
+  // STEEL FALA
+  steelFalar('Max, iniciando Turbo Energy Link!');
+  
+  // RAIO CONECTA STEEL COM RELÓGIO
+  setTimeout(()=>{document.getElementById('raioLink').classList.add('ativo')}, 500);
+  
+  // RELÓGIO MUDA COR
+  setTimeout(()=>{document.getElementById('turboWatch').classList.add('link')}, 1000);
+  
+  // SOME OS HOLOGRAMAS SEPARADOS
+  setTimeout(()=>{
+    document.getElementById('steelHolo').style.opacity = '0';
+    document.getElementById('holoTurbo').style.opacity = '0';
+  }, 1500);
+  
+  // ATIVA FUSÃO
+  setTimeout(()=>{
+    document.getElementById('fusaoLink').classList.add('ativo');
+    document.getElementById('turboBar').style.width = '100%';
+    turboNivel = 5;
+    document.getElementById('nivel').innerText = 'T5';
+    falar('Turbo Energy Link Completo! Poder Máximo!', 0.8);
+  }, 2000);
+  
+  // TELA
+  setTimeout(()=>{
+    document.getElementById('turboScreen').classList.add('ativo');
+    document.getElementById('turboText').innerText = 'TURBO ENERGY LINK';
+  }, 2500);
+  
+  // VOLTA AO NORMAL DEPOIS 6S
+  setTimeout(()=>{
+    document.getElementById('turboScreen').classList.remove('ativo');
+    document.getElementById('fusaoLink').classList.remove('ativo');
+    document.getElementById('raioLink').classList.remove('ativo');
+    document.getElementById('turboWatch').classList.remove('link');
+    document.getElementById('steelHolo').style.opacity = '1';
+    steelFalar('Link desativado. Poder estabilizado.');
+    linkAtivo = false;
+  }, 8000);
+}
+
+function ativarTurbo(modo, emoji) {
+  if(!sistemaAtivo) {ativarSistema();}
+  if(linkAtivo) return;
+  document.getElementById('sndTurbo').play();
+  
+  steelFalar('Ativando ' + modo + '. Segura firme, Max!');
+  
+  turboNivel = turboNivel >= 5 ? 1 : turboNivel + 1;
+  document.getElementById('nivel').innerText = 'T' + turboNivel;
+  document.getElementById('turboBar').style.width = (turboNivel * 20) + '%';
+  
+  document.getElementById('holoTurbo').classList.add('ativo');
+  document.getElementById('holoTurbo').innerHTML = '';
+  for(let i=0;i<15;i++){
+    let chama = document.createElement('div');
+    chama.className = 'chama';
+    chama.style.left = Math.random()*100+'%';
+    chama.style.top = Math.random()*100+'%';
+    chama.style.animationDelay = Math.random()*2+'s';
+    document.getElementById('holoTurbo').appendChild(chama);
+  }
+  
+  setTimeout(()=>{
+    document.getElementById('turboScreen').classList.add('ativo');
+    document.getElementById('turboText').innerText = modo + ' ATIVADO';
+    falar(modo + ' Ativado!', 0.9);
+  }, 1000);
+  
+  setTimeout(()=>{
+    document.getElementById('turboScreen').classList.remove('ativo');
+    steelFalar('Modo ' + modo + ' estabilizado.');
+  }, 5000);
+}
+
+function steelAnalise() {
+  const analises = [
+    'Nível de Turbo Energy em ' + (turboNivel*20) + ' por cento.',
+    'Sem ameaças detectadas nas proximidades.',
+    'Sistemas N-Tech operando em perfeitas condições.',
+    'Recomendo ativar Turbo Energy Link para poder máximo.'
+  ];
+  let analise = analises[Math.floor(Math.random()*analises.length)];
+  steelFalar(analise);
+}
+</script>
+
+</body></html>
