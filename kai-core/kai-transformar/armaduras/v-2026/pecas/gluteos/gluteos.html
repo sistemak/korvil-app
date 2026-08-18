@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>GLÚTEOS KORVIL</title>
+<style>
+:root{--c:#00FFFF;--prop:#FFD60A}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;padding:15px}
+.gluteo{width:100px;height:80px;background:rgba(0,255,255,.1);border:2px solid var(--c);border-radius:50%;display:inline-block;margin:10px}
+@keyframes propulsor{0%,100%{box-shadow:0 0 5px var(--prop)}50%{box-shadow:0 0 30px var(--prop)}}
+.ativo{animation:propulsor .5s}
+</style></head>
+<body>
+<h2>GLÚTEOS K-1</h2>
+<div class="gluteo" id="gE"></div><div class="gluteo" id="gD"></div>
+<p>Estabilidade: <span id="estab">100%</span></p>
+<button class="btn" onclick="salto()">PROPULSOR DE SALTO</button>
+<script>
+function salto(){
+  document.querySelectorAll('.gluteo').forEach(g=>g.classList.add('ativo'));
+  document.getElementById('estab').innerText='50%';
+  if(window.parent.postMessage) window.parent.postMessage({tipo:'gluteo', acao:'salto'},'*');
+  setTimeout(()=>{document.querySelectorAll('.gluteo').forEach(g=>g.classList.remove('ativo'));document.getElementById('estab').innerText='100%'},1000);
+}
+</script></body></html>
