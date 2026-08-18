@@ -1,0 +1,49 @@
+<div id="menuDireitoReal" class="menu-direito">
+  <div class="sideHeader">
+    <div>K-AI</div>
+    <div class="modo">MENU</div>
+  </div>
+
+  <div class="sideSection">
+    <div class="sideTitle">CONFIGURAÇÃO DE VOZ</div>
+    <div class="sideItem" onclick="executar('voz corvo cibernetico')">1. Corvo Cibernético M</div>
+    <div class="sideItem" onclick="executar('voz jarvis classico')">2. Jarvis Clássico M</div>
+  </div>
+
+  <div class="sideSection">
+    <div class="sideTitle">1. NAVEGAR - 5 SETORES KORVIL</div>
+    <div class="sideItem" onclick="goPage('sistema k')">1. Sistema K</div>
+    <div class="sideItem" onclick="goPage('ktp')">2. K-TP</div>
+    <div class="sideItem" onclick="goPage('kafortunado')">3. K-AFORTUNADO</div>
+    <div class="sideItem" onclick="goPage('kalma')">4. K-ALMA</div>
+    <div class="sideItem" onclick="goPage('central')">5. Central KORVIL</div>
+  </div>
+
+  <div class="sideSection">
+    <div class="sideTitle">2. CRIAR</div>
+    <div class="sideItem" onclick="executar('criar post')">Criar Post</div>
+    <div class="sideItem" onclick="executar('criar imagem ia')">Criar Imagem IA</div>
+  </div>
+
+  <div class="sideSection">
+    <div class="sideTitle">5. SISTEMA</div>
+    <div class="sideItem" onclick="executar('que horas são')">Horas</div>
+    <div class="sideItem" onclick="executar('salvar memória')">Salvar Memória</div>
+    <div class="sideItem" onclick="executar('estatísticas')">Estatísticas</div>
+    <div class="sideItem" onclick="executar('limpar memória')">Limpar Memória</div>
+  </div>
+</div>
+
+<style>
+.menu-direito{position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:330px;height:90%;background:linear-gradient(180deg,#0a0f14 0%,#000 100%);
+  border-left:2px solid #00FFFF;padding:0;color:#00FFFF;overflow-y:auto;z-index:101}
+.sideHeader{height:95px;background:linear-gradient(135deg,#00FFFF,#A8FFE6);padding:20px;
+  display:flex;align-items:center;justify-content:space-between;color:#000;font-weight:900;font-size:19px}
+.sideHeader .modo{background:#000;color:#00FFFF;padding:7px 14px;border-radius:20px;font-size:13px;border:2px solid #00FFFF}
+.sideSection{padding:14px 0;border-bottom:1px solid #132e36}
+.sideTitle{padding:12px 20px;font-size:13px;color:#A8FFE6;font-weight:800;text-transform:uppercase}
+.sideItem{padding:16px 20px;display:flex;align-items:center;gap:14px;font-size:15px;color:#00FFFF;
+  cursor:pointer;border-left:4px solid transparent;font-weight:600}
+.sideItem:hover{background:#132e36;border-left:4px solid #00FFFF}
+</style>
