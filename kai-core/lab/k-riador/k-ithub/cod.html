@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>K-AI CODE GEN V-2026.7</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#0a0a0a;color:#0f0;font-family:'Courier New';display:flex;height:100vh}
+    
+    .esq{width:40%;background:#111;padding:20px;border-right:2px solid #0f0;display:flex;flex-direction:column}
+    .dir{width:60%;background:#000;padding:20px;display:flex;flex-direction:column}
+    
+    h1{color:#0ff;text-align:center;margin-bottom:15px;text-shadow:0 0 10px #0ff}
+    h2{color:#0ff;font-size:14px;margin:10px 0}
+    
+    input{width:100%;padding:12px;background:#000;color:#0f0;border:2px solid #0ff;border-radius:5px;margin-bottom:10px;font-size:15px}
+    button{padding:12px;background:#0ff;color:#000;border:none;border-radius:5px;font-weight:bold;cursor:pointer;margin:5px 0}
+    button:hover{background:#0f0;box-shadow:0 0 15px #0ff}
+    
+    #log{flex:1;background:#000;border:2px solid #0f0;padding:10px;overflow:auto;font-size:12px;color:#0f0}
+    #codigoGerado{flex:1;background:#010409;border:2px solid #0ff;padding:10px;overflow:auto;white-space:pre;color:#0f0;font-size:12px}
+    
+    .tag{background:#0ff;color:#000;padding:2px 6px;border-radius:3px;font-size:10px}
+  </style>
+</head>
+<body>
+  <div class="esq">
+    <h1>⚡ K-AI CODE GEN ⚡</h1>
+    <h2>O QUE DESEJA CRIAR?</h2>
+    <input id="pedido" placeholder="Ex: calculadora, cronometro, jogo da velha">
+    <button onclick="KAI.criarCodigo()">🧠 GERAR CÓDIGO</button>
+    <button onclick="KAI.explicar()">📖 EXPLICAR CÓDIGO</button>
+    <button onclick="KAI.copiar()">📋 COPIAR</button>
+    
+    <h2>LOG DO CÉREBRO</h2>
+    <div id="log"></div>
+  </div>
+  
+  <div class="dir">
+    <h2>CÓDIGO GERADO <span class="tag">HTML + JS</span></h2>
+    <div id="codigoGerado">// Aguardando seu pedido...</div>
+  </div>
+
+<script>
+// ============= BASE DE CÓDIGOS SALVA DENTRO DO PRÓPRIO CÓDIGO =============
+const BASE_DE_CODIGOS = {
+  "calculadora": `
+<!DOCTYPE html>
+<html>
+<head><title>Calculadora</title>
+<style>
+body{display:flex;justify-content:center;align-items:center;height:100vh;background:#222}
+.calc{background:#333;padding:20px;border-radius:10px}
+.calc input{width:100%;height:50px;font-size:24px;margin-bottom:10px;text-align:right}
+.calc button{width:60px;height:60px;font-size:20px;margin:5px;background:#555;color:#fff;border:none;cursor:pointer}
+.calc button:hover{background:#0ff;color:#000}
+</style>
+</head>
+<body>
+<div class="calc">
+<input id="tela" readonly>
+<div>
+<button onclick="add('7')">7</button><button onclick="add('8')">8</button><button onclick="add('9')">9</button><button onclick="add('+')">+</button><br>
+<button onclick="add('4')">4</button><button onclick="add('5')">5</button><button onclick="add('6')">6</button><button onclick="add('-')">-</button><br>
+<button onclick="add('1')">1</button><button onclick="add('2')">2</button><button onclick="add('3')">3</button><button onclick="add('*')">*</button><br>
+<button onclick="add('0')">0</button><button onclick="limpar()">C</button><button onclick="calcular()">=</button><button onclick="add('/')">/</button>
+</div>
+</div>
+<script>
+function add(v){document.getElementById('tela').value += v}
+function limpar(){document.getElementById('tela').value = ''}
+function calcular(){document.getElementById('tela').value = eval(document.getElementById('tela').value)}
+</script>
+</body></html>`,
+
+  "cronometro": `
+<!DOCTYPE html><html><head><title>Cronometro</title>
+<style>body{background:#000;color:#0f0;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:Arial}
+#tempo{font-size:60px;margin:20px}button{padding:15px 30px;margin:5px;font-size:18px;background:#0ff;border:none;cursor:pointer}</style>
+</head><body>
+<h1>CRONOMETRO</h1><div id="tempo">00:00:00</div>
+<button onclick="iniciar()">INICIAR</button><button onclick="parar()">PARAR</button><button onclick="zerar()">ZERAR</button>
+<script>
+let s=0,m=0,h=0,t=null;
+function atualizar(){s++;if(s==60){s=0;m++}if(m==60){m=0;h++}
+document.getElementById('tempo').innerText = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+function iniciar(){if(!t)t=setInterval(atualizar,1000)}
+function parar(){clearInterval(t);t=null}
+function zerar(){parar();s=m=h=0;atualizar()}
+</script></body></html>`,
+
+  "jogo da velha": `
+<!DOCTYPE html><html><head><title>Jogo da Velha</title>
+<style>body{background:#111;display:flex;justify-content:center;align-items:center;height:100vh}
+.tab{display:grid;grid-template-columns:repeat(3,100px);gap:5px}
+.cel{width:100px;height:100px;background:#333;color:#0ff;font-size:60px;display:flex;align-items:center;justify-content:center;cursor:pointer}</style>
+</head><body>
+<div class="tab" id="tab"></div>
+<script>
+let jogador='X';let tab=['','','','',''];
+function desenhar(){document.getElementById('tab').innerHTML='';
+tab.forEach((v,i)=>{let d=document.createElement('div');d.className='cel';d.innerText=v;d.onclick=()=>jogar(i);document.getElementById('tab').appendChild(d)})}
+function jogar(i){if(tab[i]==''){tab[i]=jogador;jogador=jogador=='X'?'O':'X';desenhar()}}
+desenhar();
+</script></body></html>`
+};
+
+// ============= CÉREBRO QUE USA A BASE PRA CRIAR =============
+class KAICodeGen {
+  log(msg){ document.getElementById('log').innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`; }
+
+  criarCodigo(){
+    const pedido = document.getElementById('pedido').value.toLowerCase();
+    this.log(`PEDIDO RECEBIDO: ${pedido}`);
+    
+    // LÓGICA DE ENTENDIMENTO
+    if(pedido.includes("calculadora")){
+      this.log("ENTENDI: Precisa de operações matemáticas + interface");
+      this.log("BUSCANDO NA BASE: calculadora");
+      document.getElementById('codigoGerado').innerText = BASE_DE_CODIGOS.calculadora;
+      this.log("CÓDIGO GERADO COM SUCESSO", "sucesso");
+    }
+    else if(pedido.includes("cronometro") || pedido.includes("tempo")){
+      this.log("ENTENDI: Precisa contar tempo com setInterval");
+      this.log("BUSCANDO NA BASE: cronometro");
+      document.getElementById('codigoGerado').innerText = BASE_DE_CODIGOS.cronometro;
+      this.log("CÓDIGO GERADO COM SUCESSO", "sucesso");
+    }
+    else if(pedido.includes("jogo") || pedido.includes("velha")){
+      this.log("ENTENDI: Precisa de grid 3x3 e lógica de turnos");
+      this.log("BUSCANDO NA BASE: jogo da velha");
+      document.getElementById('codigoGerado').innerText = BASE_DE_CODIGOS["jogo da velha"];
+      this.log("CÓDIGO GERADO COM SUCESSO", "sucesso");
+    }
+    else{
+      this.log("NÃO ENCONTRADO NA BASE. VOU CRIAR UM TEMPLATE");
+      document.getElementById('codigoGerado').innerText = `<!DOCTYPE html>
+<html><head><title>${pedido}</title></head><body>
+<h1>${pedido.toUpperCase()}</h1>
+<p>Template base criado pela K-AI</p>
+<script>
+// Lógica do ${pedido} vai aqui
+console.log("K-AI gerou este código")
+</script>
+</body></html>`;
+    }
+  }
+
+  explicar(){
+    const cod = document.getElementById('codigoGerado').innerText;
+    this.log("ANALISANDO CÓDIGO...");
+    this.log("Linhas: " + cod.split('\n').length);
+    this.log("Tem HTML: " + cod.includes("<html>"));
+    this.log("Tem JS: " + cod.includes("<script>"));
+    this.log("ANÁLISE CONCLUÍDA");
+  }
+
+  copiar(){
+    navigator.clipboard.writeText(document.getElementById('codigoGerado').innerText);
+    this.log("CÓDIGO COPIADO");
+    alert("Código copiado!");
+  }
+}
+window.KAI = new KAICodeGen();
+</script>
+</body>
+</html>
