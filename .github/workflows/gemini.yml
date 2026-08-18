@@ -14,18 +14,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        
+      - name: Separar Tokens
+        id: t
+        run: |
+          echo "AQ=$(echo '${{ secrets.GH_TOKEN }}' | sed -n '1p')" >> $GITHUB_OUTPUT
+          echo "GH=$(echo '${{ secrets.GH_TOKEN }}' | sed -n '2p')" >> $GITHUB_OUTPUT
           
       - name: Chamar Gemini
         run: |
           curl -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent" \
-          -H "Authorization: Bearer ${{ secrets.GEMINI_TOKEN }}" \
+          -H "Authorization: Bearer ${{ steps.t.outputs.AQ }}" \
           -H "Content-Type: application/json" \
-          -d "{\"contents\":[{\"parts\":[{\"text\":\"${{ github.event.inputs.prompt }}\"}]}]}" \
+          -d "{\"contents\":[{\"parts\":[{\"text\":\"${{ github.event.inputs.prompt }}\"}]}" \
           -o resultado.json
           
       - name: Salvar resultado
         run: |
-          jq -r '.candidates[0].content.parts[0].text' resultado.json > resultado.txt || cat resultado.json > resultado.txt
+          jq -r '.candidates[0].content.parts[0].text' resultado.json > resultado.txt 2>/dev/null || cat resultado.json > resultado.txt
           
       - name: Commit resultado
         uses: stefanzweifel/git-auto-commit-action@v5
