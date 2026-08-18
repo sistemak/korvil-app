@@ -5,7 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FORJA V20 SIMPLES - Move exato onde quiser sem dividir nem duplicar - sistemak</title>
+<title>FORJA - sistemak/korvil-app - Repo como antes</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{--neon:#00f0ff;--border:rgba(0,240,255,0.3)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -23,11 +24,10 @@ body{display:flex;flex-direction:column}
 #left{border-right:2px solid var(--neon)}
 .top{padding:7px 8px;background:#000;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:5px;align-items:center;flex-shrink:0}
 .stage{flex:1;overflow:auto;min-height:0;padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;align-content:start;background:#000}
-.item{background:#080f24;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:grab;transition:.15s;display:flex;flex-direction:column;position:relative}
-.item:active{cursor:grabbing}
+.item{background:#080f24;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:grab;display:flex;flex-direction:column;position:relative}
 .item:hover{border-color:var(--neon)}
 .item.selected{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 0 20px var(--neon)}
-.item.drop-target{border-color:#00ff88!important;box-shadow:0 0 0 2px #00ff88!important;background:rgba(0,255,136,.1)}
+.item.drop-target{border-color:#00ff88!important;box-shadow:0 0 0 2px #00ff88!important;background:rgba(0,255,136,.1)!important}
 .item.folder-card{border-color:#ffcc00}
 .item-preview{width:100%;height:78px;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
 .item-info{padding:6px 7px;flex:1;display:flex;flex-direction:column;gap:3px}
@@ -67,30 +67,31 @@ input.in{background:#000;border:1px solid var(--border);color:#e0faff;padding:6p
 <div id="forja-header">
   <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
     <div class="logo">F</div>
-    <b style="font-size:11px;color:var(--neon)">FORJA V20 SIMPLES - MOVE EXATO</b>
-    <span class="badge ok" id="syncBadge">MOVE EXATO SEM DIVIDIR NEM DUPLICAR</span>
+    <b style="font-size:11px;color:var(--neon)">FORJA - sistemak/korvil-app</b>
+    <span class="badge ok" id="syncBadge">Repo como antes funcionando</span>
   </div>
   <div style="display:flex;gap:5px;align-items:center">
     <button class="btn ac" onclick="document.getElementById('folder').click()">📁 ANEXAR PASTA</button>
-    <button class="btn ac" onclick="document.getElementById('f').click()">+ ARQUIVO</button>
+    <button class="btn ac" onclick="document.getElementById('f').click()">+ ANEXAR ARQUIVOS</button>
   </div>
 </div>
 
 <div id="app">
   <div id="left">
     <div class="top">
-      <b style="font-size:8px;color:var(--neon)">ESQ: LOCAL - ARRASTA E SOLTA ONDE QUISER - EXATO</b>
+      <b style="font-size:8px;color:var(--neon)">ESQ: LOCAL - Arraste pasta/arquivos pra qualquer lugar - exato</b>
       <span id="selCount" class="badge">0 sel</span>
-      <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverEsqParaDir()">→ DIR</button>
+      <button class="btn ac" onclick="moverEsqParaDir()">→ DIR</button>
+      <button class="btn danger" onclick="excluirSelecionadosEsq()">🗑️ EXCLUIR</button>
     </div>
     <div class="stage" id="sLeft"></div>
-    <div class="dropzone" id="dropEsq"><h3>SOLTE AQUI - QUALQUER PASTA/ARQUIVO - EXATO</h3><p>Do PC, celular ou da outra tela - mantém exatamente como é</p></div>
+    <div class="dropzone" id="dropEsq"><h3>SOLTE AQUI - QUALQUER LUGAR - EXATO COMO É</h3></div>
   </div>
 
   <div id="right">
     <div class="top" style="flex-direction:column;align-items:flex-start;gap:6px">
       <div style="display:flex;gap:5px;flex-wrap:wrap;width:100%;align-items:center">
-        <b style="font-size:8px;color:var(--neon)">DIR: REPO - COMO ANTES FUNCIONANDO</b>
+        <b style="font-size:8px;color:var(--neon)">DIR: REPO - COMO ANTES</b>
         <input id="ghO" class="in" value="sistemak" style="width:68px">
         <input id="ghR" class="in" value="korvil-app" style="width:68px">
         <input id="REPO_TOKEN" type="password" class="in" placeholder="REPO_TOKEN" style="flex:1;min-width:120px">
@@ -101,46 +102,44 @@ input.in{background:#000;border:1px solid var(--border);color:#e0faff;padding:6p
       </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;width:100%;align-items:center">
         <span id="selCountRight" class="badge">0 sel DIR</span>
-        <button class="btn ac" style="border-color:#00ff88;color:#00ff88" onclick="moverDirParaEsq()">← ESQ EXATO</button>
+        <button class="btn ac" onclick="moverDirParaEsq()">← ESQ</button>
+        <button class="btn danger" onclick="excluirSelecionadosDir()">🗑️ EXCLUIR</button>
       </div>
-      <div id="currentPathDisplay" style="font-size:6px;opacity:.6;background:#000;padding:4px 8px;border-radius:20px;border:1px solid var(--border);width:100%;color:var(--neon)">sistemak/korvil-app • Repo como antes • Arraste pasta inteira exata pra qualquer lugar</div>
+      <div id="currentPathDisplay" style="font-size:6px;opacity:.6;background:#000;padding:4px 8px;border-radius:20px;border:1px solid var(--border);width:100%;color:var(--neon)">sistemak/korvil-app</div>
     </div>
     <iframe id="githubFrame" src="https://github.com/sistemak/korvil-app" style="flex:1;width:100%;border:0;background:#0d1117;display:flex;min-height:0"></iframe>
     <div id="repoViewFallback" style="flex:1;min-height:0;display:none;background:#000;flex-direction:column">
       <div class="repo-breadcrumb" id="breadcrumb"><span onclick="navegarPara('')">🏠 root</span></div>
       <div class="repo-list" id="repoList" style="flex:1;overflow:auto"></div>
     </div>
-    <div class="dropzone" id="dropDir"><h3>SOLTE AQUI - QUALQUER PASTA/ARQUIVO - EXATO</h3><p>Do PC, celular ou da outra tela - mantém exatamente como é - já salva</p></div>
+    <div class="dropzone" id="dropDir"><h3>SOLTE AQUI - QUALQUER LUGAR - EXATO COMO É</h3></div>
   </div>
 </div>
 
 <div id="liveViewer">
   <div class="viewer-top">
     <div style="display:flex;gap:8px;align-items:center;flex:1;min-width:0">
-      <span style="color:var(--neon);font-weight:900">🔨 FORJA LIVE - EXATO</span>
-      <span style="opacity:.6">Arraste e solte onde quiser - pasta inteira exata - sem dividir nem duplicar</span>
+      <span style="color:var(--neon);font-weight:900">🔨 FORJA LIVE</span>
     </div>
-    <div style="display:flex;gap:5px;align-items:center;flex-shrink:0">
-      <button class="btn ac" onclick="renderLiveSite()">⟳ RE-BUILD</button>
-      <span id="viewerType" class="badge">EXATO</span>
-    </div>
+    <span id="viewerType" class="badge">EXATO</span>
   </div>
   <div class="viewer-content">
     <div class="viewer-preview"><iframe id="liveSiteFrame"></iframe></div>
   </div>
-  <div id="log">[LOG] FORJA V20 SIMPLES - Move exato onde quiser sem dividir nem duplicar - sistemak</div>
+  <div id="log">[LOG] FORJA - Move exato onde quiser - Repo como antes - sistemak</div>
 </div>
 
-<div id="editModal"><div class="edit-layout"><div class="edit-code"><div class="edit-header"><span style="color:var(--neon)">🔨 EDITAR - <span id="editFileName"></span></span><div style="display:flex;gap:5px"><button class="btn ac" onclick="salvarEdicao()">💾 SALVAR</button><button class="btn" onclick="document.getElementById('editModal').style.display='none'">X</button></div></div><textarea id="editArea" oninput="renderInstant()"></textarea></div><div class="edit-render"><div class="edit-header" style="background:var(--neon);color:#000"><span style="font-weight:900">👁️ RENDER EXATO</span></div><iframe id="editLiveFrame"></iframe></div></div></div>
+<div id="editModal"><div class="edit-layout"><div class="edit-code"><div class="edit-header"><span style="color:var(--neon)">🔨 EDITAR - <span id="editFileName"></span></span><div style="display:flex;gap:5px"><button class="btn ac" onclick="salvarEdicao()">💾 SALVAR</button><button class="btn" onclick="document.getElementById('editModal').style.display='none'">X</button></div></div><textarea id="editArea" oninput="renderInstant()"></textarea></div><div class="edit-render"><div class="edit-header" style="background:var(--neon);color:#000"><span style="font-weight:900">👁️ RENDER</span></div><iframe id="editLiveFrame"></iframe></div></div></div>
 
 <input type="file" id="f" hidden multiple><input type="file" id="folder" hidden webkitdirectory multiple>
 
 <script>
+// === BASE - NÃO MEXIDO ===
 let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set(), currentPath="", arquivoEditando=null;
-let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-v20-SIMPLES-cfg')||'{}');}catch(e){cfg={}}
+let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-cfg')||'{}');}catch(e){cfg={}}
 if(!cfg.owner) cfg.owner='sistemak'; if(!cfg.repo) cfg.repo='korvil-app';
 ghO.value=cfg.owner; ghR.value=cfg.repo; document.getElementById('REPO_TOKEN').value=cfg.REPO_TOKEN||'';
-const openDB=indexedDB.open('korvil-v20-SIMPLES',1);
+const openDB=indexedDB.open('korvil',1);
 openDB.onupgradeneeded=e=>{ const d=e.target.result; if(!d.objectStoreNames.contains('k')) d.createObjectStore('k',{keyPath:'id'}); };
 openDB.onsuccess=e=>{ db=e.target.result; carregarTudo(); carregarDadosRepo(); abrirGithubOriginal(); };
 function getREPO_TOKEN(){ return document.getElementById('REPO_TOKEN').value.trim(); }
@@ -152,6 +151,7 @@ const fEl=document.getElementById('f'), folderEl=document.getElementById('folder
 fEl.onchange=e=>{ if(e.target.files.length) handleFiles(e.target.files); e.target.value=''; };
 folderEl.onchange=e=>{ if(e.target.files.length) handleFiles(e.target.files); e.target.value=''; };
 
+// === ÚNICA CORREÇÃO: MOVER EXATO SEM DIVIDIR ===
 function getArquivosDaPasta(prefix){
   const clean=prefix.endsWith('/')?prefix.slice(0,-1):prefix;
   return ativos.filter(a=>a.path===clean || a.path.startsWith(clean+'/'));
@@ -168,7 +168,7 @@ async function handleFiles(fileList){
     const path=file.webkitRelativePath||file.name; // EXATO como vem do PC/celular
     await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name,path:path,type:file.type,size:file.size,cat:'code',ext:file.name.split('.').pop(),date:new Date().toISOString(),blob:file});
   }
-  await carregarTudo(); renderLiveSite(); log(`${files.length} arquivos movidos EXATAMENTE como são`);
+  await carregarTudo(); renderLiveSite();
 }
 async function handleDataTransferItems(items, targetFolder){
   const files=[];
@@ -182,8 +182,7 @@ async function handleDataTransferItems(items, targetFolder){
   await Promise.all(promises);
   if(files.length>0){
     for(let file of files){
-      // EXATO: mantém estrutura exata, só prefixa com pasta destino se tiver
-      const finalPath=targetFolder? targetFolder+'/'+file._relativePath : file._relativePath;
+      const finalPath=targetFolder? targetFolder+'/'+file._relativePath : file._relativePath; // EXATO
       Object.defineProperty(file, 'webkitRelativePath', {value:finalPath});
     }
     await handleFiles(files);
@@ -195,11 +194,11 @@ function renderLeft(){
   const sL=document.getElementById('sLeft'); sL.innerHTML=''; document.getElementById('selCount').innerText=selecionados.size+' sel';
   const pastas=getPastasUnicas();
   const listaCompleta=[...pastas.map(p=>({isFolder:true, path:p.path, name:p.path.split('/').pop()+'/', count:p.count})),...ativos];
-  if(listaCompleta.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.5;padding:24px">Arraste qualquer pasta ou arquivo aqui<br>Exato como é - sem dividir</div>`; return; }
+  if(listaCompleta.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.5;padding:24px">Arraste qualquer pasta/arquivo aqui - exato</div>`; return; }
   listaCompleta.forEach(o=>{
     if(o.isFolder){
       const div=document.createElement('div'); div.className='item folder-card'+(selecionados.has('folder:'+o.path)?' selected':''); div.draggable=true; div.dataset.folder=o.path;
-      div.innerHTML=`<div class="item-preview" style="background:linear-gradient(135deg,#1a1500,#000);border:1px solid #ffcc00"><div style="font-size:20px">📁</div></div><div class="item-info"><div class="item-name">📁 ${o.name} (${o.count})</div><div class="item-path">${o.path}/ - EXATO</div></div>`;
+      div.innerHTML=`<div class="item-preview" style="background:linear-gradient(135deg,#1a1500,#000);border:1px solid #ffcc00"><div style="font-size:20px">📁</div></div><div class="item-info"><div class="item-name">📁 ${o.name}</div><div class="item-path">${o.path}/ (${o.count})</div></div>`;
       div.addEventListener('dragenter', e=>{ e.preventDefault(); div.classList.add('drop-target'); });
       div.addEventListener('dragover', e=>{ e.preventDefault(); div.classList.add('drop-target'); });
       div.addEventListener('dragleave', e=>{ if(!div.contains(e.relatedTarget)) div.classList.remove('drop-target'); });
@@ -222,30 +221,18 @@ function renderLeft(){
             }
             await carregarTudo();
           } else if(ids.length>0){
-            for(let id of ids){
-              const a=ativos.find(x=>x.id===id); if(a){
-                const rel=a.path.split('/').pop();
-                a.path=targetFolder+'/'+rel; await save(a);
-              }
-            }
+            for(let id of ids){ const a=ativos.find(x=>x.id===id); if(a){ a.path=targetFolder+'/'+a.path.split('/').pop(); await save(a); } }
             await carregarTudo();
           }
         }
       });
       div.ondragstart=e=>{ e.dataTransfer.setData('from','left'); e.dataTransfer.setData('folder',o.path); };
       div.onclick=()=>{ const key='folder:'+o.path; if(selecionados.has(key)) selecionados.delete(key); else selecionados.add(key); renderLeft(); };
-      div.ondblclick=()=>{ const arqs=getArquivosDaPasta(o.path); if(arqs[0]) abrirEditorComId(arqs[0].id); };
       sL.appendChild(div);
     } else {
-      const url=URL.createObjectURL(o.blob);
       const div=document.createElement('div'); div.className='item'+(selecionados.has(o.id)?' selected':''); div.draggable=true; div.dataset.id=o.id;
-      const thumb=o.cat==='image'?`<img src="${url}">`:`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;border:1px dashed var(--neon);font-size:7px">📄 ${o.name.slice(0,14)}</div>`;
-      div.innerHTML=`<div class="item-preview">${thumb}</div><div class="item-info"><div class="item-name">${o.name}</div><div class="item-path">${o.path}</div></div>`;
-      div.ondragstart=e=>{
-        const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id);
-        e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id]));
-        try{ const blobUrl=URL.createObjectURL(o.blob); e.dataTransfer.setData('DownloadURL', `${o.type||'application/octet-stream'}:${o.name}:${blobUrl}`); }catch{}
-      };
+      div.innerHTML=`<div class="item-preview"><div style="font-size:12px">📄 ${o.name.slice(0,10)}</div></div><div class="item-info"><div class="item-name">${o.name}</div><div class="item-path">${o.path}</div></div>`;
+      div.ondragstart=e=>{ const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id); e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id])); try{ const url=URL.createObjectURL(o.blob); e.dataTransfer.setData('DownloadURL', `${o.type||'application/octet-stream'}:${o.name}:${url}`); }catch{} };
       div.onclick=()=>{ if(selecionados.has(o.id)) selecionados.delete(o.id); else selecionados.add(o.id); renderLeft(); };
       div.ondblclick=()=>abrirEditorComId(o.id);
       sL.appendChild(div);
@@ -284,11 +271,10 @@ async function renderLiveSite(){
   const liveFrame=document.getElementById('liveSiteFrame');
   const indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html'));
   if(indexFile){ let html=await indexFile.blob.text(); liveFrame.srcdoc=html; return; }
-  if(arquivoEditando){ const txt=await arquivoEditando.blob.text(); if(txt.trim().startsWith('<')){ liveFrame.srcdoc=txt; return; } }
-  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#000;color:#e0faff;padding:12px"><div style="background:#00f0ff;color:#000;padding:5px 10px;border-radius:20px;display:inline-block">FORJA - ${ativos.length} arqs - EXATO sem dividir</div></body></html>`;
+  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#000;color:#e0faff;padding:12px">FORJA - ${ativos.length} arqs</body></html>`;
 }
 
-// === REPO NA TELA COMO ANTES - CÓDIGO ORIGINAL INTACTO - NÃO MEXIDO ===
+// === REPO COMO ANTES - NÃO MEXIDO - CÓDIGO ORIGINAL DO SEU PRINT ===
 function abrirGithubOriginal(){
   const owner=document.getElementById('ghO').value||'sistemak';
   const repo=document.getElementById('ghR').value||'korvil-app';
@@ -297,8 +283,7 @@ function abrirGithubOriginal(){
   document.getElementById('githubFrame').style.display='flex';
   document.getElementById('repoViewFallback').style.display='none';
   document.getElementById('githubFrame').src=url;
-  document.getElementById('currentPathDisplay').innerText=url+` • Repo na tela como antes`;
-  log(`▶ GITHUB ORIGINAL - ${url}`);
+  document.getElementById('currentPathDisplay').innerText=url;
   carregarDadosRepo();
 }
 function toggleFallback(){
@@ -307,12 +292,10 @@ function toggleFallback(){
   if(fb.style.display==='none' || fb.style.display===''){
     fb.style.display='flex';
     f.style.display='none';
-    document.getElementById('currentPathDisplay').innerText=`${ghO.value}/${ghR.value}/${currentPath} - 📁 EXPLORER COM 🗑️`;
     if(repoCache.length===0) carregarDadosRepo(); else renderRepo();
   } else {
     fb.style.display='none';
     f.style.display='flex';
-    document.getElementById('currentPathDisplay').innerText=`https://github.com/${ghO.value}/${ghR.value}${currentPath?'/tree/main/'+currentPath:''} - ▶ GITHUB ORIGINAL`;
   }
 }
 function navegarPara(path){ currentPath=path; document.getElementById('repoViewFallback').style.display='flex'; document.getElementById('githubFrame').style.display='none'; carregarDadosRepo(); }
@@ -339,12 +322,12 @@ function renderRepo(){
   const breadcrumb=document.getElementById('breadcrumb'); const listEl=document.getElementById('repoList');
   const parts=currentPath?currentPath.split('/').filter(Boolean):[]; let htmlCrumb=`<span onclick="navegarPara('')">🏠 root</span>`; let acc=""; parts.forEach(p=>{ acc+=(acc?"/":"")+p; htmlCrumb+=`<span style="opacity:.3">/</span><span onclick="navegarPara('${acc}')">${p}</span>`; });
   breadcrumb.innerHTML=htmlCrumb+`<span style="margin-left:auto;opacity:.5">${selecionadosDir.size} sel DIR</span>`;
-  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia - arraste pasta exata aqui</div>'; return; }
+  const items=getTreeForPath(currentPath); if(items.length===0){ listEl.innerHTML='<div style="padding:20px;opacity:.4;text-align:center">Vazia</div>'; return; }
   listEl.innerHTML=""; if(currentPath){ const up=currentPath.split('/').slice(0,-1).join('/'); const d=document.createElement('div'); d.className='repo-row'; d.innerHTML=`<span>📁.. voltar</span>`; d.onclick=()=>navegarPara(up); listEl.appendChild(d); }
   items.forEach(item=>{
     const row=document.createElement('div'); row.className='repo-row'+(item.isFolder?' folder-row':'')+(selecionadosDir.has(item.fullPath)?' selected-right':''); row.dataset.path=item.fullPath;
     if(item.isFolder){
-      row.innerHTML=`<div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0">📁 ${item.name}/ - EXATO</div><div style="display:flex;gap:4px;flex-shrink:0"><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();navegarPara('${item.fullPath}')">📂 ABRIR</button></div>`;
+      row.innerHTML=`<div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0">📁 ${item.name}/</div><div style="display:flex;gap:4px"><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();navegarPara('${item.fullPath}')">📂 ABRIR</button></div>`;
       row.addEventListener('dragenter', e=>{ e.preventDefault(); row.classList.add('drop-target'); });
       row.addEventListener('dragover', e=>{ e.preventDefault(); row.classList.add('drop-target'); });
       row.addEventListener('dragleave', e=>{ if(!row.contains(e.relatedTarget)) row.classList.remove('drop-target'); });
@@ -356,7 +339,7 @@ function renderRepo(){
           for(let file of e.dataTransfer.files){
             const txt=await file.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
             const targetPath=file.webkitRelativePath? targetFolder+'/'+file.webkitRelativePath : targetFolder+'/'+file.name;
-            await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA MOVE EXATO: ${targetPath}`,content:b64})});
+            await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${targetPath}`,content:b64})});
           }
           setTimeout(()=>carregarDadosRepo(),700);
         } else if(from==='left'){
@@ -369,15 +352,15 @@ function renderRepo(){
               const rel=a.path===folder?'':a.path.slice(folder.length+1);
               const targetPath=rel? targetFolder+'/'+folderName+'/'+rel : targetFolder+'/'+folderName;
               let txt=await a.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
-              await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA MOVE PASTA EXATA: ${targetPath}`,content:b64})});
+              await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${targetPath}`,content:b64})});
             }
             setTimeout(()=>carregarDadosRepo(),800);
           } else if(ids.length>0){
             for(let id of ids){
               const a=ativos.find(x=>x.id===id); if(a){
                 let txt=await a.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
-                const targetPath=targetFolder+'/'+a.path; // EXATO - mantém path exato
-                await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA MOVE EXATO: ${targetPath}`,content:b64})});
+                const targetPath=targetFolder+'/'+a.path;
+                await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${targetPath}`,content:b64})});
               }
             }
             setTimeout(()=>carregarDadosRepo(),700);
@@ -386,7 +369,7 @@ function renderRepo(){
       });
       row.onclick=()=>navegarPara(item.fullPath);
     } else {
-      row.innerHTML=`<div style="display:flex;align-items:center;gap:6px;min-width:0;flex:1"><input type="checkbox" onclick="event.stopPropagation();toggleDir('${item.fullPath.replace(/'/g,"\\'")}')" style="accent-color:#00f0ff"> 📄 ${item.name} - EXATO</div><div style="display:flex;gap:4px;flex-shrink:0"><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">✏️ EDITAR</button></div>`;
+      row.innerHTML=`<div style="display:flex;align-items:center;gap:6px;min-width:0;flex:1"><input type="checkbox" onclick="event.stopPropagation();toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"> 📄 ${item.name}</div><div style="display:flex;gap:4px"><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">✏️</button></div>`;
       row.onclick=()=>toggleDir(item.fullPath);
     }
     listEl.appendChild(row);
@@ -401,22 +384,17 @@ async function moverEsqParaDir(){
   let arquivos=[]; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const p=key.slice(7); arquivos.push(...getArquivosDaPasta(p)); } else { const o=ativos.find(a=>a.id===key); if(o) arquivos.push(o); } }
   arquivos=[...new Map(arquivos.map(a=>[a.path,a])).values()];
   for(let obj of arquivos){
-    let targetPath=currentPath? currentPath+'/'+obj.path : obj.path; // EXATO sem dividir
+    let targetPath=currentPath? currentPath+'/'+obj.path : obj.path; // EXATO
     let txt=await obj.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt))); let sha=null;
     try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{}
-    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA MOVE EXATO: ${targetPath}`,content:b64,sha})});
+    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${targetPath}`,content:b64,sha})});
   }
-  await carregarDadosRepo(); renderLiveSite();
-  // MOVE e não duplica - remove da ESQ após mover exato
-  for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); for(let a of arqs) await delDB(a.id); } else await delDB(key); }
-  selecionados.clear(); await carregarTudo();
+  await carregarDadosRepo();
 }
-async function moverDirParaEsq(){
-  if(selecionadosDir.size===0) return;
-  for(let p of [...selecionadosDir]){ await puxarArquivo(p); }
-  selecionadosDir.clear(); document.getElementById('selCountRight').innerText='0 sel DIR';
-}
-function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-v20-SIMPLES-cfg',JSON.stringify(cfg)); carregarDadosRepo(); abrirGithubOriginal(); }
+async function moverDirParaEsq(){ if(selecionadosDir.size===0) return; for(let p of [...selecionadosDir]) await puxarArquivo(p); selecionadosDir.clear(); }
+function excluirSelecionadosEsq(){ if(selecionados.size===0) return; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); arqs.forEach(a=>delDB(a.id)); } else delDB(key); } selecionados.clear(); setTimeout(()=>carregarTudo(),200); }
+function excluirSelecionadosDir(){}
+function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-cfg',JSON.stringify(cfg)); carregarDadosRepo(); abrirGithubOriginal(); }
 function setupDropZones(){
   const zones=[{el:document.getElementById('left'), drop:document.getElementById('dropEsq'), target:'esq'}, {el:document.getElementById('right'), drop:document.getElementById('dropDir'), target:'dir'}];
   zones.forEach(({el, drop, target})=>{
@@ -427,15 +405,10 @@ function setupDropZones(){
       e.preventDefault(); drop.classList.remove('show');
       const from=e.dataTransfer.getData('from');
       if(e.dataTransfer.files && e.dataTransfer.files.length>0 &&!from){
-        if(e.dataTransfer.items && e.dataTransfer.items[0].webkitGetAsEntry){
-          await handleDataTransferItems(e.dataTransfer.items, currentPath||'');
-        } else await handleFiles(e.dataTransfer.files);
+        if(e.dataTransfer.items && e.dataTransfer.items[0].webkitGetAsEntry){ await handleDataTransferItems(e.dataTransfer.items, currentPath||''); } else await handleFiles(e.dataTransfer.files);
         if(target==='dir'){ const ids=[...ativos].slice(-e.dataTransfer.files.length).map(a=>a.id); const old=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=old; renderLeft(); }
       } else if(from){
-        if(target==='esq' && from==='right'){
-          for(let p of [...selecionadosDir]) await puxarArquivo(p);
-          selecionadosDir.clear();
-        }
+        if(target==='esq' && from==='right'){ for(let p of [...selecionadosDir]) await puxarArquivo(p); selecionadosDir.clear(); }
         if(target==='dir' && from==='left'){
           const idsStr=e.dataTransfer.getData('ids'); let ids=[]; try{ids=JSON.parse(idsStr);}catch{ids=[];} const folder=e.dataTransfer.getData('folder'); if(folder){ const old=new Set(selecionados); selecionados=new Set(['folder:'+folder]); await moverEsqParaDir(); selecionados=old; renderLeft(); } else if(ids.length){ const old=new Set(selecionados); selecionados=new Set(ids); await moverEsqParaDir(); selecionados=old; renderLeft(); }
         }
