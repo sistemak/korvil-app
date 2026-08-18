@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>GENERATOR REX - NANITE HOLOGRAM 4D</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box}
+body {
+  background:radial-gradient(circle at center, #001828 0%, #000 100%);
+  display:flex;justify-content:center;align-items:center;height:100vh;
+  overflow:hidden;perspective:2500px;font-family:'Orbitron',sans-serif;
+}
+
+/* FUNDO LAB PROVÍDENCIA */
+.lab-grid {
+  position:absolute;width:300%;height:300%;
+  background-image:linear-gradient(rgba(0,200,255,0.1) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(0,200,255,0.1) 1px, transparent 1px);
+  background-size:80px 80px;transform:rotateX(70deg) translateZ(-700px);
+  animation:labMove 40s linear infinite
+}
+@keyframes labMove {100%{transform:rotateX(70deg) translateZ(-700px) translateY(80px)}}
+
+/* CONSOLE REX NO BRAÇO */
+.console {
+  width:400px;height:400px;border-radius:50%;position:relative;z-index:5;
+  background:radial-gradient(circle, #00CCFF 0%, #0088CC 40%, #003344 80%);
+  box-shadow:0 0 400px #00CCFF, inset 0 0 200px #00CCFF;
+  animation:pulse 4s infinite ease-in-out;cursor:pointer;border:8px solid #00CCFF;
+}
+.console-core {
+  width:200px;height:200px;border-radius:50%;background:conic-gradient(#00CCFF, #88EEFF, #00CCFF);
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:24px;
+  box-shadow:0 0 100px #00CCFF
+}
+
+/* HOLOGRAMA AZUL NANITE EM CIMA */
+.holo-projetor {
+  position:absolute;bottom:480px;width:700px;height:700px;
+  opacity:0;transition:1.5s cubic-bezier(0.16,1,0.3,1);transform:scale(0.3) rotateX(30deg)
+}
+.holo-projetor.ativo {opacity:1;transform:scale(1) rotateX(0)}
+.holo {
+  width:100%;height:100%;position:relative;
+  background:radial-gradient(circle, rgba(0,200,255,0.2) 0%, transparent 75%);
+}
+
+/* LINHAS DE NANITES */
+.holo::before {
+  content:'';position:absolute;top:0;left:0;width:100%;height:100%;
+  background:repeating-linear-gradient(90deg, transparent 0px, rgba(0,200,255,0.3) 1px, transparent 3px);
+  animation:scanNanite 1.5s linear infinite;
+}
+
+/* PARTICULAS NANITE */
+.particula {position:absolute;width:4px;height:4px;background:#00CCFF;border-radius:50%;
+  box-shadow:0 0 10px #00CCFF;animation:floatNanite 5s infinite linear}
+
+/* IMAGEM DA ARMA/CONSTRUÇÃO */
+.build-holo {
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:220px;filter:drop-shadow(0 0 100px #00CCFF);
+  animation:holoTremor 2s infinite
+}
+
+/* CORPO REX HOLOGRÁFICO */
+.rex-body {
+  position:absolute;bottom:70px;width:280px;height:480px;opacity:0;transition:1s;
+  transform-style:preserve-3d;
+}
+.rex-body.ativo {opacity:0.9;animation:rotateRex 15s infinite linear}
+.rex-modelo {
+  width:100%;height:100%;border-radius:120px 120px 50px 50px;
+  background:linear-gradient(rgba(0,200,255,0.15), rgba(0,200,255,0.05));
+  border:3px solid rgba(0,200,255,0.6);box-shadow:inset 0 0 100px rgba(0,200,255,0.4)
+}
+.scan-rex {
+  position:absolute;top:0;width:100%;height:10px;background:linear-gradient(90deg,transparent,#00CCFF,transparent);
+  box-shadow:0 0 30px #00CCFF;animation:scanDown 3s infinite
+}
+
+/* PAINEL DE ARMAS */
+.painel-armas {
+  position:absolute;right:60px;width:350px;background:rgba(0,200,255,0.05);
+  border:2px solid #00CCFF;border-radius:25px;padding:25px;backdrop-filter:blur(25px);
+  transform:translateX(500px);transition:1.2s
+}
+.painel-armas.ativo {transform:translateX(0)}
+.painel-armas h2 {color:#00CCFF;text-shadow:0 0 20px #00CCFF;margin-bottom:20px}
+.btn-arma {
+  width:100%;padding:15px;margin:10px 0;background:rgba(0,200,255,0.1);
+  border:2px solid #00CCFF;color:#00CCFF;border-radius:12px;font-weight:900;cursor:pointer;
+  transition:0.3s;font-size:16px
+}
+.btn-arma:hover {background:#00CCFF;color:#000;transform:translateX(10px) scale(1.05)}
+
+/* TRANSFORMAÇÃO BUILD 5S */
+.build-screen {
+  position:absolute;top:0;left:0;width:100%;height:100%;background:#000;
+  display:none;justify-content:center;align-items:center;flex-direction:column;z-index:99
+}
+.build-screen.ativo {display:flex}
+.build-screen h1 {color:#00CCFF;font-size:90px;text-shadow:0 0 80px #00CCFF}
+.build-bar {width:900px;height:40px;background:#001828;border:3px solid #00CCFF;border-radius:20px;margin-top:30px;overflow:hidden}
+.build-fill {height:100%;width:0%;background:linear-gradient(90deg,#00CCFF,#88EEFF);animation:build 5s forwards}
+
+@keyframes pulse {50%{box-shadow:0 0 500px #00CCFF}}
+@keyframes scanNanite {0%{transform:translateX(-100%)} 100%{transform:translateX(100%)}}
+@keyframes floatNanite {0%{transform:translateY(700px)} 100%{transform:translateY(-700px)}}
+@keyframes holoTremor {50%{transform:translate(-50%,-50%) scale(1.05)}}
+@keyframes scanDown {0%{top:0} 100%{top:100%}}
+@keyframes rotateRex {100%{transform:rotateY(360deg)}}
+@keyframes build {100%{width:100%}}
+</style>
+</head>
+<body>
+
+<div class="lab-grid"></div>
+
+<!-- PARTICULAS NANITE -->
+<script>
+for(let i=0;i<80;i++){
+  let p = document.createElement('div');
+  p.className = 'particula';
+  p.style.left = Math.random()*100+'%';
+  p.style.animationDelay = Math.random()*5+'s';
+  document.body.appendChild(p);
+}
+</script>
+
+<!-- HOLOGRAMA PROJETOR -->
+<div class="holo-projetor" id="projetor">
+  <div class="holo">
+    <div class="build-holo" id="buildHolo">✋</div>
+  </div>
+</div>
+
+<!-- CORPO REX -->
+<div class="rex-body" id="rexBody">
+  <div class="rex-modelo"></div>
+  <div class="scan-rex"></div>
+</div>
+
+<!-- PAINEL DE ARMAS NANITES -->
+<div class="painel-armas" id="painel">
+  <h2>CONSTRUTOR NANITE</h2>
+  <button class="btn-arma" onclick="construir('ESPADA', '⚔️')">ESPADA REX</button>
+  <button class="btn-arma" onclick="construir('CANHÃO', '💥')">CANHÃO SONORO</button>
+  <button class="btn-arma" onclick="construir('ESCUDO', '🛡️')">ESCUDO NANITE</button>
+  <button class="btn-arma" onclick="construir('SMACK HAND', '✋')">SMACK HAND</button>
+  <button class="btn-arma" onclick="construir('MODO EVO', '🧬')">MODO EVO SCANNER</button>
+</div>
+
+<!-- CONSOLE REX -->
+<div class="console" onclick="ativarConsole()">
+  <div class="console-core">REX</div>
+</div>
+
+<!-- TELA DE CONSTRUÇÃO -->
+<div class="build-screen" id="buildScreen">
+  <h1 id="buildText">CONSTRUINDO ARMA</h1>
+  <div class="build-bar"><div class="build-fill" id="buildBar"></div></div>
+</div>
+
+<audio id="sndConsole" src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0YQAAAAA="></audio>
+
+<script>
+function ativarConsole() {
+  document.getElementById('sndConsole').play();
+  document.getElementById('painel').classList.toggle('ativo');
+  document.getElementById('rexBody').classList.toggle('ativo');
+}
+
+function construir(arma, emoji) {
+  document.getElementById('sndConsole').play();
+  
+  // ATIVA HOLOGRAMA
+  document.getElementById('projetor').classList.add('ativo');
+  document.getElementById('buildHolo').innerText = emoji;
+  
+  // TELA DE CONSTRUÇÃO 5S
+  document.getElementById('buildScreen').classList.add('ativo');
+  document.getElementById('buildText').innerText = 'CONSTRUINDO: ' + arma;
+  document.getElementById('buildBar').style.width = '0%';
+  
+  // FUNÇÃO ESPECIAL POR ARMA
+  if(arma === 'MODO EVO') {
+    document.getElementById('buildText').innerText = 'SCANEANDO EVO PRÓXIMO...';
+  }
+  
+  setTimeout(()=>{
+    document.getElementById('buildScreen').classList.remove('ativo');
+    // HOLOGRAMA FICA ATIVO COM A ARMA
+  }, 5000);
+}
+</script>
+
+</body></html>
