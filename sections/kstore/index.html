@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KORVIL MARKET - Tudo pra seu Shape</title>
+<style>
+:root{
+  --korvil:#00f5ff;
+  --korvil2:#00ff88;
+  --bg:#050505;
+  --card:#0a0a0a;
+  --text:#fff;
+  --muted:#888;
+  --danger:#ff3b3b;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:var(--bg);color:var(--text)}
+
+/* HEADER ESTILO SHOPEE/MERCADO LIVRE */
+header{background:linear-gradient(90deg,var(--korvil),var(--korvil2));padding:12px 5%;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,245,255,.3)}
+.top-bar{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.logo{font-size:28px;font-weight:900;color:#000;text-shadow:0 0 10px #fff}
+.search-box{flex:1;display:flex}
+.search-box input{flex:1;padding:12px;border:0;border-radius:8px 0 0 8px;background:#fff;color:#000;font-size:14px}
+.search-box button{padding:12px 20px;border:0;border-radius:0 8px 8px 0;background:#000;color:var(--korvil);font-weight:800;cursor:pointer}
+.icons{display:flex;gap:20px;color:#000;font-weight:800;cursor:pointer}
+
+.banner{padding:30px 5%;background:radial-gradient(circle at 50% 50%,rgba(0,245,255,.1),transparent)}
+.banner h1{font-size:32px;background:linear-gradient(90deg,var(--korvil),var(--korvil2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* CATEGORIAS ESTILO SHOPEE */
+.categorias{display:flex;gap:15px;padding:20px 5%;overflow-x:auto}
+.cat-item{min-width:100px;text-align:center;cursor:pointer}
+.cat-item div{width:80px;height:80px;background:var(--card);border:2px solid #222;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:auto;margin-bottom:8px;transition:0.3s}
+.cat-item:hover div{border-color:var(--korvil);box-shadow:0 0 20px var(--korvil)}
+.cat-item span{font-size:12px}
+
+/* GRID DE PRODUTOS ESTILO ML */
+.grid{padding:20px 5%;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+.card{background:var(--card);border:1px solid #222;border-radius:12px;overflow:hidden;transition:0.3s;cursor:pointer}
+.card:hover{transform:translateY(-5px);border-color:var(--korvil);box-shadow:0 0 25px rgba(0,245,255,.2)}
+.card img{width:100%;height:220px;object-fit:cover;background:#111}
+.card-body{padding:12px}
+.card-title{font-size:14px;height:40px;overflow:hidden;margin-bottom:8px}
+.card-price{color:var(--korvil2);font-size:22px;font-weight:900}
+.card-old{color:var(--muted);font-size:12px;text-decoration:line-through}
+.card-tags{display:flex;gap:5px;margin-top:8px}
+.tag{background:var(--danger);color:#fff;font-size:10px;padding:3px 8px;border-radius:4px;font-weight:800}
+.tag.fretegratis{background:var(--korvil2);color:#000}
+
+/* CARRINHO LATERAL ESTILO SHOPEE */
+.cart-side{position:fixed;right:-400px;top:0;width:380px;height:100%;background:#0f0f0f;border-left:2px solid var(--korvil);transition:0.4s;padding:20px;z-index:200;overflow-y:auto}
+.cart-side.open{right:0}
+.cart-item{display:flex;gap:10px;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid #222}
+.cart-item img{width:60px;height:60px;border-radius:8px}
+.btn-buy{width:100%;padding:14px;background:linear-gradient(90deg,var(--korvil),var(--korvil2));color:#000;border:0;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px}
+.btn-buy:hover{filter:brightness(1.2)}
+
+footer{background:#000;padding:30px 5%;text-align:center;color:var(--muted);margin-top:40px}
+@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)} .cart-side{width:100%}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top-bar">
+    <div class="logo">KORVIL MARKET</div>
+    <div class="search-box">
+      <input id="search" placeholder="Buscar em KORVIL: Whey, Creatina, Acessórios...">
+      <button onclick="buscar()">BUSCAR</button>
+    </div>
+    <div class="icons" onclick="toggleCart()">🛒 Carrinho (<span id="cartCount">0</span>)</div>
+  </div>
+</header>
+
+<div class="banner">
+  <h1>KORVIL MARKET</h1>
+  <p>Tudo pra transformar seu corpo. Entrega 24h + Pix 10% OFF</p>
+</div>
+
+<div class="categorias">
+  <div class="cat-item" onclick="filtrar('todos')"><div>🔥</div><span>Ofertas</span></div>
+  <div class="cat-item" onclick="filtrar('suplemento')"><div>💊</div><span>Suplementos</span></div>
+  <div class="cat-item" onclick="filtrar('alimentar')"><div>🥜</div><span>Alimentar</span></div>
+  <div class="cat-item" onclick="filtrar('acessorio')"><div>🧤</div><span>Acessórios</span></div>
+  <div class="cat-item" onclick="filtrar('esportivo')"><div>🏋️</div><span>Esportivo</span></div>
+</div>
+
+<div class="grid" id="gridProdutos"></div>
+
+<div class="cart-side" id="cartSide">
+  <h2 style="color:var(--korvil);margin-bottom:20px;">Seu Carrinho KORVIL</h2>
+  <div id="cartItems"></div>
+  <h3 style="margin:20px 0;">Total: R$ <span id="total">0.00</span></h3>
+  <button class="btn-buy" onclick="finalizar()">FINALIZAR COMPRA VIA PIX</button>
+</div>
+
+<footer>
+  <p>KORVIL MARKET © 2026 - O Futuro do Shape | Pague com Pix, Cartão, Boleto</p>
+</footer>
+
+<script>
+const produtos = [
+  {id:1,nome:"Whey Protein KORVIL 2kg Sabor Cookie",preco:189.90,old:249.90,cat:"suplemento",tag:"-24%",frete:true,img:"https://placehold.co/400x400/00f5ff/000?text=KORVIL+WHEY"},
+  {id:2,nome:"Creatina KORVIL 300g 100% Pura",preco:89.90,old:129.90,cat:"suplemento",tag:"-31%",frete:true,img:"https://placehold.co/400x400/00f5ff/000?text=CREATINA"},
+  {id:3,nome:"Pré Treino Hype KORVIL 300g",preco:99.90,old:149.90,cat:"suplemento",tag:"-33%",frete:false,img:"https://placehold.co/400x400/00ff88/000?text=PRE+HYPE"},
+  {id:4,nome:"Barra de Proteína KORVIL Cx12",preco:59.90,old:79.90,cat:"alimentar",tag:"-25%",frete:true,img:"https://placehold.co/400x400/ffaa00/000?text=BARRA"},
+  {id:5,nome:"Pasta de Amendoim Integral 1kg",preco:39.90,old:49.90,cat:"alimentar",tag:"-20%",frete:false,img:"https://placehold.co/400x400/ffaa00/000?text=PASTA"},
+  {id:6,nome:"Shaker KORVIL 700ml 3D",preco:34.90,old:49.90,cat:"acessorio",tag:"-30%",frete:true,img:"https://placehold.co/400x400/00f5ff/000?text=SHAKER"},
+  {id:7,nome:"Cinto de Lombar Profissional",preco:159.90,old:229.90,cat:"acessorio",tag:"-30%",frete:true,img:"https://placehold.co/400x400/00ccff/000?text=CINTO"},
+  {id:8,nome:"Kit Faixa Elástica 5 Níveis",preco:54.90,old:89.90,cat:"esportivo",tag:"-39%",frete:true,img:"https://placehold.co/400x400/ff00aa/000?text=FAIXA"},
+  {id:9,nome:"BCAA 200 Caps KORVIL",preco:79.90,old:109.90,cat:"suplemento",tag:"-27%",frete:false,img:"https://placehold.co/400x400/00f5ff/000?text=BCAA"},
+  {id:10,nome:"Mochila KORVIL Treino",preco:129.90,old:179.90,cat:"esportivo",tag:"-28%",frete:true,img:"https://placehold.co/400x400/ff00aa/000?text=MOCHILA"}
+];
+
+let carrinho = [];
+
+function render(lista=produtos){
+  document.getElementById('gridProdutos').innerHTML = lista.map(p=>`
+    <div class="card" onclick="addCarrinho(${p.id})">
+      <img src="${p.img}">
+      <div class="card-body">
+        <div class="card-title">${p.nome}</div>
+        <div class="card-old">R$ ${p.old.toFixed(2)}</div>
+        <div class="card-price">R$ ${p.preco.toFixed(2)}</div>
+        <div class="card-tags">
+          <div class="tag">${p.tag}</div>
+          ${p.frete?'<div class="tag fretegratis">FRETE GRÁTIS</div>':''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addCarrinho(id){
+  const prod = produtos.find(p=>p.id==id);
+  const item = carrinho.find(i=>i.id==id);
+  if(item) item.qtd++; else carrinho.push({...prod,qtd:1});
+  updateCart();
+  toggleCart();
+}
+
+function updateCart(){
+  document.getElementById('cartCount').innerText = carrinho.reduce((a,b)=>a+b.qtd,0);
+  document.getElementById('cartItems').innerHTML = carrinho.map(i=>`
+    <div class="cart-item">
+      <img src="${i.img}">
+      <div>
+        <div style="font-size:13px">${i.nome}</div>
+        <div style="color:var(--korvil)">R$ ${i.preco.toFixed(2)} x ${i.qtd}</div>
+      </div>
+    </div>
+  `).join('');
+  const total = carrinho.reduce((a,b)=>a+b.preco*b.qtd,0);
+  document.getElementById('total').innerText = total.toFixed(2);
+}
+
+function toggleCart(){document.getElementById('cartSide').classList.toggle('open')}
+function filtrar(cat){render(cat=='todos'?produtos:produtos.filter(p=>p.cat==cat))}
+function buscar(){const t=document.getElementById('search').value.toLowerCase();render(produtos.filter(p=>p.nome.toLowerCase().includes(t)))}
+
+function finalizar(){
+  if(carrinho.length==0) return alert('Carrinho vazio');
+  let msg = "Olá KORVIL! Quero comprar:%0A%0A";
+  carrinho.forEach(i=> msg += `• ${i.nome} x${i.qtd}%0A`);
+  msg += `%0ATotal: R$ ${document.getElementById('total').innerText}%0A%0APode me mandar o Pix?`;
+  window.open(`https://wa.me/55SEUNUMERO?text=${msg}`,'_blank');
+}
+
+render();
+</script>
+</body>
+</html>
