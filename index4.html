@@ -1,43 +1,53 @@
 <!-- IA GEMINI: A.Q.Ab8RN6IfwmIJi8GNO5XSEG2eCnBwcqqTKstE_oBuLU55iN-FvQ -->
 
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>FORJA v6: COM GEMINI AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORJA v6.2: GEMINI MOBILE</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   *{box-sizing:border-box;font-family:monospace}
-  body{background:#050505;color:#00ff88;margin:0;padding:10px}
+  body{background:#050505;color:#00ff88;margin:0;padding:5px}
   .topbar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
-  .topbar button{flex:1;min-width:120px;padding:10px;font-weight:bold;cursor:pointer}
-  .ia{background:#6600ff;color:white;border:2px solid #6600ff}
-  .container{display:grid;grid-template-columns:250px 1fr 1fr;gap:10px;height:80vh}
-  .box{background:#111;border:1px solid #00ff88;padding:10px;display:flex;flex-direction:column}
+  .topbar button{flex:1;min-width:45%;padding:12px;font-weight:bold;font-size:12px;cursor:pointer}
+  .ia{background:#6600ff;color:white;border:1px solid #6600ff}
+  .apibox{background:#111;padding:8px;border:1px solid #6600ff;margin-bottom:10px}
+  .apibox input{width:70%;padding:8px;background:#000;color:#00ff88;border:1px solid #00ff88}
+  .apibox button{width:28%;padding:8px}
+  .container{display:flex;flex-direction:column;gap:10px;height:75vh}
+  @media(min-width:900px){.container{flex-direction:row}}
+  .box{background:#111;border:1px solid #00ff88;padding:10px;display:flex;flex-direction:column;flex:1}
   textarea{flex:1;background:#000;color:#00ff88;border:1px solid #333;width:100%}
   iframe{flex:1;background:white;border:1px solid #333}
-  .item{border:1px solid #333;padding:5px;margin:3px 0;cursor:pointer}
+  .item{border:1px solid #333;padding:8px;margin:3px 0;cursor:pointer;color:#00ff88}
   .ativo{background:#004400}
-  .log{height:120px;overflow:auto;background:#000;border:1px solid #333;padding:5px;font-size:12px}
+  .log{height:100px;overflow:auto;background:#000;border:1px solid #333;padding:5px;font-size:11px}
 </style>
 </head>
 <body>
 
-<h1>🔥 FORJA v6 + GEMINI AI 🔥</h1>
-<input id="apiKey" type="password" placeholder="COLE SUA API KEY DO GEMINI AQUI" style="width:100%;margin-bottom:10px">
-<a href="https://aistudio.google.com/app/apikey" target="_blank">Pegar API Key Grátis</a>
+<h1>🔥 FORJA v6.2 + GEMINI AI 🔥</h1>
+
+<div class="apibox">
+  <b>1. COLE SUA API KEY DO GEMINI:</b><br>
+  <input id="apiKey" type="password" placeholder="AIza...">
+  <button onclick="testarKey()">TESTAR</button>
+  <div id="statusKey" style="font-size:11px;margin-top:5px"></div>
+  <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#6600ff;font-size:11px">Pegar Key Grátis</a>
+</div>
 
 <div class="topbar">
   <button class="ia" onclick="abrirIA()">🤖 PEDIR PRA IA CRIAR</button>
-  <button class="ia" onclick="consertarComIA()">🔧 IA CONSERTAR CÓDIGO</button>
-  <button class="ia" onclick="explicarComIA()">📖 IA EXPLICAR CÓDIGO</button>
-  <button onclick="salvarVersao()">💾 SALVAR VERSÃO GIT</button>
-  <button onclick="abrirDB()">🗄️ BANCO SQL</button>
+  <button class="ia" onclick="consertarComIA()">🔧 IA CONSERTAR</button>
+  <button class="ia" onclick="explicarComIA()">📖 IA EXPLICAR</button>
+  <button onclick="salvarVersao()">💾 SALVAR VERSÃO</button>
   <button onclick="baixarZip()">📦 BAIXAR ZIP</button>
 </div>
 
 <div class="container">
-  <div class="box">
+  <div class="box" style="max-height:30vh">
     <h3>ARQUIVOS DA FORJA</h3>
     <input id="nome" placeholder="index.html">
     <button onclick="criar()">+ CRIAR ARQUIVO</button>
@@ -53,66 +63,79 @@
   <div class="box">
     <h3>PREVIEW + LOG IA</h3>
     <iframe id="preview"></iframe>
-    <div id="logIA" class="log"></log>
+    <div id="logIA" class="log"></div>
   </div>
 </div>
 
-<!-- MODAL IA -->
-<div id="modalIA" style="display:none;position:fixed;top:10%;left:10%;width:80%;height:80%;background:#111;border:2px solid #6600ff;padding:20px;z-index:99">
+<div id="modalIA" style="display:none;position:fixed;top:5%;left:2%;width:96%;height:90%;background:#111;border:2px solid #6600ff;padding:10px;z-index:99">
   <h3>🤖 GEMINI IA</h3>
-  <textarea id="promptIA" placeholder="Ex: crie um site de login com css bonito" style="height:100px"></textarea>
+  <textarea id="promptIA" placeholder="Ex: crie um site de login responsivo" style="height:80px;width:100%"></textarea>
   <button onclick="gerarComGemini()">GERAR COM GEMINI</button>
   <button onclick="fecharModal()">FECHAR</button>
-  <textarea id="respostaIA" style="height:300px"></textarea>
+  <textarea id="respostaIA" style="height:50%;width:100%"></textarea>
   <button onclick="usarCodigoIA()">USAR ESSE CÓDIGO</button>
 </div>
 
 <script>
-let banco = JSON.parse(localStorage.getItem('forja_banco_v6')) || [];
+let banco = JSON.parse(localStorage.getItem('forja_banco_v62')) || [];
 let atual = null;
 
-function log(t){document.getElementById('logIA').innerHTML += t + '<br>';}
+function log(t){document.getElementById('logIA').innerHTML += new Date().toLocaleTimeString() + " > " + t + '<br>';}
+
+async function testarKey(){
+  const key = document.getElementById('apiKey').value;
+  if(!key){document.getElementById('statusKey').innerHTML="<span style=color:red>Cola a API Key primeiro</span>"; return}
+  localStorage.setItem('gemini_key', key);
+  let r = await chamarGemini("Responda apenas: OK");
+  if(r) document.getElementById('statusKey').innerHTML="<span style=color:#00ff88>Conectado com Gemini!</span>";
+  else document.getElementById('statusKey').innerHTML="<span style=color:red>Erro na Key</span>";
+}
 
 async function chamarGemini(prompt){
-  const key = document.getElementById('apiKey').value;
+  const key = document.getElementById('apiKey').value || localStorage.getItem('gemini_key');
   if(!key){alert("Cole sua API Key do Gemini primeiro"); return null}
   
   log("Chamando Gemini...");
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      contents: [{parts:[{text: prompt}]}]
-    })
-  });
-  const data = await res.json();
-  let texto = data.candidates[0].content.parts[0].text;
-  log("Gemini respondeu!");
-  return texto;
+  try{
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({contents: [{parts:[{text: prompt}]}]})
+    });
+    if(!res.ok) throw new Error("Erro " + res.status + " - Key inválida");
+    const data = await res.json();
+    let texto = data.candidates[0].content.parts[0].text;
+    log("Resposta recebida!");
+    return texto.replace(/```html|```/g,'');
+  }catch(e){
+    log("ERRO: " + e.message);
+    alert("Erro: " + e.message);
+    return null;
+  }
 }
 
-// 4. IA REAL
 function abrirIA(){document.getElementById('modalIA').style.display='block'}
 function fecharModal(){document.getElementById('modalIA').style.display='none'}
 
 async function gerarComGemini(){
-  let prompt = "Você é um programador. " + document.getElementById('promptIA').value + ". Responda SOMENTE com código.";
+  let prompt = "Você é um programador expert. " + document.getElementById('promptIA').value + ". Responda SOMENTE com código completo HTML CSS JS.";
   let codigo = await chamarGemini(prompt);
-  document.getElementById('respostaIA').value = codigo;
+  if(codigo) document.getElementById('respostaIA').value = codigo;
 }
 
 async function consertarComIA(){
+  if(!atual) return alert("Selecione um arquivo primeiro");
   let codigo = document.getElementById('code').value;
-  let prompt = "Conserte esse código e retorne só o código corrigido: \n" + codigo;
+  let prompt = "Conserte os bugs e melhore esse código. Retorne só o código: \n" + codigo;
   let novo = await chamarGemini(prompt);
-  document.getElementById('code').value = novo;
+  if(novo) document.getElementById('code').value = novo;
 }
 
 async function explicarComIA(){
+  if(!atual) return alert("Selecione um arquivo primeiro");
   let codigo = document.getElementById('code').value;
-  let prompt = "Explique linha por linha esse código de forma simples: \n" + codigo;
-  let explicacao = await chamarGemini(prompt);
-  alert(explicacao);
+  let explicacao = await chamarGemini("Explique esse código de forma simples para iniciante: \n" + codigo);
+  if(explicacao) alert(explicacao);
 }
 
 function usarCodigoIA(){
@@ -120,7 +143,6 @@ function usarCodigoIA(){
   salvarBanco(); listar(); fecharModal();
 }
 
-// 5. GIT
 function salvarVersao(){
   let versoes = JSON.parse(localStorage.getItem('forja_versoes')) || [];
   versoes.push({data:new Date().toLocaleString(), snapshot:JSON.stringify(banco)});
@@ -128,25 +150,19 @@ function salvarVersao(){
   log(`Versão ${versoes.length} salva!`);
 }
 
-// 6. BANCO SQL SIMULADO
-function abrirDB(){
-  let sql = prompt("Digite SQL: CREATE TABLE users (id, nome)");
-  let db = JSON.parse(localStorage.getItem('forja_db')) || {};
-  db[Date.now()] = sql;
-  localStorage.setItem('forja_db', JSON.stringify(db));
-  log("Tabela criada: " + sql);
-}
-
-// BASE
-function criar(){banco.push({id:Date.now(), nome:document.getElementById('nome').value, conteudo:""}); salvarBanco(); listar()}
+function criar(){banco.push({id:Date.now(), nome:document.getElementById('nome').value, conteudo:"<!-- novo -->"}); salvarBanco(); listar()}
 function listar(){document.getElementById('lista').innerHTML = banco.map(i=>`<div class="item ${atual==i.id?'ativo':''}" onclick="abrir(${i.id})">${i.nome}</div>`).join('')}
 function abrir(id){atual=id; document.getElementById('code').value=banco.find(i=>i.id==id).conteudo; renderizar()}
 function salvar(){banco.find(i=>i.id==atual).conteudo=document.getElementById('code').value; salvarBanco(); renderizar()}
 function renderizar(){document.getElementById('preview').srcdoc=document.getElementById('code').value}
-function salvarBanco(){localStorage.setItem('forja_banco_v6', JSON.stringify(banco))}
+function salvarBanco(){localStorage.setItem('forja_banco_v62', JSON.stringify(banco))}
 async function baixarZip(){let zip=new JSZip(); banco.forEach(i=>zip.file(i.nome,i.conteudo)); let blob=await zip.generateAsync({type:"blob"}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="FORJA_v6.zip"; a.click()}
 
-listar();
+window.onload = ()=>{
+  let key = localStorage.getItem('gemini_key');
+  if(key) document.getElementById('apiKey').value = key;
+  listar();
+}
 </script>
 </body>
-</html>
+</html> 
