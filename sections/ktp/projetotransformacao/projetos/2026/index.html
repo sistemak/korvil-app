@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KTP TIMELINE 3D 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+<style>
+:root{--c:#00f5ff; --bg:#000; --card:#0a0a0a; --text:#fff; --ok:#00ff88; --warn:#ffaa00;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
+body{background:var(--bg);color:var(--text);padding:16px;max-width:1000px;margin:auto;}
+h1{text-align:center;color:var(--c);margin-bottom:10px;font-size:18px;}
+h2{color:var(--c);font-size:16px;margin-bottom:8px;}
+h3{color:var(--c);font-size:14px;margin-bottom:8px;}
+.timeline{display:flex;overflow-x:auto;gap:8px;margin:20px 0;padding-bottom:10px;}
+.mes{padding:10px;border:2px solid #333;border-radius:8px;min-width:90px;text-align:center;font-size:11px;flex-shrink:0;}
+.mes.ativo{border-color:var(--c);background:rgba(0,245,255,.15);box-shadow:0 0 15px var(--c);}
+.card{background:var(--card);border:1px solid #222;padding:16px;border-radius:12px;margin-bottom:12px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:700px){.grid{grid-template-columns:1fr;}}
+.btn{padding:10px 14px;background:var(--c);color:#000;border:0;border-radius:8px;font-weight:800;cursor:pointer;margin:5px;font-size:12px;}
+input[type=file]{display:none;}
+input{padding:10px;width:100%;margin:10px 0;background:#111;border:1px solid #333;color:#fff;border-radius:8px;}
+.nota{font-size:40px;font-weight:900;color:var(--ok);}
+.evolucao{font-size:20px;color:var(--ok);font-weight:800;}
+#boneco3d{width:100%;height:300px;background:#050505;border-radius:12px;border:1px solid #222;}
+.oculto{display:none;}
+</style>
+</head>
+<body>
+
+<h1>KTP PROJETO TRANSFORMAÇÃO 2026</h1>
+<div class="timeline" id="timeline"></div>
+
+<div id="login" class="card">
+  <h2>Acessar Projeto</h2>
+  <p style="font-size:12px;color:#aaa;">Teste com ID: maria1234</p>
+  <input id="inputId" placeholder="Digite seu ID: maria1234">
+  <button class="btn" onclick="entrar()">ENTRAR</button>
+</div>
+
+<div id="painel" class="oculto">
+  <div class="card">
+    <h2 id="nomeAluno"></h2>
+    <p><b>Fase Atual:</b> <span id="faseAtual"></span></p>
+    <p><b>Objetivo:</b> <span id="objAluno"></span></p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Coerência com a Fase</h3>
+      <div class="nota" id="notaCoerencia">--%</div>
+      <p id="descricaoFase" style="font-size:12px;color:#aaa;margin-top:8px;"></p>
+    </div>
+    <div class="card">
+      <h3>Evolução Total</h3>
+      <div class="evolucao" id="evolucaoTotal">--%</div>
+      <p style="font-size:12px;color:#aaa;">Peso inicial vs Atual</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Gráfico Evolução</h3>
+    <canvas id="grafico" height="120"></canvas>
+  </div>
+
+  <div class="card">
+    <h3>Simulador 3D</h3>
+    <p style="font-size:11px;color:#aaa;">O boneco muda de tamanho conforme seu peso</p>
+    <div id="boneco3d"></div>
+  </div>
+
+  <div class="card">
+    <h3>Atualizar Dados</h3>
+    <button class="btn" onclick="baixarJSON()">⬇ BAIXAR MEU.JSON</button>
+    <label class="btn" for="upload">⬆ ANEXAR EVOLUÇÃO</label>
+    <input type="file" id="upload" accept=".json" onchange="carregarArquivo(event)">
+    <p style="font-size:11px;color:#aaa;margin-top:8px;">Baixe > Edite > Anexe de volta</p>
+  </div>
+</div>
+
+<script>
+// DADOS FAKE PRA TESTE - APAGA QUANDO SUBIR PRO GITHUB
+const DADOS_FAKE = {
+  "info_aluno": {
+    "id": "maria1234",
+    "nome": "Maria Silva",
+    "objetivos": "Emagrecimento | Definição Muscular",
+    "peso_inicial": 55,
+    "data_ultima_atualizacao": "2026-03-15"
+  },
+  "fase_atual": {},
+  "historico": {
+    "2026-01": { "peso": 55, "gordura_%": 22, "cargas": {"agachamento_kg": 0}, "obs": "Início" },
+    "2026-02": { "peso": 53, "gordura_%": 20, "cargas": {"agachamento_kg": 40}, "obs": "Evoluiu bem" },
+    "2026-03": { "peso": 51, "gordura_%": 18, "cargas": {"agachamento_kg": 60}, "obs": "Meta batida" }
+  }
+}
+
+const fases = {
+  "01": {nome:"Adaptação", desc:"Aprender técnica e criar rotina. Foco: Constância"},
+  "02": {nome:"Adaptação", desc:"Aprender técnica e criar rotina. Foco: Constância"},
+  "03": {nome:"Queima", desc:"Déficit calórico. Foco: Perder gordura"},
+  "04": {nome:"Queima", desc:"Déficit calórico. Foco: Perder gordura"},
+  "05": {nome:"Hipertrofia", desc:"Superávit calórico. Foco: Ganhar massa"},
+  "06": {nome:"Hipertrofia", desc:"Superávit calórico. Foco: Ganhar massa"},
+  "07": {nome:"Hipertrofia", desc:"Superávit calórico. Foco: Ganhar massa"},
+  "08": {nome:"Força", desc:"Carga alta. Foco: Densificar músculo"},
+  "09": {nome:"Força", desc:"Carga alta. Foco: Densificar músculo"},
+  "10": {nome:"Maintenance", desc:"Manter ganhos. Eliminar gordura. Densificar massa"},
+  "11": {nome:"Maintenance", desc:"Manter ganhos. Eliminar gordura. Densificar massa"},
+  "12": {nome:"Reset", desc:"Avaliação final. Definir metas 2027"}
+}
+let dadosAluno = null;
+let scene, camera, renderer, boneco;
+
+function montarTimeline(){
+  const mesAtual = new Date().getMonth() + 1;
+  let html = '';
+  for(let i=1; i<=12; i++){
+    let mes = String(i).padStart(2,'0');
+    let classe = i==mesAtual? 'ativo' : '';
+    html += `<div class="mes ${classe}"><b>${mes}</b><br>${fases[mes].nome}</div>`;
+  }
+  document.getElementById('timeline').innerHTML = html;
+  const fase = fases[String(mesAtual).padStart(2,'0')];
+  document.getElementById('faseAtual').innerText = fase.nome;
+  document.getElementById('descricaoFase').innerText = fase.desc;
+}
+
+async function entrar(){
+  const id = document.getElementById('inputId').value;
+
+  // MODO TESTE: se digitar maria1234 usa dados fake
+  if(id == 'maria1234'){
+    dadosAluno = DADOS_FAKE;
+  } else {
+    // MODO REAL GITHUB: descomenta isso
+    // const res = await fetch(`${id}.json`);
+    // if(!res.ok){alert('Aluno não encontrado');return;}
+    // dadosAluno = await res.json();
+    alert('Use ID: maria1234 para testar');
+    return;
+  }
+
+  document.getElementById('login').classList.add('oculto');
+  document.getElementById('painel').classList.remove('oculto');
+  document.getElementById('nomeAluno').innerText = dadosAluno.info_aluno.nome;
+  document.getElementById('objAluno').innerText = dadosAluno.info_aluno.objetivos;
+
+  calcularTudo();
+  montarGrafico();
+  init3D();
+}
+
+function calcularTudo(){
+  const mesAtual = String(new Date().getMonth() + 1).padStart(2,'0');
+  const fase = fases[mesAtual].nome;
+  const obj = dadosAluno.info_aluno.objetivos;
+  let nota = 50;
+  if(fase=="Maintenance" && obj.includes("Emagrecimento")) nota = 90;
+  if(fase=="Maintenance" && obj.includes("Ganho de Peso")) nota = 40;
+  if(fase=="Hipertrofia" && obj.includes("Hipertrofia")) nota = 100;
+  if(fase=="Queima" && obj.includes("Emagrecimento")) nota = 100;
+  document.getElementById('notaCoerencia').innerText = nota + '%';
+
+  const hist = dadosAluno.historico;
+  const meses = Object.keys(hist);
+  const pesoInicial = dadosAluno.info_aluno.peso_inicial;
+  const pesoAtual = hist[meses[meses.length-1]].peso;
+  const perc = ((pesoInicial - pesoAtual)/pesoInicial*100).toFixed(1);
+  document.getElementById('evolucaoTotal').innerText = (perc>0?'-':'') + Math.abs(perc) + '%';
+}
+
+function montarGrafico(){
+  const hist = dadosAluno.historico;
+  const meses = Object.keys(hist);
+  const pesos = meses.map(m=>hist[m].peso);
+  new Chart(document.getElementById('grafico'), {
+    type:'line',
+    data:{labels:meses, datasets:[{label:'Peso KG', data:pesos, borderColor:'var(--c)', tension:0.3, fill:false}]},
+    options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:false}}}
+  })
+}
+
+function init3D(){
+  if(renderer) renderer.domElement.remove();
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(75, document.getElementById('boneco3d').clientWidth/300, 0.1, 1000);
+  renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(document.getElementById('boneco3d').clientWidth, 300);
+  document.getElementById('boneco3d').appendChild(renderer.domElement);
+
+  const hist = dadosAluno.historico;
+  const meses = Object.keys(hist);
+  const pesoInicial = dadosAluno.info_aluno.peso_inicial;
+  const pesoAtual = hist[meses[meses.length-1]].peso;
+  const escala = pesoAtual / pesoInicial;
+
+  const geometry = new THREE.CapsuleGeometry(0.4*escala, 1.2/escala, 4, 8);
+  const material = new THREE.MeshPhongMaterial({color:0x00f5ff});
+  boneco = new THREE.Mesh(geometry, material);
+  scene.add(boneco);
+
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(2,2,5);
+  scene.add(light);
+  scene.add(new THREE.AmbientLight(0x404040));
+
+  camera.position.z = 4;
+  function animate(){
+    requestAnimationFrame(animate);
+    boneco.rotation.y += 0.01;
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+function baixarJSON(){
+  const mesAtual = String(new Date().getMonth() + 1).padStart(2,'0');
+  const anoAtual = new Date().getFullYear();
+  const proximoMes = String(new Date().getMonth() + 2).padStart(2,'0');
+
+  const arquivoParaBaixar = {
+    "info_aluno": dadosAluno.info_aluno,
+    "fase_atual": {
+      "mes": `${anoAtual}-${mesAtual}`,
+      "nome_fase": fases[mesAtual].nome,
+      "descricao_fase": fases[mesAtual].desc,
+      "meta_da_fase": gerarMetaDaFase(fases[mesAtual].nome, dadosAluno.info_aluno.objetivos)
+    },
+    "historico": dadosAluno.historico,
+    "proximo_registro": {
+      "mes": `${anoAtual}-${proximoMes}`,
+      "peso": "",
+      "gordura_%": "",
+      "cargas": { "agachamento_kg": "", "supino_kg": "", "remada_kg": "" },
+      "obs_treino": "Descreva como foi o mês",
+      "foto_url": ""
+    }
+  }
+
+  const blob = new Blob([JSON.stringify(arquivoParaBaixar, null, 2)], {type: "application/json"});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${dadosAluno.info_aluno.id}_${anoAtual}-${mesAtual}.json`;
+  a.click();
+}
+
+function gerarMetaDaFase(fase, objetivos){
+  if(fase == "Maintenance" && objetivos.includes("Emagrecimento"))
+    return "Manter peso. Reduzir 1% de gordura. Manter cargas.";
+  if(fase == "Maintenance" && objetivos.includes("Ganho de Peso"))
+    return "ATENÇÃO: Fase não ideal. Foco em manter e não perder massa.";
+  if(fase == "Hipertrofia")
+    return "Aumentar 0.5kg a 1kg por mês. Aumentar carga 5% a cada 2 semanas.";
+  if(fase == "Queima")
+    return "Perder 1kg a 2kg no mês. Manter carga para não perder músculo.";
+  return "Seguir protocolo da fase.";
+}
+
+function carregarArquivo(event){
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e){
+    dadosAluno = JSON.parse(e.target.result);
+    alert('Dados atualizados!');
+    calcularTudo();
+    montarGrafico();
+    init3D();
+  }
+  reader.readAsText(file);
+}
+
+montarTimeline();
+</script>
+</body>
+</html>
