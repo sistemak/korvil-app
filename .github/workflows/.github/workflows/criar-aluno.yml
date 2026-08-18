@@ -1,0 +1,25 @@
+name: Criar Aluno
+on:
+  workflow_dispatch:
+    inputs:
+      nome:
+        description: 'slug do nome'
+        required: true
+      dados:
+        description: 'JSON base64'
+        required: true
+jobs:
+  criar:
+    runs-on: ubuntu-latest
+    permissions: { contents: write }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: node.github/scripts/criar_arquivo.js '${{ github.event.inputs.nome }}' '${{ github.event.inputs.dados }}'
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sections/ktp/projetotransformacao/projetos/2026/
+          git commit -m "Add aluno ${{ github.event.inputs.nome }}" || exit 0
+          git push
