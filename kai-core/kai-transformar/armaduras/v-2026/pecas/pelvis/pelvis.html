@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>PÉLVIS KORVIL</title>
+<style>
+:root{--c:#00FFFF;--nucleo:#00FF88}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;padding:15px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+@keyframes girar{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.pelvis{width:280px;height:100px;background:linear-gradient(#111,#0a0a0a);border:3px solid var(--c);border-radius:30px;position:relative}
+.nucleo{position:absolute;width:60px;height:60px;background:var(--nucleo);border-radius:50%;top:20px;left:110px;box-shadow:0 0 20px var(--nucleo);animation:girar 8s linear infinite}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:300px;margin:15px 0}
+.card{background:rgba(0,255,255,.08);border:1px solid var(--c);border-radius:8px;padding:8px;font-size:10px;text-align:center}
+.btn{padding:6px 10px;background:#0d1a20;border:2px solid var(--c);color:var(--c);border-radius:6px;margin:3px;cursor:pointer;font-weight:900;font-size:10px}
+</style></head>
+<body>
+<h2>PÉLVIS K-1</h2>
+<div class="pelvis"><div class="nucleo"></div></div>
+<div class="grid">
+  <div class="card"><div>ENERGIA</div><div id="energia">100%</div></div>
+  <div class="card"><div>GIRO</div><div id="giro">0°</div></div>
+</div>
+<div><button class="btn" onclick="girar()">GIRO 360°</button></div>
+<script>
+let energia=100, giro=0;
+function girar(){giro+=360; energia-=5; atualizar();}
+function atualizar(){document.getElementById('energia').innerText=Math.round(energia)+'%';document.getElementById('giro').innerText=giro+'°';}
+setInterval(()=>{if(energia<100)energia+=0.3;atualizar()},400);
+</script></body></html>
