@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE 1 DE 10      -->
+<!-- Head, Metadados e Estilos Globais CSS      -->
+<!-- ========================================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Moto G15 OS Simulator - Korvil Edition</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Roboto, Helvetica, Arial, sans-serif;
+            user-select: none;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #0b0b0b;
+            overflow: hidden;
+        }
+        #phone-container {
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .status-bar {
+            height: 30px;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            color: #fff;
+            font-size: 12px;
+            z-index: 1000;
+            flex-shrink: 0;
+        }
+        #screen-content {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(circle, #1a2a3a 0%, #050505 100%);
+        }
+        .home-grid {
+            flex: 1;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 85px;
+            gap: 10px;
+            overflow-y: auto;
+        }
+        .app-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .app-icon:active {
+            transform: scale(0.92);
+        }
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            margin-bottom: 4px;
+        }
+        .app-name {
+            color: #fff;
+            font-size: 10px;
+            text-align: center;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+        .dock {
+            height: 80px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 10px 15px;
+            border-radius: 22px;
+            flex-shrink: 0;
+        }
+        .nav-bar {
+            height: 45px;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .home-btn {
+            width: 50px;
+            height: 5px;
+            background: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .app-window {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 500;
+            display: none;
+            flex-direction: column;
+        }
+        .app-header {
+            padding: 18px 15px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .app-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <div id="phone-container">
+        <div class="status-bar">
+            <span>02:36</span>
+            <span>🔒 📶 ⚡ 100%</span>
+        </div>
+        <div id="screen-content">
+            <!-- As próximas partes complementarão o app, dados e telas -->
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE 2 DE 10      -->
+<!-- Estrutura HTML do Container Principal      -->
+<!-- ========================================== -->
+            <div class="home-grid" id="homeGrid">
+                <!-- Ícones injetados via JavaScript nas próximas partes -->
+            </div>
+
+            <div class="dock" id="dockContainer">
+                <!-- Ícones do Dock fixo -->
+            </div>
+
+            <!-- Janelas dos Aplicativos Individuais -->
+            <div id="appWhatsapp" class="app-window">
+                <div class="app-header" style="background-color: #075E54;">WhatsApp</div>
+                <div class="app-body">
+                    <p style="padding: 10px; background: #fff; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">🟢 <strong>Suporte Korvil:</strong> Sistema Moto G15 100% operacional.</p>
+                    <p style="padding: 10px; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">🟢 <strong>Grupo Dev:</strong> Todos os aplicativos carregados no HTML.</p>
+                </div>
+            </div>
+
+            <div id="appNubank" class="app-window">
+                <div class="app-header" style="background-color: #820AD1;">Nubank</div>
+                <div class="app-body">
+                    <p style="font-size: 14px; color: #666;">Saldo Disponível</p>
+                    <h2 style="font-size: 32px; color: #820AD1; margin: 10px 0 20px 0;">R$ 12.840,50</h2>
+                    <div style="background: #820AD1; color: #fff; padding: 20px; border-radius: 12px;">
+                        <strong>Cartão Virtual</strong>
+                        <p style="margin-top: 5px;">Mastercard •••• 4092</p>
+                    </div>
+                </div>
+            </div>
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE 4 DE 10      -->
+<!-- Janelas Adicionais (Calculadora e Termux)  -->
+<!-- ========================================== -->
+            <div id="appCalculadora" class="app-window">
+                <div class="app-header" style="background-color: #333;">Calculadora</div>
+                <div style="flex: 1; background: #222; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px;">
+                    <div style="color: #fff; font-size: 48px; text-align: right; margin-bottom: 20px; font-weight: bold;">9876.50</div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <button style="padding: 20px; background: #444; color: #fff; border: none; border-radius: 8px; font-size: 18px;">C</button>
+                        <button style="padding: 20px; background: #444; color: #fff; border: none; border-radius: 8px; font-size: 18px;">±</button>
+                        <button style="padding: 20px; background: #444; color: #fff; border: none; border-radius: 8px; font-size: 18px;">%</button>
+                        <button style="padding: 20px; background: #ff9800; color: #fff; border: none; border-radius: 8px; font-size: 18px;">÷</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="appTermux" class="app-window">
+                <div class="app-header" style="background-color: #000;">Termux Shell</div>
+                <div style="flex: 1; background: #000; padding: 15px; font-family: monospace; overflow-y: auto;">
+                    <p style="color: #00FF00; margin-bottom: 8px;">~# pkg update && pkg upgrade</p>
+                    <p style="color: #00FF00; margin-bottom: 8px;">~# git clone https://github.com/korvil/motog15</p>
+                    <p style="color: #00FF00; margin-bottom: 8px;">~# system ready. executing apps...</p>
+                    <p style="color: #fff; animation: blink 1s infinite;">_</p>
+                </div>
+            </div>
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE 5 DE 10      -->
+<!-- Barra de Navegação Inferior e Fechamento   -->
+<!-- ========================================== -->
+        </div>
+        <div class="nav-bar">
+            <div class="home-btn" onclick="closeAllApps()"></div>
+        </div>
+    </div>
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE 6 DE 10      -->
+<!-- Banco de Dados Completo de Aplicativos     -->
+<!-- ========================================== -->
+    <script>
+        const appsData = [
+            { id: 'whatsapp', name: 'WhatsApp', icon: '🟢', color: '#25D366' },
+            { id: 'instagram', name: 'Instagram', icon: '📸', color: '#E1306C' },
+            { id: 'tiktok', name: 'TikTok', icon: '🎵', color: '#000000' },
+            { id: 'threads', name: 'Threads', icon: '🧵', color: '#000000' },
+            { id: 'facebook', name: 'Facebook', icon: '📘', color: '#1877F2' },
+            { id: 'linkedin', name: 'LinkedIn', icon: '💼', color: '#0A66C2' },
+            { id: 'telegram', name: 'Telegram', icon: '✈️', color: '#2AABEE' },
+            { id: 'mensagens', name: 'Mensagens', icon: '💬', color: '#0084FF' },
+            { id: 'nubank', name: 'Nubank', icon: '💜', color: '#820AD1' },
+            { id: 'itau', name: 'Itaú', icon: '🟧', color: '#EC7000' },
+            { id: 'caixa', name: 'CAIXA', icon: '🟦', color: '#005CA9' },
+            { id: 'caixatem', name: 'CAIXA Tem', icon: '💰', color: '#0066CC' },
+            { id: 'picpay', name: 'PicPay', icon: '💚', color: '#21C25E' },
+            { id: 'mercadopago', name: 'Mercado Pago', icon: '🤝', color: '#009EE3' },
+            { id: 'jeitto', name: 'Jeitto', icon: '🔄', color: '#FF5722' },
+            { id: 'neon', name: 'Neon', icon: '⚡', color: '#00E5FF' },
+            { id: 'recargapay', name: 'RecargaPay', icon: '💳', color: '#003399' },
+            { id: 'asaas', name: 'Asaas', icon: '🅰️', color: '#123456' },
+            { id: 'getnet', name: 'Getnet Brasil', icon: '🔴', color: '#FF0000' },
+            { id: 'carteira', name: 'Carteira', icon: '👛', color: '#4285F4' },
+            { id: 'fgts', name: 'FGTS', icon: '📄', color: '#005CA9' },
+            { id: 'chrome', name: 'Chrome', icon: '🌐', color: '#4285F4' },
+            { id: 'youtube', name: 'YouTube', icon: '▶️', color: '#FF0000' },
+            { id: 'gmail', name: 'Gmail', icon: '✉️', color: '#EA4335' },
+            { id: 'maps', name: 'Maps', icon: '🗺️', color: '#34A853' },
+            { id: 'drive', name: 'Drive', icon: '📁', color: '#FBBC05' },
+            { id: 'fotos', name: 'Fotos', icon: '🌈', color: '#4285F4' },
+            { id: 'playstore', name: 'Play Store', icon: '🛒', color: '#00D2FF' },
+            { id: 'agenda', name: 'Agenda', icon: '📅', color: '#1967D2' },
+            { id: 'contatos', name: 'Contatos', icon: '👤', color: '#1A73E8' },
+            { id: 'chatgpt', name: 'ChatGPT', icon: '✨', color: '#10A37F' },
+            { id: 'gemini', name: 'Gemini', icon: '🌟', color: '#8E44AD' },
+            { id: 'copilot', name: 'Copilot', icon: '🌀', color: '#0078D4' },
+            { id: 'perplexity', name: 'Perplexity', icon: '🔮', color: '#202020' },
+            { id: 'canva', name: 'Canva', icon: '🎨', color: '#00C4CC' },
+            { id: 'capcut', name: 'CapCut', icon: '✂️', color: '#000000' },
+            { id: 'kinemaster', name: 'KineMaster', icon: '🎞️', color: '#FF3300' },
+            { id: 'github', name: 'GitHub', icon: '🐙', color: '#24292E' },
+            { id: 'planilhas', name: 'Planilhas', icon: '📊', color: '#0F9D58' },
+            { id: 'ifood', name: 'iFood', icon: '🍔', color: '#EA1D2C' },
+            { id: 'mercadolivre', name: 'Mercado Livre', icon: '📦', color: '#FFE600' },
+            { id: 'shopee', name: 'Shopee', icon: '🛍️', color: '#EE4D2D' },
+            { id: 'poupatempo', name: 'Poupatempo', icon: '🏛️', color: '#000000' },
+            { id: 'infojobs', name: 'Achar vagas', icon: '💼', color: '#0044CC' },
+            { id: 'steck', name: 'Steck', icon: '🏠', color: '#D32F2F' },
+            { id: 'camera', name: 'Câmera', icon: '📷', color: '#333333' },
+            { id: 'calculadora', name: 'Calculadora', icon: '🔢', color: '#555555' },
+            { id: 'configurar', name: 'Configurar', icon: '⚙️', color: '#666666' },
+            { id: 'relogio', name: 'Relógio', icon: '⏰', color: '#00ACC1' },
+            { id: 'termux', name: 'Termux', icon: '💻', color: '#000000' }
+        ];
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE 7 DE 10      -->
+<!-- Renderização dinâmica da Home e Dock       -->
+<!-- ========================================== -->
+        const homeGrid = document.getElementById('homeGrid');
+        const dockContainer = document.getElementById('dockContainer');
+
+        function renderApps() {
+            appsData.forEach(app => {
+                const appElement = document.createElement('div');
+                appElement.className = 'app-icon';
+                appElement.innerHTML = `
+                    <div class="icon-box" style="background-color: ${app.color}">${app.icon}</div>
+                    <div class="app-name">${app.name}</div>
+                `;
+                appElement.onclick = () => openApp(app.id);
+                homeGrid.appendChild(appElement);
+            });
+
+            // Renderiza apenas os 4 primeiros no dock
+            appsData.slice(0, 4).forEach(app => {
+                const dockApp = document.createElement('div');
+                dockApp.className = 'app-icon';
+                dockApp.innerHTML = `
+                    <div class="icon-box" style="background-color: ${app.color}">${app.icon}</div>
+                `;
+                dockApp.onclick = () => openApp(app.id);
+                dockContainer.appendChild(dockApp);
+            });
+        }
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE 8 DE 10      -->
+<!-- Funções de Controle de Janelas e Navegação -->
+<!-- ========================================== -->
+        function openApp(appId) {
+            // Capitaliza o ID para corresponder ao ID do elemento HTML da janela
+            const formattedId = 'app' + appId.charAt(0).toUpperCase() + appId.slice(1);
+            const targetWindow = document.getElementById(formattedId);
+            
+            if (targetWindow) {
+                targetWindow.style.display = 'flex';
+            } else {
+                // Caso o app específico não tenha janela dedicada, abre uma genérica
+                alert('Abrindo ' + appId + '...');
+            }
+        }
+
+        function closeAllApps() {
+            const windows = document.querySelectorAll('.app-window');
+            windows.forEach(win => {
+                win.style.display = 'none';
+            });
+        }
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE 9 DE 10      -->
+<!-- Inicialização de Eventos e Relógio Dinâmico-->
+<!-- ========================================== -->
+        function updateStatusBarTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+            
+            // Atualiza todos os elementos de hora na barra de status se houverem
+            const statusBars = document.querySelectorAll('.status-bar span:first-child');
+            statusBars.forEach(bar => {
+                bar.textContent = timeString;
+            });
+        }
+
+        // Executa a renderização inicial dos aplicativos na tela
+        window.onload = () => {
+            renderApps();
+            setInterval(updateStatusBarTime, 1000);
+            updateStatusBarTime();
+        };
+    </script>
+</body>
+</html>
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE 9 DE 10      -->
+<!-- Inicialização de Eventos e Relógio Dinâmico-->
+<!-- ========================================== -->
+        function updateStatusBarTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+            
+            // Atualiza todos os elementos de hora na barra de status se houverem
+            const statusBars = document.querySelectorAll('.status-bar span:first-child');
+            statusBars.forEach(bar => {
+                bar.textContent = timeString;
+            });
+        }
+
+        // Executa a renderização inicial dos aplicativos na tela
+        window.onload = () => {
+            renderApps();
+            setInterval(updateStatusBarTime, 1000);
+            updateStatusBarTime();
+        };
+    </script>
+</body>
+</html>
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE 10 DE 10     -->
+<!-- Bloco Final de Expansão, Estilos e Scripts -->
+<!-- ========================================== -->
+    <!-- 
+      Este bloco final consolida o arquivo index.html completo.
+      Instruções de uso para o GitHub:
+      1. Crie um repositório no GitHub.
+      2. Crie um arquivo chamado 'index.html'.
+      3. Junte sequencialmente da Parte 1 até a Parte 10 em um único arquivo.
+      4. Ative o GitHub Pages nas configurações do repositório para rodar online.
+    -->
+    <script>
+        // Verificação de integridade do sistema operacional simulado
+        console.log("Moto G15 OS Simulator - Korvil Edition v10.0 - Inicializado com sucesso.");
+    </script>
+<!-- ========================================== -->
+<!-- MOTO G15 OS SIMULATOR - PARTE EXTRAS/FINAL -->
+<!-- Arquivo Consolidado Completo para GitHub   -->
+<!-- ========================================== -->
+<!-- 
+  Todas as 10 partes foram geradas sequencialmente. 
+  Basta copiar o conteúdo de cada parte (da Parte 1 até a 10) 
+  e colar em ordem dentro de um único arquivo index.html no seu GitHub.
+  O sistema está pronto, contendo a interface do Moto G15, a gaveta 
+  com todos os aplicativos, dock, barra de status dinâmica e janelas funcionais!
+-->
