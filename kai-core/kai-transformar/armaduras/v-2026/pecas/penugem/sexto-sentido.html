@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><title>PENUGEM K-AI V-2026</title>
+<style>
+:root{--c:#00FFFF;--pena:#A8FFE6;--perigo:#FF3B30;--alerta:#FFD60A}
+body{margin:0;background:#000;color:var(--c);font-family:Segoe UI;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:10px}
+@keyframes brilhar{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+h2{text-shadow:0 0 10px var(--c)}.sub{font-size:12px;color:var(--pena)}
+
+/* SILHUETA KORVIL */
+.silhueta{position:relative;width:200px;height:500px;margin:20px}
+.parte{position:absolute;border:2px solid var(--c);background:rgba(0,255,255,.05)}
+.cabeca{width:80px;height:80px;border-radius:50%;top:0;left:60px}
+.peito{width:120px;height:100px;border-radius:20px;top:90px;left:40px}
+.braco{width:40px;height:120px;border-radius:20px;top:100px}
+.braco.esq{left:0}.braco.dir{right:0}
+.perna{width:50px;height:150px;border-radius:15px;top:200px}
+.perna.esq{left:50px}.perna.dir{left:100px}
+.asa{width:60px;height:200px;border-radius:10px;top:100px}
+.asa.esq{left:-70px}.asa.dir{right:-70px}
+
+/* PENAS SENSORES */
+.pena{position:absolute;width:4px;height:10px;background:var(--pena);border-radius:2px;animation:brilhar 4s infinite}
+.pena.ativa{background:var(--perigo);box-shadow:0 0 10px var(--perigo)}
+.pena.alerta{background:var(--alerta);box-shadow:0 0 8px var(--alerta)}
+
+.grid-sensores{width:500px;display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:10px 0}
+.regiao{font-size:9px;text-align:center;background:rgba(0,255,255,.08);border:1px solid var(--c);border-radius:5px;padding:4px}
+.regiao.ativa{background:var(--perigo);color:#000}
+.log{width:500px;height:90px;background:#001015;border:1px solid var(--c);padding:8px;font-size:10px;overflow-y:auto;border-radius:8px}
+</style></head>
+<body>
+<h2>PENUGEM K-AI V-2026</h2>
+<div class="sub">2.048 SENSORES | COBERTURA 360° COMPLETA | INTERNO + EXTERNO</div>
+
+<div class="silhueta">
+  <!-- CABEÇA -->
+  <div class="parte cabeca"></div>
+  <!-- PEITO -->
+  <div class="parte peito"></div>
+  <!-- BRAÇOS -->
+  <div class="parte braco esq"></div>
+  <div class="parte braco dir"></div>
+  <!-- PERNAS -->
+  <div class="parte perna esq"></div>
+  <div class="parte perna dir"></div>
+  <!-- ASAS -->
+  <div class="parte asa esq"></div>
+  <div class="parte asa dir"></div>
+
+  <!-- PENAS ESPALHADAS -->
+</div>
+
+<div class="grid-sensores" id="gridSensores"></div>
+<div class="log" id="log">> K-AI: Penugem ativada. Costurando 2.048 feeds<br></div>
+
+<script>
+const REGIOES = {
+  'cabeca': {nome:'CABEÇA', total:128, el:'.cabeca'},
+  'peito': {nome:'PEITO/CORAX', total:256, el:'.peito'},
+  'ombro': {nome:'CORVONAS', total:128, el:'.parte'}, // drones
+  'braco': {nome:'BRAÇOS', total:192, el:'.braco'},
+  'costas': {nome:'DORSO/ASAS', total:256, el:'.asa'},
+  'cintura': {nome:'NÚCLEO', total:128, el:'.parte'},
+  'perna': {nome:'PERNAS', total:256, el:'.perna'},
+  'pe': {nome:'SOLA DOS PÉS', total:128, el:'.perna'},
+  'drone': {nome:'DRONES CORVONAS', total:384, el:'.parte'}, // 4 drones x 96
+  'interno': {nome:'SENSORES INTERNOS', total:192, el:'body'} // temp, batimento
+};
+
+let sensores = {};
+let idPena = 0;
+
+// GERA 2048 PENAS
+function gerarPenugem(){
+  const silhueta = document.querySelector('.silhueta');
+  Object.keys(REGIOES).forEach(regiao=>{
+    sensores[regiao] = {ativas:0, total:REGIOES[regiao].total};
+    for(let i=0; i<REGIOES[regiao].total/8; i++){ // renderiza 1/8 pra não travar
+      const pena = document.createElement('div');
+      pena.className='pena';
+      pena.id='pena'+idPena++;
+      pena.style.top = Math.random()*100 + '%';
+      pena.style.left = Math.random()*100 + '%';
+      pena.style.animationDelay = Math.random()*4 + 's';
+      pena.dataset.regiao = regiao;
+      silhueta.appendChild(pena);
+    }
+  })
+}
+
+// GERA GRID
+function criarGrid(){
+  const grid = document.getElementById('gridSensores');
+  Object.keys(REGIOES).forEach(r=>{
+    const div = document.createElement('div');
+    div.className='regiao'; div.id='reg'+r;
+    div.innerText = `${REGIOES[r].nome}\n${sensores[r].ativas}/${REGIOES[r].total}`;
+    grid.appendChild(div);
+  })
+}
+
+function ativarSensor(regiao, tipo='movimento'){
+  sensores[regiao].ativas++;
+
+  // Acende penas aleatórias da região
+  document.querySelectorAll(`.pena[data-regiao="${regiao}"]`).forEach(p=>{
+    if(Math.random()>0.7) p.classList.add(tipo==='perigo'?'ativa':'alerta');
+    setTimeout(()=>p.classList.remove('ativa','alerta'),800);
+  })
+
+  document.getElementById('reg'+regiao).classList.add('ativa');
+  document.getElementById('reg'+regiao).innerText = `${REGIOES[regiao].nome}\n${sensores[regiao].ativas}/${REGIOES[regiao].total}`;
+
+  log(`PENUGEM: ${REGIOES[regiao].nome} - ${tipo}`);
+
+  // CONJUGAÇÃO TOTAL
+  if(window.parent.postMessage) window.parent.postMessage({
+    tipo:'sensor',
+    regiao:regiao,
+    ameaca:tipo,
+    total: Object.values(sensores).reduce((a,b)=>a+b.ativas,0)
+  },'*');
+
+  setTimeout(()=>document.getElementById('reg'+regiao).classList.remove('ativa'),1000);
+}
+
+function log(t){document.getElementById('log').innerHTML+=`> ${t}<br>`;}
+
+// SIMULAÇÃO: SENSORES DISPARANDO
+setInterval(()=>{
+  const regioes = Object.keys(REGIOES);
+  let r = regioes[Math.floor(Math.random()*regioes.length)];
+  let tipo = Math.random()>0.8? 'perigo' : 'movimento';
+  ativarSensor(r, tipo);
+}, 600);
+
+// COSTURA 360° - MANDA PRO VISOR
+setInterval(()=>{
+  let mapa360 = {};
+  Object.keys(sensores).forEach(r=> mapa360[r] = sensores[r].ativas);
+  if(window.parent.atualizarVisor360) window.parent.atualizarVisor360(mapa360);
+}, 200);
+
+gerarPenugem();
+criarGrid();
+log('PENUGEM K-AI: 100% Cobertura. Interno + Externo + Drones');
+</script>
+</body></html>
