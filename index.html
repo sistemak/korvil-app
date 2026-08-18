@@ -5,8 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FORJA - sistemak/korvil-app - Repo como antes</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<title>FORJA - sistemak/korvil-app</title>
 <style>
 :root{--neon:#00f0ff;--border:rgba(0,240,255,0.3)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -19,12 +18,13 @@ body{display:flex;flex-direction:column}
 .btn.neon{background:var(--neon);color:#000;font-weight:800}
 .btn.danger{border-color:#ff4a7a;color:#ff7a9a}
 .badge{font-size:6px;background:#000;border:1px solid var(--neon);color:var(--neon);padding:3px 8px;border-radius:20px}
+.badge.warn{border-color:#ffcc00;color:#ffcc00}
 #app{flex:1;display:flex;overflow:hidden;min-height:0;width:100%}
 #left,#right{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;background:#000;position:relative}
 #left{border-right:2px solid var(--neon)}
 .top{padding:7px 8px;background:#000;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:5px;align-items:center;flex-shrink:0}
 .stage{flex:1;overflow:auto;min-height:0;padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;align-content:start;background:#000}
-.item{background:#080f24;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:grab;display:flex;flex-direction:column;position:relative}
+.item{background:#080f24;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;position:relative;user-select:none}
 .item:hover{border-color:var(--neon)}
 .item.selected{border-color:var(--neon);box-shadow:0 0 0 1px var(--neon),0 0 20px var(--neon)}
 .item.drop-target{border-color:#00ff88!important;box-shadow:0 0 0 2px #00ff88!important;background:rgba(0,255,136,.1)!important}
@@ -39,7 +39,7 @@ body{display:flex;flex-direction:column}
 .repo-breadcrumb{padding:7px 9px;background:#000;border-bottom:1px solid var(--border);display:flex;gap:5px;flex-wrap:wrap;font-size:7px;flex-shrink:0}
 .repo-breadcrumb span{cursor:pointer;color:var(--neon);padding:3px 7px;border-radius:20px;background:#050a18;border:1px solid var(--border)}
 .repo-list{flex:1;overflow:auto;min-height:0}
-.repo-row{padding:8px 10px;background:#080f24;border-bottom:1px solid #0f1a2a;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:7px}
+.repo-row{padding:8px 10px;background:#080f24;border-bottom:1px solid #0f1a2a;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:7px;user-select:none}
 .repo-row:hover{background:#0a152a}
 .repo-row.selected-right{border-left:3px solid var(--neon);background:#0a1a30}
 .repo-row.drop-target{border:1px solid #00ff88!important;background:rgba(0,255,136,.12)!important}
@@ -60,6 +60,7 @@ input.in{background:#000;border:1px solid var(--border);color:#e0faff;padding:6p
 #editArea{flex:1;width:100%;background:#000;color:#e0faff;border:0;padding:14px;font-size:10px;font-family:Consolas,monospace;resize:none;outline:none;white-space:pre;overflow:auto}
 #editLiveFrame{flex:1;width:100%;border:0;background:#000;min-height:0}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:var(--neon);border-radius:10px}
+#duplicateWarn{position:fixed;top:50px;left:50%;transform:translateX(-50%);background:#ffcc00;color:#000;padding:10px 16px;border-radius:20px;font-size:8px;font-weight:800;z-index:500;display:none;box-shadow:0 0 30px #ffcc00}
 </style>
 </head>
 <body>
@@ -68,24 +69,25 @@ input.in{background:#000;border:1px solid var(--border);color:#e0faff;padding:6p
   <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0">
     <div class="logo">F</div>
     <b style="font-size:11px;color:var(--neon)">FORJA - sistemak/korvil-app</b>
-    <span class="badge ok" id="syncBadge">Repo como antes funcionando</span>
+    <span class="badge ok" id="syncBadge">Repo como antes - PC/Celular</span>
   </div>
   <div style="display:flex;gap:5px;align-items:center">
     <button class="btn ac" onclick="document.getElementById('folder').click()">📁 ANEXAR PASTA</button>
-    <button class="btn ac" onclick="document.getElementById('f').click()">+ ANEXAR ARQUIVOS</button>
+    <button class="btn ac" onclick="document.getElementById('f').click()">+ ARQUIVOS</button>
   </div>
 </div>
 
 <div id="app">
   <div id="left">
     <div class="top">
-      <b style="font-size:8px;color:var(--neon)">ESQ: LOCAL - Arraste pasta/arquivos pra qualquer lugar - exato</b>
+      <b style="font-size:8px;color:var(--neon)">ESQ: LOCAL - PC/Celular - Ctrl+A seleciona todos, Delete exclui</b>
+      <button class="btn ac" onclick="selecionarTodos()">☑ TODOS (Ctrl+A)</button>
       <span id="selCount" class="badge">0 sel</span>
       <button class="btn ac" onclick="moverEsqParaDir()">→ DIR</button>
-      <button class="btn danger" onclick="excluirSelecionadosEsq()">🗑️ EXCLUIR</button>
+      <button class="btn danger" onclick="excluirSelecionadosEsq()">🗑️ DEL</button>
     </div>
     <div class="stage" id="sLeft"></div>
-    <div class="dropzone" id="dropEsq"><h3>SOLTE AQUI - QUALQUER LUGAR - EXATO COMO É</h3></div>
+    <div class="dropzone" id="dropEsq"><h3>SOLTE AQUI</h3><p>Qualquer pasta/arquivo - exato onde soltar</p></div>
   </div>
 
   <div id="right">
@@ -102,31 +104,35 @@ input.in{background:#000;border:1px solid var(--border);color:#e0faff;padding:6p
       </div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;width:100%;align-items:center">
         <span id="selCountRight" class="badge">0 sel DIR</span>
+        <button class="btn ac" onclick="selecionarTodosDir()">☑ TODOS (Ctrl+A)</button>
         <button class="btn ac" onclick="moverDirParaEsq()">← ESQ</button>
-        <button class="btn danger" onclick="excluirSelecionadosDir()">🗑️ EXCLUIR</button>
+        <button class="btn danger" onclick="excluirSelecionadosDir()">🗑️ DEL</button>
       </div>
-      <div id="currentPathDisplay" style="font-size:6px;opacity:.6;background:#000;padding:4px 8px;border-radius:20px;border:1px solid var(--border);width:100%;color:var(--neon)">sistemak/korvil-app</div>
+      <div id="currentPathDisplay" style="font-size:6px;opacity:.6;background:#000;padding:4px 8px;border-radius:20px;border:1px solid var(--border);width:100%;color:var(--neon)">sistemak/korvil-app - Ctrl+A, Delete, Ctrl+clique igual PC</div>
     </div>
     <iframe id="githubFrame" src="https://github.com/sistemak/korvil-app" style="flex:1;width:100%;border:0;background:#0d1117;display:flex;min-height:0"></iframe>
     <div id="repoViewFallback" style="flex:1;min-height:0;display:none;background:#000;flex-direction:column">
       <div class="repo-breadcrumb" id="breadcrumb"><span onclick="navegarPara('')">🏠 root</span></div>
       <div class="repo-list" id="repoList" style="flex:1;overflow:auto"></div>
     </div>
-    <div class="dropzone" id="dropDir"><h3>SOLTE AQUI - QUALQUER LUGAR - EXATO COMO É</h3></div>
+    <div class="dropzone" id="dropDir"><h3>SOLTE AQUI</h3><p>Qualquer pasta/arquivo - exato onde soltar - já salva</p></div>
   </div>
 </div>
+
+<div id="duplicateWarn">⚠️ DUPLICADO NO MESMO LUGAR - Já existe arquivo/pasta com esse nome aqui</div>
 
 <div id="liveViewer">
   <div class="viewer-top">
     <div style="display:flex;gap:8px;align-items:center;flex:1;min-width:0">
       <span style="color:var(--neon);font-weight:900">🔨 FORJA LIVE</span>
+      <span style="opacity:.6">PC: Ctrl+A todos, Ctrl+clique individual, Shift+clique intervalo, Delete exclui, Arrasta pra qualquer lugar exato</span>
     </div>
-    <span id="viewerType" class="badge">EXATO</span>
+    <span id="viewerType" class="badge">PC/CEL</span>
   </div>
   <div class="viewer-content">
     <div class="viewer-preview"><iframe id="liveSiteFrame"></iframe></div>
   </div>
-  <div id="log">[LOG] FORJA - Move exato onde quiser - Repo como antes - sistemak</div>
+  <div id="log">[LOG] FORJA - Sistema como PC e celular - Repo como antes - sistemak</div>
 </div>
 
 <div id="editModal"><div class="edit-layout"><div class="edit-code"><div class="edit-header"><span style="color:var(--neon)">🔨 EDITAR - <span id="editFileName"></span></span><div style="display:flex;gap:5px"><button class="btn ac" onclick="salvarEdicao()">💾 SALVAR</button><button class="btn" onclick="document.getElementById('editModal').style.display='none'">X</button></div></div><textarea id="editArea" oninput="renderInstant()"></textarea></div><div class="edit-render"><div class="edit-header" style="background:var(--neon);color:#000"><span style="font-weight:900">👁️ RENDER</span></div><iframe id="editLiveFrame"></iframe></div></div></div>
@@ -134,8 +140,7 @@ input.in{background:#000;border:1px solid var(--border);color:#e0faff;padding:6p
 <input type="file" id="f" hidden multiple><input type="file" id="folder" hidden webkitdirectory multiple>
 
 <script>
-// === BASE - NÃO MEXIDO ===
-let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set(), currentPath="", arquivoEditando=null;
+let db, ativos=[], repoCache=[], selecionados=new Set(), selecionadosDir=new Set(), currentPath="", arquivoEditando=null, lastSelectedIndex=-1;
 let cfg={}; try{cfg=JSON.parse(localStorage.getItem('korvil-cfg')||'{}');}catch(e){cfg={}}
 if(!cfg.owner) cfg.owner='sistemak'; if(!cfg.repo) cfg.repo='korvil-app';
 ghO.value=cfg.owner; ghR.value=cfg.repo; document.getElementById('REPO_TOKEN').value=cfg.REPO_TOKEN||'';
@@ -147,11 +152,17 @@ function save(o){ return new Promise(r=>{ const tx=db.transaction('k','readwrite
 function getAll(){ return new Promise(r=>{ const tx=db.transaction('k','readonly'); const q=tx.objectStore('k').getAll(); q.onsuccess=()=>r(q.result||[]); }); }
 function delDB(id){ return new Promise(r=>{ const tx=db.transaction('k','readwrite'); tx.objectStore('k').delete(id); tx.oncomplete=()=>r(); }); }
 function log(m){ const el=document.getElementById('log'); el.innerText=`[${new Date().toLocaleTimeString()}] ${m}\n`+el.innerText.slice(0,4000); }
+function showDuplicateWarn(msg){
+  const w=document.getElementById('duplicateWarn');
+  w.innerText='⚠️ DUPLICADO NO MESMO LUGAR - '+msg;
+  w.style.display='block';
+  setTimeout(()=>w.style.display='none', 3500);
+  log(`AVISO DUPLICADO: ${msg}`);
+}
 const fEl=document.getElementById('f'), folderEl=document.getElementById('folder');
 fEl.onchange=e=>{ if(e.target.files.length) handleFiles(e.target.files); e.target.value=''; };
 folderEl.onchange=e=>{ if(e.target.files.length) handleFiles(e.target.files); e.target.value=''; };
 
-// === ÚNICA CORREÇÃO: MOVER EXATO SEM DIVIDIR ===
 function getArquivosDaPasta(prefix){
   const clean=prefix.endsWith('/')?prefix.slice(0,-1):prefix;
   return ativos.filter(a=>a.path===clean || a.path.startsWith(clean+'/'));
@@ -164,10 +175,16 @@ function getPastasUnicas(){
 }
 async function handleFiles(fileList){
   const files=Array.from(fileList);
+  let duplicados=0;
   for(let file of files){
-    const path=file.webkitRelativePath||file.name; // EXATO como vem do PC/celular
+    const path=file.webkitRelativePath||file.name;
+    if(ativos.some(a=>a.path===path)){
+      duplicados++;
+      continue;
+    }
     await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:file.name,path:path,type:file.type,size:file.size,cat:'code',ext:file.name.split('.').pop(),date:new Date().toISOString(),blob:file});
   }
+  if(duplicados>0) showDuplicateWarn(`${duplicados} arquivo(s) já existe(m) no mesmo lugar - não duplicado: ${files[0]?.webkitRelativePath||files[0]?.name}`);
   await carregarTudo(); renderLiveSite();
 }
 async function handleDataTransferItems(items, targetFolder){
@@ -182,7 +199,7 @@ async function handleDataTransferItems(items, targetFolder){
   await Promise.all(promises);
   if(files.length>0){
     for(let file of files){
-      const finalPath=targetFolder? targetFolder+'/'+file._relativePath : file._relativePath; // EXATO
+      const finalPath=targetFolder? targetFolder+'/'+file._relativePath : file._relativePath;
       Object.defineProperty(file, 'webkitRelativePath', {value:finalPath});
     }
     await handleFiles(files);
@@ -194,10 +211,10 @@ function renderLeft(){
   const sL=document.getElementById('sLeft'); sL.innerHTML=''; document.getElementById('selCount').innerText=selecionados.size+' sel';
   const pastas=getPastasUnicas();
   const listaCompleta=[...pastas.map(p=>({isFolder:true, path:p.path, name:p.path.split('/').pop()+'/', count:p.count})),...ativos];
-  if(listaCompleta.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.5;padding:24px">Arraste qualquer pasta/arquivo aqui - exato</div>`; return; }
-  listaCompleta.forEach(o=>{
+  if(listaCompleta.length===0){ sL.innerHTML=`<div style="grid-column:1/-1;text-align:center;opacity:.5;padding:24px">Arraste qualquer pasta/arquivo aqui<br>Ctrl+A todos, Ctrl+clique individual, Shift+clique intervalo igual PC</div>`; return; }
+  listaCompleta.forEach((o, idx)=>{
     if(o.isFolder){
-      const div=document.createElement('div'); div.className='item folder-card'+(selecionados.has('folder:'+o.path)?' selected':''); div.draggable=true; div.dataset.folder=o.path;
+      const div=document.createElement('div'); div.className='item folder-card'+(selecionados.has('folder:'+o.path)?' selected':''); div.draggable=true; div.dataset.folder=o.path; div.dataset.index=idx;
       div.innerHTML=`<div class="item-preview" style="background:linear-gradient(135deg,#1a1500,#000);border:1px solid #ffcc00"><div style="font-size:20px">📁</div></div><div class="item-info"><div class="item-name">📁 ${o.name}</div><div class="item-path">${o.path}/ (${o.count})</div></div>`;
       div.addEventListener('dragenter', e=>{ e.preventDefault(); div.classList.add('drop-target'); });
       div.addEventListener('dragover', e=>{ e.preventDefault(); div.classList.add('drop-target'); });
@@ -212,32 +229,84 @@ function renderLeft(){
           const idsStr=e.dataTransfer.getData('ids'); let ids=[]; try{ids=JSON.parse(idsStr);}catch{ids=[];}
           const folder=e.dataTransfer.getData('folder');
           if(folder && folder!==targetFolder){
+            if(targetFolder.startsWith(folder+'/') || targetFolder===folder){
+              showDuplicateWarn(`Não pode mover pasta pra dentro dela mesma: ${folder} → ${targetFolder}`);
+              return;
+            }
             const arqs=getArquivosDaPasta(folder);
             const folderName=folder.split('/').pop();
+            let dup=0;
             for(let a of arqs){
               const rel=a.path===folder?'':a.path.slice(folder.length+1);
               const newPath=rel? targetFolder+'/'+folderName+'/'+rel : targetFolder+'/'+folderName;
-              a.path=newPath; await save(a);
+              if(ativos.some(x=>x.path===newPath && x.id!==a.id)) dup++;
+              else { a.path=newPath; await save(a); }
             }
+            if(dup>0) showDuplicateWarn(`${dup} arquivo(s) já existe(m) em ${targetFolder}/${folderName}/ - não duplicado`);
             await carregarTudo();
           } else if(ids.length>0){
-            for(let id of ids){ const a=ativos.find(x=>x.id===id); if(a){ a.path=targetFolder+'/'+a.path.split('/').pop(); await save(a); } }
+            let dup=0;
+            for(let id of ids){
+              const a=ativos.find(x=>x.id===id); if(a){
+                const newPath=targetFolder+'/'+a.name;
+                if(ativos.some(x=>x.path===newPath && x.id!==a.id)) dup++;
+                else { a.path=newPath; await save(a); }
+              }
+            }
+            if(dup>0) showDuplicateWarn(`${dup} arquivo(s) já existe(m) no mesmo lugar`);
             await carregarTudo();
           }
         }
       });
       div.ondragstart=e=>{ e.dataTransfer.setData('from','left'); e.dataTransfer.setData('folder',o.path); };
-      div.onclick=()=>{ const key='folder:'+o.path; if(selecionados.has(key)) selecionados.delete(key); else selecionados.add(key); renderLeft(); };
+      div.onclick=(e)=>{
+        const key='folder:'+o.path;
+        if(e.ctrlKey||e.metaKey){
+          if(selecionados.has(key)) selecionados.delete(key); else selecionados.add(key);
+        } else if(e.shiftKey && lastSelectedIndex>=0){
+          const start=Math.min(lastSelectedIndex, idx); const end=Math.max(lastSelectedIndex, idx);
+          const all=[...pastas.map(p=>'folder:'+p.path),...ativos.map(a=>a.id)];
+          for(let i=start;i<=end;i++){ if(all[i]) selecionados.add(all[i]); }
+        } else {
+          if(selecionados.size===1 && selecionados.has(key)) selecionados.clear(); else { selecionados.clear(); selecionados.add(key); }
+        }
+        lastSelectedIndex=idx;
+        renderLeft();
+      };
       sL.appendChild(div);
     } else {
-      const div=document.createElement('div'); div.className='item'+(selecionados.has(o.id)?' selected':''); div.draggable=true; div.dataset.id=o.id;
-      div.innerHTML=`<div class="item-preview"><div style="font-size:12px">📄 ${o.name.slice(0,10)}</div></div><div class="item-info"><div class="item-name">${o.name}</div><div class="item-path">${o.path}</div></div>`;
-      div.ondragstart=e=>{ const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id); e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id])); try{ const url=URL.createObjectURL(o.blob); e.dataTransfer.setData('DownloadURL', `${o.type||'application/octet-stream'}:${o.name}:${url}`); }catch{} };
-      div.onclick=()=>{ if(selecionados.has(o.id)) selecionados.delete(o.id); else selecionados.add(o.id); renderLeft(); };
+      const div=document.createElement('div'); div.className='item'+(selecionados.has(o.id)?' selected':''); div.draggable=true; div.dataset.id=o.id; div.dataset.index=idx;
+      div.innerHTML=`<div class="item-preview"><div style="font-size:12px">📄 ${o.name.slice(0,12)}</div></div><div class="item-info"><div class="item-name">${o.name}</div><div class="item-path">${o.path}</div></div>`;
+      div.ondragstart=e=>{
+        const ids=[...selecionados]; if(!selecionados.has(o.id)) ids.push(o.id);
+        e.dataTransfer.setData('from','left'); e.dataTransfer.setData('ids',JSON.stringify(ids.length?ids:[o.id]));
+        try{ const url=URL.createObjectURL(o.blob); e.dataTransfer.setData('DownloadURL', `${o.type||'application/octet-stream'}:${o.name}:${url}`); }catch{}
+      };
+      div.onclick=(e)=>{
+        if(e.ctrlKey||e.metaKey){
+          if(selecionados.has(o.id)) selecionados.delete(o.id); else selecionados.add(o.id);
+        } else if(e.shiftKey && lastSelectedIndex>=0){
+          const pastas=getPastasUnicas();
+          const all=[...pastas.map(p=>'folder:'+p.path),...ativos.map(a=>a.id)];
+          const start=Math.min(lastSelectedIndex, idx); const end=Math.max(lastSelectedIndex, idx);
+          for(let i=start;i<=end;i++){ if(all[i]) selecionados.add(all[i]); }
+        } else {
+          if(selecionados.size===1 && selecionados.has(o.id)) selecionados.clear(); else { selecionados.clear(); selecionados.add(o.id); }
+        }
+        lastSelectedIndex=idx;
+        renderLeft();
+      };
       div.ondblclick=()=>abrirEditorComId(o.id);
       sL.appendChild(div);
     }
   });
+}
+function selecionarTodos(){
+  const pastas=getPastasUnicas();
+  const all=[...pastas.map(p=>'folder:'+p.path),...ativos.map(a=>a.id)];
+  if(all.every(id=>selecionados.has(id))) selecionados.clear(); else all.forEach(id=>selecionados.add(id));
+  renderLeft();
+  log(`PC: Ctrl+A - ${selecionados.size} selecionados - igual PC/celular`);
 }
 function abrirEditorComId(id){ const o=ativos.find(a=>a.id===id); if(o){ arquivoEditando=o; abrirEditor(); } }
 function abrirEditor(){
@@ -264,17 +333,17 @@ async function salvarEdicao(){
   if(REPO_TOKEN && arquivoEditando.path){
     const b64=btoa(unescape(encodeURIComponent(novoTexto))); let sha=null;
     try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(arquivoEditando.path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{}
-    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(arquivoEditando.path)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA EDIT: ${arquivoEditando.path}`,content:b64,sha})});
+    await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(arquivoEditando.path)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${arquivoEditando.path}`,content:b64,sha})});
   }
 }
 async function renderLiveSite(){
   const liveFrame=document.getElementById('liveSiteFrame');
   const indexFile=ativos.find(f=>f.path.toLowerCase().endsWith('index.html'));
   if(indexFile){ let html=await indexFile.blob.text(); liveFrame.srcdoc=html; return; }
-  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#000;color:#e0faff;padding:12px">FORJA - ${ativos.length} arqs</body></html>`;
+  liveFrame.srcdoc=`<!DOCTYPE html><html><body style="background:#000;color:#e0faff;padding:12px">FORJA - ${ativos.length} arqs - PC/Cel: Ctrl+A todos, Ctrl+clique individual, Shift+clique intervalo</body></html>`;
 }
 
-// === REPO COMO ANTES - NÃO MEXIDO - CÓDIGO ORIGINAL DO SEU PRINT ===
+// === REPO COMO ANTES - NÃO MEXIDO ===
 function abrirGithubOriginal(){
   const owner=document.getElementById('ghO').value||'sistemak';
   const repo=document.getElementById('ghR').value||'korvil-app';
@@ -283,7 +352,7 @@ function abrirGithubOriginal(){
   document.getElementById('githubFrame').style.display='flex';
   document.getElementById('repoViewFallback').style.display='none';
   document.getElementById('githubFrame').src=url;
-  document.getElementById('currentPathDisplay').innerText=url;
+  document.getElementById('currentPathDisplay').innerText=url+` • PC: Ctrl+A, Delete igual PC`;
   carregarDadosRepo();
 }
 function toggleFallback(){
@@ -337,8 +406,12 @@ function renderRepo(){
         const targetFolder=item.fullPath;
         if(e.dataTransfer.files && e.dataTransfer.files.length>0 &&!from){
           for(let file of e.dataTransfer.files){
-            const txt=await file.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
             const targetPath=file.webkitRelativePath? targetFolder+'/'+file.webkitRelativePath : targetFolder+'/'+file.name;
+            if(repoCache.some(r=>r.path===targetPath)){
+              showDuplicateWarn(`DIR já tem ${targetPath} no mesmo lugar`);
+              continue;
+            }
+            const txt=await file.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
             await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${targetPath}`,content:b64})});
           }
           setTimeout(()=>carregarDadosRepo(),700);
@@ -348,21 +421,31 @@ function renderRepo(){
           if(folder){
             const arqs=getArquivosDaPasta(folder);
             const folderName=folder.split('/').pop();
+            let dup=0;
             for(let a of arqs){
               const rel=a.path===folder?'':a.path.slice(folder.length+1);
               const targetPath=rel? targetFolder+'/'+folderName+'/'+rel : targetFolder+'/'+folderName;
-              let txt=await a.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
-              await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${targetPath}`,content:b64})});
-            }
-            setTimeout(()=>carregarDadosRepo(),800);
-          } else if(ids.length>0){
-            for(let id of ids){
-              const a=ativos.find(x=>x.id===id); if(a){
+              if(repoCache.some(r=>r.path===targetPath)) dup++;
+              else {
                 let txt=await a.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
-                const targetPath=targetFolder+'/'+a.path;
                 await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${targetPath}`,content:b64})});
               }
             }
+            if(dup>0) showDuplicateWarn(`${dup} arquivo(s) já existe(m) em ${targetFolder}/${folderName}/`);
+            setTimeout(()=>carregarDadosRepo(),800);
+          } else if(ids.length>0){
+            let dup=0;
+            for(let id of ids){
+              const a=ativos.find(x=>x.id===id); if(a){
+                const targetPath=targetFolder+'/'+a.path;
+                if(repoCache.some(r=>r.path===targetPath)) dup++;
+                else {
+                  let txt=await a.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt)));
+                  await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${getREPO_TOKEN()}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${targetPath}`,content:b64})});
+                }
+              }
+            }
+            if(dup>0) showDuplicateWarn(`${dup} arquivo(s) já existe(m) no mesmo lugar em DIR`);
             setTimeout(()=>carregarDadosRepo(),700);
           }
         }
@@ -370,29 +453,53 @@ function renderRepo(){
       row.onclick=()=>navegarPara(item.fullPath);
     } else {
       row.innerHTML=`<div style="display:flex;align-items:center;gap:6px;min-width:0;flex:1"><input type="checkbox" onclick="event.stopPropagation();toggleDir('${item.fullPath.replace(/'/g,"\\'")}')"> 📄 ${item.name}</div><div style="display:flex;gap:4px"><button class="btn ac" style="padding:3px 7px" onclick="event.stopPropagation();abrirEditorRepo('${item.fullPath.replace(/'/g,"\\'")}')">✏️</button></div>`;
-      row.onclick=()=>toggleDir(item.fullPath);
+      row.onclick=(e)=>{
+        if(e.ctrlKey||e.metaKey){
+          toggleDir(item.fullPath);
+        } else if(e.shiftKey){
+          // Shift+clique intervalo igual PC
+          const items=getTreeForPath(currentPath);
+          const allPaths=items.map(i=>i.fullPath);
+          const lastIdx=allPaths.findIndex(p=>selecionadosDir.has(p));
+          const currIdx=allPaths.indexOf(item.fullPath);
+          if(lastIdx>=0){
+            const start=Math.min(lastIdx, currIdx); const end=Math.max(lastIdx, currIdx);
+            for(let i=start;i<=end;i++) selecionadosDir.add(allPaths[i]);
+            renderRepo();
+          } else toggleDir(item.fullPath);
+        } else {
+          if(selecionadosDir.size===1 && selecionadosDir.has(item.fullPath)) selecionadosDir.clear(); else { selecionadosDir.clear(); selecionadosDir.add(item.fullPath); }
+          renderRepo();
+        }
+        document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR';
+      };
     }
     listEl.appendChild(row);
   });
 }
 function toggleDir(path){ if(selecionadosDir.has(path)) selecionadosDir.delete(path); else selecionadosDir.add(path); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR'; }
 async function puxarArquivo(path){
-  const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const blob=new Blob([new Uint8Array([...binary].map(c=>c.charCodeAt(0)))]); await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob}); await carregarTudo(); }catch(e){} }
+  const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); const blob=new Blob([new Uint8Array([...binary].map(c=>c.charCodeAt(0)))]);
+  if(ativos.some(a=>a.path===path)){ showDuplicateWarn(`ESQ já tem ${path} no mesmo lugar`); return; }
+  await save({id:Date.now()+'_'+Math.random().toString(16).slice(2),name:path.split('/').pop(),path:path,type:'',size:blob.size,cat:'code',ext:path.split('.').pop(),date:new Date().toISOString(),blob:blob}); await carregarTudo(); }catch(e){} }
 async function abrirEditorRepo(path){ const REPO_TOKEN=getREPO_TOKEN(); try{ const r=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(path)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); const d=await r.json(); const binary=atob(d.content.replace(/\n/g,'')); document.getElementById('editFileName').innerText=path; document.getElementById('editArea').value=binary; document.getElementById('editModal').style.display='flex'; arquivoEditando={path:path,name:path.split('/').pop(),isRepo:true,sha:d.sha,blob:new Blob([binary])}; renderInstant(); }catch(e){} }
 async function moverEsqParaDir(){
   if(selecionados.size===0) return; const REPO_TOKEN=getREPO_TOKEN(); if(!REPO_TOKEN){alert('REPO_TOKEN');return;}
   let arquivos=[]; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const p=key.slice(7); arquivos.push(...getArquivosDaPasta(p)); } else { const o=ativos.find(a=>a.id===key); if(o) arquivos.push(o); } }
   arquivos=[...new Map(arquivos.map(a=>[a.path,a])).values()];
+  let duplicados=0;
   for(let obj of arquivos){
-    let targetPath=currentPath? currentPath+'/'+obj.path : obj.path; // EXATO
+    let targetPath=currentPath? currentPath+'/'+obj.path : obj.path;
+    if(repoCache.some(r=>r.path===targetPath)){ duplicados++; continue; }
     let txt=await obj.blob.text(); const b64=btoa(unescape(encodeURIComponent(txt))); let sha=null;
     try{const chk=await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{headers:{Authorization:`token ${REPO_TOKEN}`}}); if(chk.ok) sha=(await chk.json()).sha;}catch{}
     await fetch(`https://api.github.com/repos/${ghO.value}/${ghR.value}/contents/${encodeURIComponent(targetPath)}`,{method:'PUT',headers:{Authorization:`token ${REPO_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({message:`FORJA: ${targetPath}`,content:b64,sha})});
   }
+  if(duplicados>0) showDuplicateWarn(`${duplicados} arquivo(s) já existe(m) no mesmo lugar em DIR - não duplicado`);
   await carregarDadosRepo();
 }
 async function moverDirParaEsq(){ if(selecionadosDir.size===0) return; for(let p of [...selecionadosDir]) await puxarArquivo(p); selecionadosDir.clear(); }
-function excluirSelecionadosEsq(){ if(selecionados.size===0) return; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); arqs.forEach(a=>delDB(a.id)); } else delDB(key); } selecionados.clear(); setTimeout(()=>carregarTudo(),200); }
+function excluirSelecionadosEsq(){ if(selecionados.size===0) return; if(!confirm(`EXCLUIR ${selecionados.size} itens? (Delete igual PC)`)) return; for(let key of [...selecionados]){ if(key.startsWith('folder:')){ const path=key.slice(7); const arqs=getArquivosDaPasta(path); arqs.forEach(a=>delDB(a.id)); } else delDB(key); } selecionados.clear(); setTimeout(()=>carregarTudo(),200); }
 function excluirSelecionadosDir(){}
 function saveCfg(){ const REPO_TOKEN=getREPO_TOKEN(); cfg={owner:ghO.value,repo:ghR.value,REPO_TOKEN:REPO_TOKEN}; localStorage.setItem('korvil-cfg',JSON.stringify(cfg)); carregarDadosRepo(); abrirGithubOriginal(); }
 function setupDropZones(){
@@ -416,8 +523,42 @@ function setupDropZones(){
     });
   });
 }
-function selecionarTodosDir(){ const items=getTreeForPath(currentPath).filter(i=>!i.isFolder); if(items.every(i=>selecionadosDir.has(i.fullPath))) items.forEach(i=>selecionadosDir.delete(i.fullPath)); else items.forEach(i=>selecionadosDir.add(i.fullPath)); renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR'; }
+function selecionarTodosDir(){
+  const items=getTreeForPath(currentPath);
+  const all=items.map(i=>i.fullPath);
+  if(all.every(p=>selecionadosDir.has(p))) selecionadosDir.clear(); else all.forEach(p=>selecionadosDir.add(p));
+  renderRepo(); document.getElementById('selCountRight').innerText=selecionadosDir.size+' sel DIR';
+}
 setupDropZones();
+
+// === COMANDOS DE TECLAS IGUAL PC E CELULAR ===
+document.addEventListener('keydown', e=>{
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='a'){
+    e.preventDefault();
+    const activeEl=document.activeElement;
+    if(activeEl && (activeEl.tagName==='INPUT' || activeEl.tagName==='TEXTAREA')) return;
+    if(document.getElementById('repoViewFallback').style.display!=='none'){
+      selecionarTodosDir();
+    } else {
+      selecionarTodos();
+    }
+  }
+  if(e.key==='Delete' || (e.ctrlKey && e.key.toLowerCase()==='d')){
+    if(selecionados.size>0){
+      excluirSelecionadosEsq();
+    }
+  }
+  if(e.key==='Escape'){
+    selecionados.clear(); selecionadosDir.clear();
+    renderLeft(); renderRepo();
+    document.getElementById('selCount').innerText='0 sel';
+    document.getElementById('selCountRight').innerText='0 sel DIR';
+  }
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){
+    e.preventDefault();
+    if(document.getElementById('editModal').style.display==='flex') salvarEdicao();
+  }
+});
 </script>
 </body>
 </html>
