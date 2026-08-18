@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-TH KORVIL-Terapia Holística| FASE 1 JANEIRO</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+  
+  :root{
+    --bg:#050505;--card:#0f0f0f;--card2:#181818;--text:#fff;--muted:#a0a0a0;
+    --neon:#00f5ff;--neon2:#00aaff;--ok:#00ff88;--glow:0 0 20px var(--neon);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:radial-gradient(circle at 50% 0%, #0a1a2a 0%, #050505 70%);
+    color:var(--text);font:16px/1.7 'Arial';overflow-x:hidden;
+    animation:bgPulse 10s ease-in-out infinite;
+  }
+  @keyframes bgPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.1)}}
+  
+  /* HEADER 3D */
+  header{
+    position:sticky;top:0;background:linear-gradient(180deg,#000 0%, #001122 100%);
+    padding:20px 24px;border-bottom:3px solid var(--neon);z-index:999;
+    box-shadow:0 10px 40px rgba(0,245,255,.3);backdrop-filter:blur(10px);
+    animation:slideDown .8s ease;
+  }
+  @keyframes slideDown{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+  .logo{font:900 28px 'Orbitron';color:var(--neon);text-shadow:var(--glow)}
+  .sub{font-size:14px;color:var(--muted);margin-top:4px;letter-spacing:1px}
+  .progresso{height:8px;background:#111;border-radius:10px;margin-top:12px;overflow:hidden;border:1px solid #222}
+  .barra{height:100%;background:linear-gradient(90deg,var(--neon),var(--neon2));width:0%;
+    box-shadow:var(--glow);transition:width 1s cubic-bezier(.4,0,.2,1)}
+  
+  /* MENU NAV 3D */
+  .menu{background:rgba(15,15,15,.9);padding:20px;border-bottom:1px solid #222;backdrop-filter:blur(10px)}
+  .titulo{font:800 18px 'Orbitron';color:var(--neon);margin:16px 0 10px;letter-spacing:2px;text-shadow:var(--glow)}
+  .linha{display:flex;gap:10px;overflow:auto;padding-bottom:12px}
+  .linha::-webkit-scrollbar{height:6px}
+  .linha::-webkit-scrollbar-thumb{background:var(--neon);border-radius:10px}
+  .botao{
+    padding:14px 20px;background:linear-gradient(145deg,#1a1a1a,#222);border-radius:25px;
+    font:700 14px 'Orbitron';cursor:pointer;white-space:nowrap;border:2px solid #333;
+    transition:all .4s cubic-bezier(.4,0,.2,1);box-shadow:0 4px 15px rgba(0,0,0,.5)
+  }
+  .botao:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 8px 25px rgba(0,245,255,.4);border-color:var(--neon)}
+  .botao.ativo{background:linear-gradient(145deg,var(--neon),var(--neon2));color:#000;border-color:var(--neon);box-shadow:var(--glow);transform:scale(1.1)}
+  
+  /* CONTEUDO */
+  .conteudo{padding:24px;animation:fadeIn 1s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .info-topo{
+    font:800 22px 'Orbitron';color:var(--neon);margin-bottom:20px;text-align:center;
+    text-shadow:var(--glow);animation:glowText 2s ease-in-out infinite
+  }
+  @keyframes glowText{0%,100%{text-shadow:0 0 10px var(--neon)}50%{text-shadow:0 0 30px var(--neon)}}
+  
+  /* VIDEO BOX HOLOGRÁFICA */
+  .video-box{
+    background:linear-gradient(145deg,#111,#1a1a1a);padding:20px;border-radius:20px;margin-bottom:24px;
+    border:2px solid var(--neon);box-shadow:0 0 40px rgba(0,245,255,.2), inset 0 0 20px rgba(0,245,255,.1);
+    transform:perspective(1000px) rotateX(2deg);transition:transform .5s
+  }
+  .video-box:hover{transform:perspective(1000px) rotateX(0deg) scale(1.02)}
+  .video-titulo{font:900 20px 'Orbitron';color:var(--neon);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .video{position:relative;padding-top:56.25%;background:#000;border-radius:15px;overflow:hidden;box-shadow:inset 0 0 30px rgba(0,245,255,.3)}
+  .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  
+  /* TEXTO BOX */
+  .texto-box{
+    background:linear-gradient(145deg,#151515,#1f1f1f);padding:28px;border-radius:20px;
+    border:1px solid #2a2a2a;box-shadow:0 10px 40px rgba(0,0,0,.6)
+  }
+  .texto-titulo{font:900 24px 'Orbitron';color:var(--neon);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+  .pagina h3{font:800 20px 'Orbitron';color:var(--neon2);margin:20px 0 12px;text-shadow:0 0 10px var(--neon2)}
+  .pagina p{font-size:17px;line-height:1.9;color:#ddd;margin-bottom:12px}
+  .pagina ul{list-style:none}
+  .pagina li{
+    padding:12px 0 12px 30px;font-size:16px;color:#ccc;position:relative;
+    animation:slideInLeft .6s ease both
+  }
+  .pagina li:nth-child(1){animation-delay:.1s}
+  .pagina li:nth-child(2){animation-delay:.2s}
+  .pagina li:nth-child(3){animation-delay:.3s}
+  @keyframes slideInLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+  .pagina li:before{content:"✦";color:var(--neon);font-weight:900;position:absolute;left:0;font-size:18px}
+  
+  /* NAV BOTOES */
+  .navegacao{display:flex;gap:12px;margin-top:24px}
+  .nav{
+    flex:1;padding:18px;background:linear-gradient(145deg,var(--neon),var(--neon2));color:#000;
+    border-radius:15px;font:900 16px 'Orbitron';text-align:center;cursor:pointer;
+    transition:all .3s;box-shadow:0 5px 20px rgba(0,245,255,.4)
+  }
+  .nav:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 10px 30px rgba(0,245,255,.6)}
+  .nav.sec{background:linear-gradient(145deg,#2a2a2a,#333);color:var(--text)}
+  
+  /* AVALIAÇÃO */
+  .avaliacao{display:none;margin-top:30px;background:#0a0a0a;border:3px solid var(--neon);padding:30px;border-radius:20px;box-shadow:var(--glow)}
+  .avaliacao.show{display:block;animation:popIn .6s ease}
+  @keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  
+  /* K-AI CUBO HOLOGRÁFICO */
+  #k-ai{
+    position:fixed;bottom:20px;right:20px;width:100px;height:100px;z-index:9999;cursor:pointer;
+    animation:float 3s ease-in-out infinite
+  }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+  .cubo{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:rotate 8s linear infinite}
+  @keyframes rotate{from{transform:rotateX(0) rotateY(0)}to{transform:rotateX(360deg) rotateY(360deg)}}
+  .face{position:absolute;width:100px;height:100px;background:linear-gradient(45deg,rgba(0,245,255,.3),rgba(0,170,255,.3));
+    border:2px solid var(--neon);box-shadow:inset 0 0 30px rgba(0,245,255,.5), 0 0 30px rgba(0,245,255,.8)}
+  .front{transform:translateZ(50px)}
+  .back{transform:rotateY(180deg) translateZ(50px)}
+  .right{transform:rotateY(90deg) translateZ(50px)}
+  .left{transform:rotateY(-90deg) translateZ(50px)}
+  .top{transform:rotateX(90deg) translateZ(50px)}
+  .bottom{transform:rotateX(-90deg) translateZ(50px)}
+  .k-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:900 20px 'Orbitron';color:var(--neon);text-shadow:var(--glow)}
+  #k-ai:hover .cubo{animation:rotateFast .5s linear infinite}
+  @keyframes rotateFast{from{transform:rotateX(0) rotateY(0)}to{transform:rotateX(720deg) rotateY(720deg)}}
+  
+  /* TUTORIAL POPUP */
+  .tutorial{
+    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#111;padding:30px;
+    border-radius:20px;border:2px solid var(--neon);box-shadow:0 0 60px rgba(0,245,255,.8);z-index:10000;
+    max-width:500px;display:none;animation:popIn .5s
+  }
+  .tutorial.show{display:block}
+  .tutorial h2{font:900 24px 'Orbitron';color:var(--neon);margin-bottom:15px}
+  .tutorial p{font-size:15px;color:#ccc;margin:10px 0}
+  .tutorial button{margin-top:15px;padding:12px 24px;background:var(--neon);color:#000;border:0;border-radius:10px;font:800 14px 'Orbitron';cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">K-TH 360°</div>
+  <div class="sub">FASE 1 • JANEIRO</div>
+  <div class="sub">MÓDULO 1 • TERAPIA HOLÍSTICA INTEGRATIVA</div>
+  <div class="progresso"><div class="barra" id="barra"></div></div>
+</header>
+
+<div class="menu">
+  <div class="titulo">⚡ TEMAS</div><div class="linha" id="navTemas"></div>
+  <div class="titulo">📚 AULAS</div><div class="linha" id="navAulas"></div>
+  <div class="titulo">📄 PÁGINAS</div><div class="linha" id="navPaginas"></div>
+</div>
+
+<div class="conteudo">
+  <div class="info-topo" id="infoTopo"></div>
+  
+  <div class="video-box">
+    <div class="video-titulo">🎥 OPÇÃO 1: ASSISTIR AULA EM VÍDEO</div>
+    <div class="video"><iframe id="video" src="https://www.youtube.com/embed/YQHsXMglC9A" allowfullscreen></iframe></div>
+  </div>
+  
+  <div class="texto-box">
+    <div class="texto-titulo">📄 OPÇÃO 2: LER CONTEÚDO COMPLETO</div>
+    <div class="pagina" id="paginaConteudo"></div>
+  </div>
+  
+  <div class="navegacao">
+    <div class="nav sec" id="btnAnt">◀ ANTERIOR</div>
+    <div class="nav" id="btnProx">PRÓXIMA ▶</div>
+  </div>
+  
+  <div class="avaliacao" id="avaliacao">
+    <h2>🏆 AVALIAÇÃO FINAL DO MÓDULO 1</h2><p>20 Questões | Nota mínima: 70%</p><div id="questoes"></div>
+    <button class="btn-final" id="btnFinalizar">FINALIZAR E GERAR CERTIFICADO</button>
+  </div>
+</div>
+
+<!-- K-AI CUBO -->
+<div id="k-ai" onclick="abrirTutorial()">
+  <div class="cubo">
+    <div class="face front"><div class="k-text">K-AI</div></div>
+    <div class="face back"><div class="k-text">K-AI</div></div>
+    <div class="face right"><div class="k-text">K-AI</div></div>
+    <div class="face left"><div class="k-text">K-AI</div></div>
+    <div class="face top"><div class="k-text">K-AI</div></div>
+    <div class="face bottom"><div class="k-text">K-AI</div></div>
+  </div>
+</div>
+
+<!-- TUTORIAL -->
+<div class="tutorial" id="tutorial">
+  <h2>🤖 OLÁ! EU SOU O K-AI</h2>
+  <p><b>Como usar a plataforma:</b></p>
+  <p>1. <b>TEMAS:</b> São os 5 pilares do Módulo 1. Clique pra pular.</p>
+  <p>2. <b>AULAS:</b> Cada tema tem 5 aulas. Cada aula aprofunda o mesmo assunto.</p>
+  <p>3. <b>PÁGINAS:</b> 5 páginas por aula. Cada uma é um tópico diferente que se complementa.</p>
+  <p>4. <b>2 FORMAS:</b> Assista o vídeo OU leia o texto. Você escolhe.</p>
+  <p>5. <b>EU:</b> Clique em mim pra tirar dúvidas a qualquer hora!</p>
+  <button onclick="fecharTutorial()">ENTENDI!</button>
+</div>
+
+<script>
+const CURSO = {
+1:{nome:"FUNDAMENTOS 360°", video:"YQHsXMglC9A", aulas:{
+ 1:{nome:"Introdução ao Conceito 360°", paginas:[
+  ["PÁGINA 1: VISÃO GERAL","O que é Terapia Holística 360°","Tratar o ser humano como um todo integrado: Físico + Mental + Emocional + Energético","Por que o sintoma é só a ponta do iceberg"],
+  ["PÁGINA 2: OS 4 CORPOS EXPLICADOS","Corpo Físico: Dor, doença, matéria. Corpo Mental: Pensamentos e crenças","Corpo Emocional: Traumas e sentimentos. Corpo Energético: Aura, Chakras, Prana","Como cada um adoece e como curar"],
+  ["PÁGINA 3: A CONEXÃO ENTRE ELES","Exemplo real: Úlcera = estresse mental + raiva emocional + energia bloqueada no estômago","Nada acontece isolado. Tudo é causa e efeito","Ciclo: Pensamento gera Emoção > Emoção bloqueia Energia > Energia adoece o Corpo"],
+  ["PÁGINA 4: HOLÍSTICO X FRAGMENTADO","Fragmentado: Tomar remédio pra dor de cabeça","Holístico: Por que tem dor? Sono ruim? Ansiedade? Falta de propósito?","O terapeuta 360° é um investigador da raiz"],
+  ["PÁGINA 5: PRÁTICA E APLICAÇÃO","Exercício: Pegue 1 sintoma seu","Liste 1 causa possível em cada um dos 4 corpos","Missão: Começar a olhar pra você e pros clientes de forma 360°"]
+ ]},
+ 2:{nome:"Bases Científicas da Terapia", paginas:[
+  ["PÁGINA 1: CIÊNCIA E ESPIRITUALIDADE","Validar a terapia holística com pesquisas","Quebrar o preconceito de que é 'coisa mística'"],
+  ["PÁGINA 2: O PODER DO PLACEBO","Estudo: Pílula de açúcar curou pacientes porque eles acreditaram","Cérebro libera químicos de cura só pela crença"],
+  ["PÁGINA 3: EPIGENÉTICA","Bruce Lipton: Seus pensamentos ligam e desligam genes","Você não é vítima da genética. Você é o programador"],
+  ["PÁGINA 4: COERÊNCIA CARDÍACA","HeartMath: Emoções positivas aumentam imunidade em 43%","Coração manda 5000x mais sinal pro cérebro"],
+  ["PÁGINA 5: PRÁTICA E APLICAÇÃO","Pesquise 1 artigo sobre meditação e saúde","Aprenda a explicar terapia pra um médico cético"]
+ ]},
+ 3:{nome:"Ética e Legislação Profissional", paginas:[
+  ["PÁGINA 1: ATUAR COM SEGURANÇA","Os 10 princípios éticos do terapeuta","Como se proteger juridicamente"],
+  ["PÁGINA 2: O QUE É PERMITIDO","Acolher, ouvir, orientar, usar técnicas integrativas","Sempre com termo de responsabilidade"],
+  ["PÁGINA 3: O QUE É PROIBIDO","Diagnosticar CID, receitar remédio, prometer cura","Isso é crime e antiético"],
+  ["PÁGINA 4: DOCUMENTAÇÃO","MEI, Contrato, Ficha Anamnese 360°","Como cobrar e emitir recibo"],
+  ["PÁGINA 5: PRÁTICA E APLICAÇÃO","Monte sua ficha de anamnese com 10 perguntas chave"]
+ ]},
+ 4:{nome:"Técnicas de Atendimento e Rapport", paginas:[
+  ["PÁGINA 1: PRIMEIROS 5 MINUTOS","Como fazer cliente confiar em você","Ambiente vende antes da técnica"],
+  ["PÁGINA 2: AMBIENTE TERAPÊUTICO","Luz, aroma, música, temperatura","Sala organizada = mente organizada"],
+  ["PÁGINA 3: COMUNICAÇÃO EMPÁTICA","Ouvir 80% Falar 20%. Validar a dor","Perguntas abertas que curam"],
+  ["PÁGINA 4: AS 7 PERGUNTAS DE OURO","O que te trouxe? Desde quando? Piora com o que?","Sono, remédio, expectativa"],
+  ["PÁGINA 5: PRÁTICA E APLICAÇÃO","Simule atendimento de 10min e grave"]
+ ]},
+ 5:{nome:"Mapa da Jornada K-TH", paginas:[
+  ["PÁGINA 1: VISÃO DO CURSO","Mapa dos 11 módulos","Onde você vai chegar em 90 dias"],
+  ["PÁGINA 2: MÓDULOS 2 AO 5","M2 Massoterapia M3 Cuidador M4 Práticas M5 Hipnose"],
+  ["PÁGINA 3: MÓDULOS 6 AO 9","M6 Meditação M7 IE M8 Florais M9 Cristais"],
+  ["PÁGINA 4: MÓDULOS 10 E 11","M10 Fitocosmética M11 Gestão + Parceria KORVIL 50%"],
+  ["PÁGINA 5: PRÁTICA E APLICAÇÃO","Defina 3 metas SMART para o curso"]
+ ]}
+}},
+
+2:{nome:"AUTOCONHECIMENTO E CURA INTERIOR", video:"uO59aN9P1fA", aulas:{
+ 1:{nome:"Quem Sou Eu: Mapa Pessoal", paginas:[["P1: RODA DA VIDA","8 áreas da vida"],["P2: ARQUÉTIPOS","Qual domina você"],["P3: FORÇAS","Seus talentos"],["P4: FRAQUEZAS","O que sabotar"],["P5: PLANO","Melhorar 1 área"]]},
+ 2:{nome:"Crenças Limitantes", paginas:[["P1: ORIGEM","Até 7 anos"],["P2: IDENTIFICAR","Frases comuns"],["P3: IMPACTO","Como sabotam"],["P4: TÉCNICA","Trocar crença"],["P5: REPROGRAMAR","Nova afirmação"]]},
+ 3:{nome:"Sombra e Luz", paginas:[["P1: CONCEITO","Lado oculto"],["P2: PROJEÇÃO","Julgar no outro"],["P3: ACEITAÇÃO","Integrar"],["P4: FORÇA","Sombra vira poder"],["P5: EXERCÍCIO","Carta sombra"]]},
+ 4:{nome:"Propósito Ikigai", paginas:[["P1: O QUE É","4 círculos"],["P2: PAIXÃO","O que ama"],["P3: MISSÃO","O que mundo precisa"],["P4: PROFISSÃO","Pelo que pagam"],["P5: FRASE","Seu propósito"]]},
+ 5:{nome:"Integração 360°", paginas:[["P1: CORPO","Cuidar físico"],["P2: MENTE","Alimentar"],["P3: EMOÇÃO","Curar"],["P4: ESPÍRITO","Conectar"],["P5: ROTINA","30min diário"]]}
+}},
+
+3:{nome:"ENERGIA VITAL E CORPOS SUTIS", video:"TQMbvJNRpLE", aulas:{
+ 1:{nome:"Os 7 Chakras Principais", paginas:[["P1: SISTEMA","7 centros"],["P2: 1-3","Raiz Sacro Plexo"],["P3: 4-7","Cardíaco ao Coronário"],["P4: DESEQUILÍBRIO","Sinais"],["P5: ALINHAR","Técnica 10min"]]},
+ 2:{nome:"Meridianos Chineses", paginas:[["P1: QI","Energia vital"],["P2: 12 CANAIS","Pulmão ao Fígado"],["P3: BLOQUEIO","Dor e doença"],["P4: ACUPRESSURA","Pontos"],["P5: PRÁTICA","Massagear IG4"]]},
+ 3:{nome:"Aura e Campos", paginas:[["P1: 7 CORPOS","Camadas"],["P2: SENTIR","Técnica mãos"],["P3: CORES","Significado"],["P4: LIMPEZA","Sal defumação"],["P5: PROTEÇÃO","Escudo"]]},
+ 4:{nome:"Prana e Respiração", paginas:[["P1: PRANA","Energia do ar"],["P2: 4-7-8","Acalmar"],["P3: FOGO","Energizar"],["P4: ALTERNA","Equilibrar"],["P5: ROTINA","3 ciclos dia"]]},
+ 5:{nome:"Proteção Energética", paginas:[["P1: VAMPIRISMO","Sinais"],["P2: ESCUDO","Luz dourada"],["P3: CRISTAIS","Turmalina"],["P4: PLANTAS","Arruda sal"],["P5: RITUAL","Abrir fechar"]]}
+}},
+
+4:{nome:"CORPO FÍSICO E SAÚDE INTEGRATIVA", video:"ZToicYcHUCg", aulas:{
+ 1:{nome:"Anatomia para Terapeutas", paginas:[["P1: NERVOSO","Simpático"],["P2: MUSCULAR","Tensão"],["P3: ENDÓCRINO","Hormônios"],["P4: DIGESTIVO","Intestino"],["P5: MAPA","Marcar dor"]]},
+ 2:{nome:"Alimentação como Medicina", paginas:[["P1: YANG YIN","Equilíbrio"],["P2: INFLAMAÇÃO","Açúcar"],["P3: ANTIOXIDANTE","Verde"],["P4: CHÁS","Funções"],["P5: CARDÁPIO","3 dias"]]},
+ 3:{nome:"Movimento Consciente", paginas:[["P1: YOGA","Posturas"],["P2: ALONGAR","Respirar"],["P3: DANÇA","Liberar"],["P4: CAMINHADA","Presença"],["P5: SEQUÊNCIA","15min"]]},
+ 4:{nome:"Sono e Regeneração", paginas:[["P1: CICLOS","90min"],["P2: HIGIENE","Sem tela"],["P3: CHÁS","Calmantes"],["P4: ROTINA","Horário"],["P5: PROTOCOLO","30min noite"]]},
+ 5:{nome:"Desintoxicação 360°", paginas:[["P1: FÍSICA","Suco verde"],["P2: MENTAL","7 dias"],["P3: DIGITAL","Detox"],["P4: ENERGÉTICA","Banho"],["P5: PLANO","3 dias"]]}
+}},
+
+5:{nome:"MENTE, EMOÇÃO E ESPIRITUALIDADE", video:"1vx8iUvfyCY", aulas:{
+ 1:{nome:"Inteligência Emocional", paginas:[["P1: 5 COMPETÊNCIAS","Autoconsciência"],["P2: RODA","6 emoções"],["P3: NOMES","Dar nome"],["P4: STOP","Técnica"],["P5: DIÁRIO","3x dia"]]},
+ 2:{nome:"Cura de Traumas EFT", paginas:[["P1: TAPPING","Pontos"],["P2: FRASE","Ajuste"],["P3: RODADA","8 pontos"],["P4: INTENSIDADE","0 a 10"],["P5: PRÁTICA","1 medo"]]},
+ 3:{nome:"Reprogramação TCC", paginas:[["P1: TRÍADE","P>E>C"],["P2: DISTORÇÃO","Catástrofe"],["P3: ABCDE","Técnica"],["P4: EVIDÊNCIA","Provar"],["P5: TROCA","Novo pensamento"]]},
+ 4:{nome:"Gestão do Estresse", paginas:[["P1: SINAIS","Corpo"],["P2: CAUSAS","Gatilhos"],["P3: COERÊNCIA","5x5x5"],["P4: ÂNCORA","Gesto"],["P5: ÁUDIO","Gravar 3min"]]},
+ 5:{nome:"Espiritualidade e Meditação", paginas:[["P1: SENTIDO","Propósito"],["P2: GUIADA","10min"],["P3: ATIVA","Presença"],["P4: MANTRA","Repetir"],["P5: GUIAR","Ensinar 5min"]]}
+}}};
+
+let estado = {tema:1, aula:1, pagina:1};
+
+function render(){
+  $('#navTemas').innerHTML = ''; Object.keys(CURSO).forEach(t=>{$('#navTemas').innerHTML += `<div class="botao ${t==estado.tema?'ativo':''}" data-tema="${t}">TEMA ${t}</div>`});
+  $('#navAulas').innerHTML = ''; Object.keys(CURSO[estado.tema].aulas).forEach(a=>{$('#navAulas').innerHTML += `<div class="botao ${a==estado.aula?'ativo':''}" data-aula="${a}">AULA ${a}</div>`});
+  $('#navPaginas').innerHTML = ''; CURSO[estado.tema].aulas[estado.aula].paginas.forEach((p,i)=>{$('#navPaginas').innerHTML += `<div class="botao ${i+1==estado.pagina?'ativo':''}" data-pagina="${i+1}">${i+1}</div>`});
+  
+  const dados = CURSO[estado.tema].aulas[estado.aula].paginas[estado.pagina-1];
+  $('#video').src = `https://www.youtube.com/embed/${CURSO[estado.tema].video}`;
+  $('#infoTopo').innerHTML = `FASE 1 > JANEIRO > MÓDULO 1 > TEMA ${estado.tema}: ${CURSO[estado.tema].nome} > AULA ${estado.aula}: ${CURSO[estado.tema].aulas[estado.aula].nome}`;
+  
+  let html = `<h3>${dados[0]}</h3>`;
+  dados.slice(1).forEach(p=>{html += `<p>${p}</p>`});
+  $('#paginaConteudo').innerHTML = html;
+  
+  let total = 125; let atual = ((estado.tema-1)*25) + ((estado.aula-1)*5) + estado.pagina; $('#barra').style.width = (atual/total*100)+'%';
+  if(estado.tema==5 && estado.aula==5 && estado.pagina==5){$('#avaliacao').classList.add('show')}else{$('#avaliacao').classList.remove('show')}
+  addEventos();
+}
+
+function addEventos(){
+  $$('#navTemas .botao').forEach(b=>b.onclick=()=>{estado.tema=+b.dataset.tema;estado.aula=1;estado.pagina=1;render()});
+  $$('#navAulas .botao').forEach(b=>b.onclick=()=>{estado.aula=+b.dataset.aula;estado.pagina=1;render()});
+  $$('#navPaginas .botao').forEach(b=>b.onclick=()=>{estado.pagina=+b.dataset.pagina;render()});
+  $('#btnAnt').onclick=()=>{nav(-1)}; $('#btnProx').onclick=()=>{nav(1)};
+}
+
+function nav(dir){
+  if(dir==1){if(estado.pagina<5)estado.pagina++;else if(estado.aula<5){estado.aula++;estado.pagina=1}else if(estado.tema<5){estado.tema++;estado.aula=1;estado.pagina=1}}
+  else{if(estado.pagina>1)estado.pagina--;else if(estado.aula>1){estado.aula--;estado.pagina=5}else if(estado.tema>1){estado.tema--;estado.aula=5;estado.pagina=5}}
+  render();
+}
+
+function abrirTutorial(){$('#tutorial').classList.add('show')}
+function fecharTutorial(){$('#tutorial').classList.remove('show')}
+
+const $=s=>document.querySelector(s);const $$=s=>document.querySelectorAll(s); 
+render();
+
+// Mostra tutorial na primeira vez
+setTimeout(()=>abrirTutorial(), 1000);
+</script>
+</body>
+</html>
