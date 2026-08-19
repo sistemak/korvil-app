@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="https://sistemak.github.io/kc/manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>KORVIL ACCESS</title>
 <script src="https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <style>:root{--c:#00FFFF;--c2:#A8FFE6}*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif}
@@ -51,10 +53,10 @@ input[readonly]{opacity:0.6; cursor:not-allowed;}
     <img src="https://raw.githubusercontent.com/sistemak/korvil-app/main/assets/images/logo-korvil.png" class="logo-img">
   </div>
 
-  <div class="tabs"><button type="button" class="tab active" id="tabLogin">ENTRAR</button><button type="button" class="tab" id="tabCadastro">NOVO USUÃRIO</button></div>
+  <div class="tabs"><button type="button" class="tab active" id="tabLogin">ENTRAR</button><button type="button" class="tab" id="tabCadastro">NOVO USUÁRIO</button></div>
 
   <button type="button" class="btn-kai" onclick="window.location.href='https://sistemak.github.io/korvil-app/kai-core/index.html'">
-    ð¤ ASSISTENTE VIRTUAL K-AI
+    🤖 ASSISTENTE VIRTUAL K-AI
   </button>
 
   <form id="login" class="form active">
@@ -76,9 +78,9 @@ input[readonly]{opacity:0.6; cursor:not-allowed;}
     </div>
     <div class="input-group"><label>WhatsApp</label><input type="text" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15" required></div>
     <div class="input-wrap"><div class="input-group" style="flex:1"><label>CEP</label><input type="text" id="cep" placeholder="00000-000" maxlength="9" required></div><button type="button" class="btn btn-sec" id="btnBuscarCep">BUSCAR</button></div>
-    <div class="grid-2"><div class="input-group"><label>NÂ° Casa</label><input type="text" id="numero" placeholder="123" required></div><div class="input-group"><label>Bairro</label><input type="text" id="bairro" placeholder="Bairro" readonly></div></div>
+    <div class="grid-2"><div class="input-group"><label>Nº Casa</label><input type="text" id="numero" placeholder="123" required></div><div class="input-group"><label>Bairro</label><input type="text" id="bairro" placeholder="Bairro" readonly></div></div>
     <div class="input-group"><label>Rua</label><input type="text" id="rua" placeholder="Rua" readonly></div>
-    <div class="input-group"><label>Crie uma Senha</label><div class="input-pass"><input type="password" id="pass" placeholder="MÃ­nimo 6 caracteres" required><svg class="toggle-pass" data-target="pass" viewBox="0 0 24 24"><path class="eye-open" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/><path class="eye-closed" d="M12 7c2.76 0 5 2.24 5 5 0.65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3.22 0.44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg></div></div>
+    <div class="input-group"><label>Crie uma Senha</label><div class="input-pass"><input type="password" id="pass" placeholder="Mínimo 6 caracteres" required><svg class="toggle-pass" data-target="pass" viewBox="0 0 24 24"><path class="eye-open" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/><path class="eye-closed" d="M12 7c2.76 0 5 2.24 5 5 0.65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3.22 0.44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg></div></div>
     <div class="input-group"><label>Repita a Senha</label><div class="input-pass"><input type="password" id="pass2" placeholder="Repita a senha" required><svg class="toggle-pass" data-target="pass2" viewBox="0 0 24 24"><path class="eye-open" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/><path class="eye-closed" d="M12 7c2.76 0 5 2.24 5 5 0.65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3.22 0.44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg></div></div>
     <button class="btn" type="submit" id="btnCadastro">CRIAR ACESSO</button>
     <div id="msgCadastro"></div>
@@ -87,7 +89,7 @@ input[readonly]{opacity:0.6; cursor:not-allowed;}
 <script>
 let db;
 const REDIRECT = "https://sistemak.github.io/korvil-app/sections/centralkorvil/index.html";
-const TABELA = 'Cadastro de usuÃ¡rios do KORVIL';
+const TABELA = 'Cadastro de usuários do KORVIL';
 
 window.onload = function() { iniciarAnimacoes(); iniciarParticulas(); }
 function iniciarAnimacoes(){const frasesKorvil = ['DESENVOLVIMENTO HUMANO','NEGOCIOS','SERVICOS','CURSOS','ECOMMERCE','LOJAS','PRODUTOS','SISTEMA K','TECNOLOGIA','K-TP TREINAMENTO PERSONALIZADO','K-AFORTUNADO','EMPREENDEDORISMO','FINANCAS','K-ALMA','SAUDE','BELEZA','MARKETING DIGITAL','EDUCACAO','JESUS','CONSULTORIA','INOVACAO','COACHING','VENDAS','FRANQUIAS','PLATAFORMA','DE TUDO UM POUCO','NETWORKING','MENTORIA','GESTAO','SUPORTE','COMUNIDADE K','EVENTOS','VIDA','AMOR','CONHECIMENTO','PARCERIAS','CONTEUDO','ACADEMIA K','RESULTADOS','K-CONECTA','K-NETWORK','TRAFEGO PAGO','ALEGRIA','DIVERSAO','COPYWRITING','FUNIL DE VENDAS','LIDERANCA','PRODUTIVIDADE','CONQUISTAS','SEJA INVENCIVEL','METAS','PERFORMANCE','ATENDIMENTO','DEUS','PALESTRAS','WORKSHOPS','FE','WEBINARS','PODCAST','YOUTUBE K','LIVE K','APP KORVIL','CRM K','AREA DO ALUNO','FORMACOES','CERTIFICADOS','EXCELENCIA','DISCIPLINA','FOCO','TRANSFORMACAO','SUCESSO','LIBERDADE FINANCEIRA','ABUNDANCIA','VIP','EXCLUSIVO','ACESSO ILIMITADO','VIVA SEUS SONHOS','ACREDITE EM VOCE','EVOLUA TODO DIA','MINDSET VENCEDOR','PROSPERE'];const versiculos = ['TUDO POSSO NAQUELE QUE ME FORTALECE - FP 4:13','O SENHOR E MEU PASTOR E NADA ME FALTARA - SL 23:1','LANCANDO SOBRE ELE TODA A VOSSA ANSIEDADE - 1PE 5:7','PORQUE EU BEM SEI OS PLANOS QUE TENHO PARA VOS - JR 29:11','NAO TEMAS, PORQUE EU SOU CONTIGO - IS 41:10','O GOZO DO SENHOR E A VOSSA FORCA - NE 8:10','ENTREGA O TEU CAMINHO AO SENHOR - SL 37:5','DEUS E O NOSSO REFUGIO E FORTALEZA - SL 46:1','SEJA FORTE E CORAJOSO - JS 1:9','A FE E O FIRME FUNDAMENTO - HB 11:1','EU SOU O CAMINHO, A VERDADE E A VIDA - JO 14:6','AMAI-VOS UNS AOS OUTROS - JO 13:34','BUSCAI PRIMEIRO O REINO DEUS - MT 6:33','A PAZ DEUS GUARDARA O VOSSO CORACAO - FP 4:7','RENOVA-SE A CADA MANHA - LM 3:23','OS QUE ESPERAM NO SENHOR RENOVARAO AS FORCAS - IS 40:31','O SENHOR PELEJARA POR VOS - EX 14:14','NAO ANDES ANSIOSO POR COISA ALGUMA - FP 4:6','EM TUDO DAI GRACAS - 1TS 5:18','DEUS SUPRIRA TODAS AS VOSSAS NECESSIDADES - FP 4:19','A VERDADE VOS LIBERTARA - JO 8:32','EU VIM PARA QUE TENHAM VIDA E A TENHAM EM ABUNDANCIA - JO 10:10','O SENHOR E A MINHA LUZ E A MINHA SALVACAO - SL 27:1','LANCA O TEU PAO SOBRE AS AGUAS - EC 11:1','ONDE ESTA O ESPIRITO DO SENHOR, AI HA LIBERDADE - 2CO 3:17','FAZEI TUDO PARA A GLORIA DEUS - 1CO 10:31','A ORACAO DE UM JUSTO PODE MUITO - TG 5:16','CONFIA NO SENHOR DE TODO O TEU CORACAO - PV 3:5','EU SOU A VIDEIRA, VOS OS RAMOS - JO 15:5','O AMOR NUNCA FALHA - 1CO 13:8'];const palavras = [...frasesKorvil,...versiculos];const wordsBg = document.getElementById('wordsBg');const animacoes = ['pulse','slideL','slideR'];let palavrasAtivas = [];function criarPalavra(){if(palavrasAtivas.length >= 60) return;const el = document.createElement('div');el.className = 'word fadeIn ' + animacoes[Math.floor(Math.random()*3)];el.innerText = palavras[Math.floor(Math.random()*palavras.length)];el.style.left = Math.random()*85 + 5 + '%';el.style.top = Math.random()*85 + 5 + '%';wordsBg.appendChild(el);palavrasAtivas.push(el);setTimeout(()=>{ el.classList.add('fadeOut'); setTimeout(()=>{el.remove()},1500) }, 8000 + Math.random()*4000);}for(let i=0; i<50; i++) setTimeout(criarPalavra, i*70);setInterval(()=>{ if(palavrasAtivas.length < 40) for(let i=0; i<3; i++) criarPalavra(); }, 600);}
@@ -110,7 +112,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('tabCadastro').onclick = ()=>showTab('cadastro');
   const msg = (t,c,i)=>document.getElementById(i).innerHTML=t?`<p class="${c}">${t}</p>`:'';
   const loading = (b,on)=>{b.disabled=on;b.innerHTML=on?'<span class="loader"></span>PROCESSANDO':b.id==='btnLogin'?'ACESSAR':'CRIAR ACESSO'};
-  document.getElementById('btnBuscarCep').onclick = async ()=>{const cep = document.getElementById('cep').value.replace(/\D/g,'');if(cep.length!=8) return msg('Digite 8 nÃºmeros','error','msgCadastro');msg('Buscando...','ok','msgCadastro');try{ const r=await fetch(`https://viacep.com.br/ws/${cep}/json/`); const d=await r.json();if(!d.erro){ document.getElementById('rua').value=d.logradouro; document.getElementById('bairro').value=d.bairro; msg('CEP OK','ok','msgCadastro'); }else msg('CEP invÃ¡lido','error','msgCadastro');}catch{ msg('Erro na busca','error','msgCadastro'); }}
+  document.getElementById('btnBuscarCep').onclick = async ()=>{const cep = document.getElementById('cep').value.replace(/\D/g,'');if(cep.length!=8) return msg('Digite 8 números','error','msgCadastro');msg('Buscando...','ok','msgCadastro');try{ const r=await fetch(`https://viacep.com.br/ws/${cep}/json/`); const d=await r.json();if(!d.erro){ document.getElementById('rua').value=d.logradouro; document.getElementById('bairro').value=d.bairro; msg('CEP OK','ok','msgCadastro'); }else msg('CEP inválido','error','msgCadastro');}catch{ msg('Erro na busca','error','msgCadastro'); }}
 
   document.getElementById('cadastro').onsubmit = async e=>{
     e.preventDefault(); const btn=document.getElementById('btnCadastro');
@@ -125,7 +127,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   }
 
-  // SÃ ISSO AQUI MUDOU
+  // SÓ ISSO AQUI MUDOU
   document.getElementById('login').onsubmit = e=>{
     e.preventDefault();
     window.location.replace(REDIRECT);
