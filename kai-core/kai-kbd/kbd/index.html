@@ -1,1 +1,322 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KORVIL - ESTEIRA FINAL - 2 TELAS CORRETO</title>
+<style>
+*{box-sizing:border-box;font-family:Inter,sans-serif}
+body{margin:0;background:#0d1117;color:#e6edf3;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.header{background:#010409;border-bottom:2px solid #00f5ff;padding:8px 12px;display:flex;justify-content:space-between;align-items:center}
+.btn{background:#00f5ff;color:#000;font-weight:900;padding:6px 10px;border-radius:6px;border:none;cursor:pointer;font-size:10px}
+.main{display:flex;flex:1;overflow:hidden}
+.left{width:35%;background:#010409;border-right:1px solid #222;display:flex;flex-direction:column}
+.right{width:65%;background:#0d1117;display:flex;flex-direction:column}
+.head{padding:6px 10px;background:#161b22;border-bottom:1px solid #222;font-size:9px;color:#8b949e}
+.scroll{overflow:auto;flex:1;padding:6px}
+.item{padding:6px 8px;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin:1px 0;font-size:11px}
+.item:hover{background:#161b22}
+.item.active{background:#00f5ff22;border:1px solid #00f5ff;color:#00f5ff}
+.toggle{width:28px;height:16px;background:#333;border-radius:20px;position:relative;cursor:pointer}
+.toggle.on{background:#00ff88}
+.toggle:after{content:'';position:absolute;top:2px;left:2px;width:12px;height:12px;background:#fff;border-radius:50%;transition:.2s}
+.toggle.on:after{left:14px}
+.card{background:#161b22;border:1px solid #222;border-radius:8px;padding:10px;margin-bottom:8px}
+.input{background:#0d1117;border:1px solid #333;color:#fff;border-radius:6px;padding:6px;width:100%;font-size:11px;margin:2px 0}
+.chip{display:inline-flex;gap:4px;align-items:center;padding:4px 8px;border:1px solid #333;border-radius:20px;font-size:10px;margin:2px;background:#0d1117}
+@media(max-width:800px){.main{flex-direction:column}.left{width:100%;height:45%;border-right:none;border-bottom:2px solid #00f5ff}.right{width:100%;height:55%}}
+</style>
+</head>
+<body>
+<div class="header">
+<div><b style="color:#00f5ff">KORVIL LOJA : K-TP : fitness : categorias</b> <span id="save" style="font-size:8px;background:#00ff88;color:#000;padding:2px 6px;border-radius:10px">AUTOSAVE</span></div>
+<div style="display:flex;gap:4px"><button class="btn" onclick="downloadZip()">ZIP COMPLETO GITHUB</button><button class="btn" onclick="toggleSource()">CÓDIGO FONTE</button></div>
+</div>
+<div class="main">
+<div class="left">
+<div class="head">ESQUERDA - PASTAS E ARQUIVOS - CLIQUE PRA ABRIR NA DIREITA</div>
+<div class="scroll" id="tree"></div>
+</div>
+<div class="right">
+<div class="head" id="breadcrumb">DIREITA - EDITOR EM TEMPO REAL - CLIQUE NAS COISAS DA DIREITA PRA ABRIR NELA MESMA</div>
+<div class="scroll" id="visual"></div>
+<div id="sourcePanel" style="display:none;border-top:2px solid #00f5ff;padding:6px"><textarea id="sourceCode" style="width:100%;height:150px;background:#000;color:#0ff;font-size:8px"></textarea></div>
+</div>
+</div>
+<script>
+let STORAGE='korvil-esteira-final-correto-v11';
+let data = JSON.parse(localStorage.getItem(STORAGE)||'null') || {
+  "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias/acessorios": {type:"folder", nome:"acessorios", disponivel:true, children:{
+    "faixa-elastica": {type:"product", nome:"Faixa Elástica KORVIL", disponivel:true, preco:29, estoque:50, modelos:[{nome:"Leve",disponivel:true,preco:29}], fotos:[], descricao:""}
+  }},
+  "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias/equipamentos-aparelhos": {type:"folder", nome:"equipamentos-aparelhos", disponivel:true, children:{
+    "halteres": {type:"product", nome:"Halteres 5kg", disponivel:true, preco:99, estoque:20, modelos:[{nome:"5kg",disponivel:true}], fotos:[], descricao:""}
+  }},
+  "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias/produtos/suplementos/marcas/profit": {type:"folder", nome:"profit", disponivel:true, children:{}},
+  "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias/produtos/suplementos/marcas/max-titanium": {type:"folder", nome:"max-titanium", disponivel:true, children:{}},
+  "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias/produtos/suplementos/marcas/growth": {type:"folder", nome:"growth", disponivel:true, children:{}},
+  "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias/produtos/suplementos/tipos/whey/concentrado/whey-power-900g": {type:"product", nome:"Whey KORVIL Power 900g", categoria:"suplemento", disponivel:true, marca:"max-titanium", preco:89, estoque:100, modelos:[{nome:"Concentrado",disponivel:true,preco:89},{nome:"Isolado",disponivel:true,preco:149},{nome:"Hidrolisado",disponivel:false,preco:199}], sabores:[{nome:"Chocolate",disponivel:true},{nome:"Baunilha",disponivel:true},{nome:"Morango",disponivel:false},{nome:"Cookies",disponivel:true}], quantidades:[{nome:"30g Sachê",gramas:"30g",disponivel:true,preco:6},{nome:"900g",gramas:"900g",disponivel:true,preco:89},{nome:"1kg",gramas:"1kg",disponivel:true,preco:99},{nome:"2kg",gramas:"2kg",disponivel:true,preco:169}], embalagens:[{nome:"Pote",disponivel:true,preco:89},{nome:"Refil",disponivel:true,preco:79},{nome:"Sachê 30g",disponivel:true,preco:6}], fotos:["https://via.placeholder.com/300x300/ffe600/000?text=Whey+900g"], videos:[], descricao:"Whey 25g proteína", precosVariacao:[{combinacao:"Pote 900g Chocolate",preco:89,disponivel:true}]},
+  "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias/produtos/suplementos/tipos/creatina/monohidratada/creatina-150g": {type:"product", nome:"Creatina K-TP Pure 150g", categoria:"suplemento", disponivel:true, marca:"growth", preco:45, estoque:200, modelos:[{nome:"Monohidratada",disponivel:true,preco:45},{nome:"Creapure",disponivel:true,preco:69}], sabores:[{nome:"Natural",disponivel:true},{nome:"Limão",disponivel:false}], quantidades:[{nome:"150g",gramas:"150g",disponivel:true,preco:45},{nome:"300g",gramas:"300g",disponivel:true,preco:79},{nome:"500g",gramas:"500g",disponivel:true,preco:129},{nome:"1kg",gramas:"1kg",disponivel:true,preco:199}], embalagens:[{nome:"Pote",disponivel:true,preco:45},{nome:"Refil",disponivel:true,preco:39},{nome:"Sachê 5g",disponivel:true,preco:2}], fotos:["https://via.placeholder.com/300x300/00ff88/000?text=Creatina"], videos:[], descricao:"Creatina pura", precosVariacao:[{combinacao:"Pote 150g",preco:45,disponivel:true}]},
+  "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias/vestuario/feminino/calcas/leggings/legging-power-black": {type:"product", nome:"Legging KORVIL Power Black", categoria:"vestuario", disponivel:true, preco:89, estoque:50, modelos:[{nome:"Lisa Compressão",disponivel:true,preco:89},{nome:"Com Bolso Lateral",disponivel:true,preco:99},{nome:"Empina Bumbum",disponivel:false,preco:109}], cores:[{nome:"Preta",disponivel:true},{nome:"Grafite",disponivel:true},{nome:"Azul Marinho",disponivel:false}], tamanhos:[{nome:"PP",disponivel:true},{nome:"P",disponivel:true},{nome:"M",disponivel:true},{nome:"G",disponivel:true},{nome:"GG",disponivel:true},{nome:"XG",disponivel:true},{nome:"X2G",disponivel:true},{nome:"X3G",disponivel:false},{nome:"X4G",disponivel:false},{nome:"X5G",disponivel:false},{nome:"X6G",disponivel:false}], fotos:["https://via.placeholder.com/300x300/000/fff?text=Legging"], videos:[], descricao:"Legging fitness", precosVariacao:[]},
+  "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias/vestuario/feminino/calcas/leggings/legging-flex-nude": {type:"product", nome:"Legging Flex Nude", categoria:"vestuario", disponivel:true, preco:99, estoque:30, modelos:[{nome:"Cirre Brilho",disponivel:true}], cores:[{nome:"Nude",disponivel:true}], tamanhos:[{nome:"PP",disponivel:true},{nome:"P",disponivel:true},{nome:"M",disponivel:true},{nome:"G",disponivel:true},{nome:"GG",disponivel:true},{nome:"XG",disponivel:true},{nome:"X2G",disponivel:true},{nome:"X3G",disponivel:true},{nome:"X4G",disponivel:true},{nome:"X5G",disponivel:true},{nome:"X6G",disponivel:true}], fotos:[], videos:[], descricao:""},
+  "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias/vestuario/masculino/camisas/camisetas/camiseta-alpha": {type:"product", nome:"Camiseta KORVIL Alpha Tradicional", categoria:"vestuario", disponivel:true, preco:69, estoque:100, modelos:[{nome:"Gola Redonda Lisa",disponivel:true,preco:69},{nome:"Estampada Logo",disponivel:true,preco:79},{nome:"DryFit",disponivel:false,preco:89}], cores:[{nome:"Preta",disponivel:true},{nome:"Branca",disponivel:true},{nome:"Cinza Mescla",disponivel:true}], tamanhos:[{nome:"PP",disponivel:true},{nome:"P",disponivel:true},{nome:"M",disponivel:true},{nome:"G",disponivel:true},{nome:"GG",disponivel:true},{nome:"XG",disponivel:true},{nome:"X2G",disponivel:true},{nome:"X3G",disponivel:false},{nome:"X4G",disponivel:false},{nome:"X5G",disponivel:false},{nome:"X6G",disponivel:false}], fotos:["https://via.placeholder.com/300x300/333/fff?text=Camiseta"], videos:[], descricao:"Camiseta treino"}
+};
+
+let selectedPath = "korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias";
+
+function save(){
+  localStorage.setItem(STORAGE, JSON.stringify(data));
+  document.getElementById('save').innerText='✓ Salvo '+new Date().toLocaleTimeString();
+  document.getElementById('sourceCode').value=JSON.stringify(data,null,2);
+}
+
+function getChildren(path){
+  let children={};
+  let prefix=path+'/';
+  for(let key in data){
+    if(key.startsWith(prefix)){
+      let rest=key.substring(prefix.length);
+      if(rest && !rest.includes('/')){
+        children[rest]=data[key];
+      } else if(rest){
+        let first=rest.split('/')[0];
+        if(!children[first]){
+          // check if folder exists as key or create virtual folder
+          let folderPath=path+'/'+first;
+          let folderData=data[folderPath] || {type:"folder", nome:first, disponivel:true, children:{}};
+          // collect its direct children later
+          children[first]=folderData;
+        }
+      }
+    }
+  }
+  // Also add direct subfolders that exist as folder keys
+  for(let key in data){
+    if(key.startsWith(prefix)){
+      let rest=key.substring(prefix.length);
+      let parts=rest.split('/').filter(p=>p);
+      if(parts.length>=1){
+        let first=parts[0];
+        if(!children[first]){
+          let folderPath=path+'/'+first;
+          if(data[folderPath]) children[first]=data[folderPath];
+        }
+      }
+    }
+  }
+  return children;
+}
+
+function getAllFolders(){
+  let folders=[];
+  let seen=new Set();
+  for(let key in data){
+    let parts=key.split('/');
+    let cur='';
+    for(let i=0;i<parts.length-1;i++){
+      cur=cur?cur+'/'+parts[i]:parts[i];
+      if(!seen.has(cur)){
+        seen.add(cur);
+        folders.push(cur);
+      }
+    }
+  }
+  // add root folders manually to match image
+  let root="korvil-app/sections/kstore/setores-loja/ktp/fitness/categorias";
+  if(!seen.has(root)) folders.push(root);
+  folders.sort();
+  return folders;
+}
+
+function renderTree(){
+  let el=document.getElementById('tree');
+  el.innerHTML='';
+  let folders=getAllFolders();
+  folders.forEach(path=>{
+    let depth=(path.match(/\//g)||[]).length - 5;
+    if(depth<0) depth=0;
+    let name=path.split('/').pop();
+    let node=data[path] || {nome:name, disponivel:true, type:"folder"};
+    let div=document.createElement('div');
+    div.className='item'+(selectedPath===path?' active':'');
+    div.style.marginLeft=(depth*12)+'px';
+    let disp=node.disponivel===false?'🔴':'🟢';
+    let icon=node.type==='product'?'📦':'📁';
+    div.innerHTML=`<span>${disp} ${icon} ${node.nome||name}</span><span style="display:flex;gap:4px"><div class="toggle ${node.disponivel!==false?'on':''}" onclick="event.stopPropagation();toggleDisp('${path}')"></div><button onclick="event.stopPropagation();downloadPath('${path}')" style="font-size:7px">ZIP</button></span>`;
+    div.onclick=()=>{selectedPath=path; renderTree(); renderVisual(path);};
+    el.appendChild(div);
+  });
+  // also products as leaf
+  for(let key in data){
+    if(data[key].type==='product'){
+      let depth=(key.match(/\//g)||[]).length - 5;
+      let name=data[key].nome;
+      let div=document.createElement('div');
+      div.className='item'+(selectedPath===key?' active':'');
+      div.style.marginLeft=(depth*12+16)+'px';
+      let disp=data[key].disponivel===false?'🔴':'🟢';
+      div.innerHTML=`<span>${disp} 📦 ${name}</span><span><div class="toggle ${data[key].disponivel!==false?'on':''}" onclick="event.stopPropagation();toggleDisp('${key}')"></div></span>`;
+      div.onclick=()=>{selectedPath=key; renderTree(); renderVisual(key);};
+      el.appendChild(div);
+    }
+  }
+}
+
+function renderVisual(path){
+  document.getElementById('breadcrumb').innerText=path+' • DIREITA - EDITOR EM TEMPO REAL - CLIQUE NAS COISAS DA DIREITA PRA ABRIR NELA MESMA';
+  let cont=document.getElementById('visual');
+  let node=data[path];
+  if(!node){
+    // folder virtual
+    let children=getChildren(path);
+    let keys=Object.keys(children);
+    if(keys.length===0){ cont.innerHTML='<div class="card">Pasta vazia - clique em + Adicionar na esquerda ou aqui</div>'; return; }
+    let html=`<div class="card"><div style="display:flex;justify-content:space-between"><h3 style="color:#00f5ff;font-size:12px">📂 ${path.split('/').pop()} • ${keys.length} itens • Banco de Dados</h3><div style="display:flex;gap:4px"><button class="btn" onclick="newItem('${path}')">+ ADICIONAR PRODUTO/PASTA</button><button class="btn" onclick="downloadPath('${path}')">ZIP DESTA PASTA</button></div></div></div>`;
+    html+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px">`;
+    keys.forEach(k=>{
+      let ch=children[k];
+      let fullPath=path+'/'+k;
+      let isProd=ch.type==='product';
+      if(isProd){
+        html+=`<div class="card" style="border-left:3px solid ${ch.disponivel!==false?'#00ff88':'#ff4d6d'};cursor:pointer" onclick="selectedPath='${fullPath}';renderTree();renderVisual('${fullPath}')">
+        <b style="font-size:11px">${ch.nome}</b><br><span style="font-size:8px">R$${ch.preco||'--'} • ${ch.marca||ch.categoria||''}</span><br><div style="margin-top:4px"><div class="toggle ${ch.disponivel!==false?'on':''}" onclick="event.stopPropagation();toggleDisp('${fullPath}')"></div> <span style="font-size:7px">${ch.disponivel!==false?'DISPONÍVEL':'INDISPONÍVEL'}</span></div><button style="font-size:7px;margin-top:4px" onclick="event.stopPropagation();selectedPath='${fullPath}';renderTree();renderVisual('${fullPath}')">EDITAR NA DIREITA</button>
+        </div>`;
+      } else {
+        html+=`<div class="card" style="cursor:pointer" onclick="selectedPath='${fullPath}';renderTree();renderVisual('${fullPath}')"><b>📁 ${ch.nome||k}</b><br><span style="font-size:8px">${Object.keys(getChildren(fullPath)).length} itens dentro - clique pra abrir aqui na direita</span><br><div style="margin-top:4px"><div class="toggle ${ch.disponivel!==false?'on':''}" onclick="event.stopPropagation();toggleDisp('${fullPath}')"></div> <span style="font-size:7px">${ch.disponivel!==false?'DISPONÍVEL':'INDISPONÍVEL'}</span></div></div>`;
+      }
+    });
+    html+=`</div>`;
+    cont.innerHTML=html;
+    return;
+  }
+  if(node.type==='folder'){
+    let children=getChildren(path);
+    let keys=Object.keys(children);
+    let html=`<div class="card"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px"><h3 style="color:#00f5ff;font-size:12px">📂 ${node.nome} • ${keys.length} itens</h3><div style="display:flex;gap:4px"><div class="toggle ${node.disponivel!==false?'on':''}" onclick="toggleDisp('${path}')"></div><span style="font-size:8px">${node.disponivel!==false?'DISPONÍVEL':'INDISPONÍVEL'}</span><button class="btn" onclick="newItem('${path}')">+ ADICIONAR</button><button class="btn" onclick="downloadPath('${path}')">ZIP DESTA PASTA</button></div></div></div>`;
+    html+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px">`;
+    keys.forEach(k=>{
+      let ch=children[k];
+      let fullPath=path+'/'+k;
+      let isProd=ch.type==='product';
+      if(isProd){
+        html+=`<div class="card" style="border-left:3px solid ${ch.disponivel!==false?'#00ff88':'#ff4d6d'};cursor:pointer" onclick="selectedPath='${fullPath}';renderTree();renderVisual('${fullPath}')"><b style="font-size:11px">${ch.nome}</b><br><span style="font-size:8px">R$${ch.preco}</span><br><div class="toggle ${ch.disponivel!==false?'on':''}" onclick="event.stopPropagation();toggleDisp('${fullPath}')"></div></div>`;
+      } else {
+        html+=`<div class="card" style="cursor:pointer" onclick="selectedPath='${fullPath}';renderTree();renderVisual('${fullPath}')"><b>📁 ${ch.nome||k}</b><br><span style="font-size:8px">${Object.keys(getChildren(fullPath)).length} itens - clique pra abrir na direita</span></div>`;
+      }
+    });
+    html+=`</div>`;
+    cont.innerHTML=html;
+  } else {
+    // PRODUCT EDITOR BANCO DE DADOS
+    let prod=node;
+    let html=`<div class="card" style="border-left:4px solid #00f5ff">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap"><div><div style="font-size:8px;color:#8b949e">BANCO DE DADOS • ${path}</div><h2 style="font-size:14px;margin:2px 0" contenteditable="true" onblur="updateField('${path}','nome',this.innerText)">${prod.nome}</h2><div style="font-size:10px">Marca: <span contenteditable="true" style="border-bottom:1px dashed #333" onblur="updateField('${path}','marca',this.innerText)">${prod.marca||''}</span> • Preço: R$ <span contenteditable="true" style="border-bottom:1px dashed #333" onblur="updateField('${path}','preco',this.innerText)">${prod.preco||0}</span> • Estoque: <span contenteditable="true" style="border-bottom:1px dashed #333" onblur="updateField('${path}','estoque',this.innerText)">${prod.estoque||0}</span></div></div><div style="text-align:right"><div style="font-size:9px">DISPONÍVEL?</div><div class="toggle ${prod.disponivel!==false?'on':''}" onclick="toggleDisp('${path}')" style="width:36px;height:18px"></div><div style="font-size:8px">${prod.disponivel!==false?'🟢 SIM':'🔴 NÃO'}</div></div></div>
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:8px;margin-top:8px">
+      <div>${(prod.fotos||[]).map((f,i)=>`<div style="width:60px;height:60px;border:1px solid #333;border-radius:4px;overflow:hidden;position:relative;margin-bottom:4px"><img src="${f}" style="width:100%;height:100%;object-fit:cover"><button onclick="removeFoto('${path}',${i})" style="position:absolute;top:0;right:0;background:#000;color:#fff;border:none;width:14px;height:14px;font-size:8px;border-radius:50%">x</button></div>`).join('')}<button onclick="addFoto('${path}')" style="font-size:8px;width:60px">+ FOTO</button><div style="margin-top:6px"><div style="font-size:8px">VÍDEOS</div>${(prod.videos||[]).map(v=>`<div style="font-size:8px">${v.substring(0,15)}...</div>`).join('')}<button onclick="addVideo('${path}')" style="font-size:8px">+ VÍDEO</button></div></div>
+      <div><div style="width:100%;height:160px;border:1px solid #333;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#000"><img src="${(prod.fotos&&prod.fotos[0])||'https://via.placeholder.com/300x300/00f5ff/000?text=Produto'}" style="max-width:100%;max-height:100%"></div><div style="margin-top:6px"><b style="font-size:9px">PREÇOS VARIAÇÃO</b><table style="width:100%;font-size:8px;border-collapse:collapse"><tr><th>Combinação</th><th>R$</th><th>Disp</th></tr>${(prod.precosVariacao||[]).map((pv,i)=>`<tr><td><input value="${pv.combinacao}" style="width:100%;background:#0d1117;border:1px solid #333;color:#fff;font-size:8px" oninput="updateSub('${path}','precosVariacao',${i},'combinacao',this.value)"></td><td><input type="number" value="${pv.preco}" style="width:50px;background:#0d1117;border:1px solid #333;color:#fff;font-size:8px" oninput="updateSub('${path}','precosVariacao',${i},'preco',this.value)"></td><td><div class="toggle ${pv.disponivel!==false?'on':''}" onclick="toggleSub('${path}','precosVariacao',${i})" style="width:22px;height:12px"></div></td></tr>`).join('')}</table><button onclick="addSub('${path}','precosVariacao')" style="font-size:7px">+ Variação</button></div></div>
+    </div>
+    </div>`;
+
+    function section(field, title){
+      if(!prod[field]) return '';
+      let h=`<div class="card"><b style="font-size:10px;color:#00f5ff">${title} - clique no nome pra editar, toggle pra disponível/indisponível</b><div style="margin-top:4px">`;
+      (prod[field]||[]).forEach((it,i)=>{
+        h+=`<div style="display:flex;gap:3px;align-items:center;margin:3px 0;background:#0d1117;padding:5px;border-radius:6px"><input value="${it.nome}" style="flex:1;background:#161b22;border:1px solid #333;color:#fff;border-radius:4px;padding:4px;font-size:10px" oninput="updateSub('${path}','${field}',${i},'nome',this.value)"><input type="number" value="${it.preco||''}" placeholder="R$" style="width:55px;background:#161b22;border:1px solid #333;color:#fff;border-radius:4px;padding:4px;font-size:10px" oninput="updateSub('${path}','${field}',${i},'preco',this.value)">${it.gramas?`<span style="font-size:8px">${it.gramas}</span>`:''}<div class="toggle ${it.disponivel!==false?'on':''}" onclick="toggleSub('${path}','${field}',${i})"></div><button onclick="removeSub('${path}','${field}',${i})" style="font-size:7px">X</button></div>`;
+      });
+      h+=`<button onclick="addSub('${path}','${field}')" style="font-size:8px">+ Adicionar ${title.split(' ')[0]}</button></div></div>`;
+      return h;
+    }
+
+    html+=section('modelos','1. MODELOS');
+    html+=section('sabores','2. SABORES');
+    html+=section('quantidades','3. GRAMAS / KG');
+    html+=section('embalagens','4. EMBALAGENS (Pote, Refil, Sachê)');
+    html+=section('cores','2. CORES');
+    html+=section('tamanhos','3. TAMANHOS (PP ao X6G ou 33 ao 47)');
+
+    html+=`<div class="card"><b style="font-size:9px">DESCRIÇÃO</b><textarea style="width:100%;background:#0d1117;border:1px solid #333;color:#fff;border-radius:4px;padding:6px;font-size:11px" rows="3" oninput="updateField('${path}','descricao',this.value)">${prod.descricao||''}</textarea></div>`;
+    html+=`<div style="display:flex;gap:4px"><button class="btn" onclick="save()">SALVAR</button><button class="btn" onclick="downloadPath('${path}')">ZIP INDIVIDUAL DESTE PRODUTO</button><button class="btn" style="background:#ff4d6d;color:#fff" onclick="deleteNode('${path}')">EXCLUIR</button></div>`;
+
+    cont.innerHTML=html;
+  }
+}
+
+function toggleDisp(path){
+  if(data[path]){ data[path].disponivel = data[path].disponivel===false ? true : false; save(); renderTree(); renderVisual(path); }
+}
+function updateField(path, field, val){
+  if(data[path]){ data[path][field]=val; save(); }
+}
+function updateSub(path, field, idx, subfield, val){
+  if(data[path] && data[path][field] && data[path][field][idx]){ data[path][field][idx][subfield]=val; save(); }
+}
+function toggleSub(path, field, idx){
+  if(data[path] && data[path][field] && data[path][field][idx]){ data[path][field][idx].disponivel = data[path][field][idx].disponivel===false ? true : false; save(); renderVisual(path); }
+}
+function addSub(path, field){
+  if(!data[path]) return;
+  if(!data[path][field]) data[path][field]=[];
+  data[path][field].push({nome:"Novo "+field, disponivel:true, preco:0, gramas: field==='quantidades'?"500g":undefined});
+  save(); renderVisual(path);
+}
+function removeSub(path, field, idx){
+  if(data[path] && data[path][field]){ data[path][field].splice(idx,1); save(); renderVisual(path); }
+}
+function addFoto(path){
+  let url=prompt('URL foto');
+  if(!url) return;
+  if(!data[path].fotos) data[path].fotos=[];
+  data[path].fotos.push(url);
+  save(); renderVisual(path);
+}
+function removeFoto(path, idx){
+  data[path].fotos.splice(idx,1);
+  save(); renderVisual(path);
+}
+function addVideo(path){
+  let url=prompt('URL vídeo');
+  if(!url) return;
+  if(!data[path].videos) data[path].videos=[];
+  data[path].videos.push(url);
+  save(); renderVisual(path);
+}
+function newItem(path){
+  let nome=prompt('Nome novo produto/pasta?');
+  if(!nome) return;
+  let isProd=confirm('É produto? OK=Produto');
+  let key=path+'/'+nome.toLowerCase().replace(/[^a-z0-9]/g,'-');
+  if(isProd){
+    data[key]={nome:nome, type:"product", disponivel:true, preco:99, estoque:10, modelos:[{nome:"Modelo Padrão",disponivel:true,preco:99}], sabores:[], quantidades:[{nome:"500g",gramas:"500g",disponivel:true,preco:99}], embalagens:[{nome:"Pote",disponivel:true,preco:99}], cores:[], tamanhos:[], fotos:[], videos:[], descricao:"", precosVariacao:[]};
+  } else {
+    data[key]={nome:nome, type:"folder", disponivel:true, children:{}};
+  }
+  save(); renderTree(); renderVisual(path);
+}
+function deleteNode(path){
+  if(!confirm('Excluir '+path+'?')) return;
+  delete data[path];
+  // delete children
+  for(let k in data){ if(k.startsWith(path+'/')) delete data[k]; }
+  save(); renderTree(); document.getElementById('visual').innerHTML='<div class="card">Excluído - código fonte atualizado</div>';
+}
+function downloadPath(path){
+  let blob=new Blob([JSON.stringify(data[path]||getChildren(path),null,2)],{type:'application/json'});
+  let url=URL.createObjectURL(blob);
+  let a=document.createElement('a'); a.href=url; a.download=path.replace(/\//g,'_')+'.json'; a.click();
+}
+function downloadZip(){
+  let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  let url=URL.createObjectURL(blob);
+  let a=document.createElement('a'); a.href=url; a.download='KORVIL_ESTEIRA_FINAL_COMPLETO.json'; a.click();
+}
+function toggleSource(){
+  let el=document.getElementById('sourcePanel');
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+
+renderTree();
+renderVisual(selectedPath);
+</script>
+</body>
+</html>
