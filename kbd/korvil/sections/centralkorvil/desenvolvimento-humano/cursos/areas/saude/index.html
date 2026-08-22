@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000">
+<title>Saúde| KORVIL</title>
+<style>
+:root{--c:#00f5ff;--bg:#000;--card:#0a0a0a;--text:#fff;--text2:#aaa;--borda:#1f1f1f;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);padding:20px;max-width:700px;margin:auto;animation:fadeIn .3s;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.logo{max-width:180px;margin:0 auto 16px;display:block;border:2px solid var(--c);border-radius:16px;padding:8px;background:#000;box-shadow:0 0 15px var(--c)30;cursor:pointer;}
+h1{text-align:center;color:var(--c);font-size:20px;font-weight:800;margin-bottom:6px;text-shadow:0 0 10px var(--c);}
+.sub{text-align:center;color:var(--text2);font-size:13px;margin-bottom:20px;}
+
+.card{background:var(--card);border:1.5px solid var(--borda);border-radius:12px;padding:16px;margin-bottom:12px;cursor:pointer;transition:.2s;}
+.card:active{border-color:var(--c);transform:scale(.98);box-shadow:0 0 15px var(--c)30;}
+.card h2{color:var(--c);font-size:15px;font-weight:700;margin-bottom:6px;}
+.card p{color:var(--text2);font-size:13px;line-height:1.6;}
+
+.btn{background:var(--c);color:#000;text-align:center;padding:14px 16px;border-radius:10px;text-decoration:none;font-weight:800;font-size:14px;display:block;margin-top:16px;}
+.btn:active{transform:scale(.97);filter:brightness(1.2);}
+.btn.voltar{background:#222;color:var(--text);margin-top:8px;}
+</style>
+</head>
+<body>
+
+<img src="https://korvilp-sudo.github.io/korvil-app/assets/images/korvil-logo.png" class="logo" onclick="window.location.href='kth/index.html'">
+<h1>🏥 SAÚDE</h1>
+<div class="sub">Clique abaixo para acessar</div>
+
+<div class="card" onclick="window.location.href='kth/index.html'">
+  <h2>K-TH - TERAPIAS HOLÍSTICAS</h2>
+  <p>Formação Profissional em Massoterapia, Reiki, Aromaterapia, Reflexologia e Cromoterapia. Certificado KORVIL.</p>
+</div>
+
+<a href="kth/index.html" class="btn">ACESSAR K-TH</a>
+<a href="../index.html" class="btn voltar">Voltar para Áreas</a>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+backend:
+  name: github
+  repo: korvilp-sudo/korvil-app
+  branch: main
+
+media_folder: "sections/centralkorvil/korvil-loja/uploads"
+public_folder: "/uploads"
+
+publish_mode: editorial_workflow
+
+collections:
+    - name: "produtos"
+    label: "📦 CADASTRAR PRODUTO SISTEMA K"
+    label_singular: "Produto"
+    folder: "sections/centralkorvil/korvil-loja"
+    create: true
+    slug: "{{sistema}}/{{area}}/marcas/{{marca}}/produtos/{{produto}}"
+    extension: "html"
+    summary: "{{sistema}} > {{area}} > {{marca}} > {{titulo}}"
+    fields:
+            - {label: "1. ESCOLHA O SISTEMA", name: "sistema", widget: "select", options: ["K", "K-TP", "K-AFORTUNADO", "K-ALMA"]}
+            - {label: "2. ESCOLHA A ÁREA", name: "area", widget: "select", options: ["Profissionais", "Tecnologias", "Suplementos", "Acessorios", "Alimentos", "Livros", "Financas", "Empreendedorismo", "Saude", "Beleza", "Terapias"]}
+            - {label: "3. MARCA / PROFISSIONAL", name: "marca", widget: "string", hint: "Ex: Profit, CorpoPerfeito"}
+            - {label: "4. NOME DA PASTA DO PRODUTO", name: "produto", widget: "string", hint: "Ex: whey-3kg"}
+            - {label: "5. TÍTULO DO PRODUTO", name: "titulo", widget: "string"}
+            - {label: "6. PREÇO R$", name: "preco", widget: "number", value_type: "float"}
+            - {label: "7. SABOR", name: "sabor", widget: "string", required: false}
+            - {label: "8. PESO/TAMANHO", name: "peso", widget: "string", required: false}
+            - {label: "9. IMAGEM DO PRODUTO", name: "imagem", widget: "image", required: false}
+            - {label: "10. DESCRIÇÃO", name: "descricao", widget: "markdown"}
