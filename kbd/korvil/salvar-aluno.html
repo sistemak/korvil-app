@@ -1,0 +1,35 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>KTP</title>
+<style>body{background:#000;color:#00f5ff;padding:20px;text-align:center;font-family:sans-serif}input,button{padding:14px;width:90%;border-radius:8px;border:1px solid #00f5ff;background:#111;color:#00f5ff}button{background:#00f5ff;color:#000;font-weight:bold}</style></head><body>
+<h2>CRIAR ALUNO NA PASTA 2026</h2>
+<input id="nome" placeholder="Nome: Lucas Davi8">
+<button onclick="criar()">CRIAR ARQUIVO REAL</button>
+<div id="log" style="margin-top:20px"></div>
+
+<script>
+const REPO = "korvilp-sudo/korvil-app";
+
+async function criar(){
+  const nome = document.getElementById('nome').value;
+  if(!nome) return alert("Digite nome");
+  const id = "aluno" + Date.now();
+  const dados = JSON.stringify({nome:nome, status:"Ativo", data:new Date().toLocaleString()});
+
+  document.getElementById('log').innerText = "Enviando pedido... Aguarde 20s";
+
+  const res = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/salvar-aluno.yml/dispatches`,{
+    method:'POST',
+    headers:{"Content-Type":"application/json"}, // SEM TOKEN AQUI
+    body:JSON.stringify({
+      ref:"main",
+      inputs:{id:id, dados:dados}
+    })
+  });
+
+  if(res.status == 204){
+    document.getElementById('log').innerText = "✅ Pedido enviado!\nEspere 20 segundos e dê F5 na pasta 2026\nArquivo: "+id+".json";
+  } else {
+    const txt = await res.text();
+    document.getElementById('log').innerText = "❌ Deu erro: " + res.status + "\n" + txt;
+  }
+}
+</script></body></html>

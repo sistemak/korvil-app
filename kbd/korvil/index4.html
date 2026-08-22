@@ -1,0 +1,56 @@
+<!--
+IA GEMINI: A.Q.Ab8RN6I1Nzr5DA9JesCA8jUPrUo2_DSx7HDczIxILa7dS7RNPw
+Github token g.hp_GV0BuP2xzUBQ5tefZYS7ISnlfiIa7Q1zMfai
+SÓ LEMBRETE FALSO
+-->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>GEMINI FUNCIONANDO AGORA</title>
+<style>
+body{background:#000;color:#0f0;font-family:monospace;padding:20px}
+input,textarea,button{width:100%;padding:10px;margin:10px 0;background:#111;border:1px solid #0f0;color:#0f0}
+button{background:#0f0;color:#000;font-weight:bold;cursor:pointer}
+#resposta{border:1px solid #0f0;padding:10px;min-height:200px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<h2>GEMINI IA - SEM ERRO</h2>
+
+Cole seu AQ_TOKEN: <input id="token" type="password">
+Prompt: <textarea id="prompt" rows="3">Me diga oi</textarea>
+<button onclick="rodar()">RODAR IA</button>
+
+Resposta:
+<div id="resposta"></div>
+
+<script>
+async function rodar(){
+  const token = document.getElementById('token').value;
+  const prompt = document.getElementById('prompt').value;
+  const div = document.getElementById('resposta');
+  div.innerText = "Carregando...";
+  
+  try {
+    // USEI PROXY PRA NÃO DAR ERRO DE CORS NO GITHUB PAGES
+    const url = `https://corsproxy.io/?https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${token}`;
+    
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({contents: [{parts: [{text: prompt}]}]})
+    });
+    const data = await r.json();
+    
+    if(data.error) div.innerText = "ERRO: " + data.error.message;
+    else div.innerText = data.candidates[0].content.parts[0].text;
+    
+  } catch(e){
+    div.innerText = "ERRO: " + e.message;
+  }
+}
+</script>
+</body>
+</html>
