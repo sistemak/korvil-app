@@ -1,0 +1,11 @@
+{
+  "type": "product",
+  "nome": "Creatina 300g Profit",
+  "marca": "PROFIT",
+  "tipo": "Creatina",
+  "subtipo": "monohidratada",
+  "gramas": "Pote 300g",
+  "disponivel": true,
+  "preco": 79,
+  "estoque": 150
+}
