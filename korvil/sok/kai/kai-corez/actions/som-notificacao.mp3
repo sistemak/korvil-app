@@ -1,0 +1,12 @@
+
+// kai-core/actions/notificacao.js
+
+export const tocarNotificacao = () => {
+    try {
+        const audio = new Audio('../assets/som-notificacao.mp3');
+        audio.volume = 0.5;
+        audio.play().catch(e => console.warn("Interação necessária para áudio:", e));
+    } catch (err) {
+        console.error("Erro ao reproduzir notificação:", err);
+    }
+};
