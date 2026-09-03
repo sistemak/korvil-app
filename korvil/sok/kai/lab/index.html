@@ -1,0 +1,468 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>KORVIL v43 - EXATO - K-B.D ícone principal primeiro + Menu lado direito + lista vertical igual PC com botoes e sub-botoes dentro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box}
+html,body{margin:0;background:#1e1e1e;color:#cccccc;height:100%;width:100%;overflow:hidden;font-family:'Inter',system-ui,sans-serif}
+.mono{font-family:'JetBrains Mono',monospace}
+.pc-topbar{height:40px;min-height:40px;background:#181818;border-bottom:1px solid #2d2d2d;display:flex;align-items:center;justify-content:space-between;padding:0 6px;flex-shrink:0;user-select:none}
+.kbd-principal-pc{height:32px;padding:0 10px 0 6px;background:#007acc;color:#fff;display:flex;align-items:center;gap:8px;font-weight:800;font-size:12px;letter-spacing:.02em;border-radius:4px;cursor:pointer;border:1px solid #007acc;font-family:'JetBrains Mono',monospace}
+.kbd-principal-pc .k-icon{width:22px;height:22px;background:#fff;color:#007acc;border-radius:3px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px}
+.kbd-principal-pc:hover{background:#1a8ad1}
+.menu-btn-pc{height:32px;padding:0 14px;background:#2d2d2d;color:#cccccc;border:1px solid #3c3c3c;border-radius:4px;display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer}
+.menu-btn-pc:hover{background:#3c3c3c;color:#fff}
+.menu-btn-pc.active{background:#3c3c3c;color:#fff;border-color:#007acc}
+/* MENU VERTICAL IGUAL PC - LISTA VERTICAL COM BOTOES E SUB-BOTOES DENTRO DE CADA COISA */
+.vertical-pc-menu{position:fixed;top:40px;right:6px;width:340px;max-width:94vw;max-height:84vh;background:#252526;border:1px solid #3c3c3c;border-radius:6px;box-shadow:0 16px 48px rgba(0,0,0,.85);z-index:600;display:none;flex-direction:column;overflow:hidden}
+.vertical-pc-menu.open{display:flex;animation:pop .12s ease-out}
+@keyframes pop{from{transform:translateY(-8px);opacity:0}to{transform:translateY(0);opacity:1}}
+.v-header-pc{padding:10px 12px;font-size:10px;font-weight:700;letter-spacing:.1em;color:#858585;background:#2d2d2d;border-bottom:1px solid #3c3c3c;display:flex;justify-content:space-between;align-items:center}
+.v-list-pc{flex:1;overflow:auto;padding:4px 0}
+.btn-pc{padding:8px 12px;font-size:11px;display:flex;align-items:center;gap:8px;cursor:pointer;color:#cccccc;border-left:3px solid transparent;position:relative;min-height:36px}
+.btn-pc:hover{background:#2a2d2e;color:#fff}
+.btn-pc.selected{background:#094771;color:#fff;border-left-color:#007acc}
+.btn-pc.sub-btn{padding-left:28px;background:rgba(0,0,0,.15);font-size:11px;border-left-color:#3c3c3c}
+.btn-pc.sub-btn:hover{background:#2a2d2e;border-left-color:#007acc}
+.btn-pc.sub-sub-btn{padding-left:42px;background:rgba(0,0,0,.25);font-size:10px}
+.btn-pc.group-btn{background:#2d2d2d;color:#858585;font-weight:700;font-size:10px;letter-spacing:.06em;cursor:pointer}
+.btn-pc.group-btn:hover{background:#3c3c3c;color:#cccccc}
+.btn-pc.kbd-btn{color:#4fc3f7}
+.btn-pc.kbd-btn:hover{background:rgba(0,122,204,.15);color:#4fc3f7}
+.btn-pc.kithub-btn{color:#6ee7b7}
+.btn-pc.kithub-btn:hover{background:rgba(16,185,129,.12);color:#a7f3d0}
+.btn-pc .arrow{margin-left:auto;font-size:10px;color:#858585;transition:transform .15s}
+.btn-pc.open .arrow{transform:rotate(90deg)}
+.btn-pc .badge{font-size:8px;padding:2px 5px;border-radius:999px;background:#3c3c3c;color:#858585;margin-left:auto}
+.sub-container{display:none;flex-direction:column;background:rgba(0,0,0,.15);border-top:1px solid #2d2d2d;border-bottom:1px solid #2d2d2d}
+.sub-container.open{display:flex}
+.workspace{flex:1;display:flex;overflow:hidden;min-height:0}
+.tree{width:320px;background:#252526;border-right:1px solid #3c3c3c;overflow:auto;flex-shrink:0;display:flex;flex-direction:column}
+.main{flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column;background:#1e1e1e}
+.item{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:2px;cursor:pointer;font-size:11px;min-width:0;color:#cccccc}
+.item:hover{background:#2a2d2e}
+.item.selected{background:#094771;color:#fff}
+.children{margin-left:14px;border-left:1px solid #3c3c3c;padding-left:6px}
+.mini-menu{position:fixed;z-index:500;min-width:240px;max-width:90vw;background:#252526;border:1px solid #3c3c3c;border-radius:4px;box-shadow:0 12px 32px rgba(0,0,0,.8);display:none}
+.mini-menu.open{display:block}
+.mini-header{padding:8px 12px;border-bottom:1px solid #3c3c3c;background:#2d2d2d;display:flex;justify-content:space-between}
+.mini-row{display:flex;gap:8px;padding:7px 12px;font-size:11px;cursor:pointer;color:#cccccc}
+.mini-row:hover{background:#2a2d2e;color:#fff}
+.footer{height:22px;background:#007acc;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 8px;font-size:10px;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;color:#858585;text-align:center;overflow:auto;background:#1e1e1e}
+.code-top{height:35px;background:#2d2d2d;border-bottom:1px solid #3c3c3c;display:flex;align-items:center;justify-content:space-between;padding:0 8px;flex-shrink:0;gap:6px}
+.code-wrap{flex:1;display:flex;overflow:hidden;min-height:0}
+.code-pane{flex:1;display:flex;flex-direction:column;min-width:0;border-right:1px solid #3c3c3c;min-height:0}
+.editor{flex:1;width:100%;background:#1e1e1e;color:#d4d4d4;border:none;outline:none;padding:12px;font-size:12px;resize:none;font-family:'JetBrains Mono',monospace}
+.preview{flex:1;border:none;background:white;width:100%}
+.index-wrap{flex:1;overflow:auto;min-height:0;background:#1e1e1e}
+.index-header{padding:12px 14px;border-bottom:1px solid #3c3c3c;background:#2d2d2d;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.index-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;padding:12px}
+.index-card{border:1px solid #3c3c3c;border-radius:4px;background:#252526;padding:10px;cursor:pointer}
+.index-card:hover{background:#2a2d2e;border-color:#007acc}
+.auto-badge{font-size:9px;padding:3px 8px;border-radius:999px;background:#16825d;color:#fff;font-family:'JetBrains Mono',monospace}
+@media (max-width:900px){ .pc-topbar{height:auto;min-height:40px;flex-wrap:wrap} .vertical-pc-menu{left:4px;right:4px;width:auto;max-width:none} .workspace{flex-direction:column} .tree{width:100%;height:36%} .code-wrap{flex-direction:column} .index-grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="pc-topbar">
+  <div class="kbd-principal-pc" id="kbdPrincipal"><div class="k-icon">K</div><span>K-B.D</span></div>
+  <div style="display:flex;align-items:center;gap:8px"><span style="font-size:10px;color:#858585" class="mono">Visual exatamente igual PC • auto save total sem botão</span><div class="menu-btn-pc" id="menuBtnPc"><span>☰</span><span>Menu</span></div></div>
+</div>
+
+<div class="vertical-pc-menu" id="verticalPcMenu">
+  <div class="v-header-pc"><span>MENU VERTICAL IGUAL PC • BOTÕES E SUB-BOTÕES DENTRO DE CADA COISA</span><span style="font-size:8px;color:#4fc3f7">AUTO SAVE</span></div>
+  <div class="v-list-pc" id="vListPc">
+    <!-- ORDEM EXATA COMO PEDIU: -->
+    <!-- Banco de dados , ao clicar mostre em baixo dele o K-B.D na tela pra uso -->
+    <div class="btn-pc kbd-btn" data-btn="banco" id="btnBanco"><span>🗄️</span><span style="flex:1">Banco de dados</span><span class="arrow">›</span></div>
+    <div class="sub-container" id="subBanco">
+      <div class="btn-pc sub-btn kbd-btn" data-action="kbd_real"><span>🗄️</span><span style="flex:1">K-B.D</span><span class="badge">estrutura completa Github</span></div>
+    </div>
+    <!-- em baixo de K-B.D mostre S.O.K -->
+    <div class="btn-pc" data-btn="sok" id="btnSok"><span>🖥️</span><span style="flex:1">S.O.K</span><span class="arrow">›</span></div>
+    <div class="sub-container" id="subSok">
+      <div class="btn-pc sub-btn" data-action="sok_os"><span>🖥️</span><span style="flex:1">SISTEMA OPERACIONAL KORVIL</span><span class="badge">S.O.K</span></div>
+    </div>
+    <!-- em baixo de o sistema operacional korvil, mostre o K-AI -->
+    <div class="btn-pc" data-btn="kai" id="btnKai"><span>🤖</span><span style="flex:1">K-AI</span></div>
+    <!-- em baixo do K-B.D, mostre Programas -->
+    <div class="btn-pc group-btn" data-btn="programas" id="btnProgramas"><span>📦</span><span style="flex:1">Programas</span><span class="arrow">›</span></div>
+    <div class="sub-container" id="subProgramas">
+      <div class="btn-pc sub-btn" data-action="kriador"><span>🔧</span><span style="flex:1">K-RIADOR</span><span class="badge">sistema original</span></div>
+      <div class="btn-pc sub-btn kithub-btn" data-action="kithub"><span>🐙</span><span style="flex:1">k-ithub</span><span class="badge">sistema original</span></div>
+    </div>
+    <!-- em baixo de Programas, mostre ferramentas -->
+    <div class="btn-pc group-btn" data-btn="ferramentas" id="btnFerramentas"><span>🛠️</span><span style="flex:1">ferramentas</span><span class="arrow">›</span></div>
+    <div class="sub-container" id="subFerramentas">
+      <div class="btn-pc sub-btn" data-action="keditor"><span>📝</span><span style="flex:1">k-editor</span><span class="badge">mostre na tela etc</span></div>
+      <div class="btn-pc sub-btn" data-action="konversa"><span>💬</span><span style="flex:1">K-onversa</span><span class="badge">mostre na tela etc</span></div>
+    </div>
+  </div>
+  <div style="padding:8px 12px;border-top:1px solid #3c3c3c;background:#2d2d2d;font-size:9px;color:#858585">💾 Tudo se salva e atualiza sozinho o tempo todo a qualquer uso ou alterações durante o uso em todo o código, sem precisar clicar nos botões pra fazer isso • visual exatamente igual PC • botões e sub-botões dentro de cada coisa</div>
+</div>
+
+<div class="workspace">
+  <div class="tree" id="tree"></div>
+  <div class="main" id="main"><div id="mainContent" style="flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0"></div></div>
+</div>
+<div class="footer"><span id="status">Sempre mostre a tela inicial sem nada aberto por enquanto • K-B.D ícone principal primeiro • Menu lado direito • lista vertical igual PC com botões e sub-botões • auto save total sem botão</span><span>● auto save sem botão</span></div>
+<div id="miniMenu" class="mini-menu"></div>
+
+<script>
+let NODES = [{"id": "id_1787763422000039_5296", "name": "KORVIL: Central KORVIL:", "type": "folder", "parentId": null, "content": ""}, {"id": "id_1787763422000046_8313", "name": "serviços :", "type": "folder", "parentId": "id_1787763422000039_5296", "content": ""}, {"id": "id_1787763422000049_5373", "name": "negócios :", "type": "folder", "parentId": "id_1787763422000039_5296", "content": ""}, {"id": "id_1787763422000050_9396", "name": "parcerias:", "type": "folder", "parentId": "id_1787763422000039_5296", "content": ""}, {"id": "id_1787763422000052_1544", "name": "(Pasta de funcionamento desse sistema): aqui toda a explicação", "type": "folder", "parentId": "id_1787763422000039_5296", "content": ""}, {"id": "id_1787763422000054_2169", "name": "README - ordem exata + atalhos", "type": "folder", "parentId": "id_1787763422000052_1544", "content": "Clique simples esquerdo = mini-menu | Clique na pasta = abre/fecha | Delete = exclui | Ctrl+Z desfaz | Ctrl+C/V copiar/colar | Arrastar move sem duplicar | Duplicar só no botão Duplicar"}, {"id": "id_1787763422000055_6840", "name": "Setores :", "type": "folder", "parentId": "id_1787763422000039_5296", "content": ""}, {"id": "id_1787763422000057_7136", "name": "1. Central KORVIL", "type": "folder", "parentId": "id_1787763422000055_6840", "content": ""}, {"id": "id_1787763422000059_1319", "name": "2. Sistema K", "type": "folder", "parentId": "id_1787763422000055_6840", "content": ""}, {"id": "id_1787763422000064_6180", "name": "3. K-TP", "type": "folder", "parentId": "id_1787763422000055_6840", "content": ""}, {"id": "id_1787763422000065_6966", "name": "1. Representantes", "type": "folder", "parentId": "id_1787763422000064_6180", "content": ""}, {"id": "id_1787763422000067_1457", "name": "2. Vendedores: ", "type": "folder", "parentId": "id_1787763422000064_6180", "content": ""}, {"id": "id_1787763422000068_2813", "name": "vendedores internos", "type": "folder", "parentId": "id_1787763422000067_1457", "content": ""}, {"id": "id_1787763422000069_1436", "name": "K-TP - COMO FUNCIONA - 3 PASSOS + PROVA 30% OFF - R$12 mínimo.txt", "type": "folder", "parentId": "id_1787763422000068_2813", "content": "SIM, tenho certeza absoluta. DZ metade original: 1x30 2x40 3x50 4x65 5x75\n1x R$60 -18 = R$42 -30 = R$12 ✅\n2x R$80 -24 = R$56 -40 = R$16 ✅\n3x R$100 -30 = R$70 -50 = R$20 ✅\n4x R$130 -39 = R$91 -65 = R$26 (31 com DZ60) ✅\n5x R$150 -45 = R$105 -75 = R$30 (35 com DZ70) ✅\nNunca negativo, nunca abaixo R$12, 30% OFF limite perfeito"}, {"id": "id_1787763422000070_7172", "name": "vendedores externos:", "type": "folder", "parentId": "id_1787763422000067_1457", "content": ""}, {"id": "id_1787763422000072_1097", "name": "Parceiros contratados:", "type": "folder", "parentId": "id_1787763422000070_7172", "content": ""}, {"id": "id_1787763422000076_7895", "name": "1. Alana Silva", "type": "folder", "parentId": "id_1787763422000072_1097", "content": ""}, {"id": "id_1787763422000078_5966", "name": "2. Diego Oliveira", "type": "folder", "parentId": "id_1787763422000072_1097", "content": ""}, {"id": "id_1787763422000079_8316", "name": "3. Paula Dante", "type": "folder", "parentId": "id_1787763422000072_1097", "content": ""}, {"id": "id_1787763422000083_8338", "name": "4. Fabiana Tomaz", "type": "folder", "parentId": "id_1787763422000072_1097", "content": ""}, {"id": "id_1787763422000084_8940", "name": "5. Flávia Gomes", "type": "folder", "parentId": "id_1787763422000072_1097", "content": ""}, {"id": "id_1787763422000086_6347", "name": "3. K-TP :", "type": "folder", "parentId": "id_1787763422000046_8313", "content": ""}, {"id": "id_1787763422000087_1962", "name": "1. Representantes", "type": "folder", "parentId": "id_1787763422000086_6347", "content": ""}, {"id": "id_1787763422000089_2102", "name": "2. Vendedores: ", "type": "folder", "parentId": "id_1787763422000086_6347", "content": ""}, {"id": "id_1787763422000090_7308", "name": "vendedores internos", "type": "folder", "parentId": "id_1787763422000089_2102", "content": ""}, {"id": "id_1787763422000091_6693", "name": "K-TP - COMO FUNCIONA.txt", "type": "folder", "parentId": "id_1787763422000090_7308", "content": "Prova R$12 mínimo"}, {"id": "id_1787763422000093_9437", "name": "vendedores externos:", "type": "folder", "parentId": "id_1787763422000089_2102", "content": ""}, {"id": "id_1787763422000094_4246", "name": "Parceiros contratados:", "type": "folder", "parentId": "id_1787763422000093_9437", "content": ""}, {"id": "id_1787763422000095_6577", "name": "1. Alana Silva", "type": "folder", "parentId": "id_1787763422000094_4246", "content": ""}, {"id": "id_1787763422000097_6494", "name": "2. Diego Oliveira", "type": "folder", "parentId": "id_1787763422000094_4246", "content": ""}, {"id": "id_1787763422000098_2447", "name": "3. Paula Dante", "type": "folder", "parentId": "id_1787763422000094_4246", "content": ""}, {"id": "id_1787763422000100_9992", "name": "4. Fabiana Tomaz", "type": "folder", "parentId": "id_1787763422000094_4246", "content": ""}, {"id": "id_1787763422000101_5528", "name": "5. Flávia Gomes", "type": "folder", "parentId": "id_1787763422000094_4246", "content": ""}, {"id": "id_1787763422000103_5878", "name": "3. K-TP :", "type": "folder", "parentId": "id_1787763422000049_5373", "content": ""}, {"id": "id_1787763422000104_4707", "name": "1. Representantes", "type": "folder", "parentId": "id_1787763422000103_5878", "content": ""}, {"id": "id_1787763422000105_2210", "name": "2. Vendedores: ", "type": "folder", "parentId": "id_1787763422000103_5878", "content": ""}, {"id": "id_1787763422000107_7162", "name": "vendedores internos", "type": "folder", "parentId": "id_1787763422000105_2210", "content": ""}, {"id": "id_1787763422000108_2526", "name": "K-TP - COMO FUNCIONA.txt", "type": "folder", "parentId": "id_1787763422000107_7162", "content": "Prova R$12 mínimo"}, {"id": "id_1787763422000110_5105", "name": "vendedores externos:", "type": "folder", "parentId": "id_1787763422000105_2210", "content": ""}, {"id": "id_1787763422000111_9067", "name": "Parceiros contratados:", "type": "folder", "parentId": "id_1787763422000110_5105", "content": ""}, {"id": "id_1787763422000112_2406", "name": "1. Alana Silva", "type": "folder", "parentId": "id_1787763422000111_9067", "content": ""}, {"id": "id_1787763422000114_9974", "name": "2. Diego Oliveira", "type": "folder", "parentId": "id_1787763422000111_9067", "content": ""}, {"id": "id_1787763422000117_8508", "name": "3. Paula Dante", "type": "folder", "parentId": "id_1787763422000111_9067", "content": ""}, {"id": "id_1787763422000119_6311", "name": "4. Fabiana Tomaz", "type": "folder", "parentId": "id_1787763422000111_9067", "content": ""}, {"id": "id_1787763422000121_4359", "name": "5. Flávia Gomes", "type": "folder", "parentId": "id_1787763422000111_9067", "content": ""}, {"id": "id_1787763422000122_7179", "name": "3. K-TP :", "type": "folder", "parentId": "id_1787763422000050_9396", "content": ""}, {"id": "id_1787763422000124_1655", "name": "1. Representantes", "type": "folder", "parentId": "id_1787763422000122_7179", "content": ""}, {"id": "id_1787763422000125_6350", "name": "2. Vendedores: ", "type": "folder", "parentId": "id_1787763422000122_7179", "content": ""}, {"id": "id_1787763422000126_1036", "name": "vendedores internos", "type": "folder", "parentId": "id_1787763422000125_6350", "content": ""}, {"id": "id_1787763422000127_2910", "name": "K-TP - COMO FUNCIONA.txt", "type": "folder", "parentId": "id_1787763422000126_1036", "content": "Prova R$12 mínimo"}, {"id": "id_1787763422000129_9881", "name": "vendedores externos:", "type": "folder", "parentId": "id_1787763422000125_6350", "content": ""}, {"id": "id_1787763422000130_7956", "name": "Parceiros contratados:", "type": "folder", "parentId": "id_1787763422000129_9881", "content": ""}, {"id": "id_1787763422000131_9585", "name": "1. Alana Silva", "type": "folder", "parentId": "id_1787763422000130_7956", "content": ""}, {"id": "id_1787763422000133_7135", "name": "2. Diego Oliveira", "type": "folder", "parentId": "id_1787763422000130_7956", "content": ""}, {"id": "id_1787763422000134_7991", "name": "3. Paula Dante", "type": "folder", "parentId": "id_1787763422000130_7956", "content": ""}, {"id": "id_1787763422000135_8503", "name": "4. Fabiana Tomaz", "type": "folder", "parentId": "id_1787763422000130_7956", "content": ""}, {"id": "id_1787763422000136_2977", "name": "5. Flávia Gomes", "type": "folder", "parentId": "id_1787763422000130_7956", "content": ""}, {"id": "id_1787763422000138_3018", "name": "4. K-AFORTUNADO", "type": "folder", "parentId": "id_1787763422000055_6840", "content": ""}, {"id": "id_1787763422000139_2818", "name": "5. K-ALMA", "type": "folder", "parentId": "id_1787763422000055_6840", "content": ""}, {"id": "id_1787763422000141_1349", "name": "6. KORVIL LOJA (K.L)", "type": "folder", "parentId": "id_1787763422000055_6840", "content": ""}, {"id": "id_1787763422000142_5819", "name": "KORVIL LOJA ( - 5 SETORES + CENTRAL)", "type": "folder", "parentId": null, "content": ""}, {"id": "id_1787763422000143_8403", "name": "01 SETOR: SISTEMA K: ", "type": "folder", "parentId": "id_1787763422000142_5819", "content": ""}, {"id": "id_1787763422000145_9232", "name": "E-commerce:", "type": "folder", "parentId": "id_1787763422000143_8403", "content": ""}, {"id": "id_1787763422000146_3896", "name": "Loja Virtual Própria", "type": "folder", "parentId": "id_1787763422000145_9232", "content": ""}, {"id": "id_1787763422000147_9243", "name": "Marketplace (Shopee, Mercado Livre, Amazon)", "type": "folder", "parentId": "id_1787763422000145_9232", "content": ""}, {"id": "id_1787763422000151_4288", "name": "Manutenção de Celular:", "type": "folder", "parentId": "id_1787763422000143_8403", "content": ""}, {"id": "id_1787763422000155_9237", "name": "Tela: iPhone 11-15 Original Paralela InCell OLED", "type": "folder", "parentId": "id_1787763422000151_4288", "content": ""}, {"id": "id_1787763422000156_7922", "name": "Bateria: Samsung A10-A54 Turbo Original Paralela", "type": "folder", "parentId": "id_1787763422000151_4288", "content": ""}, {"id": "id_1787763422000157_4777", "name": "04 SETOR: K-TP: FITNESS:", "type": "folder", "parentId": "id_1787763422000142_5819", "content": ""}, {"id": "id_1787763422000161_8640", "name": "CATEGORIAS:", "type": "folder", "parentId": "id_1787763422000157_4777", "content": ""}, {"id": "id_1787763422000163_4836", "name": "ACESSÓRIOS: Corda Pular Faixa Elástica Mini Band", "type": "folder", "parentId": "id_1787763422000161_8640", "content": ""}, {"id": "id_1787763422000164_1842", "name": "EQUIPAMENTOS: Halteres Anilhas Barra Kettlebell", "type": "folder", "parentId": "id_1787763422000161_8640", "content": ""}, {"id": "id_1787763422000166_2940", "name": "PRODUTOS:", "type": "folder", "parentId": "id_1787763422000161_8640", "content": ""}, {"id": "id_1787763422000169_1581", "name": "SUPLEMENTOS: MARCAS: PROFIT GROWTH MAX TITANIUM DR PEANUTS", "type": "folder", "parentId": "id_1787763422000166_2940", "content": ""}, {"id": "id_1787763422000171_3944", "name": "VESTUÁRIOS: ROUPAS: FEMININO MASCULINO CALÇADOS: TÊNIS Modelos Tamanhos 34-44 Cores", "type": "folder", "parentId": "id_1787763422000166_2940", "content": ""}, {"id": "id_1787763422000172_7897", "name": "SERVIÇOS: TREINAMENTO PERSONALIZADO PROJETO TRANSFORMAÇÃO", "type": "folder", "parentId": "id_1787763422000166_2940", "content": ""}, {"id": "id_1787763422000173_9522", "name": "kbd", "type": "folder", "parentId": "id_1787763422000039_5296", "content": ""}, {"id": "id_1787763422000175_7006", "name": "korvil", "type": "folder", "parentId": "id_1787763422000173_9522", "content": ""}, {"id": "id_1787763422000177_1653", "name": "lab", "type": "folder", "parentId": "id_1787763422000175_7006", "content": ""}, {"id": "id_1787763422000178_2418", "name": "ferramentas-programas:", "type": "folder", "parentId": "id_1787763422000177_1653", "content": ""}, {"id": "id_1787763422000179_4688", "name": "K-RIADOR:", "type": "folder", "parentId": "id_1787763422000178_2418", "content": "", "isTool": true}, {"id": "id_1787786565440508_8464", "name": "k-ithub", "type": "folder", "parentId": "id_1787763422000178_2418", "content": "k-ithub clone tempo real", "isTool": true, "isKithub": true}, {"id": "id_1787786565440531_4342", "name": "k-editor", "type": "folder", "parentId": "id_1787763422000178_2418", "content": "<!DOCTYPE html><html><head><title>k-editor index</title></head><body><h1>k-editor index entrada</h1></body></html>", "isTool": true}, {"id": "id_1787786565440548_9944", "name": "K-onversa", "type": "folder", "parentId": "id_1787763422000178_2418", "content": "K-onversa index", "isTool": true}, {"id": "id_1787786565440557_5049", "name": "S.O.K", "type": "folder", "parentId": null, "content": "S.O.K SISTEMA OPERACIONAL KORVIL index", "isTool": true}, {"id": "id_1787786565440568_8621", "name": "K-AI", "type": "folder", "parentId": null, "content": "K-AI index", "isTool": true}, {"id": "id_1787786565440577_6978", "name": "Banco de dados", "type": "folder", "parentId": null, "content": "K-B.D Banco de dados estrutura completa repositorio Github", "isTool": true}, {"id": "id_1787786565440590_9259", "name": "SISTEMA OPERACIONAL KORVIL", "type": "folder", "parentId": "id_1787786565440557_5049", "content": "SISTEMA OPERACIONAL KORVIL index entrada", "isTool": true}, {"id": "id_1787786565440675_6203", "name": "K-B.D", "type": "folder", "parentId": "id_1787786565440577_6978", "content": "K-B.D estrutura completa repositório Github - index entrada - mesmas funções", "isTool": true, "isKBDReal": true}];
+let FERR_ID = "id_1787763422000178_2418";
+let KITHUB_ID = "id_1787786565440508_8464";
+let SOK_ID = "id_1787786565440557_5049";
+let KAI_ID = "id_1787786565440568_8621";
+let KBD_ID = "id_1787786565440577_6978";
+let KBD_REAL_ID = "id_1787786565440675_6203";
+let KEDITOR_ID = "id_1787786565440531_4342";
+let KONVERSA_ID = "id_1787786565440548_9944";
+let KRI_ID = "id_1787763422000179_4688";
+let SOK_OS_ID = "id_1787786565440590_9259";
+let expanded = new Set(NODES.filter(n=>n.parentId===null).map(n=>n.id));
+let selected = new Set();
+let history = [];
+let future = [];
+let clipboard = null;
+let draggingIds = [];
+let currentFileId = null;
+let autoSaveTimer = null;
+
+function saveHistory(){ history.push(JSON.stringify(NODES)); if(history.length>80) history.shift(); future=[]; try{ localStorage.setItem('korvil-v43-exato-botoes-subbotoes-auto-save-total', JSON.stringify(NODES)); }catch(e){} }
+function getChildren(pid){ return NODES.filter(n=>n.parentId===pid); }
+function isDescendant(c,a){ let cur=NODES.find(n=>n.id===c); while(cur){ if(cur.parentId===a) return true; cur=NODES.find(n=>n.id===cur.parentId);} return false; }
+function isCodeFile(node){ const n=node.name.toLowerCase(); return n.endsWith('.html')||n.endsWith('.js')||n.endsWith('.css')||n.endsWith('.json'); }
+function isKithub(node){ return node.id===KITHUB_ID || node.name.toLowerCase()==='k-ithub' || node.isKithub; }
+
+function render(){
+  const tree=document.getElementById('tree');
+  tree.innerHTML='';
+  NODES.filter(n=>n.parentId===null).forEach(r=> renderNode(r, tree, 0, [r.id]));
+  document.getElementById('status').textContent='Tela inicial sem nada aberto • '+NODES.length+' nodes ordem exata • K-B.D ícone principal primeiro • Menu lado direito • lista vertical igual PC com botões e sub-botões dentro • auto save total sem botão';
+}
+
+function renderNode(node, container, depth, path){
+  const row=document.createElement('div');
+  row.className='item'+(selected.has(node.id)?' selected':'')+(isKithub(node)?' kithub':'');
+  row.dataset.id=node.id;
+  const childs=getChildren(node.id);
+  const isFolder=childs.length>0 || node.type==='folder';
+  const isOpen=expanded.has(node.id);
+  const icon=document.createElement('div');
+  icon.style.cssText='width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0';
+  icon.textContent=isKithub(node)?'🐙':(isFolder?(isOpen?'📂':'📁'):(isCodeFile(node)?'💻':'📄'));
+  icon.onclick=(e)=>{ e.stopPropagation(); if(isFolder){ if(expanded.has(node.id)) expanded.delete(node.id); else expanded.add(node.id); render(); if(expanded.has(node.id)) showFileView(node, path);} };
+  const label=document.createElement('div');
+  label.style.cssText='flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0';
+  label.textContent=node.name;
+  row.appendChild(icon); row.appendChild(label);
+  row.addEventListener('click', (e)=>{ if(e.target===icon) return; e.stopPropagation(); selected.clear(); selected.add(node.id); showFileView(node, path); showMiniMenu(e.clientX, e.clientY, node, path); render(); });
+  let tTimer=null, tx=0, ty=0;
+  row.addEventListener('touchstart', (e)=>{ tx=e.touches[0].clientX; ty=e.touches[0].clientY; tTimer=setTimeout(()=>{ selected.clear(); selected.add(node.id); showFileView(node, path); render(); showMiniMenu(tx,ty,node,path); if(navigator.vibrate) navigator.vibrate(40); },600); }, {passive:true});
+  row.addEventListener('touchmove', (e)=>{ const dx=Math.abs(e.touches[0].clientX-tx); const dy=Math.abs(e.touches[0].clientY-ty); if(dx>10||dy>10) clearTimeout(tTimer); }, {passive:true});
+  row.addEventListener('touchend', ()=> clearTimeout(tTimer));
+  container.appendChild(row);
+  if(isFolder && isOpen){
+    const cw=document.createElement('div'); cw.className='children';
+    childs.forEach(ch=> renderNode(ch, cw, depth+1, [...path,ch.id]));
+    container.appendChild(cw);
+  }
+}
+
+function showEmpty(){
+  // Sempre mostre a tela inicial sem nada aberto por enquanto
+  document.getElementById('mainContent').innerHTML = `
+    <div class="empty">
+      <div style="width:80px;height:80px;border-radius:12px;background:#252526;border:1px solid #3c3c3c;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:16px">📂</div>
+      <h2 style="color:#cccccc;margin:0 0 8px 0;font-size:15px">Tela inicial sem nada aberto por enquanto</h2>
+      <div style="font-size:11px;max-width:640px;line-height:1.6;text-align:left;background:#252526;border:1px solid #3c3c3c;border-radius:6px;padding:14px">
+        <b style="color:#4fc3f7">Visual exatamente igual PC - K-B.D como ícone principal em primeiro no lugar do K do topo, na frente dele no lado direito menu, ao clicar em menu, mostre lista vertical igual PC:</b><br><br>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.8;background:#1e1e1e;border:1px solid #3c3c3c;border-radius:4px;padding:10px">
+        📂 Banco de dados<br>
+        &nbsp;&nbsp;└─ 🗄️ K-B.D → mostra em baixo dele o K-B.D na tela pra uso com tudo completo com está toda a estrutura completa do repositório no Github, mantém mesmas funções ações e sistema de uso que já tá feito nele<br>
+        📂 S.O.K<br>
+        &nbsp;&nbsp;└─ 🖥️ SISTEMA OPERACIONAL KORVIL → clicar nele mostra na tela pra uso<br>
+        🤖 K-AI → clicar no K-AI abre na tela pra uso<br>
+        📦 Programas<br>
+        &nbsp;&nbsp;├─ 🔧 K-RIADOR → mostra sistema original dele na tela<br>
+        &nbsp;&nbsp;└─ 🐙 k-ithub → mostra sistema original dele na tela<br>
+        🛠️ ferramentas<br>
+        &nbsp;&nbsp;├─ 📝 k-editor → mostre na tela etc<br>
+        &nbsp;&nbsp;└─ 💬 K-onversa → mostre na tela etc<br>
+        </div><br>
+        • Abra todos na tela com os index da cada um, os index são as páginas iniciais de entrada pra cada um, eles já vão ver e usar as ancoras e codigos de todas as pastas e arquivos deles<br>
+        • Tudo se salva e atualiza sozinho o tempo todo a qualquer uso ou alterações durante o uso em todo o código, sem precisar clicar nos botões pra fazer isso<br><br>
+        <b style="color:#4ade80">✅ Faça exatamente isso, sem apagar nem inventar, nem mudar nada que tá certo, mantém todas funções ações e tudo funcionando corretamente sem nenhum erro</b>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
+        <button style="height:32px;padding:0 12px;border-radius:4px;background:#007acc;color:#fff;border:none;font-size:11px;cursor:pointer" onclick="document.getElementById('menuBtnPc').click()">☰ Abrir Menu vertical igual PC</button>
+      </div>
+    </div>
+  `;
+  currentFileId=null;
+}
+
+function openIndexFromMenu(action){
+  // Fecha menu vertical
+  document.getElementById('verticalPcMenu').classList.remove('open');
+  document.getElementById('menuBtnPc').classList.remove('active');
+  const map={
+    'kbd_real': KBD_REAL_ID,
+    'sok_os': SOK_OS_ID,
+    'kai': KAI_ID,
+    'kriador': KRI_ID,
+    'kithub': KITHUB_ID,
+    'keditor': KEDITOR_ID,
+    'konversa': KONVERSA_ID,
+    'banco': KBD_ID,
+    'sok': SOK_ID
+  };
+  const nid=map[action];
+  if(!nid) return;
+  const node=NODES.find(n=> n.id===nid);
+  if(!node) return;
+  selected.clear(); selected.add(nid);
+  expanded.add(nid);
+  render();
+  if(action==='kbd_real' || action==='banco'){
+    showKBDIndexFull();
+  } else if(action==='sok_os' || action==='sok'){
+    showSOKIndexFull();
+  } else if(action==='kai'){
+    showKAIIndexFull();
+  } else if(action==='kriador'){
+    showKRIADORIndexFull(node);
+  } else if(action==='kithub'){
+    showKithubIndexFull(node);
+  } else if(action==='keditor'){
+    showKEditorIndexFull(node);
+  } else if(action==='konversa'){
+    showKOnversaIndexFull(node);
+  } else {
+    showFileView(node, [nid]);
+  }
+}
+
+function showKBDIndexFull(){
+  const all=NODES;
+  document.getElementById('mainContent').innerHTML = `
+    <div class="index-wrap">
+      <div class="index-header"><div><div style="font-weight:800;font-size:13px" class="mono">🗄️ Banco de dados → K-B.D • ESTRUTURA COMPLETA REPOSITÓRIO GITHUB • INDEX ENTRADA • MESMAS FUNÇÕES AÇÕES E SISTEMA DE USO QUE JÁ TÁ FEITO NELE</div><div style="font-size:10px;color:#858585">Banco de dados , ao clicar mostre em baixo dele o K-B.D na tela pra uso com tudo completo com está toda a estrutura completa do repositório no Github , mantém as mesmas funções ações e sistema de uso que já tá feito nele • ${all.length} nodes • auto save sem botão • ancoras e codigos de todas pastas e arquivos</div></div><span class="auto-badge">AUTO SAVE TOTAL SEM BOTÃO</span></div>
+      <div style="display:flex;flex:1;min-height:0">
+        <div style="width:320px;border-right:1px solid #3c3c3c;background:#252526;display:flex;flex-direction:column;min-height:0"><div style="height:28px;padding:0 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #3c3c3c;background:#2d2d2d;font-size:9px;color:#858585"><span>🌳 K-B.D REAL • ESTRUTURA COMPLETA GITHUB • MESMAS FUNÇÕES</span><span>${all.length}</span></div><div id="kbdFullTree" style="flex:1;overflow:auto;padding:4px"></div></div>
+        <div style="flex:1;display:flex;flex-direction:column;min-height:0"><div style="height:28px;background:#2d2d2d;border-bottom:1px solid #3c3c3c;display:flex;align-items:center;padding:0 10px;font-size:10px;color:#858585"><span>📂 INDEX ENTRADA • TODAS PASTAS E ARQUIVOS COM ANCORAS E CODIGOS • AUTO SAVE SEM BOTÃO</span></div><div style="flex:1;overflow:auto;padding:12px" id="kbdFullGrid"></div></div>
+      </div>
+    </div>
+  `;
+  const treeDiv=document.getElementById('kbdFullTree');
+  function renderFullNode(node, container, depth){
+    const row=document.createElement('div');
+    row.style.cssText='padding:4px 8px;font-size:11px;cursor:pointer;display:flex;gap:6px;color:#cccccc;';
+    row.style.paddingLeft=(8+depth*14)+'px';
+    const childs=getChildren(node.id);
+    row.innerHTML='<span>'+(isKithub(node)?'🐙':(childs.length>0?'📁':'📄'))+'</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+node.name+'</span>';
+    row.onclick=()=>{ selected.clear(); selected.add(node.id); render(); showFileView(node, [node.id]); };
+    container.appendChild(row);
+    if(expanded.has(node.id) || depth<1) childs.forEach(c=> renderFullNode(c, container, depth+1));
+  }
+  NODES.filter(n=> n.parentId===null).forEach(r=> renderFullNode(r, treeDiv, 0));
+  const grid=document.getElementById('kbdFullGrid');
+  grid.innerHTML='<div class="index-grid">'+all.slice(0,80).map(n=>{
+    const childs=getChildren(n.id);
+    return `<div class="index-card" onclick="const nd=NODES.find(x=> x.id==='${n.id}'); if(nd){ selected.clear(); selected.add('${n.id}'); render(); showFileView(nd, ['${n.id}']); }"><div style="display:flex;gap:6px"><span>${isKithub(n)?'🐙':(childs.length>0?'📁':'📄')}</span><span style="flex:1;font-size:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${n.name}</span></div><div style="font-size:9px;color:#858585;margin-top:4px;word-break:break-all">âncora: <a href="#${n.id}" style="color:#4fc3f7">#${n.id.substring(0,8)}</a> • <a href="#${n.name.toLowerCase().replace(/[^a-z0-9]/g,'-')}" style="color:#4fc3f7">#${n.name.toLowerCase().replace(/[^a-z0-9]/g,'-')}</a></div><div style="margin-top:4px"><pre style="font-size:9px;background:#1e1e1e;border:1px solid #3c3c3c;border-radius:3px;padding:4px;max-height:50px;overflow:hidden;white-space:pre-wrap;word-break:break-all">${(n.content||'').substring(0,120).replace(/</g,'&lt;')}</pre></div></div>`;
+  }).join('')+'</div>';
+}
+
+function showSOKIndexFull(){
+  const setores=NODES.find(n=> n.name.toLowerCase().includes('setores'));
+  const childs=setores? getChildren(setores.id): [];
+  const sokOsNode=NODES.find(n=> n.id===SOK_OS_ID);
+  document.getElementById('mainContent').innerHTML = `
+    <div class="index-wrap">
+      <div class="index-header"><div><div style="font-weight:800;font-size:13px" class="mono">🖥️ S.O.K → SISTEMA OPERACIONAL KORVIL • INDEX ENTRADA • MOSTRA NA TELA PRA USO</div><div style="font-size:10px;color:#858585">S.O.K clicar nele mostra em baixo SISTEMA OPERACIONAL KORVIL, clicar nele mostre na tela pra uso • index entrada • ancoras e codigos de todas pastas e arquivos dele • auto save sem botão</div></div><span class="auto-badge">AUTO SAVE • S.O.K</span></div>
+      <div style="padding:12px">
+        <div style="border:1px solid #3c3c3c;border-radius:4px;background:#252526;padding:10px;margin-bottom:10px"><div style="font-size:11px;font-weight:700">S.O.K • SISTEMA OPERACIONAL KORVIL index entrada • ${childs.length} setores • âncora #${SOK_OS_ID}</div><div style="font-size:9px;color:#858585;margin-top:4px">Âncoras: ${childs.map(c=> `<a href="#${c.id}" style="color:#4fc3f7">#${c.name}</a>`).join(' • ')}</div><div style="margin-top:8px"><pre style="font-size:10px;background:#1e1e1e;border:1px solid #3c3c3c;border-radius:3px;padding:8px;white-space:pre-wrap;word-break:break-all">${(sokOsNode?.content||'SISTEMA OPERACIONAL KORVIL - index entrada - ancoras e codigos completos').substring(0,400).replace(/</g,'&lt;')}</pre></div></div>
+        <div class="index-grid">${childs.map(c=> `<div class="index-card" onclick="document.querySelector('[data-id=\'${c.id}\']').click()"><div style="font-size:11px;font-weight:700">${c.name}</div><div style="font-size:9px;color:#858585">âncora #${c.id} • código ${(c.content||'').substring(0,60)}</div></div>`).join('')}</div>
+      </div>
+    </div>
+  `;
+}
+
+function showKAIIndexFull(){
+  document.getElementById('mainContent').innerHTML = `
+    <div class="index-wrap">
+      <div class="index-header"><div><div style="font-weight:800;font-size:13px" class="mono">🤖 K-AI • INDEX ENTRADA • CLICAR NO K-AI ABRE NA TELA PRA USO</div><div style="font-size:10px;color:#858585">K-AI clicar no K-AI abre na tela pra uso • em baixo de o sistema operacional korvil, mostre o K-AI • index entrada • ancoras e codigos de todas pastas e arquivos • auto save sem botão</div></div><span class="auto-badge">AUTO SAVE • K-AI</span></div>
+      <div style="padding:12px;display:grid;grid-template-columns:1fr 320px;gap:12px">
+        <div style="border:1px solid #3c3c3c;border-radius:4px;background:#252526;padding:10px;min-height:400px;display:flex;flex-direction:column">
+          <div id="kaiMsgs" style="flex:1;min-height:260px;overflow:auto;border:1px solid #3c3c3c;border-radius:4px;padding:8px;background:#1e1e1e;font-size:11px"><div style="color:#858585">K-AI index entrada • ${NODES.length} nodes • ancoras e codigos • auto save sem botão</div></div>
+          <div style="display:flex;gap:6px;margin-top:8px"><input id="kaiInput" placeholder="K-AI..." style="flex:1;height:32px;border-radius:4px;background:#1e1e1e;border:1px solid #3c3c3c;padding:0 10px;font-size:11px;color:#e4e4e7;outline:none"><button style="height:32px;padding:0 12px;border-radius:4px;background:#007acc;color:#fff;border:none;font-size:11px;cursor:pointer" onclick="sendKAI()">Enviar</button></div>
+        </div>
+        <div style="border:1px solid #3c3c3c;border-radius:4px;background:#252526;padding:10px"><div style="font-size:10px;font-weight:700;color:#858585;margin-bottom:8px">📂 ANCORAS E CODIGOS K-AI</div><div style="display:grid;gap:6px;font-size:10px;max-height:400px;overflow:auto">${NODES.filter(n=> n.name.toLowerCase().includes('alma') || n.name.toLowerCase().includes('afortunado')).slice(0,10).map(n=> `<div style="padding:6px 8px;border:1px solid #3c3c3c;border-radius:3px"><div>${n.name}</div><div style="font-size:9px;color:#858585">âncora #${n.id.substring(0,8)}</div></div>`).join('')}</div></div>
+      </div>
+    </div>
+  `;
+  window.sendKAI=()=>{
+    const inp=document.getElementById('kaiInput'); const msgs=document.getElementById('kaiMsgs');
+    if(!inp.value.trim()) return;
+    const u=document.createElement('div'); u.style.cssText='margin:6px 0;padding:6px 8px;background:#2a2d2e;border-radius:4px'; u.textContent='Você: '+inp.value; msgs.appendChild(u);
+    const a=document.createElement('div'); a.style.cssText='margin:6px 0;padding:6px 8px;background:#094771;border-radius:4px;color:#fff'; a.textContent='K-AI: âncora #'+inp.value.toLowerCase().replace(/[^a-z0-9]/g,'-')+' • código completo • auto save'; msgs.appendChild(a);
+    inp.value=''; msgs.scrollTop=msgs.scrollHeight; saveHistory();
+  };
+  document.getElementById('kaiInput')?.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendKAI(); });
+}
+
+function showKRIADORIndexFull(node){
+  const childs=getChildren(node.id);
+  document.getElementById('mainContent').innerHTML = `
+    <div class="index-wrap"><div class="index-header"><div><div style="font-weight:800;font-size:13px" class="mono">🔧 Programas → K-RIADOR • SISTEMA ORIGINAL DELE NA TELA • INDEX ENTRADA</div><div style="font-size:10px;color:#858585">Programas K-RIADOR ao clicar mostre os sistema original dele na tela • em baixo de K-B.D mostre Programas, ao clicar mostre lista vertical: K-RIADOR • index entrada • ancoras e codigos de todas pastas e arquivos dele • auto save sem botão</div></div><span class="auto-badge">AUTO SAVE</span></div><div style="padding:12px"><div class="index-grid">${childs.map(c=> `<div class="index-card" onclick="document.querySelector('[data-id=\'${c.id}\']').click()"><div style="font-size:11px;font-weight:700">${c.name}</div><div style="font-size:9px;color:#858585">âncora #${c.id} • ${(c.content||'').substring(0,60)}</div></div>`).join('') || '<div style="padding:20px;border:1px dashed #3c3c3c;border-radius:4px;text-align:center;color:#858585">K-RIADOR sistema original na tela • index entrada • ancoras e codigos de todas pastas e arquivos dele • auto save sem botão</div>'}</div></div></div>
+  `;
+}
+
+function showKithubIndexFull(node){
+  const all=NODES;
+  document.getElementById('mainContent').innerHTML = `
+    <div class="index-wrap" style="background:#1e1e1e">
+      <div class="index-header"><div><div style="font-weight:800;font-size:13px" class="mono">🐙 Programas → k-ithub • SISTEMA ORIGINAL DELE NA TELA • INDEX ENTRADA • CLONE TEMPO REAL</div><div style="font-size:10px;color:#858585">em baixo de K-RIADOR mostre k-ithub, ao clicar mostre os sistema original dele na tela • index entrada • ancoras e codigos de todas pastas e arquivos deles • K-B.D real faz tudo • 3 vias mesma página • auto save sem botão</div></div><span class="auto-badge">AUTO SAVE 3 VIAS</span></div>
+      <div style="display:flex;flex:1;min-height:0"><div style="width:280px;border-right:1px solid #3c3c3c;background:#252526;display:flex;flex-direction:column;min-height:0"><div style="height:28px;padding:0 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #3c3c3c;background:#2d2d2d;font-size:9px;color:#858585"><span>EXPLORER • ORIGINAL • INDEX</span><span>${all.length}</span></div><div id="kithubTreeFull" style="flex:1;overflow:auto;padding:4px 0"></div></div><div style="flex:1;display:flex;flex-direction:column;min-height:0"><div style="flex:1;display:flex;min-height:0"><div style="flex:1;display:flex;flex-direction:column;border-right:1px solid #3c3c3c;min-height:0"><div style="height:26px;background:#2d2d2d;border-bottom:1px solid #3c3c3c;display:flex;align-items:center;padding:0 8px;font-size:10px;color:#858585">📝 Código index - ancoras e codigos - auto save sem botão - 3 vias</div><textarea id="kithubEditorFull" style="flex:1;width:100%;background:#1e1e1e;color:#d4d4d4;border:none;outline:none;padding:10px;font-size:11px;font-family:'JetBrains Mono',monospace" spellcheck="false"></textarea></div><div style="flex:1;display:flex;flex-direction:column;min-height:0"><div style="height:26px;background:#2d2d2d;border-bottom:1px solid #3c3c3c;display:flex;align-items:center;padding:0 8px;font-size:10px;color:#858585">👁️ Preview tempo real - index entrada</div><iframe id="kithubPreviewFull" style="flex:1;border:none;background:white"></iframe></div></div></div></div>
+    </div>
+  `;
+  const tree=document.getElementById('kithubTreeFull'); tree.innerHTML=''; all.filter(n=> n.parentId===null).forEach(r=>{ const row=document.createElement('div'); row.style.cssText='padding:4px 8px;font-size:11px;cursor:pointer;display:flex;gap:4px;color:#cccccc'; row.textContent='📁 '+r.name; row.onclick=()=>{ const ed=document.getElementById('kithubEditorFull'); ed.value=r.content||''; document.getElementById('kithubPreviewFull').srcdoc='<pre style="padding:12px;background:#1e1e1e;color:#d4d4d4;white-space:pre-wrap;word-break:break-word">'+ed.value.replace(/</g,'&lt;')+'</pre>'; }; tree.appendChild(row); });
+  const ed=document.getElementById('kithubEditorFull'); ed.value=node.content||'k-ithub index entrada - clone tempo real repositorio original - ancoras #k-ithub #clone #repositorio e codigos de todas pastas e arquivos'; document.getElementById('kithubPreviewFull').srcdoc=ed.value; ed.addEventListener('input', ()=>{ clearTimeout(autoSaveTimer); autoSaveTimer=setTimeout(()=>{ saveHistory(); node.content=ed.value; },400); document.getElementById('kithubPreviewFull').srcdoc=ed.value; });
+}
+
+function showKEditorIndexFull(node){
+  document.getElementById('mainContent').innerHTML = `
+    <div class="index-wrap"><div class="index-header"><div><div style="font-weight:800;font-size:13px" class="mono">📝 ferramentas → k-editor • MOSTRE NA TELA ETC • INDEX ENTRADA</div><div style="font-size:10px;color:#858585">em baixo de Programas, mostre ferramentas, ao clicar mostre k-editor mostre na tela etc • index entrada • ancoras e codigos de todas pastas e arquivos dele • auto save sem botão</div></div><span class="auto-badge">AUTO SAVE</span></div><div style="display:flex;flex:1;min-height:0"><div style="flex:1;display:flex;flex-direction:column;border-right:1px solid #3c3c3c"><div style="height:28px;background:#2d2d2d;border-bottom:1px solid #3c3c3c;display:flex;align-items:center;padding:0 8px;font-size:10px;color:#858585">📝 k-editor index - ancoras e codigos - auto save sem botão</div><textarea id="keditorMainFull" style="flex:1;width:100%;background:#1e1e1e;color:#d4d4d4;border:none;outline:none;padding:12px;font-size:12px;font-family:'JetBrains Mono',monospace" spellcheck="false">${(node.content||'').replace(/</g,'&lt;')}</textarea></div><div style="flex:1;display:flex;flex-direction:column"><div style="height:28px;background:#2d2d2d;border-bottom:1px solid #3c3c3c;display:flex;align-items:center;padding:0 8px;font-size:10px;color:#858585">👁️ Preview - k-editor index</div><iframe id="keditorPreviewFull" style="flex:1;border:none;background:white"></iframe></div></div></div>
+  `;
+  const editor=document.getElementById('keditorMainFull'); const preview=document.getElementById('keditorPreviewFull');
+  const update=()=>{ preview.srcdoc=editor.value; saveHistory(); node.content=editor.value; };
+  editor.addEventListener('input', ()=>{ clearTimeout(autoSaveTimer); autoSaveTimer=setTimeout(update, 400); preview.srcdoc=editor.value; });
+  preview.srcdoc=editor.value;
+}
+
+function showKOnversaIndexFull(node){
+  document.getElementById('mainContent').innerHTML = `
+    <div class="index-wrap"><div class="index-header"><div><div style="font-weight:800;font-size:13px" class="mono">💬 ferramentas → K-onversa • MOSTRE NA TELA ETC • INDEX ENTRADA</div><div style="font-size:10px;color:#858585">ferramentas K-onversa mostre na tela etc • index entrada • ancoras e codigos de todas pastas e arquivos dele • auto save sem botão</div></div><span class="auto-badge">AUTO SAVE</span></div><div style="padding:12px;display:grid;grid-template-columns:1fr 300px;gap:12px"><div style="border:1px solid #3c3c3c;border-radius:4px;background:#252526;padding:10px;min-height:400px;display:flex;flex-direction:column"><div id="konversaMsgsFull" style="flex:1;min-height:260px;overflow:auto;border:1px solid #3c3c3c;border-radius:4px;padding:8px;background:#1e1e1e;font-size:11px"><div style="color:#858585">K-onversa index entrada • ancoras #k-onversa #conversa • codigos de todas pastas e arquivos • auto save sem botão</div></div><div style="display:flex;gap:6px;margin-top:8px"><input id="konversaInputFull" placeholder="K-onversa..." style="flex:1;height:32px;border-radius:4px;background:#1e1e1e;border:1px solid #3c3c3c;padding:0 10px;font-size:11px;color:#e4e4e7;outline:none"><button style="height:32px;padding:0 12px;border-radius:4px;background:#007acc;color:#fff;border:none;font-size:11px;cursor:pointer" onclick="sendKonversaFull()">Enviar</button></div></div><div style="border:1px solid #3c3c3c;border-radius:4px;background:#252526;padding:10px"><div style="font-size:10px;font-weight:700;color:#858585;margin-bottom:8px">📂 ANCORAS E CODIGOS</div><div style="display:grid;gap:6px;font-size:10px">${getChildren(node.id).map(c=> `<div style="padding:6px 8px;border:1px solid #3c3c3c;border-radius:3px"><div>${c.name}</div><div style="font-size:9px;color:#858585">âncora #${c.id.substring(0,8)}</div></div>`).join('') || '<div style="color:#858585">Usando todos arquivos K-B.D como base • ancoras e codigos • index entrada</div>'}</div></div></div></div>
+  `;
+  window.sendKonversaFull=()=>{
+    const inp=document.getElementById('konversaInputFull'); const msgs=document.getElementById('konversaMsgsFull');
+    if(!inp.value.trim()) return;
+    const u=document.createElement('div'); u.style.cssText='margin:6px 0;padding:6px 8px;background:#2a2d2e;border-radius:4px'; u.textContent='Você: '+inp.value; msgs.appendChild(u);
+    const a=document.createElement('div'); a.style.cssText='margin:6px 0;padding:6px 8px;background:#094771;border-radius:4px;color:#fff'; a.textContent='K-onversa: âncora #'+inp.value.toLowerCase().replace(/[^a-z0-9]/g,'-')+' • código completo • auto save'; msgs.appendChild(a);
+    inp.value=''; msgs.scrollTop=msgs.scrollHeight; saveHistory();
+  };
+  document.getElementById('konversaInputFull')?.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendKonversaFull(); });
+}
+
+function showFileView(node, path){
+  currentFileId=node.id;
+  const childs=getChildren(node.id);
+  const isK=isKithub(node);
+  const isCode=isCodeFile(node);
+  if(isK){ showKithubIndexFull(node); return; }
+  if(isCode){
+    document.getElementById('mainContent').innerHTML = `<div class="code-top"><div style="display:flex;gap:6px;align-items:center;min-width:0"><div style="font-size:11px;font-weight:700;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${node.name}</div><div style="width:7px;height:7px;border-radius:50%;background:#4ade80;flex-shrink:0"></div><span style="font-size:8px;color:#858585">auto save sem botão</span></div><div style="display:flex;gap:3px"><button class="btn" style="height:28px;padding:0 8px;background:#2d2d2d;color:#fff;border:1px solid #3c3c3c;border-radius:4px;font-size:11px;cursor:pointer" id="btnCode">📝</button><button class="btn" style="height:28px;padding:0 8px;background:#2d2d2d;color:#fff;border:1px solid #3c3c3c;border-radius:4px;font-size:11px;cursor:pointer" id="btnPreview">👁️</button><button class="btn" style="height:28px;padding:0 8px;background:#007acc;color:#fff;border:none;border-radius:4px;font-size:11px;cursor:pointer" id="btnSplit">⚡</button></div></div><div class="code-wrap"><div class="code-pane" id="paneCode"><textarea class="editor" id="editor" spellcheck="false"></textarea></div><div class="code-pane" id="panePreview"><iframe class="preview" id="preview"></iframe></div></div>`;
+    const editor=document.getElementById('editor'); editor.value=node.content||''; const update=()=>{ const code=editor.value; const iframe=document.getElementById('preview'); if(!iframe) return; if(code.toLowerCase().includes('<html')) iframe.srcdoc=code; else iframe.srcdoc='<pre style="padding:12px;white-space:pre-wrap;word-break:break-word;background:#1e1e1e;color:#d4d4d4">'+code.replace(/</g,'&lt;')+'</pre>'; }; editor.addEventListener('input', ()=>{ clearTimeout(autoSaveTimer); update(); autoSaveTimer=setTimeout(()=>{ saveHistory(); node.content=editor.value; },400); }); document.getElementById('btnCode').onclick=()=>{ document.getElementById('paneCode').style.display='flex'; document.getElementById('panePreview').style.display='none'; }; document.getElementById('btnPreview').onclick=()=>{ document.getElementById('paneCode').style.display='none'; document.getElementById('panePreview').style.display='flex'; update(); }; document.getElementById('btnSplit').onclick=()=>{ document.getElementById('paneCode').style.display='flex'; document.getElementById('panePreview').style.display='flex'; update(); }; update();
+  } else {
+    document.getElementById('mainContent').innerHTML = `<div style="padding:12px;overflow:auto;flex:1"><div style="font-size:10px;color:#858585;margin-bottom:10px">${path.map((id,idx)=>{ const n=NODES.find(x=>x.id===id); return n? '<span style="'+(idx===path.length-1?'color:#4fc3f7;font-weight:700':'')+'">'+n.name+'</span>'+(idx<path.length-1?' › ':'') : ''; }).join('')+'</div><div style="padding:12px;border:1px solid #3c3c3c;border-radius:4px;background:#252526"><div style="font-weight:700">${node.name}</div><div style="font-size:10px;color:#858585">${childs.length} itens • auto save sem botão • ancoras e codigos</div><div style="margin-top:10px;display:grid;gap:6px">${childs.map(c=> `<div style="padding:8px 10px;border:1px solid #3c3c3c;border-radius:4px;background:#2a2d2e;cursor:pointer;display:flex;gap:6px;align-items:center" onclick="document.querySelector('[data-id=\'${c.id}\']').click()"><span>${getChildren(c.id).length>0?'📁':'📄'}</span><span style="flex:1;font-size:11px">${c.name}</span><span style="font-size:9px;color:#858585">âncora #${c.id.substring(0,6)}</span></div>`).join('') || '<div style="padding:16px;text-align:center;color:#858585;font-size:11px;border:1px dashed #3c3c3c;border-radius:4px">Vazio • ancoras e codigos • auto save</div>'}</div></div></div>`;
+  }
+}
+
+let miniNode=null, miniPath=null;
+function showMiniMenu(x,y,node,path){
+  miniNode=node; miniPath=path;
+  const m=document.getElementById('miniMenu');
+  let left=x, topPos=y;
+  if(left + 260 > window.innerWidth) left = window.innerWidth - 268;
+  if(topPos + 360 > window.innerHeight) topPos = window.innerHeight - 368;
+  if(left < 8) left=8; if(topPos < 8) topPos=8;
+  m.innerHTML='<div class="mini-header"><div style="font-size:11px;font-weight:700;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+node.name+'</div><div style="font-size:9px;color:#858585">auto save</div></div><div class="mini-row" onclick="actionOpenClose()">📂 '+(expanded.has(node.id)?'Fechar':'Abrir')+'</div><div class="mini-row" onclick="actionShowInside()">👁️ Mostrar estrutura dentro</div><div style="height:1px;background:#3c3c3c;margin:4px 0"></div><div class="mini-row" onclick="actionNewFile()">📄 ➕ Novo arquivo</div><div class="mini-row" onclick="actionNewFolder()">📁 ➕ Nova pasta</div><div style="height:1px;background:#3c3c3c;margin:4px 0"></div><div class="mini-row" onclick="actionCopy()">📋 Copiar</div><div class="mini-row" onclick="actionCut()">✂️ Recortar</div><div class="mini-row" onclick="actionPaste()">📥 Colar</div><div class="mini-row" onclick="actionDuplicate()">🧬 Duplicar</div><div style="height:1px;background:#3c3c3c;margin:4px 0"></div><div class="mini-row" onclick="actionRename()">✏️ Renomear</div><div class="mini-row" style="color:#f87171" onclick="actionDelete()">🗑️ Excluir</div>';
+  m.style.left=left+'px'; m.style.top=topPos+'px'; m.classList.add('open'); m.style.display='block';
+}
+function hideMiniMenu(){ const m=document.getElementById('miniMenu'); m.classList.remove('open'); m.style.display='none'; }
+function actionOpenClose(){ if(miniNode){ if(expanded.has(miniNode.id)) expanded.delete(miniNode.id); else expanded.add(miniNode.id); render(); showFileView(miniNode, miniPath);} hideMiniMenu(); }
+function actionShowInside(){ if(miniNode){ expanded.add(miniNode.id); render(); showFileView(miniNode, miniPath);} hideMiniMenu(); }
+function actionNewFile(){ saveHistory(); const name=prompt('Nome novo arquivo:'); if(!name) return; const parent=miniNode && (getChildren(miniNode.id).length>0 || miniNode.type==='folder') ? miniNode.id : miniNode.parentId; NODES.push({id:'id_'+Date.now(), name, type:'file', parentId: parent, content:''}); expanded.add(parent); render(); hideMiniMenu(); }
+function actionNewFolder(){ saveHistory(); const name=prompt('Nome nova pasta:'); if(!name) return; const parent=miniNode && (getChildren(miniNode.id).length>0 || miniNode.type==='folder') ? miniNode.id : miniNode.parentId; NODES.push({id:'id_'+Date.now(), name, type:'folder', parentId: parent}); expanded.add(parent); render(); hideMiniMenu(); }
+function actionCopy(){ clipboard={mode:'copy', ids: Array.from(selected.size?selected:[miniNode.id])}; hideMiniMenu(); }
+function actionCut(){ clipboard={mode:'cut', ids: Array.from(selected.size?selected:[miniNode.id])}; hideMiniMenu(); }
+function actionPaste(){ if(!clipboard) return; saveHistory(); const target=miniNode && (getChildren(miniNode.id).length>0 || miniNode.type==='folder') ? miniNode.id : miniNode.parentId; clipboard.ids.forEach(id=>{ const orig=NODES.find(n=>n.id===id); if(!orig) return; if(clipboard.mode==='copy'){ NODES.push({...orig, id:'id_'+Date.now()+Math.random(), parentId: target, name: orig.name+' cópia'}); } else { if(id!==target && !isDescendant(target,id)) orig.parentId=target; } }); if(clipboard.mode==='cut') clipboard=null; expanded.add(target); render(); hideMiniMenu(); }
+function actionDuplicate(){ saveHistory(); const ids=selected.size? Array.from(selected): [miniNode.id]; ids.forEach(id=>{ const orig=NODES.find(n=>n.id===id); if(!orig) return; NODES.push({...orig, id:'id_'+Date.now()+Math.random(), name: orig.name+' (duplicado)', parentId: orig.parentId}); }); render(); hideMiniMenu(); }
+function actionRename(){ const nn=prompt('Novo nome:', miniNode.name); if(nn){ saveHistory(); miniNode.name=nn; render(); showFileView(miniNode, miniPath);} hideMiniMenu(); }
+function actionDelete(){ if(!confirm('Excluir '+(selected.size||1)+'?')) return; saveHistory(); const ids=selected.size? Array.from(selected): [miniNode.id]; const toDel=new Set(); ids.forEach(id=>{ toDel.add(id); NODES.forEach(n=>{ if(isDescendant(n.id,id)) toDel.add(n.id); }); }); NODES=NODES.filter(n=>!toDel.has(n.id)); selected.clear(); render(); showEmpty(); hideMiniMenu(); }
+
+// MENU VERTICAL IGUAL PC - BOTÕES E SUB-BOTÕES DENTRO DE CADA COISA
+document.getElementById('menuBtnPc').onclick=(e)=>{
+  e.stopPropagation();
+  document.getElementById('verticalPcMenu').classList.toggle('open');
+  document.getElementById('menuBtnPc').classList.toggle('active');
+};
+document.getElementById('kbdPrincipal').onclick=(e)=>{
+  e.stopPropagation();
+  document.getElementById('verticalPcMenu').classList.toggle('open');
+  document.getElementById('menuBtnPc').classList.toggle('active');
+};
+
+// Toggle botões com sub-botões dentro - igual PC
+document.getElementById('btnBanco').onclick=(e)=>{
+  e.stopPropagation();
+  const sub=document.getElementById('subBanco');
+  sub.classList.toggle('open');
+  document.getElementById('btnBanco').classList.toggle('open');
+};
+document.getElementById('btnSok').onclick=(e)=>{
+  e.stopPropagation();
+  const sub=document.getElementById('subSok');
+  sub.classList.toggle('open');
+  document.getElementById('btnSok').classList.toggle('open');
+};
+document.getElementById('btnProgramas').onclick=(e)=>{
+  e.stopPropagation();
+  const sub=document.getElementById('subProgramas');
+  sub.classList.toggle('open');
+  document.getElementById('btnProgramas').classList.toggle('open');
+};
+document.getElementById('btnFerramentas').onclick=(e)=>{
+  e.stopPropagation();
+  const sub=document.getElementById('subFerramentas');
+  sub.classList.toggle('open');
+  document.getElementById('btnFerramentas').classList.toggle('open');
+};
+document.getElementById('btnKai').onclick=(e)=>{
+  e.stopPropagation();
+  openIndexFromMenu('kai');
+};
+
+// Sub-botões - abrem index na tela com ancoras e codigos
+document.querySelectorAll('[data-action]').forEach(el=>{
+  el.onclick=(e)=>{
+    e.stopPropagation();
+    openIndexFromMenu(el.dataset.action);
+  };
+});
+
+document.addEventListener('click', (e)=>{
+  if(!e.target.closest('#verticalPcMenu') && !e.target.closest('#menuBtnPc') && !e.target.closest('#kbdPrincipal')){
+    document.getElementById('verticalPcMenu').classList.remove('open');
+    document.getElementById('menuBtnPc').classList.remove('active');
+  }
+  if(!e.target.closest('#miniMenu') && !e.target.closest('.item')){
+    hideMiniMenu();
+  }
+});
+document.addEventListener('keydown', (e)=>{
+  if(e.key==='Escape'){ hideMiniMenu(); document.getElementById('verticalPcMenu').classList.remove('open'); document.getElementById('menuBtnPc').classList.remove('active'); showEmpty(); }
+  if(e.key==='Delete' && selected.size>0){ e.preventDefault(); const del=()=>{ saveHistory(); const ids=Array.from(selected); const toDel=new Set(); ids.forEach(id=>{ toDel.add(id); NODES.forEach(n=>{ if(isDescendant(n.id,id)) toDel.add(n.id); }); }); NODES=NODES.filter(n=>!toDel.has(n.id)); selected.clear(); render(); showEmpty(); }; if(confirm('Excluir '+(selected.size||1)+'?')) del(); }
+});
+
+render();
+showEmpty();
+setInterval(()=>{ try{ localStorage.setItem('korvil-v43-exato-botoes-subbotoes-auto-save-total-sem-botao', JSON.stringify(NODES)); }catch(e){} }, 1000);
+</script>
+</body>
+</html>

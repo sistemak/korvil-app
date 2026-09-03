@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>K-TP HOLOGRAM PROTOCOL 3.0</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160/build/three.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',Arial}
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+  body{background:#000;color:#00f0ff;padding:15px;overflow-x:hidden}
+ .holo-bg{position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 50% 50%, rgba(0,240,255,0.1) 0%, transparent 70%);animation:pulse 4s infinite;z-index:-1}
+  @keyframes pulse{0%,100%{opacity:0.3}50%{opacity:0.7}}
+ .container{max-width:1200px;margin:auto;position:relative}
+ .card{background:rgba(0,20,40,0.6);backdrop-filter:blur(10px);border:1px solid #00f0ff;border-radius:15px;padding:20px;margin-bottom:20px;box-shadow:0 0 20px rgba(0,240,255,0.3)}
+  h1,h2{color:#00f0ff;text-shadow:0 0 10px #00f0ff}
+  input,select,button{width:100%;padding:10px;border-radius:8px;border:1px solid #00f0ff;background:#001020;color:#00f0ff}
+  button{background:linear-gradient(90deg,#00f0ff,#0066ff);color:#000;font-weight:bold;cursor:pointer;transition:0.3s}
+  button:hover{box-shadow:0 0 20px #00f0ff;transform:scale(1.02)}
+ .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px}
+  #canvas3d{width:100%;height:400px;border-radius:15px;border:1px solid #00f0ff}
+ .food-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-height:300px;overflow-y:auto}
+ .food-item{background:#001020;padding:8px;border-radius:8px;cursor:pointer;border:1px solid #334155}
+ .food-item.selected{border-color:#00f0ff;background:#003040}
+ .result-glow{font-size:50px;color:#22ff88;text-shadow:0 0 20px #22ff88;text-align:center}
+</style>
+</head>
+<body>
+<div class="holo-bg"></div>
+<div class="container">
+  <h1>⚡ K-TP HOLOGRAM PROTOCOL 3.0 ⚡</h1>
+
+  <!-- 1. DADOS + BIOTIPO -->
+  <div class="card">
+    <h2>1. DADOS DO ALUNO</h2>
+    <div class="grid">
+      <input id="peso" type="number" placeholder="Peso kg" value="75">
+      <input id="altura" type="number" placeholder="Altura cm" value="175">
+      <input id="idade" type="number" placeholder="Idade" value="25">
+      <input id="cintura" type="number" placeholder="Cintura cm" value="80">
+    </div>
+  </div>
+
+  <!-- 2. OBJETIVOS + ALIMENTOS -->
+  <div class="card">
+    <h2>2. ESCOLHA SEUS ALIMENTOS DO DIA</h2>
+    <p>Clique nos alimentos que você come. Eu calculo macros e te dou as melhores trocas</p>
+    <div class="food-grid" id="foodList"></div>
+    <div id="foodResult"></div>
+  </div>
+
+  <!-- 3. GRAFICO 3D HOLOGRAFICO -->
+  <div class="card">
+    <h2>3. ANÁLISE HOLOGRÁFICA 3D DO PROTOCOLO</h2>
+    <div id="canvas3d"></div>
+  </div>
+
+  <!-- 4. RESULTADO FINAL -->
+  <div class="card">
+    <h2>RESULTADO FINAL</h2>
+    <div class="result-glow" id="scoreFinal">0%</div>
+    <canvas id="radarChart"></canvas>
+    <div id="melhoresEscolhas"></div>
+  </div>
+
+  <button onclick="calcularTudo()">GERAR PROTOCOLO HOLOGRÁFICO</button>
+</div>
+
+<script>
+// BANCO DE ALIMENTOS
+const alimentos = [
+  {nome:"Frango Grelhado",cal:165,prot:31,carb:0,gord:3.6,tag:"hipertrofia"},
+  {nome:"Arroz Branco",cal:130,prot:2.7,carb:28,gord:0.3,tag:"energia"},
+  {nome:"Batata Doce",cal:86,prot:1.6,carb:20,gord:0.1,tag:"definicao"},
+  {nome:"Ovo",cal:70,prot:6,carb:0.6,gord:5,tag:"hipertrofia"},
+  {nome:"Aveia",cal:389,prot:16.9,carb:66,gord:6.9,tag:"saude"},
+  {nome:"Whey Protein",cal:120,prot:24,carb:3,gord:2,tag:"hipertrofia"},
+  {nome:"Abacate",cal:160,prot:2,carb:9,gord:15,tag:"saude"},
+  {nome:"Salmão",cal:208,prot:20,carb:0,gord:13,tag:"definicao"}
+];
+let alimentosSelecionados = [];
+
+document.getElementById('foodList').innerHTML = alimentos.map((a,i)=>`
+  <div class="food-item" onclick="toggleFood(${i})">
+    <b>${a.nome}</b><br><small>${a.cal}kcal | P:${a.prot}g</small>
+  </div>
+`).join('');
+
+function toggleFood(i){
+  if(alimentosSelecionados.includes(i)) alimentosSelecionados.splice(alimentosSelecionados.indexOf(i),1);
+  else alimentosSelecionados.push(i);
+  document.querySelectorAll('.food-item')[i].classList.toggle('selected');
+  calcularAlimentos();
+}
+
+function calcularAlimentos(){
+  let total = {cal:0,prot:0,carb:0,gord:0};
+  alimentosSelecionados.forEach(i=>{
+    total.cal += alimentos[i].cal;
+    total.prot += alimentos[i].prot;
+    total.carb += alimentos[i].carb;
+    total.gord += alimentos[i].gord;
+  });
+  document.getElementById('foodResult').innerHTML = `
+    <b>Total do Dia:</b> ${total.cal}kcal | Prot:${total.prot}g | Carb:${total.carb}g | Gord:${total.gord}g
+  `;
+  gerarMelhoresEscolhas(total);
+}
+
+function gerarMelhoresEscolhas(total){
+  let dicas = [];
+  if(total.prot < 120) dicas.push("Adicione WHEY ou FRANGO para bater proteína e acelerar hipertrofia");
+  if(total.carb < 150) dicas.push("Adicione BATATA DOCE ou ARROZ para ter energia pro treino");
+  if(total.gord > 50) dicas.push("Troque ABACATE por OVO para reduzir gordura e acelerar definição");
+
+  document.getElementById('melhoresEscolhas').innerHTML = `
+    <h3>🚀 MELHORES ESCOLHAS PRA RESULTADO RÁPIDO</h3>
+    ${dicas.map(d=>`<p>✅ ${d}</p>`).join('')}
+  `;
+}
+
+// GRAFICO 3D COM THREE.JS
+let scene, camera, renderer, cube;
+function init3D(){
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(75, document.getElementById('canvas3d').clientWidth/400, 0.1, 1000);
+  renderer = new THREE.WebGLRenderer({alpha:true});
+  renderer.setSize(document.getElementById('canvas3d').clientWidth, 400);
+  document.getElementById('canvas3d').appendChild(renderer.domElement);
+
+  const geometry = new THREE.TorusKnotGeometry(2, 0.5, 100, 16);
+  const material = new THREE.MeshPhongMaterial({color:0x00f0ff, wireframe:true});
+  cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+
+  const light = new THREE.PointLight(0x00f0ff, 1, 100);
+  light.position.set(5,5,5);
+  scene.add(light);
+  camera.position.z = 6;
+  animate3D();
+}
+function animate3D(){
+  requestAnimationFrame(animate3D);
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+  renderer.render(scene, camera);
+}
+init3D();
+
+// CALCULO GERAL
+let radar;
+function calcularTudo(){
+  const peso = +document.getElementById('peso').value;
+  const score = Math.min(100, 60 + alimentosSelecionados.length*5).toFixed(0);
+  document.getElementById('scoreFinal').innerText = score + '%';
+
+  // GRAFICO RADAR 2D
+  if(radar) radar.destroy();
+  radar = new Chart(document.getElementById('radarChart'),{
+    type:'radar',
+    data:{
+      labels:['Treino','Dieta','Físico','Mente','Espírito'],
+      datasets:[{
+        label:'Seu Score',
+        data:[score*0.3, score*0.3, 7, 8, 6],
+        backgroundColor:'rgba(0,240,255,0.2)',
+        borderColor:'#00f0ff'
+      }]
+    }
+  });
+}
+</script>
+</body>
+</html>

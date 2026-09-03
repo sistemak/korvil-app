@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000">
+<title>K-TP - KORVIL</title>
+<style>
+:root{--c:#00f5ff; --c2:#00d4ff; --bg:#000; --card:#0a0a0a; --text:#fff; --text2:#aaa; --borda:#1f1f1f;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-size:14px;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.topbar{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(0,0,0,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--borda);display:flex;align-items:center;justify-content:center;z-index:100;}
+.menu-btn{position:absolute;left:14px;background:transparent;border:1.5px solid var(--c);color:var(--c);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;}
+.logo{color:var(--c);font-weight:900;font-size:17px;letter-spacing:1.5px;text-shadow:0 0 10px var(--c);}
+
+.wrap{padding:70px 16px 110px;max-width:700px;margin:auto;animation:fadeIn.4s;}
+h1{font-size:20px;font-weight:800;margin:0 0 16px;text-align:center;}
+h2{font-size:16px;font-weight:700;margin:0 0 8px;}
+h3.sectitle{text-align:center;font-size:13px;color:var(--text2);margin:8px 0 12px;font-weight:600;letter-spacing:1px;}
+
+.card{background:var(--card);border:1.5px solid var(--borda);border-radius:12px;padding:16px;margin-bottom:12px;cursor:pointer;transition:.2s;animation:fadeIn.5s;}
+.card:active{border-color:var(--c);box-shadow:0 0 15px var(--c)30;}
+.card p{color:var(--text2);font-size:13px;margin-top:4px;}
+
+.btn{width:100%;padding:14px;background:transparent;border:1.5px solid var(--c);color:var(--c);border-radius:10px;font-weight:800;cursor:pointer;margin-top:16px;}
+.btn:active{background:var(--c);color:#000;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="menu-btn" onclick="voltarCentral()">VOLTAR</button>
+  <div class="logo">K-TP</div>
+</div>
+
+<main class="wrap">
+  <h1>K-TP</h1>
+  <h3 class="sectitle">KORVIL TRANSFORMAÇÃO PROFISSIONAL</h3>
+  
+  <div class="card" onclick="irParaTransformacao()">
+    <h2>1. PROJETO TRANSFORMAÇÃO</h2>
+    <p>Treinamento Personalizado</p>
+  </div>
+  
+  <div class="card" onclick="abrirLojaKTP()">
+    <h2>2. KORVIL LOJA</h2>
+    <p>Produtos Oficiais K-TP</p>
+  </div>
+
+  <button class="btn" onclick="voltarCentral()">VOLTAR PARA CENTRAL</button>
+</main>
+
+<script>
+function irParaTransformacao(){
+  window.location.href = "https://korvilp-sudo.github.io/korvil-app/sections/ktp/projetotransformacao/index.html";
+}
+
+function abrirLojaKTP(){
+  window.location.href = "https://korvilp-sudo.github.io/korvil-app/sections/centralkorvil/korvil-loja/index.html";
+}
+
+function voltarCentral(){
+  window.location.href = "https://korvilp-sudo.github.io/korvil-app/sections/centralkorvil/index.html";
+}
+</script>
+</body>
+</html>

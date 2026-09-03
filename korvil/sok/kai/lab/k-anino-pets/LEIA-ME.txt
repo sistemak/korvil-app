@@ -1,0 +1,18 @@
+K-ANINO PETS - SOS HURLEY - PACOTE RECUPERADO
+==============================================
+Este ZIP contém todos os arquivos exatos.
+
+ESTRUTURA:
+- index.html -> redireciona para vk.html
+- kai-core/lab/k-riador/vk.html (304 linhas originais)
+- kai-core/lab/k-riador/assets/IMG_20180211_115516776.jpg
+- kai-core/lab/k-riador/assets/HURLEYY.MP4
+- assets/hurley2.jpg
+
+COMO USAR:
+1. Extraia tudo em uma pasta
+2. Clique duplo em index.html ou vk.html
+3. Tudo funciona offline, sem links externos
+4. Mantenha a estrutura de pastas intacta
+
+Recuperado em: 26/08/2026, 13:43:12

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000">
+<title>K-TP PROJETO TRANSFORMAÇÃO 4D</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700;900&display=swap');
+
+:root {
+  --c: #00ffff;
+  --c-glow: rgba(0, 255, 255, 0.4);
+  --bg: #020208;
+  --card-bg: rgba(6, 15, 30, 0.75);
+  --text: #ffffff;
+  --text2: #e0e0e0;
+  --borda: rgba(0, 255, 255, 0.3);
+  --ok: #00ff88;
+  --pink: #ff0055;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  padding: 20px 12px;
+  max-width: 800px;
+  margin: auto;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  perspective: 1000px;
+}
+
+/* --- FUNDO VIVO ANIMADO 4D --- */
+.bg-container {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 50%, #081026 0%, #000000 100%);
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.4;
+  animation: floatOrb 14s ease-in-out infinite alternate;
+}
+.orb-1 { width: 60vw; height: 60vw; background: #00ffff; top: -20vw; left: -10vw; }
+.orb-2 { width: 50vw; height: 50vw; background: #0066ff; bottom: -15vw; right: -10vw; animation-delay: -7s; }
+.orb-3 { width: 40vw; height: 40vw; background: var(--pink); top: 40%; left: 20%; opacity: 0.25; animation-duration: 20s; }
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, 40px) scale(1.15); }
+  100% { transform: translate(-50px, 60px) scale(0.9); }
+}
+
+.grid-3d {
+  position: absolute;
+  width: 200vw;
+  height: 200vh;
+  top: -50vh;
+  left: -50vw;
+  background-image: 
+    linear-gradient(to right, rgba(0, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 50px 50px;
+  transform: perspective(600px) rotateX(65deg) translateZ(0);
+  animation: gridMove 10s linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes gridMove {
+  0% { transform: perspective(600px) rotateX(65deg) translateY(0); }
+  100% { transform: perspective(600px) rotateX(65deg) translateY(50px); }
+}
+
+/* --- CARDS & HIERARQUIA GLASSMORPHISM --- */
+.card-main {
+  background: rgba(4, 10, 22, 0.85);
+  border: 2px solid var(--borda);
+  border-radius: 20px;
+  padding: 24px 18px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 25px var(--c-glow);
+}
+
+.brand-header {
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--c);
+  margin-bottom: 15px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 12px var(--c);
+}
+
+.logos-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.logo, .logo-projeto {
+  display: block;
+  max-width: 140px;
+  height: auto;
+  border: 2px solid var(--c);
+  border-radius: 14px;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 20px var(--c-glow);
+  transition: transform 0.3s ease;
+}
+
+.logo:hover, .logo-projeto:hover {
+  transform: scale(1.05) rotate(1deg);
+}
+
+.main-title {
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  background: linear-gradient(180deg, #ffffff 20%, var(--c) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 24px;
+  letter-spacing: 1.5px;
+  filter: drop-shadow(0 0 15px var(--c));
+}
+
+.titulo-secao {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--c);
+  margin: 22px 0 12px;
+  border-left: 4px solid var(--c);
+  padding-left: 10px;
+  text-shadow: 0 0 10px var(--c);
+  letter-spacing: 1px;
+}
+
+.sub-titulo {
+  font-size: 15px;
+  color: var(--text2);
+  margin-bottom: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.badge-card {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(0, 0, 0, 0.6));
+  border: 1.5px solid var(--c);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  margin-bottom: 18px;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+.badge-card div {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.4;
+  text-shadow: 0 0 8px var(--c);
+}
+
+/* LISTAS EM CARDS/BADGES */
+.grid-badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.badge-item {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 10px 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.05);
+}
+
+.check { color: var(--ok); font-weight: 900; text-shadow: 0 0 8px var(--ok); }
+
+/* --- FASES / LINHA DO TEMPO 4D --- */
+.fase-card {
+  background: rgba(10, 20, 35, 0.65);
+  border: 1.5px solid var(--borda);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fase-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: var(--c);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--c-glow);
+}
+
+.meses {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.25), rgba(0, 136, 255, 0.25));
+  border: 1px solid var(--c);
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px var(--c);
+}
+
+.titulo-fase {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--c);
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.numero { color: var(--ok); text-shadow: 0 0 10px var(--ok); }
+
+.desc-fase {
+  font-size: 15px;
+  color: var(--text2);
+  line-height: 1.7;
+  text-align: justify;
+  font-weight: 600;
+}
+
+/* --- BOTÕES FUTURISTAS --- */
+.btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(90deg, var(--c), #0088ff);
+  color: #000;
+  text-align: center;
+  border-radius: 12px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  border: 0;
+  cursor: pointer;
+  margin-top: 14px;
+  box-shadow: 0 0 25px var(--c-glow);
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 35px var(--c);
+}
+
+.btn.acessar {
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid var(--c);
+  color: var(--c);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+.btn.acessar:hover, .btn.acessar:active {
+  background: var(--c);
+  color: #000;
+  box-shadow: 0 0 30px var(--c);
+}
+</style>
+</head>
+<body>
+
+<!-- FUNDO VIVO ANIMADO 4D -->
+<div class="bg-container">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="grid-3d"></div>
+</div>
+
+<!-- TELA INICIAL: APRESENTAÇÃO -->
+<div id="apresentacao">
+  <div class="card-main">
+    <div class="brand-header">K-TP Treinamento Personalizado</div>
+    
+    <div class="logos-container">
+      <img src="https://korvilp-sudo.github.io/korvil-app/sections/ktp/images/logoktp.png" class="logo" alt="Logo K-TP">
+      <img src="https://korvilp-sudo.github.io/korvil-app/sections/ktp/images/logoprojetotransformacao.png" class="logo-projeto" alt="Logo Projeto Transformação">
+    </div>
+
+    <div class="main-title">PROJETO TRANSFORMAÇÃO</div>
+
+    <div class="titulo-secao">| SOBRE O PROGRAMA</div>
+    <div class="sub-titulo">Programa de guia fitness de alta performance desenvolvido por Say Korvil.</div>
+
+    <div class="badge-card">
+      <div>TREINADOR<br>TERAPEUTA HOLÍSTICO<br><span style="color:var(--c);">ESPECIALISTA EM RESULTADOS</span></div>
+    </div>
+
+    <div class="titulo-secao">| PARTICIPANTES</div>
+    <div class="grid-badges">
+      <div class="badge-item"><span class="check">✓</span>Crianças (10+)</div>
+      <div class="badge-item"><span class="check">✓</span>Jovens</div>
+      <div class="badge-item"><span class="check">✓</span>Adultos</div>
+      <div class="badge-item"><span class="check">✓</span>Idosos</div>
+      <div class="badge-item"><span class="check">✓</span>Praticantes</div>
+      <div class="badge-item"><span class="check">✓</span>Atletas</div>
+    </div>
+
+    <div class="titulo-secao">| METODOLOGIA</div>
+    <div class="grid-badges">
+      <div class="badge-item"><span class="check">✓</span>1. Manutenção</div>
+      <div class="badge-item"><span class="check">✓</span>2. Resistência</div>
+      <div class="badge-item"><span class="check">✓</span>3. Força</div>
+      <div class="badge-item"><span class="check">✓</span>4. Hipertrofia</div>
+    </div>
+
+    <div class="titulo-secao">| LINHA DO TEMPO DO PROJETO</div>
+
+    <!-- FASE 1: OFF SEASON -->
+    <div class="fase-card">
+      <div class="meses">JANEIRO A FEVEREIRO - OFF SEASON: PREPARO</div>
+      <div class="titulo-fase"><span class="numero">1.</span> OFF SEASON - ADAPTAÇÃO GERAL</div>
+      <div class="desc-fase">
+        Fase de adaptação total de corpo e mente às rotinas do Projeto TRANSFORMAÇÃO. Não existe dieta restritiva aqui. O objetivo é aumentar a ingestão calórica de forma estratégica para elevar energia, disposição, recuperação e preparar o metabolismo para o bulking. Para quem já fez o projeto no ano anterior, é o momento de liberdade consciente: aproveitar o que gosta sem sabotar os objetivos. Foco também na adaptação técnica: aprender execução correta dos exercícios e entender a metodologia semanal de cada fase. Essencial para ectomorfos e alunos com dificuldade de ganhar massa e peso. Se o objetivo for ganho de peso e hipertrofia, trabalhamos com superávit calórico. Se for emagrecimento e definição muscular, já iniciamos o controle calórico. Dieta mais liberal, mas sempre direcionada.
+      </div>
+    </div>
+
+    <!-- FASE 2: BULKING -->
+    <div class="fase-card">
+      <div class="meses">MARÇO A MAIO - BULKING: EVOLUÇÃO</div>
+      <div class="titulo-fase"><span class="numero">2.</span> BULKING - HIPERTROFIA MÁXIMA</div>
+      <div class="desc-fase">
+        Fase prioritária de construção. Objetivo principal: hipertrofia muscular, ganho de força, regeneração tecidual, reabilitação e condicionamento físico geral com foco em saúde e performance. Regra básica: comer mais do que gasta. Dieta limpa e protocolar, totalmente alinhada aos objetivos escolhidos por cada aluno, com prioridade máxima em proteínas de alta qualidade, carboidratos complexos e micronutrientes. Treinos estruturados para progressão de carga e execução técnica impecável, sem erros. Zero desperdício. Essa é a fase de ganhar massa magra de verdade, volume e densidade muscular. Disciplina na dieta e no treino é obrigatória para construir a base sólida do físico.
+      </div>
+    </div>
+
+    <!-- FASE 3: MAINTENANCE -->
+    <div class="fase-card">
+      <div class="meses">JUNHO A AGOSTO - MAINTENANCE: MANTER RESULTADOS</div>
+      <div class="titulo-fase"><span class="numero">3.</span> MAINTENANCE - CONSOLIDAÇÃO</div>
+      <div class="desc-fase">
+        Fase de manutenção e consolidação de todos os ganhos conquistados no bulking. Momento de verificar, ajustar e refinar o protocolo geral do projeto. Objetivo: manter massa magra, reduzir levemente a gordura corporal e densificar a musculatura. Preparação física e mental para a fase de cutting. Foco total em disciplina, consistência e nutrição inteligente para nutrir o físico. Trabalhamos também o equilíbrio da mente, da alma e do estado de espírito. Os treinos são de intensidade mediana para evitar lesões, preservar articulações e não comprometer a energia da fase final. Esta é a ponte entre construção e definição. Fase de lapidar o que foi construído.
+      </div>
+    </div>
+
+    <!-- FASE 4: CUTTING -->
+    <div class="fase-card">
+      <div class="meses">SETEMBRO A NOVEMBRO - CUTTING: FINALIZAÇÃO</div>
+      <div class="titulo-fase"><span class="numero">4.</span> CUTTING - DEFINIÇÃO TOTAL</div>
+      <div class="desc-fase">
+        Fase de finalização e exposição do resultado do Projeto TRANSFORMAÇÃO. Objetivo: eliminar o máximo de gordura corporal possível preservando 100% da massa muscular conquistada. Dieta rigorosa com déficit calórico controlado e estratégico. Treinos intensos, técnicos e precisos. Não pode errar e não pode se lesionar. Foco total em estética, simetria, vascularização e modelagem do físico. É aqui que o trabalho do ano inteiro aparece. Fase de definição muscular geral, performance máxima e resultado visível. Execução perfeita em dieta e treino. Sem falhas.
+      </div>
+    </div>
+
+    <!-- FASE 5: DEZEMBRO -->
+    <div class="fase-card">
+      <div class="meses">DEZEMBRO - FÉRIAS: APROVEITAR OS RESULTADOS</div>
+      <div class="titulo-fase"><span class="numero">5.</span> DEZEMBRO - FÉRIAS ESTRATÉGICAS</div>
+      <div class="desc-fase">
+        Período oficial de férias e recarga. Treinos leves com exercícios de rotina, mobilidade e manutenção. Objetivo: aproveitar os resultados conquistados, descansar corpo e articulações e manter o corpo ativo sem pressão. Momento para avaliar o ano, celebrar a evolução e repensar as escolhas de objetivos para o próximo ciclo do projeto. É a fase de transição: manter a constância sem estresse. Para voltar no ano seguinte com mais foco, mais energia e mais estratégia para atingir um novo nível.
+      </div>
+    </div>
+
+    <button class="btn" onclick="window.location.href='inscricao-do-projeto.html'">COMEÇAR INSCRIÇÃO</button>
+    <button class="btn acessar" onclick="acessarProjeto()">ACESSAR PROJETO</button>
+  </div>
+</div>
+
+<script>
+// MESMOS IDS DO projetotransformacao.html ALUNOS_DB
+const idsPermitidos = [
+  "ktp0", "mag1", "mcarla2", "hvitoria3", "alexandra4", "michele5", "aline6", 
+  "adriana7", "joss8", "amigaadrum9", "amigaadrdois10", "angel11", "anapaula12", 
+  "gusta13", "sueli14", "fabi15", "paula16", "nop17", "bianca18", "lau19", 
+  "cass20", "katia21", "mara22", "edna23", "luciane24", "marly25", "mcris26", 
+  "juci27", "joce28", "marcos29", "lucas30", "celi31", "jaque32", "elisa33", 
+  "gice34", "pati35", "mel36", "naty37", "gon38", "nicol39", "tchuco40", "dani41"
+]; 
+
+function acessarProjeto(){
+  const senha = prompt("Digite sua senha/ID de aluno do Projeto Transformação:");
+  if(!senha){return;}
+  const senhaNormalizada = senha.trim().toLowerCase().replace(/\s+/g, ''); // TIRA ESPAÇO E MINÚSCULO
+  console.log("Tentando logar com:", senhaNormalizada);
+
+  if(idsPermitidos.includes(senhaNormalizada)){
+    localStorage.setItem('idLogado', senhaNormalizada);
+    window.location.href = "projetotransformacao.html"; 
+  } else {
+    alert("Acesso negado. ID: " + senha + " não encontrado.");
+  }
+}
+</script>
+</body>
+</html>

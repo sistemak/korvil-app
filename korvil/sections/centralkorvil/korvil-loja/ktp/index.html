@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KORVIL LOJA | K-TP FITNESS</title>
+<style>
+:root{--c:#00ff88; --bg:#000; --card:#0a0a0a; --text:#fff; --text2:#aaa; --borda:#1f1f1f;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:var(--bg);color:var(--text);padding-bottom:70px}
+
+/* TOPO IGUAL DA LOJA */
+.topo{background:linear-gradient(90deg,var(--c),#00d4ff);padding:10px 4%;position:sticky;top:0;z-index:100}
+.busca{display:flex;background:#fff;border-radius:8px;padding:10px;gap:8px}
+.busca input{flex:1;border:0;outline:0;color:#000}
+
+/* BANNER DO SETOR */
+.banner{margin:12px 4%;background:linear-gradient(135deg,var(--c),#00d4ff);padding:20px;border-radius:12px;color:#000}
+.banner h1{font-size:24px;font-weight:900}
+.banner p{font-size:13px;margin-top:4px}
+
+/* CATEGORIAS EM CARDS GRANDES */
+.titulo{padding:10px 4% 5px;font-size:18px;font-weight:800}
+.grid-categorias{padding:0 4% 20px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card-cat{background:var(--card);border-radius:12px;padding:15px;border:1px solid var(--borda);text-decoration:none;color:var(--text)}
+.card-cat img{width:100%;height:100px;object-fit:cover;border-radius:8px;background:#111;margin-bottom:8px}
+.card-cat h3{font-size:15px}
+
+/* PRODUTOS EM DESTAQUE */
+.grid{padding:0 4% 20px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:var(--card);border-radius:12px;padding:10px;border:1px solid var(--borda)}
+.card img{width:100%;height:140px;object-fit:cover;border-radius:8px;background:#111}
+.preco{color:var(--c);font-size:18px;font-weight:900}
+.btn{width:100%;background:var(--c);color:#000;border:0;padding:8px;border-radius:6px;margin-top:6px;font-weight:800}
+
+/* MENU INFERIOR */
+.menu-inf{position:fixed;bottom:0;left:0;right:0;background:#000;border-top:1px solid var(--borda);display:flex;justify-content:space-around;padding:8px 0}
+.item-menu{text-align:center;font-size:10px;color:var(--text2);text-decoration:none}
+.item-menu.ativo{color:var(--c)}
+</style>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+</head>
+<body>
+
+  <!-- TOPO PADRÃO KORVIL LOJA -->
+  <div class="topo">
+    <div class="busca"><ion-icon name="search-outline" style="color:#000"></ion-icon><input placeholder="Buscar em KORVIL LOJA"></div>
+  </div>
+
+  <!-- BANNER IDENTIFICANDO QUE ESTÁ NO KTP -->
+  <div class="banner">
+    <h1>K-TP FITNESS</h1>
+    <p>KORVIL LOJA • Transformação Profissional</p>
+  </div>
+
+  <!-- CATEGORIAS DA ÁREA FITNESS -->
+  <h3 class="titulo">Categorias</h3>
+  <div class="grid-categorias">
+    <a href="./suplementos/index.html" class="card-cat">
+      <img src="https://placehold.co/300/00ff88/000?text=SUPLEMENTOS">
+      <h3>Suplementos</h3>
+      <p style="font-size:12px;color:var(--text2)">Whey, Creatina, Pré</p>
+    </a>
+    <a href="./equipamentos/index.html" class="card-cat">
+      <img src="https://placehold.co/300/00d4ff/000?text=EQUIPAMENTOS">
+      <h3>Equipamentos</h3>
+      <p style="font-size:12px;color:var(--text2)">Halter, Esteira, Banco</p>
+    </a>
+    <a href="./acessorios/index.html" class="card-cat">
+      <img src="https://placehold.co/300/00ff88/000?text=ACESSORIOS">
+      <h3>Acessórios</h3>
+      <p style="font-size:12px;color:var(--text2)">Luvas, Cinto, Squeeze</p>
+    </a>
+    <a href="./produtos-alimentares/index.html" class="card-cat">
+      <img src="https://placehold.co/300/00d4ff/000?text=ALIMENTARES">
+      <h3>Produtos Alimentares</h3>
+      <p style="font-size:12px;color:var(--text2)">Barra, Shake, Pasta</p>
+    </a>
+    <a href="./artigos-esportivos/index.html" class="card-cat">
+      <img src="https://placehold.co/300/00ff88/000?text=ARTIGOS">
+      <h3>Artigos Esportivos</h3>
+      <p style="font-size:12px;color:var(--text2)">Bola, Raquete, Kimono</p>
+    </a>
+  </div>
+
+  <!-- PRODUTOS MAIS VENDIDOS DA ÁREA -->
+  <h3 class="titulo">Mais Vendidos do K-TP 🔥</h3>
+  <div class="grid" id="gridDestaques"></div>
+
+  <!-- MENU INFERIOR -->
+  <div class="menu-inf">
+    <a href="../../index.html" class="item-menu"><ion-icon name="home"></ion-icon><div>Inicio</div></a>
+    <a href="#" class="item-menu ativo"><ion-icon name="fitness"></ion-icon><div>K-TP</div></a>
+    <a href="#" class="item-menu"><ion-icon name="cart"></ion-icon><div>Carrinho</div></a>
+    <a href="#" class="item-menu"><ion-icon name="menu"></ion-icon><div>Mais</div></a>
+  </div>
+
+<script>
+// PRODUTOS DESTAQUES DE TODAS AS CATEGORIAS DO KTP
+const destaques = [
+  {nome:"Whey Protein 2kg", preco:129.90, img:"https://placehold.co/400/00ff88/000?text=WHEY", link:"./suplementos/index.html"},
+  {nome:"Halter Ajustável 20kg", preco:249.90, img:"https://placehold.co/400/00d4ff/000?text=HALTER", link:"./equipamentos/index.html"},
+  {nome:"Kit Luvas + Cinturão", preco:99.90, img:"https://placehold.co/400/00ff88/000?text=LUVAS", link:"./acessorios/index.html"},
+  {nome:"Barra de Proteína Cx12", preco:45.90, img:"https://placehold.co/400/00d4ff/000?text=BARRA", link:"./produtos-alimentares/index.html"}
+];
+
+document.getElementById('gridDestaques').innerHTML = destaques.map(p=>`
+  <a href="${p.link}" style="text-decoration:none;color:var(--text)">
+    <div class="card">
+      <img src="${p.img}">
+      <div style="font-size:14px;margin:6px 0;height:36px">${p.nome}</div>
+      <div class="preco">R$ ${p.preco.toFixed(2)}</div>
+      <button class="btn">VER PRODUTO</button>
+    </div>
+  </a>
+`).join('');
+</script>
+</body>
+</html>
