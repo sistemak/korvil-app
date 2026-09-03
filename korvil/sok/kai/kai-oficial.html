@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K-AI | PLATAFORMA OFICIAL KORVIL</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="kai-voice.js"></script>
+
+  <style>
+    :root {
+      --c: #00FFFF;
+      --c2: #A8FFE6;
+      --bg: #000000;
+      --panel: rgba(0, 10, 15, 0.85);
+      --border: rgba(0, 255, 255, 0.4);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
+    body { background: var(--bg); color: var(--c); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+    /* BACKGROUND 3D */
+    #canvas3d { position: fixed; inset: 0; z-index: 0; }
+
+    /* HEADER HUD OFICIAL */
+    header { position: relative; z-index: 10; display: flex; justify-content: space-between; align-items: center; padding: 18px 30px; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(12px); border-bottom: 2px solid var(--c); box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); }
+    .logo-container { display: flex; flex-direction: column; }
+    .logo { font-size: 26px; font-weight: 900; letter-spacing: 5px; text-shadow: 0 0 20px var(--c); }
+    .logo span { color: var(--c2); font-size: 11px; letter-spacing: 2px; }
+
+    .nav-links { display: flex; gap: 12px; }
+    .nav-btn { text-decoration: none; color: var(--c); font-size: 11px; font-weight: 700; padding: 8px 16px; border: 1px solid var(--c); border-radius: 20px; background: rgba(0, 255, 255, 0.05); transition: 0.3s; }
+    .nav-btn:hover { background: var(--c); color: #000; box-shadow: 0 0 15px var(--c); }
+
+    /* CONTAINER PRINCIPAL CHAT */
+    main { position: relative; z-index: 10; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding: 20px; max-width: 750px; margin: 0 auto; width: 100%; height: calc(100vh - 80px); }
+
+    .chat-container { width: 100%; background: var(--panel); border: 1px solid var(--border); border-radius: 15px; padding: 20px; max-height: 240px; overflow-y: auto; backdrop-filter: blur(15px); box-shadow: 0 0 25px rgba(0, 255, 255, 0.15); margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+    .msg { font-size: 14px; line-height: 1.5; padding: 8px 12px; border-radius: 8px; }
+    .msg.user { color: var(--c2); text-align: right; background: rgba(0, 255, 255, 0.1); border-right: 3px solid var(--c2); align-self: flex-end; }
+    .msg.kai { color: var(--c); text-align: left; background: rgba(0, 10, 20, 0.6); border-left: 3px solid var(--c); align-self: flex-start; }
+
+    /* CONTROLES DE ENTRADA & VOZ */
+    .controls-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .input-box { width: 100%; display: flex; gap: 10px; background: rgba(0, 0, 0, 0.9); border: 1px solid var(--c); border-radius: 30px; padding: 8px 18px; backdrop-filter: blur(10px); box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); }
+    .input-box input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 14px; }
+    .input-box input::placeholder { color: rgba(0, 255, 255, 0.4); }
+
+    .btn-send { background: transparent; border: none; color: var(--c); font-size: 18px; cursor: pointer; transition: 0.2s; }
+    .btn-send:hover { color: var(--c2); transform: scale(1.2); }
+
+    .mic-btn { width: 75px; height: 75px; border: 3px solid var(--c); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; transition: 0.3s; background: rgba(0, 255, 255, 0.05); box-shadow: 0 0 30px var(--c); }
+    .mic-btn:hover { transform: scale(1.1); box-shadow: 0 0 50px var(--c); }
+    .mic-btn.listening { animation: pulse 0.8s infinite; background: rgba(0, 255, 255, 0.3); }
+    @keyframes pulse { 0%, 100% { box-shadow: 0 0 30px var(--c); } 50% { box-shadow: 0 0 70px var(--c2); } }
+
+    .status-lbl { font-size: 12px; color: var(--c2); letter-spacing: 1px; }
+
+    /* FLOATING CUBE WIDGET */
+    #kaiCube {
+      position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px;
+      background: linear-gradient(135deg, #00FFFF, #9013fe); color: white;
+      font-weight: bold; font-size: 15px; border-radius: 10px; display: flex;
+      align-items: center; justify-content: center; cursor: pointer; z-index: 9999;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3), 0 0 15px var(--c); user-select: none; transition: transform 0.2s ease;
+      border: 1px solid var(--c);
+    }
+    #kaiCube:hover { transform: scale(1.1); box-shadow: 0 0 25px var(--c); }
+
+    #kaiPanel {
+      display: none; position: fixed; bottom: 90px; right: 20px; width: 320px; max-width: 90%;
+      height: 400px; background: rgba(5, 15, 20, 0.95); border-radius: 12px; border: 1px solid var(--c);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,255,0.2); z-index: 10000;
+      flex-direction: column; overflow: hidden; backdrop-filter: blur(15px);
+    }
+    #kaiPanel header {
+      background: rgba(0, 255, 255, 0.15); color: var(--c); padding: 10px 14px; display: flex;
+      justify-content: space-between; align-items: center; font-weight: bold; border-bottom: 1px solid var(--border); box-shadow: none;
+    }
+    #kaiCloseBtn { background: transparent; border: none; color: var(--c); font-size: 20px; cursor: pointer; }
+
+    .kaiBody { flex: 1; padding: 10px; overflow-y: auto; background: rgba(0, 0, 0, 0.6); display: flex; flex-direction: column; gap: 6px; }
+    .kaiBody div { font-size: 12px; line-height: 1.4; padding: 6px 10px; border-radius: 6px; }
+    .msg-user-mini { color: var(--c2); text-align: right; background: rgba(0, 255, 255, 0.1); align-self: flex-end; max-width: 85%; }
+    .msg-kai-mini { color: var(--c); text-align: left; background: rgba(0, 20, 30, 0.8); border: 1px solid rgba(0, 255, 255, 0.2); align-self: flex-start; max-width: 85%; }
+
+    .kaiInputRow { display: flex; padding: 10px; border-top: 1px solid var(--border); gap: 6px; background: rgba(0, 0, 0, 0.8); }
+    .kaiInput { flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border); background: rgba(0, 0, 0, 0.5); color: #fff; font-size: 12px; outline: none; }
+    .kaiSendBtn { background: rgba(0, 255, 255, 0.2); color: var(--c); border: 1px solid var(--c); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
+    .kaiSendBtn:hover { background: var(--c); color: #000; }
+  </style>
+</head>
+<body>
+
+  <!-- CANVAS THREE.JS OCTAEDRO -->
+  <canvas id="canvas3d"></canvas>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-container">
+      <div class="logo">K-AI OFICIAL</div>
+      <span>KORVIL ARTIFICIAL INTELLIGENCE</span>
+    </div>
+    <div class="nav-links">
+      <a href="kai-user.html" class="nav-btn">Modo Usuário</a>
+      <a href="kai-admin.html" class="nav-btn">Painel Admin</a>
+    </div>
+  </header>
+
+  <!-- MAIN INTERFACE -->
+  <main>
+    <div class="chat-container" id="chat">
+      <div class="msg kai">K-AI inicializado. KORVIL Artificial Intelligence pronta para servir.</div>
+    </div>
+
+    <div class="controls-wrapper">
+      <div class="input-box">
+        <input type="text" id="userInput" placeholder="Digite seu comando..." autocomplete="off">
+        <button class="btn-send" id="sendBtn">➔</button>
+      </div>
+
+      <div class="mic-btn" id="micBtn">🎙️</div>
+      <div class="status-lbl" id="status">Clique e diga "Olá K-AI"</div>
+    </div>
+  </main>
+
+  <!-- WIDGET FLOATING CUBE -->
+  <div id="kaiCube">K-AI</div>
+
+  <div id="kaiPanel">
+    <header>
+      <span>K-AI MINI CORE</span>
+      <button id="kaiCloseBtn">&times;</button>
+    </header>
+    <div class="kaiBody" id="kaiMiniBody">
+      <div class="msg-kai-mini">K-AI Mini ativo. Como posso ajudar?</div>
+    </div>
+    <div class="kaiInputRow">
+      <input type="text" class="kaiInput" id="kaiMiniInput" placeholder="Digite aqui..." autocomplete="off">
+      <button class="kaiSendBtn" id="kaiMiniSendBtn">Enviar</button>
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop></audio>
+
+  <script>
+    // 1. RECONHECIMENTO E SÍNTESE DE VOZ
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const synth = window.speechSynthesis;
+    let recognition;
+    let isListening = false;
+
+    const micBtn = document.getElementById('micBtn');
+    const chat = document.getElementById('chat');
+    const status = document.getElementById('status');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const bgMusic = document.getElementById('bgMusic');
+
+    // Módulo kai-voice.js se carregado
+    let voiceCore = null;
+    if (typeof KAIVoice !== 'undefined') {
+      voiceCore = new KAIVoice({
+        onStart: () => {
+          isListening = true;
+          micBtn.classList.add('listening');
+          status.innerText = 'K-AI ouvindo...';
+        },
+        onEnd: () => {
+          isListening = false;
+          micBtn.classList.remove('listening');
+          status.innerText = 'Clique para falar com K-AI';
+        },
+        onResult: (transcript) => processarEntrada(transcript)
+      });
+      micBtn.onclick = () => voiceCore.toggle();
+    } else if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'pt-BR';
+      recognition.continuous = false;
+
+      recognition.onstart = () => {
+        isListening = true;
+        micBtn.classList.add('listening');
+        status.innerText = 'K-AI ouvindo...';
+      };
+      recognition.onend = () => {
+        isListening = false;
+        micBtn.classList.remove('listening');
+        status.innerText = 'Clique para falar com K-AI';
+      };
+      recognition.onresult = (e) => {
+        const cmd = e.results[0][0].transcript;
+        processarEntrada(cmd);
+      };
+      micBtn.onclick = () => { if (!isListening) recognition.start(); };
+    }
+
+    function addMsg(tipo, texto) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + tipo;
+      div.innerText = tipo === 'user' ? 'Você: ' + texto : 'K-AI: ' + texto;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+
+      addMiniMsg(tipo === 'user' ? 'user' : 'kai', texto);
+    }
+
+    function falar(texto) {
+      addMsg('kai', texto);
+      if (voiceCore) {
+        voiceCore.speak(texto);
+      } else if (synth) {
+        synth.cancel();
+        const utter = new SpeechSynthesisUtterance(texto);
+        utter.lang = 'pt-BR';
+        utter.rate = 1.05;
+        utter.pitch = 1.1;
+        synth.speak(utter);
+      }
+    }
+
+    async function processarEntrada(texto) {
+      const cmd = texto || userInput.value.trim();
+      if (!cmd) return;
+
+      addMsg('user', cmd);
+      if (!texto) userInput.value = '';
+
+      try {
+        const res = await fetch('/api/kai/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: cmd })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          falar(data.response);
+        } else {
+          processarComandoLocal(cmd.toLowerCase());
+        }
+      } catch (err) {
+        processarComandoLocal(cmd.toLowerCase());
+      }
+    }
+
+    function processarComandoLocal(cmd) {
+      if (cmd.includes('olá') || cmd.includes('k-ai')) {
+        falar('Olá. K-AI online. Sistema KORVIL operacional. Como posso te auxiliar hoje?');
+        tocarSom('startup');
+      } else if (cmd.includes('horas') || cmd.includes('hora')) {
+        falar('Horário atual do sistema KORVIL: ' + new Date().toLocaleTimeString('pt-BR'));
+      } else if (cmd.includes('data') || cmd.includes('dia')) {
+        falar('Data de hoje: ' + new Date().toLocaleDateString('pt-BR'));
+      } else if (cmd.includes('música') || cmd.includes('tocar')) {
+        falar('Ativando trilha sonora KORVIL');
+        tocarMusica();
+      } else if (cmd.includes('parar música')) {
+        pararMusica();
+        falar('Trilha pausada');
+      } else if (cmd.includes('abrir') && cmd.includes('app')) {
+        falar('Acessando aplicativo KORVIL');
+        setTimeout(() => window.open('https://korvilp-sudo.github.io/korvil-app/app.html', '_blank'), 1000);
+      } else if (cmd.includes('status') || cmd.includes('sistema')) {
+        falar('Todos os sistemas KORVIL operando em 100%. Núcleo K-AI estável.');
+      } else if (cmd.includes('piada')) {
+        falar('Por que o K-AI não dorme? Porque ele faz backup dos sonhos dos usuários.');
+      } else {
+        falar('Comando processado. Digite status, horas, música, abrir app ou fale com o sistema.');
+      }
+    }
+
+    sendBtn.onclick = () => processarEntrada();
+    userInput.onkeypress = (e) => { if (e.key === 'Enter') processarEntrada(); };
+
+    // 2. SONS E TRILHA
+    function tocarSom(tipo) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const audio = new AudioCtx();
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(tipo === 'startup' ? 880 : 440, audio.currentTime);
+      gain.gain.setValueAtTime(0.2, audio.currentTime);
+      osc.connect(gain).connect(audio.destination);
+      osc.start();
+      osc.stop(audio.currentTime + 0.4);
+    }
+
+    function tocarMusica() {
+      bgMusic.src = 'https://cdn.pixabay.com/download/audio/2023/01/03/audio_2b12e3e1c8.mp3';
+      bgMusic.volume = 0.25;
+      bgMusic.play();
+    }
+    function pararMusica() { bgMusic.pause(); }
+
+    // 3. WIDGET FLOATING CUBE
+    const kaiCube = document.getElementById('kaiCube');
+    const kaiPanel = document.getElementById('kaiPanel');
+    const kaiCloseBtn = document.getElementById('kaiCloseBtn');
+    const kaiMiniInput = document.getElementById('kaiMiniInput');
+    const kaiMiniSendBtn = document.getElementById('kaiMiniSendBtn');
+    const kaiMiniBody = document.getElementById('kaiMiniBody');
+
+    kaiCube.onclick = () => { kaiPanel.style.display = kaiPanel.style.display === 'flex' ? 'none' : 'flex'; };
+    kaiCloseBtn.onclick = () => { kaiPanel.style.display = 'none'; };
+
+    function addMiniMsg(tipo, texto) {
+      const div = document.createElement('div');
+      div.className = tipo === 'user' ? 'msg-user-mini' : 'msg-kai-mini';
+      div.innerText = texto;
+      kaiMiniBody.appendChild(div);
+      kaiMiniBody.scrollTop = kaiMiniBody.scrollHeight;
+    }
+
+    kaiMiniSendBtn.onclick = () => {
+      const val = kaiMiniInput.value.trim();
+      if (val) {
+        processarEntrada(val);
+        kaiMiniInput.value = '';
+      }
+    };
+    kaiMiniInput.onkeypress = (e) => { if (e.key === 'Enter') kaiMiniSendBtn.click(); };
+
+    // 4. CENA THREE.JS OCTAEDRO K-AI
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas3d'), antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Núcleo Octaedro Principal
+    const geometry = new THREE.OctahedronGeometry(1.8, 0);
+    const material = new THREE.MeshPhongMaterial({
+      color: 0x00FFFF,
+      emissive: 0x00FFFF,
+      emissiveIntensity: 0.6,
+      shininess: 120,
+      wireframe: false,
+      transparent: true,
+      opacity: 0.9
+    });
+    const nucleo = new THREE.Mesh(geometry, material);
+    scene.add(nucleo);
+
+    // Octaedro Wireframe Interno
+    const geoInterna = new THREE.OctahedronGeometry(1.0, 0);
+    const matInterna = new THREE.MeshBasicMaterial({ color: 0xA8FFE6, wireframe: true });
+    const nucleoInterno = new THREE.Mesh(geoInterna, matInterna);
+    scene.add(nucleoInterno);
+
+    // Anéis Orbitais
+    const ringGeo = new THREE.TorusGeometry(2.7, 0.08, 16, 100);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x00FFFF, wireframe: true });
+    const ring1 = new THREE.Mesh(ringGeo, ringMat);
+    const ring2 = new THREE.Mesh(ringGeo, ringMat); ring2.rotation.x = Math.PI / 2;
+    scene.add(ring1, ring2);
+
+    // Iluminação
+    const light1 = new THREE.PointLight(0x00FFFF, 2.5, 50); light1.position.set(5, 5, 5); scene.add(light1);
+    const light2 = new THREE.PointLight(0xA8FFE6, 1.5, 50); light2.position.set(-5, -5, -5); scene.add(light2);
+    camera.position.z = 6;
+
+    // Partículas
+    const particles = new THREE.Points(
+      new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(Array(4000).fill().map(() => (Math.random() - 0.5) * 25), 3)),
+      new THREE.PointsMaterial({ color: 0x00FFFF, size: 0.025 })
+    );
+    scene.add(particles);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      nucleo.rotation.x += 0.008;
+      nucleo.rotation.y += 0.015;
+      nucleoInterno.rotation.x -= 0.012;
+      nucleoInterno.rotation.y -= 0.018;
+      ring1.rotation.y += 0.02;
+      ring2.rotation.z += 0.015;
+      particles.rotation.y += 0.0008;
+      material.emissiveIntensity = 0.5 + Math.sin(Date.now() * 0.003) * 0.2;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Apresentação inicial
+    setTimeout(() => {
+      falar('K-AI inicializado. KORVIL Artificial Intelligence pronta para servir.');
+    }, 2000);
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

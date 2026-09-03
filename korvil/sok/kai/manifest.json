@@ -1,0 +1,45 @@
+{
+  "short_name": "K-AI",
+  "name": "K-AI | KORVIL Artificial Intelligence",
+  "description": "Assistente virtual e interface cyberpunk inteligente do ecossistema KORVIL.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./kai-oficial.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "lang": "pt-BR",
+  "categories": ["utilities", "productivity", "developer tools"],
+  "shortcuts": [
+    {
+      "name": "K-AI Oficial",
+      "short_name": "Oficial",
+      "description": "Abrir interface principal do K-AI",
+      "url": "./kai-oficial.html"
+    },
+    {
+      "name": "Painel Admin",
+      "short_name": "Admin",
+      "description": "Acessar painel de controle do K-AI",
+      "url": "./kai-admin.html"
+    }
+  ]
+}
