@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000">
+<title>K-TP PROJETO TRANSFORMAÇÃO 2026</title>
+<style>
+:root{--c:#00f5ff; --bg:#000; --card:#0a0a0a; --text:#fff; --text2:#aaa; --borda:#1f1f1f; --ok:#00ff88; --erro:#ff4444; --aviso:#ffaa00; --azul:#0084ff;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
+body{background:var(--bg);color:var(--text);margin:0;overflow-x:hidden;}
+.header{padding:12px 16px 12px 56px;text-align:left;border-bottom:1px solid var(--borda);background:#0a0a0a;position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;}
+h1{font-size:14px;font-weight:900;color:var(--c);}
+.menu-btn{position:fixed;top:10px;left:12px;z-index:101;background:var(--c);color:#000;border:0;border-radius:6px;padding:6px 8px;font-weight:900;font-size:16px;cursor:pointer;}
+.btn-aluno{padding:7px 14px;background:var(--c);color:#000;border:0;border-radius:8px;font-weight:900;font-size:11px;cursor:pointer;letter-spacing:.3px;}
+.card-semana{background:#0a0a0a;border:2px solid var(--c);border-radius:10px;padding:16px;margin-top:16px;text-align:center;}
+.card-semana img{max-width:100%;border-radius:8px;margin:12px 0;border:1px solid var(--borda);}
+.card-semana h3{color:var(--c);font-size:16px;margin-bottom:8px;}
+.card-semana p{font-size:12px;color:var(--text2);line-height:1.6;white-space:pre-line;}
+.card-semana.mensagem-semana{margin-top:12px;padding:12px;background:#001a1a;border:1px solid var(--c);border-radius:8px;font-size:11px;color:var(--text);text-align:left;white-space:pre-line;}
+#menu-lateral{position:fixed;left:-280px;top:0;width:260px;height:100%;background:#0a0a0a;border-right:1px solid var(--c);z-index:200;transition:.3s;overflow-y:auto;padding:60px 0 20px;}
+#menu-lateral.ativo{left:0;}
+#overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:199;display:none;}
+#overlay.ativo{display:block;}
+.menu-titulo{padding:14px 16px;font-size:11px;color:var(--c);font-weight:900;letter-spacing:1px;border-bottom:2px solid var(--c);margin-top:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;transition:.2s;}
+.menu-titulo:hover{background:#111;}
+.menu-titulo::after{content:'+';font-size:14px;color:var(--c);transition:.3s;}
+.menu-titulo.aberto::after{content:'−';}
+.semanas-da-fase{background:#050505;display:none;}
+.semanas-da-fase.aberta{display:block;}
+.semana-item{padding:10px 16px 10px 24px;font-size:10px;cursor:pointer;border-bottom:1px solid var(--borda);color:var(--text2);line-height:1.4;display:block;transition:.2s;border-left:3px solid transparent;}
+.semana-item:hover{background:#111;color:#fff;}
+.semana-item.atual{color:#fff;background:#0d111a;border-left:3px solid var(--azul);box-shadow:inset 0 0 0 1px var(--azul), 0 0 12px rgba(0,132,255,0.25);font-weight:800;}
+.container{padding:12px;max-width:1200px;margin:auto;}
+.card-aluno{background:#001a1a;border:2px solid var(--c);border-radius:10px;padding:12px;margin-bottom:12px;position:relative;}
+.card-aluno h2{font-size:12px;color:var(--c);margin-bottom:6px;}
+.card-aluno p{font-size:11px;color:var(--text2);line-height:1.6;}
+.btn-fechar-resultado{position:absolute;top:8px;right:8px;background:var(--erro);color:#fff;border:0;border-radius:50%;width:22px;height:22px;font-weight:900;font-size:12px;cursor:pointer;line-height:22px;text-align:center;}
+.obs-pix{padding:14px;background:#0a0a0a;border:1px dashed var(--c);border-radius:8px;font-size:11px;color:var(--text2);margin:15px 0;text-align:center;line-height:1.6;}
+.titulo-crono{font-size:16px;font-weight:900;text-align:center;color:var(--c);margin-bottom:10px;}
+.msg-inicial{text-align:center;color:var(--text2);font-size:12px;margin-top:40px;}
+.abas-plano{display:flex;gap:8px;margin-bottom:12px;border-bottom:2px solid var(--borda);}
+.aba-plano{padding:10px 16px;background:#111;border:0;color:var(--text2);font-weight:800;font-size:12px;cursor:pointer;border-radius:6px 6px 0 0;}
+.aba-plano.ativa{background:var(--c);color:#000;}
+.grupo-horario{margin-top:20px;margin-bottom:8px;color:var(--c);font-weight:900;font-size:13px;padding:8px;background:#0a0a0a;border-left:3px solid var(--c);}
+.grupo-status{margin:8px 0;color:var(--aviso);font-weight:800;font-size:11px;padding-left:8px;}
+.status-ativo{color:var(--ok);font-weight:900;}
+.status-desativado{color:var(--erro);font-weight:900;}
+#modal-aluno{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
+#modal-aluno.ativo{display:flex;}
+.modal-card{background:var(--card);border:2px solid var(--c);border-radius:10px;padding:16px;width:100%;max-width:400px;}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.btn-fechar{background:var(--erro);color:#fff;border:0;border-radius:4px;padding:4px 8px;font-weight:900;cursor:pointer;}
+.busca-id{display:flex;gap:6px;}
+.busca-id input{flex:1;padding:8px;background:#000;border:1px solid var(--borda);border-radius:4px;color:#fff;font-size:12px;}
+.busca-id button{padding:8px 10px;background:var(--c);color:#000;border:0;border-radius:4px;font-weight:900;cursor:pointer;}
+
+/* K-AI */
+#k-ai-system-box{background:#080c12;border:1px solid #0e2a36;border-left:3px solid var(--c);border-radius:10px;padding:0;margin-bottom:14px;overflow:hidden;position:relative;}
+.k-ai-system-header{display:flex;align-items:center;gap:8px;padding:9px 12px;background:linear-gradient(90deg,#001a1a,#0a0a0a);border-bottom:1px solid #0e2a36;}
+.k-ai-system-icon{width:22px;height:22px;border-radius:50%;background:var(--c);color:#000;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;box-shadow:0 0 10px rgba(0,245,255,.4);}
+.k-ai-system-label{font-size:9px;color:var(--c);font-weight:900;letter-spacing:1px;}
+.k-ai-system-status{margin-left:auto;display:flex;align-items:center;gap:4px;font-size:8px;color:var(--ok);}
+.k-ai-system-status i{width:6px;height:6px;background:var(--ok);border-radius:50%;display:inline-block;box-shadow:0 0 6px var(--ok);animation:sysPulse 2s infinite;}
+@keyframes sysPulse{0%,100%{opacity:1}50%{opacity:.4}}
+#k-ai-msg-box{padding:10px 12px;display:flex;gap:10px;align-items:flex-start;cursor:pointer;transition:.2s;min-height:56px;}
+#k-ai-msg-box:hover{background:#0d111a;}
+#k-ai-msg-avatar{width:28px;height:28px;border-radius:8px;background:#0a1e2a;border:1px solid var(--c);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+#k-ai-msg-content{flex:1;}
+#k-ai-msg-title{font-size:10px;font-weight:900;color:var(--c);margin-bottom:3px;display:flex;align-items:center;gap:6px;}
+#k-ai-msg-title span{font-size:8px;background:var(--c);color:#000;padding:1px 5px;border-radius:10px;}
+#k-ai-msg-text{font-size:11px;color:#d0d0d0;line-height:1.4;}
+#k-ai-msg-action{font-size:9px;color:var(--c);margin-top:6px;display:flex;align-items:center;gap:4px;opacity:.8;}
+#k-ai-progress{height:2px;background:#111;width:100%;position:relative;overflow:hidden;}
+#k-ai-progress-bar{height:100%;background:var(--c);width:0%;transition:width 10s linear;}
+#k-ai-tour-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.25);backdrop-filter:blur(2px);z-index:2000;display:none;}
+#k-ai-tour-overlay.ativo{display:block;}
+#k-ai-tour-spotlight{position:fixed;z-index:2001;pointer-events:none;display:none;border:3px solid var(--c);border-radius:10px;box-shadow:0 0 0 2000px rgba(0,0,0,.65), 0 0 30px var(--c), inset 0 0 20px rgba(0,245,255,.2);transition:.4s cubic-bezier(.175,.885,.32,1.275);}
+#k-ai-tour-spotlight.ativo{display:block;}
+#k-ai-tour-card{position:fixed;z-index:2002;display:none;width:92%;max-width:360px;background:#0f1115;border:2px solid var(--c);border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.8), 0 0 30px rgba(0,245,255,.3);overflow:hidden;animation:tourPop .35s cubic-bezier(.175,.885,.32,1.275);}
+#k-ai-tour-card.ativo{display:block;}
+@keyframes tourPop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.k-tour-top{background:linear-gradient(90deg,#001a1a,#0a1e2a);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--c);}
+.k-tour-top b{font-size:11px;color:var(--c);letter-spacing:.5px;}
+.k-tour-x{width:24px;height:24px;border-radius:50%;background:#1a1a1a;border:1px solid #333;color:#fff;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.k-tour-x:hover{background:var(--erro);border-color:var(--erro);}
+.k-tour-mid{padding:14px 16px;}
+.k-tour-step{font-size:8px;color:var(--c);font-weight:900;letter-spacing:1.2px;margin-bottom:4px;}
+.k-tour-h2{font-size:14px;font-weight:900;color:#fff;margin-bottom:6px;line-height:1.2;}
+.k-tour-p{font-size:11px;color:#aaa;line-height:1.5;}
+.k-tour-call{margin-top:10px;padding:9px 10px;background:#000;border:1px solid var(--azul);border-radius:8px;font-size:10px;color:#fff;display:flex;gap:8px;align-items:center;box-shadow:inset 0 0 0 1px rgba(0,132,255,.2);}
+.k-tour-foot{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;background:#0a0a0a;border-top:1px solid #1a1a1a;}
+.k-dots{display:flex;gap:5px;}
+.k-d{width:18px;height:6px;border-radius:10px;background:#222;transition:.3s;}
+.k-d.on{background:var(--c);box-shadow:0 0 8px var(--c);}
+.k-tour-btns{display:flex;gap:6px;}
+.kb{padding:8px 12px;border-radius:7px;border:0;font-weight:900;font-size:10px;cursor:pointer;}
+.kb-next{background:var(--c);color:#000;}
+.kb-next:hover{background:#fff;}
+.kb-back{background:#1e1e1e;color:#888;}
+.kb-back:hover{color:#fff;}
+#k-ai-hand{position:fixed;z-index:2003;display:none;font-size:28px;pointer-events:none;filter:drop-shadow(0 2px 8px rgba(0,0,0,.8));animation:handBounce 1s infinite;}
+@keyframes handBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+#k-ai-hand.ativo{display:block;}
+
+/* ===== NOVO: CAIXA DE DADOS DO ALUNO ===== */
+.plano-header-grande{
+  background:linear-gradient(90deg,#001a1a,#0a1e2a);
+  border:2px solid var(--c);
+  border-radius:12px;
+  padding:14px 16px;
+  margin:18px 0 12px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(0,245,255,.2);
+}
+.plano-header-grande b{font-size:13px;color:var(--c);display:block;letter-spacing:.5px;}
+.plano-header-grande span{font-size:18px;color:#fff;font-weight:900;display:block;margin-top:2px;}
+.plano-header-grande small{font-size:10px;color:var(--text2);display:block;margin-top:4px;}
+
+.aluno-box{
+  background:#0a0a0a;
+  border:1.5px solid var(--borda);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:16px;
+  position:relative;
+  overflow:hidden;
+}
+.aluno-box.destaque-aluno{
+  border:2px solid var(--c);
+  box-shadow:0 0 20px rgba(0,245,255,.15);
+}
+.aluno-box-top{
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid var(--borda);
+  padding-bottom:10px;margin-bottom:10px;
+}
+.aluno-box-top h2{font-size:13px;color:var(--c);margin:0;}
+.aluno-box-top .id-badge{
+  background:var(--c);color:#000;padding:3px 8px;border-radius:20px;
+  font-size:10px;font-weight:900;
+}
+.aluno-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.aluno-field{
+  background:#000;
+  border:1px solid #1a1a1a;
+  border-radius:8px;
+  padding:8px 10px;
+}
+.aluno-field.full{grid-column:1 / -1;}
+.aluno-field label{
+  font-size:8px;color:var(--c);font-weight:900;letter-spacing:.8px;
+  display:block;margin-bottom:2px;text-transform:uppercase;
+}
+.aluno-field span{
+  font-size:11px;color:#fff;line-height:1.3;display:block;
+  word-break:break-word;
+}
+.aluno-field span.vazio{color:#555;}
+.aluno-field.ativo{border-color:var(--ok);box-shadow:inset 0 0 0 1px rgba(0,255,136,.2);}
+.aluno-field.inativo{border-color:var(--erro);opacity:.9;}
+.aluno-status-box{
+  grid-column:1 / -1;
+  padding:10px;
+  border-radius:8px;
+  text-align:center;
+  font-weight:900;
+  font-size:11px;
+}
+.aluno-status-box.ativo{background:rgba(0,255,136,.1);border:1px solid var(--ok);color:var(--ok);}
+.aluno-status-box.inativo{background:rgba(255,68,68,.1);border:1px solid var(--erro);color:var(--erro);}
+
+@media(max-width:600px){
+  .aluno-grid{grid-template-columns:1fr;}
+}
+</style>
+<style>
+/* SEMANA ORGANIZADA POR TÓPICOS */
+.semana-org{ background:#0a0a0a; border:2px solid var(--c); border-radius:14px; overflow:hidden; margin-top:16px; }
+.semana-org-topo{ background:linear-gradient(90deg,#001a1a,#0a1e2a); padding:14px 16px; text-align:center; border-bottom:2px solid var(--c); }
+.semana-org-topo h3{ color:var(--c); font-size:12px; font-weight:900; letter-spacing:.3px; margin-bottom:6px; line-height:1.3; }
+.semana-org-badge{ display:inline-block; background:var(--c); color:#000; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:900; letter-spacing:.5px; }
+.semana-org-img{ width:100%; max-height:180px; object-fit:cover; display:block; border-bottom:1px solid #1a1a1a; }
+.semana-org-grid{ display:grid; grid-template-columns:1fr; gap:10px; padding:12px; }
+@media(min-width:600px){ .semana-org-grid{ grid-template-columns:1fr 1fr; } }
+.topico{ background:#000; border:1.5px solid #1a1a1a; border-radius:10px; padding:12px; position:relative; overflow:hidden; }
+.topico.ativo{ border-color:var(--c); }
+.topico-icon{ font-size:16px; margin-bottom:6px; display:block; }
+.topico-titulo{ font-size:9px; color:var(--c); font-weight:900; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+.topico-titulo span{ font-size:10px; background:#111; border:1px solid #222; padding:2px 6px; border-radius:10px; color:#fff; }
+.topico-texto{ font-size:11px; color:#e0e0e0; line-height:1.5; white-space:pre-line; }
+.topico-texto b{ color:#fff; }
+.topico-obj{ border-left:3px solid var(--c); background:linear-gradient(90deg,#001a1a,#000); }
+.topico-foco{ border-left:3px solid var(--aviso); }
+.topico-treino{ border-left:3px solid var(--ok); background:linear-gradient(90deg,#001a0a,#000); }
+.topico-dieta{ border-left:3px solid #ff6b35; background:linear-gradient(90deg,#1a0f00,#000); }
+.topico-estrategia{ border-left:3px solid var(--azul); }
+.semana-data{ text-align:center; padding:10px; font-size:10px; color:var(--aviso); background:#050505; border-top:1px solid #1a1a1a; }
+/* VIDEO TOPO GIF - CORRIGIDO GITHUB */
+.video-topo-container{
+  width:100%;
+  max-height:360px;
+  overflow:hidden;
+  border-radius:14px;
+  border:2px solid var(--c);
+  margin-bottom:14px;
+  background:#000;
+  position:relative;
+  box-shadow:0 0 20px rgba(0,245,255,.25);
+}
+.video-topo-gif{
+  width:100%;
+  height:auto;
+  max-height:360px;
+  object-fit:cover;
+  display:block;
+  background:#000;
+}
+.video-topo-label{
+  position:absolute;
+  bottom:8px;
+  left:8px;
+  background:rgba(0,0,0,.75);
+  border:1px solid var(--c);
+  color:var(--c);
+  font-size:8px;
+  font-weight:900;
+  padding:4px 10px;
+  border-radius:20px;
+  letter-spacing:.5px;
+}
+.video-fallback{
+  width:100%;
+  padding:20px;
+  text-align:center;
+  background:#001a1a;
+  border:1px dashed var(--c);
+  border-radius:10px;
+  font-size:10px;
+  color:var(--text2);
+}
+</style>
+</head>
+<body>
+<!-- CODIGO TESTE EM: https://sistemak.github.io/korvil-app/kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/v%C3%ADdeos/index.html -->
+
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+<div class="header">
+  <h1>K-TP PROJETO TRANSFORMAÇÃO 2026</h1>
+  <button class="btn-aluno" onclick="abrirBuscaAluno()">🔑 Acessar ID</button>
+</div>
+<div id="overlay" onclick="toggleMenu()"></div>
+<div id="menu-lateral"></div>
+
+<!-- CODIGO PATH: sistemak/kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/videos/index.html -->
+<!-- TESTE URL: https://sistemak.github.io/korvil-app/kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/videos/index.html -->
+<!-- VIDEO PATH MANTIDO: sistemak/korvil-app/kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/videos/images.mp4 -->
+<div class="container">
+  <!-- VIDEO TOPO - CAMINHO: sistemak/korvil-app/kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/videos/images.mp4 -->
+  <div class="video-topo-container">
+    <video id="videoTopo" class="video-topo-gif" autoplay loop muted playsinline preload="auto">
+      <source src="https://sistemak.github.io/korvil-app/kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/videos/images.mp4" type="video/mp4">
+      <source src="sistemak/korvil-app/kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/videos/images.mp4" type="video/mp4">
+      <source src="kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/videos/images.mp4" type="video/mp4">
+      <source src="./assets/videos/images.mp4" type="video/mp4">
+      <source src="assets/videos/images.mp4" type="video/mp4">
+      Seu navegador não suporta vídeo. Baixe: <a href="https://sistemak.github.io/korvil-app/kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/videos/images.mp4">images.mp4</a>
+    </video>
+    <div class="video-topo-label">🎬 K-TP 2026 • TESTE sistemak</div>
+  </div>
+  <div id="video-debug" style="font-size:9px;color:#0ff;padding:6px 10px;background:#000;border:1px dashed #0ff;border-radius:6px;margin-bottom:10px;">🎥 Código: sistemak/kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/videos/index.html<br>🎥 Vídeo: sistemak/korvil-app/kbd/korvil/sections/ktp/projetotransformacao/projetos/2026/teste/assets/videos/images.mp4</div>
+
+  <div id="k-ai-system-box">
+    <div class="k-ai-system-header">
+      <div class="k-ai-system-icon">✨</div>
+      <div class="k-ai-system-label">SISTEMA K-AI • ASSISTENTE DO PROJETO</div>
+      <div class="k-ai-system-status"><i></i> ONLINE</div>
+    </div>
+    <div id="k-ai-msg-box" onclick="kAI.abrirTour()">
+      <div id="k-ai-msg-avatar">🤖</div>
+      <div id="k-ai-msg-content">
+        <div id="k-ai-msg-title">K-AI <span id="k-ai-tag">FASE ATUAL</span></div>
+        <div id="k-ai-msg-text">Carregando orientação...</div>
+        <div id="k-ai-msg-action">👆 Clique aqui para iniciar o tour guiado</div>
+      </div>
+    </div>
+    <div id="k-ai-progress"><div id="k-ai-progress-bar"></div></div>
+  </div>
+
+  <div id="info-aluno-container"></div>
+  <div class="card-aluno" style="background:#0a0a0a;border:1.5px solid var(--borda)">
+    <img src="https://sistemak.github.io/korvil-app/sections/ktp/images/logoprojetotransformacao.png" style="max-width:120px;display:block;margin:0 auto 8px">
+    <div class="sub-titulo" style="font-size:10px;color:var(--text2);text-align:center;">Link oficial da semana. Atualiza automaticamente toda segunda-feira 00:01</div>
+  </div>
+
+  <!-- CARD DA SEMANA - SEMPRE VISIVEL DE ACORDO COM MENU -->
+  <div id="semana-container"></div>
+
+  <!-- ORIENTAÇÕES DOS OBJETIVOS -->
+  <div id="orientacoes-objetivos-container" style="display:none;"></div>
+
+  <!-- CRONOGRAMA DO ALUNO - SÓ APARECE DEPOIS DO ID -->
+  <div id="cronograma-container" style="display:none;"></div>
+</div>
+
+<div id="k-ai-tour-overlay" onclick="kAI.fecharTour()"></div>
+<div id="k-ai-tour-spotlight"></div>
+<div id="k-ai-hand">👆</div>
+<div id="k-ai-tour-card">
+  <div class="k-tour-top"><b id="k-tour-head">✨K-AI✨</b><button class="k-tour-x" onclick="kAI.fecharTour()">✕</button></div>
+  <div class="k-tour-mid">
+    <div class="k-tour-step" id="k-tour-step">PASSO 1 DE 3</div>
+    <div class="k-tour-h2" id="k-tour-h2">Título</div>
+    <div class="k-tour-p" id="k-tour-p">Descrição</div>
+    <div class="k-tour-call" id="k-tour-call">👉 Ação</div>
+  </div>
+  <div class="k-tour-foot">
+    <div class="k-dots" id="k-tour-dots"></div>
+    <div class="k-tour-btns">
+      <button class="kb kb-back" onclick="kAI.voltar()">VOLTAR</button>
+      <button class="kb kb-next" id="k-tour-next" onclick="kAI.avancar()">PRÓXIMO</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-aluno">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div style="font-weight:900;color:var(--c)">ACESSAR COM ID</div>
+      <button class="btn-fechar" onclick="fecharBuscaAluno()">X</button>
+    </div>
+    <div class="busca-id">
+      <input type="text" id="input-id-aluno" placeholder="DIGITE SEU ID" onkeypress="if(event.key==='Enter') buscarAluno()">
+      <button onclick="buscarAluno()">ENTRAR</button>
+    </div>
+    <div id="resultado-aluno" style="margin-top:10px;font-size:11px;"></div>
+  </div>
+</div>
+
+<script>
+const MENSAGENS_SEMANA = {
+  "2026-01-05": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE MANUTENÇÃO\n\nEssa é uma semana única dentro do processo — uma pausa estratégica para ajustar, aprender e evoluir com mais consciência.\n\nOBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados\nAqui, a intensidade diminui, mas a atenção aumenta. É o momento de aprender mais sobre os exercícios, melhorar a execução dos movimentos e corrigir detalhes que fazem toda a diferença lá na frente.\n\nO foco está na regeneração muscular, na mobilidade e na qualidade de cada exercício. Um corpo bem recuperado responde melhor, ganha mais eficiência e reduz o risco de lesões.\n\nMenos carga, mais controle. Menos pressa, mais precisão.\n\nSemana mais leve. É ela que sustenta sua evolução e prepara você para voltar ainda mais forte.`,
+  "2026-01-12": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE RESISTÊNCIA\nOBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados\n\nEssa é uma semana fundamental dentro do processo — onde você constrói a base que sustenta toda evolução física.\n\nAqui, o foco não está no peso, mas na capacidade do músculo trabalhar por mais tempo, suportar esforço e melhorar a recuperação entre exercícios.\n\nA intensidade vem do volume e da continuidade, não da carga. É o momento de fortalecer o fôlego, a mente e a disciplina física.\n\nMais repetições, menos peso.\nMais constância, menos pausa.\nMais resistência, mais preparação.\n\nSemana de construção da base. É ela que aumenta sua capacidade e prepara seu corpo para níveis mais altos de força, hipertrofia e performance.`,
+  "2026-01-19": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE FORÇA\nOBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados\nFoco da semana: ficar mais forte de verdade\nNão é estética — é força, resistência e controle\nSer musculoso ≠ ser forte\nDefinição é aparência\nForça é desempenho real\nTREINO: Poucas repetições 3 a 6 | Carga mais alta ~70% | Execução controlada | Mais descanso\nAprenda o movimento. Ative o sistema nervoso. Preparação para o Bulking que vem em Março.`,
+  "2026-01-26": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados\nFoco: Desenvolvimento e crescimento do físico através de treino estruturado, controlado e eficiente.\n\nESTRUTURA DO TREINO:\nHIPERTROFIA 10 a 12 repetições até a falha\nMistura de força + resistência\nEstímulo máximo para crescimento muscular\nObjetivo: levar o músculo ao limite com controle\nSem pressa. Sem excesso. Execução correta vale mais que velocidade.\nO corpo cresce na recuperação, não no exagero.`,
+  "2026-02-02": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE MANUTENÇÃO\nOBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados\nEssa é uma semana única dentro do processo — uma pausa estratégica para ajustar, aprender e evoluir com mais consciência.\nMenos carga, mais controle. Foco em regeneração muscular e qualidade.`,
+  "2026-02-09": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE RESISTÊNCIA\nOBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados\nConstrua a base. Mais repetições, menos peso. Foco em fôlego, mente e disciplina.`,
+  "2026-02-16": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE FORÇA\nOBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados\nFoco: ficar mais forte de verdade. 3 a 6 reps. Preparação para o Bulking.`,
+  "2026-02-23": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados\nFoco: Desenvolvimento do físico. 10 a 12 reps. Controle total.`,
+  "2026-03-02": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\n\nSEMANA DE MANUTENÇÃO\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\nRecuperação estratégica para suportar as cargas altas que virão. É o momento de preparar o corpo para crescer — com inteligência.\n\nSemana leve para absorver o treino anterior e estar 100% para o volume que vem.`,
+  "2026-03-09": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\n\nSEMANA DE RESISTÊNCIA\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\n\nAumentar a capacidade de treino. Mais volume, mais trabalho. O foco é a continuidade sem parar.\n\nUm corpo resistente queima mais energia e aguenta treinos mais fortes depois.`,
+  "2026-03-16": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\n\nSEMANA DE FORÇA\n\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\nFoco da semana: ficar mais forte de verdade\nTREINO: 3 a 6 repetições | Carga alta ~70% | 5s contraindo + 5s alongando\nALIMENTAÇÃO: Proteína média | Carboidrato ALTO | Gordura normal\nFoco: comer mais energia para ganhar peso e força.`,
+  "2026-03-23": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\n\nSEMANA DE HIPERTROFIA\n\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\n\nFoco principal: CRESCER\n\nESTRUTURA: 10 a 12 repetições até a falha\nMistura de força + resistência\nEstímulo máximo para crescimento muscular\n\nALIMENTAÇÃO: Proteína ALTA | Carboidrato ALTO | Gordura moderada\nVocê está transformando o corpo em etapas, com inteligência, disciplina e controle total.`,
+  "2026-03-30": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\nFoco principal: CRESCER. 10 a 12 reps até a falha. Proteína Alta + Carbo Alto.`,
+  "2026-04-06": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE MANUTENÇÃO\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\nRecuperação estratégica para suportar as cargas altas. Preparar o corpo para crescer.`,
+  "2026-04-13": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE RESISTÊNCIA\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\nAumentar a capacidade de treino. Mais volume, mais trabalho.`,
+  "2026-04-20": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE FORÇA\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\n3 a 6 reps pesado. Carga alta. Foco: Força real para sustentar o ganho de massa.`,
+  "2026-04-27": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\nFoco principal: CRESCER. 10 a 12 reps até a falha.`,
+  "2026-05-04": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE MANUTENÇÃO\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\nRecuperação estratégica para suportar as cargas altas.`,
+  "2026-05-11": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE RESISTÊNCIA\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\nAumentar a capacidade de treino. Mais volume.`,
+  "2026-05-18": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE FORÇA\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\n3 a 6 reps pesado. Subir a carga para forçar novo ganho de massa.`,
+  "2026-05-25": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Ganhar massa muscular | Cumprir metas | Melhorar performance | Evolução\nFoco principal: CRESCER. 10 a 12 reps até a falha.`,
+  "2026-06-01": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\n\nSEMANA DE MANUTENÇÃO\n\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\n\nMissão: Manter.\nO objetivo aqui é preservar todos os ganhos obtidos nas fases anteriores. Treino técnico, carga estável e foco total em não perder massa muscular.`,
+  "2026-06-08": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE RESISTÊNCIA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nManter o condicionamento e o gasto calórico. Não acumular gordura.`,
+  "2026-06-15": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE FORÇA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nSegurar a força conquistada. Carga alta, volume baixo.`,
+  "2026-06-22": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nÚltimo estímulo para manter o músculo.`,
+  "2026-06-29": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nÚltimo estímulo para manter o músculo.`,
+  "2026-07-06": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE MANUTENÇÃO\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nMissão: Manter. Treino técnico, carga estável.`,
+  "2026-07-13": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE FORÇA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nSegurar a força conquistada. Carga alta, volume baixo.`,
+  "2026-07-20": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nÚltimo estímulo para manter o músculo.`,
+  "2026-07-27": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nÚltimo estímulo para manter o músculo.`,
+  "2026-08-03": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE MANUTENÇÃO\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nMissão: Manter. Preservar massa magra.`,
+  "2026-08-10": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE RESISTÊNCIA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nManter o condicionamento e gasto calórico.`,
+  "2026-08-17": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE FORÇA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nSegurar a força conquistada.`,
+  "2026-08-24": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nÚltimo estímulo para manter o músculo.`,
+  "2026-08-31": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Manter todos os ganhos do Bulking | Preservar massa muscular magra | Preparo pro Cutting\nÚltimo estímulo para manter o músculo.`,
+  "2026-09-07": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE RESISTÊNCIA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nAcelerar o metabolismo. Treino com mais movimento, menos descanso.\nALIMENTAÇÃO: Proteína ALTA | Carboidrato BAIXO | Gordura moderada\nFoco: manter músculo e perder gordura.`,
+  "2026-09-14": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE FORÇA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nProteger a força e o músculo durante o déficit calórico. Carga pesada.`,
+  "2026-09-21": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nModelar o físico. 10 a 12 repetições com foco total na contração muscular.`,
+  "2026-09-28": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nModelar o físico. Detalhes e definição.`,
+  "2026-10-05": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE MANUTENÇÃO\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nRecuperar para aguentar o déficit. Semana leve.`,
+  "2026-10-12": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE RESISTÊNCIA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nGasto calórico lá em cima. Secar mais.`,
+  "2026-10-19": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE FORÇA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nProteger a força mesmo com pouca caloria.`,
+  "2026-10-26": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nDetalhes do físico. Contração máxima.`,
+  "2026-11-02": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE MANUTENÇÃO\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nRecuperar para aguentar o déficit.`,
+  "2026-11-09": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE RESISTÊNCIA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nÚltimo gás para secar.`,
+  "2026-11-16": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE FORÇA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nÚltimo estímulo pesado do ano.`,
+  "2026-11-23": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nModelagem final antes de dezembro.`,
+  "2026-11-30": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE HIPERTROFIA\nOBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico\nModelagem final antes de dezembro.`,
+  "2026-12-07": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS\n\nSEMANA DE RESISTÊNCIA\nOBJETIVO: Mostrar os resultados\n\nMovimentar o corpo nas festas. Manter o ritmo.\nMês de avaliação final, fotos e descanso merecido.\nVocê transformou o corpo com inteligência, disciplina e controle total. 💪`,
+  "2026-12-14": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS\nSEMANA DE FORÇA\nOBJETIVO: Mostrar os resultados\nManter o estímulo para não perder força. Fechar forte o 11° ano.`,
+  "2026-12-21": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS\nSEMANA DE HIPERTROFIA\nOBJETIVO: Mostrar os resultados\nAvaliação final e fotos. Mostrar resultado de 2026.`,
+  "2026-12-28": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS\nSEMANA DE HIPERTROFIA\nOBJETIVO: Mostrar os resultados\nÚltimo treino do ano. Celebração. Resultado e descanso merecido 💪`
+};
+const MENU = {
+  "2026-01-05": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE MANUTENÇÃO`,
+  "2026-01-12": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE RESISTÊNCIA`,
+  "2026-01-19": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE FORÇA`,
+  "2026-01-26": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE HIPERTROFIA`,
+  "2026-02-02": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE MANUTENÇÃO`,
+  "2026-02-09": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE RESISTÊNCIA`,
+  "2026-02-16": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE FORÇA`,
+  "2026-02-23": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON\nSEMANA DE HIPERTROFIA`,
+  "2026-03-02": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE MANUTENÇÃO`,
+  "2026-03-09": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE RESISTÊNCIA`,
+  "2026-03-16": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE FORÇA`,
+  "2026-03-23": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE HIPERTROFIA`,
+  "2026-03-30": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE HIPERTROFIA`,
+  "2026-04-06": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE MANUTENÇÃO`,
+  "2026-04-13": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE RESISTÊNCIA`,
+  "2026-04-20": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE FORÇA`,
+  "2026-04-27": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE HIPERTROFIA`,
+  "2026-05-04": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE MANUTENÇÃO`,
+  "2026-05-11": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE RESISTÊNCIA`,
+  "2026-05-18": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE FORÇA`,
+"2026-05-25": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING\nSEMANA DE HIPERTROFIA`,
+  "2026-06-01": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE MANUTENÇÃO`,
+  "2026-06-08": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE RESISTÊNCIA`,
+  "2026-06-15": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE FORÇA`,
+  "2026-06-22": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA`,
+  "2026-06-29": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA`,
+  "2026-07-06": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE MANUTENÇÃO`,
+  "2026-07-13": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE FORÇA`,
+  "2026-07-20": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA`,
+  "2026-07-27": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA`,
+  "2026-08-03": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE MANUTENÇÃO`,
+  "2026-08-10": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE RESISTÊNCIA`,
+  "2026-08-17": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE FORÇA`,
+  "2026-08-24": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA`,
+  "2026-08-31": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE\nSEMANA DE HIPERTROFIA`,
+  "2026-09-07": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE RESISTÊNCIA`,
+  "2026-09-14": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE FORÇA`,
+  "2026-09-21": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE HIPERTROFIA`,
+  "2026-09-28": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE HIPERTROFIA`,
+  "2026-10-05": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE MANUTENÇÃO`,
+  "2026-10-12": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE RESISTÊNCIA`,
+  "2026-10-19": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE FORÇA`,
+  "2026-10-26": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE HIPERTROFIA`,
+  "2026-11-02": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE MANUTENÇÃO`,
+  "2026-11-09": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE RESISTÊNCIA`,
+  "2026-11-16": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE FORÇA`,
+  "2026-11-23": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE HIPERTROFIA`,
+  "2026-11-30": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING\nSEMANA DE HIPERTROFIA`,
+  "2026-12-07": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS\nSEMANA DE RESISTÊNCIA`,
+  "2026-12-14": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS\nSEMANA DE FORÇA`,
+  "2026-12-21": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS\nSEMANA DE HIPERTROFIA`,
+  "2026-12-28": `K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS\nSEMANA DE HIPERTROFIA`
+};
+const FASES_MENU = {
+  "FASE 1: OFF SEASON": ["2026-01-05","2026-01-12","2026-01-19","2026-01-26","2026-02-02","2026-02-09","2026-02-16","2026-02-23"],
+  "FASE 2: BULKING": ["2026-03-02","2026-03-09","2026-03-16","2026-03-23","2026-03-30","2026-04-06","2026-04-13","2026-04-20","2026-04-27","2026-05-04","2026-05-11","2026-05-18","2026-05-25"],
+  "FASE 3: MAINTENANCE": ["2026-06-01","2026-06-08","2026-06-15","2026-06-22","2026-06-29","2026-07-06","2026-07-13","2026-07-20","2026-07-27","2026-08-03","2026-08-10","2026-08-17","2026-08-24","2026-08-31"],
+  "FASE 4: CUTTING": ["2026-09-07","2026-09-14","2026-09-21","2026-09-28","2026-10-05","2026-10-12","2026-10-19","2026-10-26","2026-11-02","2026-11-09","2026-11-16","2026-11-23","2026-11-30"],
+  "DEZEMBRO: FÉRIAS": ["2026-12-07","2026-12-14","2026-12-21","2026-12-28"]
+};
+let ALUNOS_DB = {
+  "ktp0": {nome:"SAY KORVIL", tipo:"ADMIN"},
+  "mag1": {nome:"Magda Gomes dos Santos", tipo:"ADMIN"},
+  "mcarla2": {nome:"Maria Carla Carvalho Santos", tipo:"ALUNO"},
+  "hvitoria3": {nome:"Hellem Vitória Carvalho dos Santos", tipo:"ALUNO"},
+  "alexandra4": {nome:"Alexandra", tipo:"ALUNO"},
+  "michele5": {nome:"Michele B", tipo:"ALUNO"},
+  "aline6": {nome:"Aline", tipo:"ALUNO"},
+  "adriana7": {nome:"Adriana", tipo:"ALUNO"},
+  "joss8": {nome:"Jossiane Alves", tipo:"ALUNO"},
+  "amigaadrum9": {nome:"amigaadrum", tipo:"ALUNO"},
+  "amigaadrdois10": {nome:"amigaadrdois", tipo:"ALUNO"},
+  "angel11": {nome:"Angélica", tipo:"ALUNO"},
+  "anapaula12": {nome:"Ana Paula", tipo:"ALUNO"},
+  "gusta13": {nome:"Gustavo Geraldino", tipo:"ALUNO"},
+  "sueli14": {nome:"Sueli", tipo:"ALUNO"},
+  "fabi15": {nome:"Fabiana", tipo:"ALUNO"},
+  "paula16": {nome:"Paula Cristine", tipo:"ALUNO"},
+  "nop17": {nome:"Natan Osvath Paoli", tipo:"ALUNO"},
+  "bianca18": {nome:"Bianca", tipo:"ALUNO"},
+  "lau19": {nome:"Laura Jesus Aragão", tipo:"ALUNO"},
+  "cass20": {nome:"Cassandra Jesus", tipo:"ALUNO"},
+  "katia21": {nome:"LUCIRENE Katia Paoli Ferreira", tipo:"ALUNO"},
+  "mara22": {nome:"Lucimara", tipo:"ALUNO"},
+  "edna23": {nome:"Edna Candida Paoli", tipo:"ALUNO"},
+  "luciane24": {nome:"Luciane Paoli", tipo:"ALUNO"},
+  "marly25": {nome:"Marly", tipo:"ALUNO"},
+  "mcris26": {nome:"Maria Cristina", tipo:"ALUNO"},
+  "juci27": {nome:"Jucilene", tipo:"ALUNO"},
+  "joce28": {nome:"Jocélia", tipo:"ALUNO"},
+  "marcos29": {nome:"Marcos França", tipo:"ALUNO"},
+  "lucas30": {nome:"Lucas", tipo:"ALUNO"},
+  "celi31": {nome:"Celidalva", tipo:"ALUNO"},
+  "jaque32": {nome:"Jaqueline", tipo:"ALUNO"},
+  "elisa33": {nome:"Elisangela", tipo:"ALUNO"},
+  "gice34": {nome:"Gicelia", tipo:"ALUNO"},
+  "pati35": {nome:"Patrícia", tipo:"ALUNO"},
+  "mel36": {nome:"Melissa", tipo:"ALUNO"},
+  "naty37": {nome:"Natália Melo", tipo:"ALUNO"},
+  "gon38": {nome:"José Gonzaga", tipo:"ALUNO"},
+  "nicol39": {nome:"Nicoli da Silga Guedes", tipo:"ALUNO"},
+  "tchuco1": {nome:"Tchuco Silva", tipo:"ALUNO"},
+  "dani2": {nome:"Daniele Vieira Leite", tipo:"ALUNO"},
+  "teste": {nome:"Aluno Teste", tipo:"ALUNO"}
+};
+let CRONOGRAMA_DB = {
+"PRESENCIAL": [
+    {hora:"06h00 TESTE - ID teste", status:"ATIVOS", alunos:[
+      {n:99, id:"teste", aluno:"Aluno Teste - TESTE", dias:"Segunda a Sexta", freq:"5x", objetivo:"Emagrecimento | Saúde | Definição Muscular | Condicionamento Físico", valor:"R$100,00", matricula:"R$50,00", total:"R$150,00", venc:"27/07/26", status:"Ativo", cpf:"000.000.000-00", nasc:"1990-01-01", idade:"36 anos", genero:"Masculino", whats:"(11) 99999-9999", email:"teste@teste.com", nivel_atividade:"Iniciante", q1:"Sim", q2:"Normal", q3:"8 horas", q4:"Nao", q5:"Barriga", q6:"Nao", q7:"Sim", q8:"Sim", q9:"Nenhum", plano:"Presencial 5x"}
+    ]},
+    {hora:"06h00 🐦", status:"DESATIVADOS", alunos:[
+      {n:0, id:"adriana7", aluno:"Adriana", dias:"Ter Qua", freq:"2x", objetivo:"Emagrecimento", valor:"R$80,00", matricula:"R$0,00", total:"R$80,00", venc:"24/03/26", status:"Desativado", cpf:"--", nasc:"--", idade:"--", genero:"--", whats:"--", email:"--", nivel_atividade:"--", q1:"--", q2:"--", q3:"--", q4:"--", q5:"--", q6:"--", q7:"--", q8:"--", q9:"--", plano:"Presencial 2x"},
+      {n:1, id:"joss8", aluno:"Jossiane Alves", dias:"Seg a Sex", freq:"5x", objetivo:"Definição", valor:"R$150,00", matricula:"R$0,00", total:"R$150,00", venc:"24/10/25", status:"Desativado", cpf:"--", nasc:"--", idade:"--", genero:"--", whats:"--", email:"--", nivel_atividade:"--", q1:"--", q2:"--", q3:"--", q4:"--", q5:"--", q6:"--", q7:"--", q8:"--", q9:"--", plano:"Presencial 5x"},
+      {n:2, id:"amigaadrum9", aluno:"amigaadrum", dias:"--", freq:"--", objetivo:"Saúde", valor:"--", matricula:"--", total:"--", venc:"--", status:"Desativado", cpf:"--", nasc:"--", idade:"--", genero:"--", whats:"--", email:"--", nivel_atividade:"--", q1:"--", q2:"--", q3:"--", q4:"--", q5:"--", q6:"--", q7:"--", q8:"--", q9:"--", plano:"--"},
+      {n:3, id:"amigaadrdois10", aluno:"amigaadrdois", dias:"--", freq:"--", objetivo:"Saúde", valor:"--", matricula:"--", total:"--", venc:"--", status:"Desativado", cpf:"--", nasc:"--", idade:"--", genero:"--", whats:"--", email:"--", nivel_atividade:"--", q1:"--", q2:"--", q3:"--", q4:"--", q5:"--", q6:"--", q7:"--", q8:"--", q9:"--", plano:"--"}
+    ]},
+    {hora:"08h00 🐢", status:"ATIVOS", alunos:[
+      {n:0, id:"mag1", aluno:"Magda Gomes dos Santos", dias:"Segunda, Terça, Quarta, Quinta, Sexta", freq:"5x", objetivo:"Definição Muscular", valor:"R$150,00", matricula:"R$50,00", total:"R$200,00", venc:"13/05/26", status:"Ativo", cpf:"112.505.24", nasc:"2026-07-27", idade:"0 anos", genero:"Feminino", whats:"(13) 99636-4009", email:"magdagomes998@gmail.com", nivel_atividade:"Intermediário", q1:"Sim", q2:"Irregular", q3:"9 horas", q4:"Não", q5:"Abdômen", q6:"Não", q7:"Sim", q8:"Sim", q9:"Anti depressivo", plano:"Presencial 5x"},
+      {n:1, id:"mcarla2", aluno:"Maria Carla Carvalho Santos", dias:"Segunda, Quinta, Sexta", freq:"3x", objetivo:"Emagrecimento | Saúde | Hipertrofia | Definição Muscular | Condicionamento Físico | Reabilitação Física", valor:"R$100,00", matricula:"R$50,00", total:"R$150,00", venc:"06/08/2026", status:"Ativo", cpf:"417.344.068-52", nasc:"1996-04-22", idade:"30 anos", genero:"Feminino", whats:"(13) 99768-3699", email:"carlacarvalho8362@gmail.com", nivel_atividade:"Iniciante", q1:"Sim", q2:"Mais ou menos, preciso melhorar", q3:"6 a 7 horas", q4:"Não", q5:"Barriga, braços e pernas", q6:"Não", q7:"Sim", q8:"Sim", q9:"Vitaminas e ferro norimpurum", plano:"Presencial 3x"},
+      {n:2, id:"hvitoria3", aluno:"Hellem Vitória Carvalho dos Santos", dias:"Segunda, Quinta, Sexta", freq:"3x", objetivo:"Definição Muscular | Saúde | Hipertrofia | Condicionamento Físico | Reabilitação Física | Emagrecimento", valor:"R$100,00", matricula:"R$50,00", total:"R$150,00", venc:"06/08/2026", status:"Ativo", cpf:"417.344.078-24", nasc:"1999-01-11", idade:"27 anos", genero:"Feminino", whats:"(13) 99645-0471", email:"vitoria2018201@gmail.com", nivel_atividade:"Iniciante", q1:"Sim", q2:"Normal,preciso aumentar a proteína", q3:"7 horas", q4:"Não", q5:"Braços,barriga, culote e pernas.", q6:"Não", q7:"Sim", q8:"Sim", q9:"Só noripurum", plano:"Presencial 3x"}
+    ]},
+    {hora:"17h00 🌙", status:"ATIVOS", alunos:[
+      {n:0, id:"katia21", aluno:"LUCIRENE Katia Paoli Ferreira", dias:"Terça, Quinta, Sexta", freq:"3x", objetivo:"Emagrecimento | Saúde | Definição Muscular | Condicionamento Físico | Reabilitação Física", valor:"R$100,00", matricula:"R$50,00", total:"R$150,00", venc:"27/07/26", status:"Ativo", cpf:"284.743.828-90", nasc:"1980-06-23", idade:"46 anos", genero:"Feminino", whats:"(13) 99739-5370", email:"katiapaoli70@gmail.com", nivel_atividade:"Iniciante", q1:"Sim", q2:"Saudavel", q3:"7", q4:"Não como carnes", q5:"Diminuir braços e abdômen e costas", q6:"Sim no joelho", q7:"Passo em terapeura", q8:"Sim", q9:"Somente pressão", plano:"Presencial 3x"},
+      {n:1, id:"edna23", aluno:"Edna Candida Paoli", dias:"Terça, Sexta, Quinta", freq:"3x", objetivo:"Saúde | Condicionamento Físico | Reabilitação Física", valor:"R$100,00", matricula:"R$50,00 - 27/07/2026", total:"R$150,00", venc:"27/07/26", status:"Ativo", cpf:"021.310.768-60", nasc:"1952-07-09", idade:"73 anos", genero:"Feminino", whats:"(55) 13997-982240", email:"katiapaoli70@gmail.com", nivel_atividade:"Iniciante", q1:"Sim", q2:"Saudavel", q3:"7", q4:"Sal reduzido", q5:"Todo corpo", q6:"Mao mobilidade reduzida", q7:"Nao", q8:"Nao", q9:"Pressão diuréticos e para diabetes", plano:"Presencial 3x", cep:"11250-000", rua:"Valdomiro Vergaro", numero:"23", bairro:"Sao Joao", cidade:"Bertioga"},
+      {n:2, id:"gon38", aluno:"José Gonzaga", dias:"Seg Qua Sex", freq:"3x", objetivo:"Hipertrofia", valor:"R$100,00", matricula:"R$0,00", total:"R$100,00", venc:"13/05/26", status:"Ativo", cpf:"--", nasc:"--", idade:"--", genero:"--", whats:"--", email:"--", nivel_atividade:"--", q1:"--", q2:"--", q3:"--", q4:"--", q5:"--", q6:"--", q7:"--", q8:"--", q9:"--", plano:"Presencial 3x"},
+      {n:3, id:"nicol39", aluno:"Nicoli da Silga Guedes", dias:"Segunda, Quarta, Sexta", freq:"3x", objetivo:"Definição Muscular | Condicionamento Físico | Reabilitação Física | Saúde", valor:"R$100,00", matricula:"R$50,00", total:"R$150,00", venc:"30/04/26", status:"Ativo", cpf:"397.764.168-96", nasc:"2001-10-21", idade:"25 anos", genero:"Feminino", whats:"(13) 99657-4924", email:"nicolisgdss@gmail.com", nivel_atividade:"Iniciante", q1:"Apenas na epoca de escola", q2:"Nao me alimento corretamente", q3:"7/8h", q4:"Nao", q5:"Resistencia de braco e pernas, pois nao tenho forca", q6:"Nao", q7:"Sim", q8:"Sim", q9:"Nao", plano:"Presencial 3x"}
+    ]},
+    {hora:"19h00 ⭐", status:"ATIVOS", alunos:[]}
+  ],
+"ONLINE": [
+    {hora:"14h00", status:"DESATIVADOS", alunos:[
+      {n:0, id:"tchuco1", aluno:"Tchuco Silva", dias:"Segunda a Sexta", freq:"5x", objetivo:"Condicionamento Físico | Saúde", valor:"R$60,00", matricula:"R$0,00", total:"R$60,00", venc:"15/07/26", status:"Desativado", cpf:"--", nasc:"--", idade:"--", genero:"--", whats:"--", email:"--", nivel_atividade:"--", q1:"--", q2:"--", q3:"--", q4:"--", q5:"--", q6:"--", q7:"--", q8:"--", q9:"--", plano:"Online 5x"},
+      {n:1, id:"dani2", aluno:"Daniele Vieira Leite", dias:"Seg a Sex", freq:"5x", objetivo:"Definição", valor:"R$60,00", matricula:"R$0,00", total:"R$60,00", venc:"13/05/26", status:"Desativado", cpf:"--", nasc:"--", idade:"--", genero:"--", whats:"--", email:"--", nivel_atividade:"--", q1:"--", q2:"--", q3:"--", q4:"--", q5:"--", q6:"--", q7:"--", q8:"--", q9:"--", plano:"Online 5x"}
+    ]}
+  ]
+};
+let planoAtivo = 'PRESENCIAL';
+let idLogado = '';
+
+// K-AI
+const kAI = {
+  msgs: [
+    {tag:"BEM-VINDO", titulo:"Página do projeto", texto:"Essa é a página oficial do seu acompanhamento K-TP 2026. Aqui você vê fases, datas e o que fazer em cada semana, passo a passo.", tour:[
+      {t:"BEM-VINDO AO K-TP 2026", p:"Essa página é seu guia oficial do ano todo. Aqui você acompanha as 5 fases, as datas de cada semana e as orientações exatas do que fazer.", alvo:null, acao:"Este é o centro do projeto - continue o tour"},
+      {t:"SEMANA SEMPRE ATUALIZADA", p:"Toda segunda 00:01 a página muda sozinha para a semana atual. A semana com borda AZUL é sempre a que você deve seguir hoje.", alvo:".card-semana", acao:"👇 Veja aqui o card da semana atual"},
+      {t:"NÃO SE PERCA NAS FASES", p:"São 11 meses divididos em fases. Siga na ordem! Cada semana tem um foco diferente. Depois desse tour você vai saber usar tudo sozinho.", alvo:null, acao:"Pronto para aprender o menu? Clique em ENTENDI"}
+    ]},
+    {tag:"MENU", titulo:"Como usar o menu de fases", texto:"Clique no ☰ para abrir. Só a fase atual fica aberta, as outras ficam fechadas para não confundir. Clique na fase para abrir.", tour:[
+      {t:"PASSO 1 - ABRIR O MENU", p:"No topo esquerdo tem o botão ☰. Clique nele AGORA para abrir o menu lateral. Vou te mostrar por dentro.", alvo:".menu-btn", acao:"👉 Clique AGORA no botão ☰ para abrir o menu", acaoReal:()=>{toggleMenu()}},
+      {t:"PASSO 2 - FASES EM ABAS", p:"Perfeito! Viu? O menu abriu. Só a FASE 3 está aberta porque é a atual. As outras estão fechadas. Clique no nome de uma fase para abrir/fechar.", alvo:".menu-titulo", acao:"👉 Clique no nome de qualquer FASE para abrir/fechar"},
+      {t:"PASSO 3 - ESCOLHA A SEMANA", p:"Dentro da fase aberta estão as semanas. Cada uma tem data e tipo. Clique em qualquer semana para ver o treino. A azul é a ATUAL.", alvo:".semana-item.atual", acao:"👉 Clique na semana com BORDA AZUL para ver os detalhes"}
+    ]},
+    {tag:"ACESSAR ID", titulo:"Veja seu cronograma com seu ID", texto:"No topo direito clique em Acessar ID e digite seu ID. Você vê seus horários, status e pagamento.", tour:[
+      {t:"PASSO 1 - BOTÃO ACESSAR ID", p:"No topo direito tem o botão 🔑 Acessar ID. Clique nele para digitar seu ID e liberar seu cronograma pessoal.", alvo:".btn-aluno", acao:"👉 Clique em ACESSAR ID no topo", acaoReal:()=>{abrirBuscaAluno()}},
+      {t:"PASSO 2 - DIGITAR SEU ID", p:"Abriu a janelinha! Aqui você cola seu ID (ex: mag1, mcarla2). Depois clica em ENTRAR. Se for ADM, libera tudo.", alvo:"#input-id-aluno", acao:"👉 Digite seu ID aqui e clique ENTRAR"},
+      {t:"PASSO 3 - SEUS DADOS", p:"Após entrar, seus dados aparecem no topo e seu horário na tabela. Se não colocar ID, você só vê a semana geral do projeto.", alvo:"#info-aluno-container", acao:"Agora você sabe! Pode fechar e testar"}
+    ]},
+    {tag:"TREINO", titulo:"O que fazer na semana", texto:"Cada semana tem 1 método: MANUTENÇÃO, RESISTÊNCIA, FORÇA ou HIPERTROFIA. Leia a orientação no card e execute.", tour:[
+      {t:"MÉTODO DA SEMANA", p:"No card do meio da tela tem a imagem e nome do método: MANUTENÇÃO = leve, RESISTÊNCIA = mais reps, FORÇA = pesado poucas reps, HIPERTROFIA = até falhar.", alvo:".card-semana img", acao:"👇 Esta imagem mostra o método da semana"},
+      {t:"LEIA A ORIENTAÇÃO", p:"Abaixo da imagem tem o texto explicando objetivo, foco e como executar. Leia tudo antes de treinar. É seu passo a passo.", alvo:".card-semana .mensagem-semana", acao:"👉 Leia aqui o que fazer nessa semana"},
+      {t:"EXECUÇÃO É TUDO", p:"Foco na execução perfeita, não na pressa. O resultado vem da constância. Siga a semana atual e avance toda segunda.", alvo:null, acao:"Entendeu? Agora é treinar! 💪"}
+    ]},
+    {tag:"TUTORIAL", titulo:"Tutorial completo em 3 passos", texto:"Novo aqui? Siga: 1) Abra o menu ☰ 2) Acesse seu ID 3) Siga a semana atual com borda azul.", tour:[
+      {t:"PASSO 1 - MENU", p:"Primeiro abra o menu lateral no ☰ e veja em que fase do ano você está. Entenda a linha do tempo.", alvo:".menu-btn", acao:"1️⃣ Abra o menu ☰", acaoReal:()=>{document.getElementById('menu-lateral').classList.add('ativo');document.getElementById('overlay').classList.add('ativo');}},
+      {t:"PASSO 2 - SEU ID", p:"Segundo, clique em Acessar ID e coloque seu ID para ver seu horário e se seu pagamento está em dia.", alvo:".btn-aluno", acao:"2️⃣ Clique em Acessar ID"},
+      {t:"PASSO 3 - TREINE", p:"Terceiro, volte para o card da semana atual e siga a orientação. Pronto! Repita toda semana.", alvo:".card-semana", acao:"3️⃣ Siga a semana atual com borda azul"}
+    ]}
+  ],
+  idx:0, tourIdx:0, step:0, timer:null,
+  iniciar(){this.mostrar();this.iniciarTimer();},
+  mostrar(){const m=this.msgs[this.idx];document.getElementById('k-ai-tag').innerText=m.tag;document.getElementById('k-ai-msg-title').innerHTML=`${m.titulo} <span>${m.tag}</span>`;document.getElementById('k-ai-msg-text').innerText=m.texto;const bar=document.getElementById('k-ai-progress-bar');bar.style.transition='none';bar.style.width='0%';setTimeout(()=>{bar.style.transition='width 10s linear';bar.style.width='100%';},50);},
+  iniciarTimer(){clearInterval(this.timer);this.timer=setInterval(()=>{this.idx=(this.idx+1)%this.msgs.length;this.mostrar();},10000);},
+  abrirTour(i){if(typeof i==='number') this.idx=i;this.tourIdx=this.idx;this.step=0;document.getElementById('k-ai-tour-overlay').classList.add('ativo');document.getElementById('k-ai-tour-spotlight').classList.add('ativo');document.getElementById('k-ai-tour-card').classList.add('ativo');document.getElementById('k-ai-hand').classList.add('ativo');clearInterval(this.timer);this.renderTour();},
+  fecharTour(){document.getElementById('k-ai-tour-overlay').classList.remove('ativo');document.getElementById('k-ai-tour-spotlight').classList.remove('ativo');document.getElementById('k-ai-tour-card').classList.remove('ativo');document.getElementById('k-ai-hand').classList.remove('ativo');document.querySelectorAll('.k-ai-tour-focus').forEach(el=>el.classList.remove('k-ai-tour-focus'));this.iniciarTimer();},
+  renderTour(){const tour=this.msgs[this.tourIdx].tour;const s=tour[this.step];document.getElementById('k-tour-step').innerText=`PASSO ${this.step+1} DE ${tour.length} • ${this.msgs[this.tourIdx].tag}`;document.getElementById('k-tour-head').innerText=`✨K-AI✨ • ${this.msgs[this.tourIdx].titulo.toUpperCase()}`;document.getElementById('k-tour-h2').innerText=s.t;document.getElementById('k-tour-p').innerText=s.p;document.getElementById('k-tour-call').innerText=s.acao;let d='';tour.forEach((_,i)=>{d+=`<div class="k-d ${i===this.step?'on':''}"></div>`;});document.getElementById('k-tour-dots').innerHTML=d;document.getElementById('k-tour-next').innerText= this.step===tour.length-1 ? 'ENTENDI ✅' : 'PRÓXIMO →';this.posicionarTour(s);},
+  posicionarTour(s){const spot=document.getElementById('k-ai-tour-spotlight');const card=document.getElementById('k-ai-tour-card');const hand=document.getElementById('k-ai-hand');let alvoEl=null;if(s.alvo){alvoEl=document.querySelector(s.alvo);}if(alvoEl){const r=alvoEl.getBoundingClientRect();const pad=6;spot.style.left=(r.left-pad)+'px';spot.style.top=(r.top-pad)+'px';spot.style.width=(r.width+pad*2)+'px';spot.style.height=(r.height+pad*2)+'px';alvoEl.classList.add('k-ai-tour-focus');if(r.top < window.innerHeight/2){card.style.top=(r.bottom+18)+'px';card.style.left='50%';card.style.transform='translateX(-50%)';hand.style.left=(r.left+r.width/2-12)+'px';hand.style.top=(r.top-32)+'px';hand.innerText='👇';}else{card.style.top=(r.top-card.offsetHeight-50)+'px';card.style.left='50%';card.style.transform='translateX(-50%)';hand.style.left=(r.left+r.width/2-12)+'px';hand.style.top=(r.bottom+8)+'px';hand.innerText='👆';}setTimeout(()=>{const cr=card.getBoundingClientRect();if(cr.bottom > window.innerHeight-10) card.style.top=(window.innerHeight - cr.height - 16)+'px';if(cr.top < 10) card.style.top='16px';},50);}else{spot.style.left='50%';spot.style.top='50%';spot.style.width='0px';spot.style.height='0px';card.style.left='50%';card.style.top='50%';card.style.transform='translate(-50%,-50%)';hand.style.display='none';}},
+  avancar(){const tour=this.msgs[this.tourIdx].tour;const s=tour[this.step];if(s.acaoReal) s.acaoReal();if(this.step < tour.length-1){this.step++;this.renderTour();}else{this.fecharTour();}},
+  voltar(){if(this.step>0){this.step--;this.renderTour();}}
+};
+
+function toggleMenu(){document.getElementById('menu-lateral').classList.toggle('ativo');document.getElementById('overlay').classList.toggle('ativo');}
+function abrirBuscaAluno(){document.getElementById('modal-aluno').classList.add('ativo');}
+function fecharBuscaAluno(){document.getElementById('modal-aluno').classList.remove('ativo');}
+function fecharResultado(){
+  idLogado='';
+  localStorage.removeItem('idLogado');
+  document.getElementById('info-aluno-container').innerHTML='';
+  // esconde cronograma do aluno, mantém só mensagem da semana
+  const crono = document.getElementById('cronograma-container');
+  crono.innerHTML='';
+  crono.style.display='none';
+}
+function formatarData(d){const dt=new Date(d+'T12:00:00');return dt.toLocaleDateString('pt-BR');}
+function getSegundaDaSemana(){const agora=new Date();let dataBase=new Date(agora);if(agora.getDay()===1&&agora.getHours()<1){dataBase.setDate(agora.getDate()-7);}const diaSemana=dataBase.getDay();const diff=dataBase.getDate()-diaSemana+(diaSemana===0?-6:1);const segunda=new Date(dataBase.setDate(diff));const ano=segunda.getFullYear();const mes=String(segunda.getMonth()+1).padStart(2,'0');const dia=String(segunda.getDate()).padStart(2,'0');return `${ano}-${mes}-${dia}`;}
+function getFaseDaDataAtual(){const hojeISO=getSegundaDaSemana();let melhorData=null;for(let data in MENU){if(data<=hojeISO){if(!melhorData||data>melhorData) melhorData=data;}}if(!melhorData) melhorData=Object.keys(MENU)[0];for(let fase in FASES_MENU){if(FASES_MENU[fase].includes(melhorData)){return{faseAtual:fase,dataAtual:melhorData};}}return{faseAtual:Object.keys(FASES_MENU)[0],dataAtual:melhorData};}
+function carregarMenu(){const{faseAtual,dataAtual}=getFaseDaDataAtual();let html='';for(let fase in FASES_MENU){const ehFaseAtual=(fase===faseAtual);html+=`<div class="menu-titulo ${ehFaseAtual?'aberto':''}" onclick="toggleFase(this)">${fase}</div>`;html+=`<div class="semanas-da-fase ${ehFaseAtual?'aberta':''}">`;FASES_MENU[fase].forEach(data=>{const segundaLinha=MENU[data].split('\n')[1]||'SEMANA';const ehAtual=(data===dataAtual)?' atual':'';html+=`<div class="semana-item${ehAtual}" onclick="mostrarInfoSemana('${data}')">${formatarData(data)} - ${segundaLinha}</div>`;});html+=`</div>`;}document.getElementById('menu-lateral').innerHTML=html;}
+function toggleFase(el){const conteudo=el.nextElementSibling;const isAberta=conteudo.classList.contains('aberta');if(isAberta){conteudo.classList.remove('aberta');el.classList.remove('aberto');}else{conteudo.classList.add('aberta');el.classList.add('aberto');}}
+function mostrarInfoSemana(data){
+  const container=document.getElementById('semana-container');
+  if(!container) return;
+  const infoCompleta=MENU[data]||"";
+  const linhas=infoCompleta.split('\n');
+  const titulo=linhas[0]||"K-TP | PROJETO TRANSFORMAÇÃO 11° ANO";
+  const subtitulo=linhas[1]||"SEMANA";
+  const mensagemRaw=MENSAGENS_SEMANA[data]||"Mensagem da semana não cadastrada.";
+  const imagens={'MANUTENÇÃO':'semana-de-manutencao','RESISTÊNCIA':'semana-de-resistencia','FORÇA':'semana-de-forca','HIPERTROFIA':'semana-de-hipertrofia'};
+  let pastaImagem='semana-de-manutencao';
+  for(let key in imagens){if(subtitulo.includes(key)){pastaImagem=imagens[key];break;}}
+  const baseURL=`https://sistemak.github.io/korvil-app/sections/ktp/projetotransformacao/images/imagens/2026/imagens-dos-metodos`;
+  const caminhoImagem=`${baseURL}/${pastaImagem}/${pastaImagem}.png`;
+
+  // === USANDO EXATAMENTE AS MESMAS ORIENTAÇÕES QUE JÁ ESTAVAM - SEM INVENTAR ===
+  function extrair(padrao, txt){ const m = txt.match(padrao); return m ? m[1].trim() : null; }
+
+  const objFase = extrair(/OBJETIVO DA FASE:\s*([^\n]+)/i, mensagemRaw) || extrair(/OBJETIVO:\s*([^\n]+)/i, mensagemRaw);
+  const focoPrincipal = extrair(/Foco principal:\s*([^\n]+)/i, mensagemRaw);
+  const focoSemana = extrair(/Foco da semana:\s*([^\n]+)/i, mensagemRaw);
+  const missao = extrair(/Missão:\s*([^\n]+)/i, mensagemRaw);
+  const treino = extrair(/TREINO:\s*([^\n]+)/i, mensagemRaw);
+  const estrutura = extrair(/ESTRUTURA(?: DO TREINO)?:\s*([\s\S]*?)(?=\n[A-ZÁÉÍÓÚÂÃÊÔÇ ]+:\s|$)/i, mensagemRaw);
+  const dieta = extrair(/ALIMENTAÇÃO:\s*([\s\S]*?)(?=\n[A-ZÁÉÍÓÚÂÃÊÔÇ ]+:\s|Você está|$)/i, mensagemRaw);
+
+  // Pega o restante que é a explicação original sem apagar nada
+  let explicacao = mensagemRaw;
+  explicacao = explicacao.replace(/K-TP \| PROJETO TRANSFORMAÇÃO[^\n]*\n?/gi,'');
+  explicacao = explicacao.replace(/SEMANA DE [A-ZÁÉÍÓÚÂÃÊÔÇ]+\n?/gi,'');
+  explicacao = explicacao.replace(/OBJETIVO DA FASE:[^\n]*\n?/gi,'');
+  explicacao = explicacao.replace(/OBJETIVO:[^\n]*\n?/gi,'');
+  explicacao = explicacao.replace(/Foco principal:[^\n]*\n?/gi,'');
+  explicacao = explicacao.replace(/Foco da semana:[^\n]*\n?/gi,'');
+  explicacao = explicacao.replace(/Missão:[^\n]*\n?/gi,'');
+  explicacao = explicacao.replace(/TREINO:[^\n]*\n?/gi,'');
+  explicacao = explicacao.replace(/ESTRUTURA DO TREINO:[^\n]*\n?/gi,'');
+  explicacao = explicacao.replace(/ESTRUTURA:[^\n]*\n?/gi,'');
+  explicacao = explicacao.replace(/ALIMENTAÇÃO:[^\n]*\n?/gi,'');
+  explicacao = explicacao.trim();
+
+  let cards = '';
+  if(objFase){
+    cards+=`<div class="topico topico-obj"><div class="topico-titulo">🎯 OBJETIVO DA FASE</div><div class="topico-texto">${objFase}</div></div>`;
+  }
+  if(focoPrincipal){
+    cards+=`<div class="topico topico-foco"><div class="topico-titulo">🔥 FOCO PRINCIPAL</div><div class="topico-texto">${focoPrincipal}</div></div>`;
+  }
+  if(focoSemana){
+    cards+=`<div class="topico topico-foco"><div class="topico-titulo">🔥 FOCO DA SEMANA</div><div class="topico-texto">${focoSemana}</div></div>`;
+  }
+  if(missao){
+    cards+=`<div class="topico topico-foco"><div class="topico-titulo">🎯 MISSÃO</div><div class="topico-texto">${missao}</div></div>`;
+  }
+  if(treino){
+    cards+=`<div class="topico topico-treino"><div class="topico-titulo">🏋️ TREINO</div><div class="topico-texto">${treino}</div></div>`;
+  }
+  if(estrutura){
+    // mostra exatamente como tava escrito
+    cards+=`<div class="topico topico-treino"><div class="topico-titulo">🏋️ ESTRUTURA DO TREINO</div><div class="topico-texto">${estrutura}</div></div>`;
+  }
+  if(dieta){
+    cards+=`<div class="topico topico-dieta"><div class="topico-titulo">🥗 ALIMENTAÇÃO</div><div class="topico-texto">${dieta}</div></div>`;
+  }
+  if(explicacao && explicacao.length>5){
+    // mostra o resto da orientação original exatamente como estava
+    cards+=`<div class="topico topico-estrategia" style="grid-column:1 / -1"><div class="topico-titulo">📋 ORIENTAÇÃO COMPLETA</div><div class="topico-texto">${explicacao}</div></div>`;
+  }
+
+  if(!cards){
+    cards=`<div class="topico topico-estrategia" style="grid-column:1 / -1"><div class="topico-titulo">📋 ORIENTAÇÃO DA SEMANA</div><div class="topico-texto">${mensagemRaw}</div></div>`;
+  }
+
+  let html=`<div class="semana-org">
+    <div class="semana-org-topo"><h3>${titulo}</h3><div class="semana-org-badge">${subtitulo}</div></div>
+    <img class="semana-org-img" src="${caminhoImagem}" alt="${subtitulo}" onerror="this.src='https://sistemak.github.io/korvil-app/sections/ktp/images/logoprojetotransformacao.png'">
+    <div class="semana-org-grid">${cards}</div>
+    <div class="semana-data">📅 Semana inicia em: ${formatarData(data)} • Clique no menu ☰ para trocar de semana</div>
+  </div>`;
+
+  container.innerHTML=html;
+  if(window.innerWidth<768) toggleMenu();
+}
+
+// ===== FUNÇÕES MELHORADAS: SÓ MOSTRA O ALUNO LOGADO =====
+function encontrarAlunoCompleto(id){
+  for(let tipo in CRONOGRAMA_DB){
+    for(let bloco of CRONOGRAMA_DB[tipo]){
+      let achado = bloco.alunos.find(a=>a.id===id);
+      if(achado){
+        return {dados:achado, tipoPlano:tipo, bloco:bloco};
+      }
+    }
+  }
+  return null;
+}
+
+function campo(label, valor, extraClass='', full=false){
+  let v = (valor===undefined||valor===null||valor===''||valor==='--') ? '<span class="vazio">--</span>' : `<span>${valor}</span>`;
+  return `<div class="aluno-field ${extraClass} ${full?'full':''}"><label>${label}</label>${v}</div>`;
+}
+
+function renderAlunoBox(a, isAdminView=false){
+  const ativo = a.status==='Ativo';
+  let html = `<div class="aluno-box ${ativo?'destaque-aluno':''}">
+    <div class="aluno-box-top">
+      <h2>👤 ${a.aluno}</h2>
+      <div class="id-badge">${a.id}</div>
+    </div>
+    <div class="aluno-grid">
+      ${campo('PLANO', a.plano, '', true)}
+      ${campo('DIAS', a.dias)}
+      ${campo('FREQUÊNCIA', a.freq)}
+      ${campo('HORÁRIO', a.hora || '--')}
+      ${campo('OBJETIVO', a.objetivo, '', true)}
+      ${campo('VALOR', a.valor, ativo?'ativo':'inativo')}
+      ${campo('MATRÍCULA', a.matricula)}
+      ${campo('TOTAL', a.total, 'full')}
+      ${campo('VENCIMENTO', a.venc, ativo?'ativo':'inativo')}
+      ${campo('STATUS', a.status, '', true)}
+      <div class="aluno-status-box ${ativo?'ativo':'inativo'}">${ativo?'✅ ATIVO - Acesso liberado':'❌ DESATIVADO - Regularize'}</div>
+      ${campo('CPF', a.cpf)}
+      ${campo('NASCIMENTO', a.nasc)}
+      ${campo('IDADE', a.idade)}
+      ${campo('GÊNERO', a.genero)}
+      ${campo('WHATSAPP', a.whats, '', true)}
+      ${campo('EMAIL', a.email, '', true)}
+      ${campo('NÍVEL', a.nivel_atividade)}
+      ${campo('JÁ TREINOU?', a.q1, '', true)}
+      ${campo('ALIMENTAÇÃO', a.q2, '', true)}
+      ${campo('SONO', a.q3)}
+      ${campo('RESTRIÇÃO', a.q4)}
+      ${campo('O QUE MELHORAR', a.q5, '', true)}
+      ${campo('LIMITAÇÃO', a.q6)}
+      ${campo('PSICOLÓGICO?', a.q7)}
+      ${campo('TRATAMENTO?', a.q8)}
+      ${campo('MEDICAÇÃO', a.q9, '', true)}
+      ${a.cep ? campo('CEP', a.cep) : ''}
+      ${a.rua ? campo('RUA', a.rua) : ''}
+      ${a.numero ? campo('NÚMERO', a.numero) : ''}
+      ${a.bairro ? campo('BAIRRO', a.bairro) : ''}
+      ${a.cidade ? campo('CIDADE', a.cidade, '', true) : ''}
+    </div>
+  </div>`;
+  return html;
+}
+
+function mostrarDadosAluno(id){
+  const alunoInfo = ALUNOS_DB[id];
+  const container = document.getElementById('info-aluno-container');
+  if(!alunoInfo) return;
+  const completo = encontrarAlunoCompleto(id);
+  if(alunoInfo.tipo==='ADMIN'){
+    container.innerHTML=`<div class="card-aluno"><button class="btn-fechar-resultado" onclick="fecharResultado()">X</button><h2>👑 MODO ADMIN - ${alunoInfo.nome}</h2><p>Acesso total: PRESENCIAL + ONLINE</p></div>`;
+  } else {
+    if(completo){
+      container.innerHTML=`<div class="card-aluno"><button class="btn-fechar-resultado" onclick="fecharResultado()">X</button><h2>✅ ID CONFIRMADO</h2><p><b>${completo.dados.aluno}</b> - ${completo.dados.plano}<br>Horário: ${completo.bloco.hora} - ${completo.bloco.status}</p></div>`;
+    } else {
+      container.innerHTML=`<div class="card-aluno"><button class="btn-fechar-resultado" onclick="fecharResultado()">X</button><h2>👤 ${alunoInfo.nome}</h2><p>ID: ${id} - Dados do cronograma não localizados</p></div>`;
+    }
+  }
+}
+
+function mostrarCronograma(){
+  const container = document.getElementById('cronograma-container');
+  if(!idLogado){
+    container.innerHTML='';
+    container.style.display='none';
+    return;
+  }
+  container.style.display='block';
+  const alunoDB = ALUNOS_DB[idLogado];
+  const ehAdm = alunoDB?.tipo==='ADMIN';
+  const encontrado = encontrarAlunoCompleto(idLogado);
+
+  let html = `<div class="titulo-crono">📋 CRONOGRAMA K-TP — PROJETO TRANSFORMAÇÃO</div>`;
+  html+=`<div class="obs-pix">Olá ${alunoDB.nome}, confira seus dados abaixo.<br><b>Pix: korvilloja@gmail.com</b></div>`;
+
+  if(ehAdm){
+    html+=`<div class="abas-plano">
+      <button class="aba-plano ${planoAtivo==='PRESENCIAL'?'ativa':''}" onclick="trocarAba('PRESENCIAL', this)">🌐 PRESENCIAL MENSAL</button>
+      <button class="aba-plano ${planoAtivo==='ONLINE'?'ativa':''}" onclick="trocarAba('ONLINE', this)">💻 ONLINE MENSAL</button>
+    </div>`;
+    // ADMIN vê só o plano ativo selecionado, mas em formato caixa
+    let tipo = planoAtivo;
+    html+=`<div class="plano-header-grande"><b>PLANO ${tipo} MENSAL</b><span>Visão ADMIN - ${CRONOGRAMA_DB[tipo].length} horários</span><small>Mostrando todos os alunos deste plano</small></div>`;
+    CRONOGRAMA_DB[tipo].forEach(bloco=>{
+      html+=`<div class="grupo-horario">🕒 ${bloco.hora} — ${bloco.status}</div>`;
+      bloco.alunos.forEach(a=>{
+        // injeta hora no objeto pra renderizar
+        a.hora = bloco.hora;
+        html+=renderAlunoBox(a, true);
+      });
+    });
+  } else {
+    // ALUNO COMUM: mostra SÓ ELE, no plano correto
+    if(!encontrado){
+      html+=`<div style="text-align:center;color:var(--erro);padding:20px;">❌ Cronograma não encontrado para o ID ${idLogado}<br><small style="color:var(--text2)">Fale com o administrador</small></div>`;
+      container.innerHTML=html;
+      return;
+    }
+    // força o plano correto
+    planoAtivo = encontrado.tipoPlano;
+    const tipoPlanoNome = encontrado.tipoPlano==='PRESENCIAL' ? 'PLANO PRESENCIAL MENSAL' : 'PLANO ONLINE MENSAL';
+    html+=`<div class="plano-header-grande"><b>${tipoPlanoNome}</b><span>${encontrado.dados.plano.toUpperCase()}</span><small>🕒 ${encontrado.bloco.hora} • ${encontrado.bloco.status}</small></div>`;
+    // injeta hora
+    encontrado.dados.hora = encontrado.bloco.hora;
+    html+=renderAlunoBox(encontrado.dados);
+  }
+  container.innerHTML=html;
+}
+
+function trocarAba(plano, el){
+  planoAtivo=plano;
+  document.querySelectorAll('.aba-plano').forEach(b=>b.classList.remove('ativa'));
+  if(el) el.classList.add('ativa');
+  mostrarCronograma();
+}
+
+function buscarAluno(){
+  const id=document.getElementById('input-id-aluno').value.toLowerCase().trim();
+  if(!id){document.getElementById('resultado-aluno').innerHTML='<div style="color:var(--aviso)">Digite um ID</div>';return;}
+  if(ALUNOS_DB[id]){
+    idLogado=id;
+    localStorage.removeItem('idLogado'); // não salva automático mais
+    const enc = encontrarAlunoCompleto(id);
+    if(enc){ planoAtivo = enc.tipoPlano; }
+    else { planoAtivo = ALUNOS_DB[id].tipo==='ADMIN' ? 'PRESENCIAL' : 'PRESENCIAL'; }
+    fecharBuscaAluno();
+    // Ao acessar com ID, mostra a semana atual + cronograma do aluno
+    const dataAtual=getSegundaDaSemana();
+    let dataParaMostrar=dataAtual;
+    if(!MENU[dataParaMostrar]){
+      const {dataAtual: d} = getFaseDaDataAtual();
+      dataParaMostrar = d;
+    }
+    mostrarInfoSemana(dataParaMostrar);
+    mostrarDadosAluno(id);
+    mostrarCronograma();
+    document.getElementById('resultado-aluno').innerHTML='';
+    document.getElementById('input-id-aluno').value='';
+  } else {
+    document.getElementById('resultado-aluno').innerHTML='<div style="color:var(--erro)">ID não encontrado</div>';
+  }
+}
+window.onload=function(){
+  carregarMenu();
+  // MOSTRA MENSAGEM DA DATA CERTA DE ACORDO COM MENU (como estava)
+  const dataAtual=getSegundaDaSemana();
+  let dataParaMostrar=dataAtual;
+  if(!MENU[dataParaMostrar]){
+    const {dataAtual: d} = getFaseDaDataAtual();
+    dataParaMostrar = d;
+  }
+  mostrarInfoSemana(dataParaMostrar);
+  
+  // INICIO SEMPRE LIMPO: não carrega nenhum ID automaticamente
+  // limpa qualquer login antigo salvo
+  idLogado='';
+  document.getElementById('info-aluno-container').innerHTML='';
+  const crono = document.getElementById('cronograma-container');
+  if(crono){ crono.innerHTML=''; crono.style.display='none'; }
+  // não usa mais localStorage automático - só quando clicar em Acessar ID
+
+  kAI.iniciar();
+};
+</script>
+</body>
+</html>
