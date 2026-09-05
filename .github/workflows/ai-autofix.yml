@@ -1,0 +1,10 @@
+name: AutoFix Universal
+on: [pull_request]
+permissions: { contents: write }
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    steps:
+            - uses: actions/checkout@v4
+            - uses: autofix-ci/action@635ffb0
+            - uses: pre-commit/action@v3.0.1
