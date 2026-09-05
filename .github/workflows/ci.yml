@@ -1,0 +1,20 @@
+name: CI Universal
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+            - uses: actions/checkout@v4
+            - name: Setup Node/Python/Go (auto)
+        uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+            - name: Auto Install & Test
+        run: |
+          if [ -f package.json ]; then npm ci && npm test --if-present && npm run build --if-present; fi
+          if [ -f requirements.txt ]; then pip install -r requirements.txt && pytest --if-present; fi
+          if [ -f go.mod ]; then go test ./... && go build ./...; fi
+            - name: Lint Universal
+        uses: super-linter/super-linter@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: false
