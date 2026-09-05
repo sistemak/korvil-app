@@ -1,0 +1,15 @@
+name: IA Review
+on: [pull_request]
+jobs:
+  ai-review:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+            - uses: actions/checkout@v4
+            - uses: anc95/ChatGPT-CodeReview@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LANGUAGE: pt-BR
+          PROMPT: "Revise código, ache bugs, sugira otimização de algoritmos e correções de segurança"

@@ -1,0 +1,14 @@
+name: Segurança Universal
+on: [push, pull_request, { schedule: [{ cron: "0 0 * * 0" }] }]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+            - uses: actions/checkout@v4
+            - uses: github/codeql-action/init@v3
+        with: { languages: javascript, python, go }
+            - uses: github/codeql-action/analyze@v3
+            - uses: aquasecurity/trivy-action@master
+        with: { scan-type: 'fs', severity: 'HIGH,CRITICAL' }
+            - uses: gitleaks/gitleaks-action@v2
+        env: { GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} }
