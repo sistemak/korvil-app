@@ -126,6 +126,10 @@ async function renderRoot() {
           const text = await fileRes.text();
           main.innerHTML = `<div class="path">${path}</div><div class="preview"><h4>📄 ${path}</h4><pre>${text.substring(0,5000).replace(/</g,'&lt;')}</pre></div>`;
         }
+        // vscode.js - coloca na raiz korvil-app/vscode.js
+if (location.hostname === 'github.com') {
+  location.href = location.href.replace('github.com', 'github.dev');
+}
       });
     });
 
