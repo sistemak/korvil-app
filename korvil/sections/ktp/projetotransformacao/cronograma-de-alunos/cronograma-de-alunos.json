@@ -1,5 +1,5 @@
 <script>
-let ALUNOS_DB = {
+let ALUNOS_PRESENCIAL = {
   "ktp0": {nome:"SAY KORVIL", tipo:"ADMIN"}, // SEU ID ADM
   "mag1": {nome:"Magda Gomes dos Santos", tipo:"ADMIN"}, // MAG ADM
   "mcarla2": {nome:"Maria Carla Carvalho Santos", tipo:"ALUNO"},
@@ -40,11 +40,13 @@ let ALUNOS_DB = {
   "naty37": {nome:"Natália Melo", tipo:"ALUNO"},
   "gon38": {nome:"José Gonzaga", tipo:"ALUNO"},
   "nicol39": {nome:"Nicoli da Silga Guedes", tipo:"ALUNO"},
+  "madel40": {nome:"Maria Adelaide Santos Araújo", tipo:"ALUNO"},
+  let ALUNOS_ONLINE 
   "tchuco1": {nome:"Tchuco Silva", tipo:"ALUNO"},
   "dani2": {nome:"Daniele Vieira Leite", tipo:"ALUNO"}
 };
 
-let CRONOGRAMA_DB = {
+let CRONOGRAMA = {
 "PRESENCIAL": [
     {hora:"06h00 🐦", status:"DESATIVADOS", alunos:[
       {n:0, id:"adriana7", aluno:"Adriana", dias:"Ter Qua", freq:"2x", objetivo:"Emagrecimento", valor:"R$80,00", matricula:"R$0,00", total:"R$80,00", venc:"24/03/26", status:"Desativado", cpf:"--", nasc:"--", idade:"--", genero:"--", whats:"--", email:"--", nivel_atividade:"--", q1:"--", q2:"--", q3:"--", q4:"--", q5:"--", q6:"--", q7:"--", q8:"--", q9:"--", plano:"Presencial 2x"},
@@ -56,6 +58,7 @@ let CRONOGRAMA_DB = {
       {n:0, id:"mag1", aluno:"Magda Gomes dos Santos", dias:"Segunda, Terça, Quarta, Quinta, Sexta", freq:"5x", objetivo:"Definição Muscular", valor:"R$150,00", matricula:"R$50,00", total:"R$200,00", venc:"13/05/26", status:"Ativo", cpf:"112.505.24", nasc:"2026-07-27", idade:"0 anos", genero:"Feminino", whats:"(13) 99636-4009", email:"magdagomes998@gmail.com", nivel_atividade:"Intermediário", q1:"Sim", q2:"Irregular", q3:"9 horas", q4:"Não", q5:"Abdômen", q6:"Não", q7:"Sim", q8:"Sim", q9:"Anti depressivo", plano:"Presencial 5x"},
       {n:1, id:"mcarla2", aluno:"Maria Carla Carvalho Santos", dias:"Segunda, Quinta, Sexta", freq:"3x", objetivo:"Emagrecimento | Saúde | Hipertrofia | Definição Muscular | Condicionamento Físico | Reabilitação Física", valor:"R$100,00", matricula:"R$50,00", total:"R$150,00", venc:"06/08/2026", status:"Ativo", cpf:"417.344.068-52", nasc:"1996-04-22", idade:"30 anos", genero:"Feminino", whats:"(13) 99768-3699", email:"carlacarvalho8362@gmail.com", nivel_atividade:"Iniciante", q1:"Sim", q2:"Mais ou menos, preciso melhorar", q3:"6 a 7 horas", q4:"Não", q5:"Barriga, braços e pernas", q6:"Não", q7:"Sim", q8:"Sim", q9:"Vitaminas e ferro norimpurum", plano:"Presencial 3x"},
       {n:2, id:"hvitoria3", aluno:"Hellem Vitória Carvalho dos Santos", dias:"Segunda, Quinta, Sexta", freq:"3x", objetivo:"Definição Muscular | Saúde | Hipertrofia | Condicionamento Físico | Reabilitação Física | Emagrecimento", valor:"R$100,00", matricula:"R$50,00", total:"R$150,00", venc:"06/08/2026", status:"Ativo", cpf:"417.344.078-24", nasc:"1999-01-11", idade:"27 anos", genero:"Feminino", whats:"(13) 99645-0471", email:"vitoria2018201@gmail.com", nivel_atividade:"Iniciante", q1:"Sim", q2:"Normal,preciso aumentar a proteína", q3:"7 horas", q4:"Não", q5:"Braços,barriga, culote e pernas.", q6:"Não", q7:"Sim", q8:"Sim", q9:"Só noripurum", plano:"Presencial 3x"}
+      {n:3, id:"madel40", aluno:"Maria Adelaide Santos Araújo", dias:"Segunda, Quinta", freq:"2x", objetivo:"Emagrecimento | Definição Muscular | Saúde | Hipertrofia | Condicionamento Físico | Reabilitação Física", valor:"R$80,00", matricula:"R$50,00", total:"R$130,00", venc:"24/08/2026", status:"Ativo", cpf:"007.562.935-61", nasc:"1977-06-06", idade:"49 anos", genero:"Feminino", whats:"(13) 99653-6319", email:"mariaadelaidesantos2014@gmail.com", nivel_atividade:"Intermediário", q1:"Sim", q2:"Boa", q3:"Quatro", q4:"Não", q5:"Tudo", q6:"Sim", q7:"Não", q8:"Não", q9:"Não", plano:"Mensal Presencial 2x", cep:"11250-600", rua:"Condomínio Portal dos Dourados", numero:"2407", bairro:"Jardim Vicente de Carvalho", cidade:"Bertioga"}
     ]},
     {hora:"19h00 ⭐", status:"ATIVOS", alunos:[
       {n:0, id:"gon38", aluno:"José Gonzaga", dias:"Seg Qua Sex", freq:"3x", objetivo:"Hipertrofia", valor:"R$100,00", matricula:"R$0,00", total:"R$100,00", venc:"13/05/26", status:"Ativo", cpf:"--", nasc:"--", idade:"--", genero:"--", whats:"--", email:"--", nivel_atividade:"--", q1:"--", q2:"--", q3:"--", q4:"--", q5:"--", q6:"--", q7:"--", q8:"--", q9:"--", plano:"Presencial 3x"},
