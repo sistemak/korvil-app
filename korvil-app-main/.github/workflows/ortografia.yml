@@ -1,0 +1,12 @@
+name: Ortografia & CSpell
+on: [push, pull_request]
+jobs:
+  spell:
+    runs-on: ubuntu-latest
+    steps:
+            - uses: actions/checkout@v4
+            - uses: streetsidesoftware/cspell-action@v6
+        with:
+          files: "**/*.{md,ts,js,py,go,json}"
+          inline: warning
+          config: ./.cspell.json

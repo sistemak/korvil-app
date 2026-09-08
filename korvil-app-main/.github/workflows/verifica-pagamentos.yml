@@ -1,0 +1,34 @@
+name: Verifica PIX Real - Setor korvil-loja - 2026
+
+on:
+  schedule:
+    - cron: '*/2 * * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - 'korvil/sections/korvil-loja/**'
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Verifica Asaas korvil.p@gmail.com - setor korvil-loja
+        env:
+          ASAAS_API_KEY: ${{ secrets.ASAAS_API_KEY }}
+        run: node .github/scripts/verifica-asaas.js
+      
+      - name: Commita pagamentos do setor korvil-loja
+        run: |
+          git config user.name "korvil-bot"
+          git config user.email "bot@korvil.com"
+          git add korvil/sections/korvil-loja/pagamentos/2026/ korvil/sections/korvil-loja/pendentes/
+          git diff --staged --quiet || git commit -m "✅ korvil-loja 2026 PIX confirmado - caiu em korvil.p@gmail.com - $(date -u)"
+          git push

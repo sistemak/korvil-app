@@ -1,0 +1,116 @@
+{
+  "marca": "GROWTH",
+  "total": 10,
+  "produtos": [
+    {
+      "id": "prod-0001",
+      "codigo": "KORVIL-0001-PRO",
+      "nome_completo": "Creatina Monohidratada Pote 500g Morango Isolado",
+      "marca": "GROWTH",
+      "sabor": "Morango",
+      "embalagem": "Pote 500g",
+      "variante": "Isolado",
+      "setor": "SISTEMA K Loja > Manutenção de Celular > Tela > GROWTH",
+      "preco": "83.40"
+    },
+    {
+      "id": "prod-0006",
+      "codigo": "KORVIL-0006-PRO",
+      "nome_completo": "Hipercalórico Mass Sache 30g Morango Hidrolisado",
+      "marca": "GROWTH",
+      "sabor": "Morango",
+      "embalagem": "Sache 30g",
+      "variante": "Hidrolisado",
+      "setor": "SISTEMA K Loja > Manutenção de Celular > Tela > GROWTH",
+      "preco": "100.90"
+    },
+    {
+      "id": "prod-0011",
+      "codigo": "KORVIL-0011-PRO",
+      "nome_completo": "Glutamina Power Caixa 60 caps Morango Creme",
+      "marca": "GROWTH",
+      "sabor": "Morango",
+      "embalagem": "Caixa 60 caps",
+      "variante": "Creme",
+      "setor": "SISTEMA K Loja > Manutenção de Celular > Tela > GROWTH",
+      "preco": "118.40"
+    },
+    {
+      "id": "prod-0016",
+      "codigo": "KORVIL-0016-PRO",
+      "nome_completo": "Whey Protein Profit Pote 900g Morango Concentrado",
+      "marca": "GROWTH",
+      "sabor": "Morango",
+      "embalagem": "Pote 900g",
+      "variante": "Concentrado",
+      "setor": "SISTEMA K Loja > Manutenção de Celular > Tela > GROWTH",
+      "preco": "135.90"
+    },
+    {
+      "id": "prod-0021",
+      "codigo": "KORVIL-0021-PRO",
+      "nome_completo": "Whey Isolado Pote 500g Morango Isolado",
+      "marca": "GROWTH",
+      "sabor": "Morango",
+      "embalagem": "Pote 500g",
+      "variante": "Isolado",
+      "setor": "SISTEMA K Loja > Manutenção de Celular > Tela > GROWTH",
+      "preco": "153.40"
+    },
+    {
+      "id": "prod-0026",
+      "codigo": "KORVIL-0026-PRO",
+      "nome_completo": "BCAA 2:1:1 Sache 30g Morango Hidrolisado",
+      "marca": "GROWTH",
+      "sabor": "Morango",
+      "embalagem": "Sache 30g",
+      "variante": "Hidrolisado",
+      "setor": "SISTEMA K Loja > Manutenção de Celular > Tela > GROWTH",
+      "preco": "170.90"
+    },
+    {
+      "id": "prod-0031",
+      "codigo": "KORVIL-0031-PRO",
+      "nome_completo": "Termogênico Black Caixa 60 caps Morango Creme",
+      "marca": "GROWTH",
+      "sabor": "Morango",
+      "embalagem": "Caixa 60 caps",
+      "variante": "Creme",
+      "setor": "SISTEMA K Loja > Manutenção de Celular > Tela > GROWTH",
+      "preco": "188.40"
+    },
+    {
+      "id": "prod-0036",
+      "codigo": "KORVIL-0036-PRO",
+      "nome_completo": "Pré-Treino Insano Pote 900g Morango Concentrado",
+      "marca": "GROWTH",
+      "sabor": "Morango",
+      "embalagem": "Pote 900g",
+      "variante": "Concentrado",
+      "setor": "SISTEMA K Loja > Manutenção de Celular > Tela > GROWTH",
+      "preco": "205.90"
+    },
+    {
+      "id": "prod-0041",
+      "codigo": "KORVIL-0041-PRO",
+      "nome_completo": "Creatina Monohidratada Pote 500g Morango Isolado",
+      "marca": "GROWTH",
+      "sabor": "Morango",
+      "embalagem": "Pote 500g",
+      "variante": "Isolado",
+      "setor": "SISTEMA K Loja > Manutenção de Celular > Tela > GROWTH",
+      "preco": "223.40"
+    },
+    {
+      "id": "prod-0046",
+      "codigo": "KORVIL-0046-PRO",
+      "nome_completo": "Hipercalórico Mass Sache 30g Morango Hidrolisado",
+      "marca": "GROWTH",
+      "sabor": "Morango",
+      "embalagem": "Sache 30g",
+      "variante": "Hidrolisado",
+      "setor": "SISTEMA K Loja > Manutenção de Celular > Tela > GROWTH",
+      "preco": "240.90"
+    }
+  ]
+}

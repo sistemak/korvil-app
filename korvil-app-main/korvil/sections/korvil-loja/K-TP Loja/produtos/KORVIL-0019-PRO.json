@@ -1,0 +1,23 @@
+{
+  "id": "prod-0019",
+  "codigo": "KORVIL-0019-PRO",
+  "nome_completo": "KORVIL-0019-PRO | Moletom Canguru Produto KORVIL PDF G | Moletom Canguru | Concentrado",
+  "nome": "Moletom Canguru Produto KORVIL PDF G",
+  "marca": "Moletom Canguru",
+  "setor": "SISTEMA K Loja",
+  "categoria": "Suplementos",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "PDF",
+  "embalagem": "G",
+  "variante": "Concentrado",
+  "preco": 62.2,
+  "estoque": 29,
+  "descricao": "Produto oficial KORVIL KORVIL-0019-PRO. Moletom Canguru Concentrado com sabor PDF, embalagem G. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/SISTEMA K Loja/Fitness - Produtos/Suplementos/Moletom Canguru/Produto KORVIL/G/PDF/Concentrado/KORVIL-0019-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0019-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0019-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "SISTEMA K Loja/Fitness - Produtos/Suplementos/Moletom Canguru/Produto KORVIL/G/PDF/Concentrado"
+}

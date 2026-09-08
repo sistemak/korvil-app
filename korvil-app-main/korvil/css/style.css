@@ -1,0 +1,172 @@
+/* =====================
+   K-AI CUBO GLOBAL
+===================== */
+#kai{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:2000;
+}
+
+.kai-cube{
+  width:70px;
+  height:70px;
+  background:linear-gradient(135deg,#2fe0d0,#00b3ff);
+  color:#000;
+  font-weight:900;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 0 25px rgba(47,224,208,.6);
+  animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+/* =========================
+   VARIÁVEIS GLOBAIS
+========================= */
+:root {
+  --bg: #0b0f14;
+  --bg-card: rgba(16,24,38,.55);
+  --bg-card-hover: rgba(16,24,38,.75);
+  --text: #fff;
+  --muted: #aaa;
+  --accent: #2fe0d0;
+  --border: rgba(255,255,255,.12);
+  --shadow: 0 4px 12px rgba(0,0,0,.35);
+  --radius: 14px;
+  --pad: 20px;
+  --max: 1200px;
+}
+
+/* =========================
+   RESET / BODY
+========================= */
+* { box-sizing: border-box; margin:0; padding:0; }
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* =========================
+   TOPO / HEADER
+========================= */
+.topo {
+  background: #0f1720;
+  border-bottom: 2px solid var(--accent);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.topo__wrap {
+  max-width: var(--max);
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 12px var(--pad);
+}
+.brand {
+  text-decoration:none;
+  color: var(--accent);
+  font-weight:900;
+  font-size:20px;
+}
+.menuBtn {
+  display:none;
+  font-size:24px;
+  background:none;
+  border:none;
+  color:var(--text);
+  cursor:pointer;
+}
+.nav {
+  display:flex;
+  gap:10px;
+}
+.nav__link {
+  color: var(--text);
+  text-decoration:none;
+  padding:8px 12px;
+  border-radius:10px;
+  transition:.2s;
+}
+.nav__link:hover {
+  background: var(--accent);
+  color:#000;
+}
+
+/* =========================
+   MOBILE MENU
+========================= */
+@media(max-width:600px){
+  .menuBtn{ display:inline-flex; }
+  .nav{
+    display:none;
+    flex-direction:column;
+    width:100%;
+    margin-top:10px;
+  }
+  .nav.is-open{ display:flex; }
+}
+
+/* =========================
+   MAIN
+========================= */
+.app {
+  padding: var(--pad);
+  min-height: 80vh;
+}
+
+/* =========================
+   HOME / SETORES
+========================= */
+.korvil-home {
+  text-align:center;
+}
+.subtitle {
+  opacity:.8;
+  margin-top:6px;
+}
+.sectors {
+  margin-top:30px;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap:20px;
+}
+.sector {
+  background: #121a22;
+  padding:24px;
+  border-radius: var(--radius);
+  border:2px solid rgba(47,224,208,.35);
+  text-decoration:none;
+  color: var(--text);
+  transition:.25s;
+}
+.sector:hover {
+  background: var(--accent);
+  color:#000;
+}
+
+/* =========================
+   FOOTER
+========================= */
+.rodape {
+  border-top:1px solid var(--border);
+  background: rgba(11,15,20,.65);
+}
+.rodape__wrap {
+  max-width: var(--max);
+  margin:0 auto;
+  padding:16px var(--pad);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}

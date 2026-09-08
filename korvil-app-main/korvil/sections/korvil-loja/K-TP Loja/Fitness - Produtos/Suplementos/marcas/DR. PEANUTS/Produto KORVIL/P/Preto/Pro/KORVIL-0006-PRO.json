@@ -1,0 +1,23 @@
+{
+  "id": "prod-0006",
+  "codigo": "KORVIL-0006-PRO",
+  "nome_completo": "KORVIL-0006-PRO | DR. PEANUTS Produto KORVIL Preto P | DR. PEANUTS | Pro",
+  "nome": "DR. PEANUTS Produto KORVIL Preto P",
+  "marca": "DR. PEANUTS",
+  "setor": "K-TP Loja",
+  "categoria": "Suplementos",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "Preto",
+  "embalagem": "P",
+  "variante": "Pro",
+  "preco": 40.1,
+  "estoque": 16,
+  "descricao": "Produto oficial KORVIL KORVIL-0006-PRO. DR. PEANUTS Pro com sabor Preto, embalagem P. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/K-TP Loja/Fitness - Produtos/Suplementos/DR. PEANUTS/Produto KORVIL/P/Preto/Pro/KORVIL-0006-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0006-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0006-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "K-TP Loja/Fitness - Produtos/Suplementos/DR. PEANUTS/Produto KORVIL/P/Preto/Pro"
+}

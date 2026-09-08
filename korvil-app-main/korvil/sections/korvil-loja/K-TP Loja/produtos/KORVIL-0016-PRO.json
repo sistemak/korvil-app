@@ -1,0 +1,23 @@
+{
+  "id": "prod-0016",
+  "codigo": "KORVIL-0016-PRO",
+  "nome_completo": "KORVIL-0016-PRO | Calça Legging Produto KORVIL 15ml Unidade | Calça Legging | Dry Fit",
+  "nome": "Calça Legging Produto KORVIL 15ml Unidade",
+  "marca": "Calça Legging",
+  "setor": "SISTEMA K Loja",
+  "categoria": "Fitness - Vestuário",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "15ml",
+  "embalagem": "Unidade",
+  "variante": "Dry Fit",
+  "preco": 57.1,
+  "estoque": 26,
+  "descricao": "Produto oficial KORVIL KORVIL-0016-PRO. Calça Legging Dry Fit com sabor 15ml, embalagem Unidade. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/SISTEMA K Loja/Fitness - Vestuário/Calça Legging/Produto KORVIL/Unidade/15ml/Dry Fit/KORVIL-0016-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0016-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0016-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "SISTEMA K Loja/Fitness - Vestuário/Calça Legging/Produto KORVIL/Unidade/15ml/Dry Fit"
+}

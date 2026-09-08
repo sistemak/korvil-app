@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>KORVIL - DB Uploader PRO</title>
+<style>
+    body{background:#0a0a0a;color:#fff;font-family:Arial;padding:20px;max-width:800px;margin:auto}
+    input,select,textarea,button{width:100%;padding:12px;margin:8px 0;border-radius:6px;border:1px solid #333;background:#111;color:#fff}
+    button{background:#0057ff;font-weight:800;cursor:pointer}
+   .ok{color:#25D366}.erro{color:red}
+   .card{background:#141414;padding:15px;border-radius:8px;margin:10px 0;border:1px solid #222}
+</style>
+</head>
+<body>
+
+<h2>⚡ KORVIL - Gerador + Envio Github</h2>
+
+<div class="card">
+    <h3>Enviar Arquivo</h3>
+    <select id="tipo">
+        <option value="servicos">Serviço</option>
+        <option value="produtos">Produto</option>
+        <option value="parceiro">Site Parceiro</option>
+        <option value="css">CSS</option>
+        <option value="js">JS</option>
+    </select>
+
+    <input type="text" id="nomePasta" placeholder="Nome da Pasta: ex: julio-saude">
+    <input type="text" id="nomeArquivo" placeholder="Nome do Arquivo: ex: index.html">
+    <textarea id="codigo" rows="10" placeholder="Aqui vai vir o código do banco de dados"></textarea>
+    <button onclick="enviarGithub()">ENVIAR PRO GITHUB</button>
+    <p id="resposta"></p>
+</div>
+
+<div class="card">
+    <h3>Testar com dados do Banco</h3>
+    <button onclick="gerarDoBanco()">Gerar 3 arquivos do Banco</button>
+    <div id="listaBanco"></div>
+</div>
+
+<script>
+const API_URL = "http://localhost:3000/upload"; // Mude pra url do seu servidor
+
+async function enviarGithub(arquivo = null){
+    const resEl = document.getElementById('resposta');
+    const dados = {
+        tipo: arquivo? arquivo.tipo : document.getElementById('tipo').value,
+        pasta: arquivo? arquivo.pasta : document.getElementById('nomePasta').value,
+        arquivo: arquivo? arquivo.arquivo : document.getElementById('nomeArquivo').value,
+        codigo: arquivo? arquivo.codigo : document.getElementById('codigo').value
+    };
+
+    resEl.innerHTML = 'Enviando...';
+
+    const r = await fetch(API_URL,{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(dados)
+    });
+
+    const json = await r.json();
+    resEl.innerHTML = r.ok? `<span class="ok">✅ Criado: <a href="${json.content.html_url}" target="_blank" style="color:#0057ff">Ver Arquivo</a></span>` : `<span class="erro">❌ ${json.message || json.erro}</span>`;
+}
+
+// SIMULADOR BANCO DE DADOS
+function gerarDoBanco(){
+    const dadosBanco = [
+        {tipo:'parceiro', pasta:'clinica-magda', arquivo:'index.html', codigo:'<h1>Clinica Magda</h1>'},
+        {tipo:'servicos', pasta:'eletricista-joao', arquivo:'servico1.html', codigo:'<h1>Instalação TV</h1>'},
+        {tipo:'produtos', pasta:'loja-bebidas', arquivo:'produto1.html', codigo:'<h1>Cerveja</h1>'}
+    ];
+
+    document.getElementById('listaBanco').innerHTML = dadosBanco.map((d,i)=>`
+        <div class="card">
+            <b>${d.pasta}/${d.arquivo}</b>
+            <button onclick='enviarGithub(${JSON.stringify(d)})'>Enviar Este</button>
+        </div>
+    `).join('');
+}
+</script>
+
+</body>
+</html>

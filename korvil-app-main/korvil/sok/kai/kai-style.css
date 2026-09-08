@@ -1,0 +1,276 @@
+/* =========================================================
+   K-AI STYLESHEET (KAI-STYLE.CSS) - KORVIL CORE & WIDGET
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+:root {
+  --c: #00FFFF;
+  --c2: #A8FFE6;
+  --bg: #000000;
+  --panel: rgba(0, 10, 15, 0.85);
+  --border: rgba(0, 255, 255, 0.4);
+  --danger: #ff3366;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Orbitron', sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--c);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* BACKGROUND 3D CANVAS */
+#canvas3d {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* =========================================================
+   ESTILOS DA INTERFACE PRINCIPAL (HUD & CHAT)
+   ========================================================= */
+
+header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid var(--c);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px var(--c);
+}
+
+.logo span {
+  color: var(--c2);
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+/* CHAT CONTAINER */
+.chat-container {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 20px;
+  max-height: 250px;
+  overflow-y: auto;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.15);
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.msg {
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.msg.user {
+  color: var(--c2);
+  text-align: right;
+  background: rgba(0, 255, 255, 0.1);
+  border-right: 3px solid var(--c2);
+  align-self: flex-end;
+}
+
+.msg.kai {
+  color: var(--c);
+  text-align: left;
+  background: rgba(0, 10, 20, 0.6);
+  border-left: 3px solid var(--c);
+  align-self: flex-start;
+}
+
+/* MICROFONE & CONTROLES */
+.mic-btn {
+  width: 75px;
+  height: 75px;
+  border: 2px solid var(--c);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+  transition: 0.3s;
+  background: rgba(0, 255, 255, 0.05);
+  box-shadow: 0 0 25px var(--c);
+}
+
+.mic-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 45px var(--c);
+}
+
+.mic-btn.listening {
+  animation: pulse 0.8s infinite;
+  background: rgba(0, 255, 255, 0.25);
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--c); }
+  50% { box-shadow: 0 0 50px var(--c2); }
+}
+
+/* =========================================================
+   K-AI CUBE FLOATING WIDGET SYSTEM
+   ========================================================= */
+
+#kaiCube {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #00FFFF, #9013fe);
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 255, 255, 0.4);
+  user-select: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+#kaiCube:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), 0 0 25px var(--c);
+}
+
+#kaiPanel {
+  display: none;
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 320px;
+  max-width: 90%;
+  height: 400px;
+  background: rgba(5, 15, 20, 0.95);
+  border-radius: 12px;
+  border: 1px solid var(--c);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 255, 0.2);
+  z-index: 10000;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+}
+
+#kaiPanel header {
+  background: rgba(0, 255, 255, 0.15);
+  color: var(--c);
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+}
+
+#kaiCloseBtn {
+  background: transparent;
+  border: none;
+  color: var(--c);
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#kaiCloseBtn:hover {
+  transform: scale(1.2);
+  color: var(--c2);
+}
+
+.kaiBody {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.kaiBody div {
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.kaiInputRow {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid var(--border);
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.kaiInput {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  font-size: 13px;
+  outline: none;
+}
+
+.kaiInput::placeholder {
+  color: rgba(0, 255, 255, 0.4);
+}
+
+.kaiSendBtn {
+  background: rgba(0, 255, 255, 0.2);
+  color: var(--c);
+  border: 1px solid var(--c);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kaiSendBtn:hover {
+  background: var(--c);
+  color: #000;
+  box-shadow: 0 0 10px var(--c);
+}
+

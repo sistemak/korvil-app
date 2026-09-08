@@ -1,0 +1,23 @@
+{
+  "id": "prod-0008",
+  "codigo": "KORVIL-0008-PRO",
+  "nome_completo": "KORVIL-0008-PRO | ADAPTOGEN Produto KORVIL Azul G | ADAPTOGEN | Algodão",
+  "nome": "ADAPTOGEN Produto KORVIL Azul G",
+  "marca": "ADAPTOGEN",
+  "setor": "K-ALMA Loja",
+  "categoria": "Suplementos",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "Azul",
+  "embalagem": "G",
+  "variante": "Algodão",
+  "preco": 43.5,
+  "estoque": 18,
+  "descricao": "Produto oficial KORVIL KORVIL-0008-PRO. ADAPTOGEN Algodão com sabor Azul, embalagem G. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/K-ALMA Loja/Fitness - Produtos/Suplementos/ADAPTOGEN/Produto KORVIL/G/Azul/Algodão/KORVIL-0008-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0008-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0008-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "K-ALMA Loja/Fitness - Produtos/Suplementos/ADAPTOGEN/Produto KORVIL/G/Azul/Algodão"
+}

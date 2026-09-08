@@ -1,0 +1,23 @@
+{
+  "id": "prod-0035",
+  "codigo": "KORVIL-0035-PRO",
+  "nome_completo": "KORVIL-0035-PRO | MAX TITANIUM Produto KORVIL 1kg Saco 1kg | MAX TITANIUM | Algodão",
+  "nome": "MAX TITANIUM Produto KORVIL 1kg Saco 1kg",
+  "marca": "MAX TITANIUM",
+  "setor": "K-ALMA Loja",
+  "categoria": "Suplementos",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "1kg",
+  "embalagem": "Saco 1kg",
+  "variante": "Algodão",
+  "preco": 89.4,
+  "estoque": 45,
+  "descricao": "Produto oficial KORVIL KORVIL-0035-PRO. MAX TITANIUM Algodão com sabor 1kg, embalagem Saco 1kg. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/K-ALMA Loja/Fitness - Produtos/Suplementos/MAX TITANIUM/Produto KORVIL/Saco 1kg/1kg/Algodão/KORVIL-0035-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0035-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0035-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "K-ALMA Loja/Fitness - Produtos/Suplementos/MAX TITANIUM/Produto KORVIL/Saco 1kg/1kg/Algodão"
+}
