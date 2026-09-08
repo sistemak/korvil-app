@@ -1,0 +1,25 @@
+name: Deploy KAI-KBD
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'kai-core/kai-kbd/**' # só roda quando mexe aqui dentro
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar Código
+        uses: actions/checkout@v4
+
+      - name: Zipar kai-kbd
+        run: zip -r kai-kbd.zip kai-core/kai-kbd/
+
+      - name: Enviar para Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: kai-kbd-${{ github.run_number }}
+          files: kai-kbd.zip
+        env:
+  KAI_TOKEN: ${{ secrets.KAI_TOKEN }} # <- MUDOU AQUI
