@@ -1,0 +1,12 @@
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial}
+body{background:#050505;color:#fff;padding-bottom:70px}
+.topo{display:flex;align-items:center;padding:12px 15px;background:#0a0a0a;gap:12px;position:sticky;top:0;z-index:99}
+.topo h1{font-size:18px;flex:1;text-align:center}
+.topo a{color:#fff;text-decoration:none;font-size:20px}
+.endereco{padding:12px 15px;font-size:13px;color:#aaa;border-bottom:1px solid #222;cursor:pointer}
+.menu-bottom{position:fixed;bottom:0;width:100%;display:flex;justify-content:space-around;background:#0a0a0a;padding:8px 0;border-top:1px solid #222}
+.menu-bottom a{color:#888;text-align:center;font-size:11px;text-decoration:none} 
+.menu-bottom .ativo{color:#00f5ff}
+.btn-azul{background:#00f5ff;color:#000;width:100%;padding:15px;border:none;border-radius:10px;font-weight:bold;font-size:16px;cursor:pointer}
+.tag{background:#00f5ff;color:#000;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:5px}
+.card{background:#111;padding:12px;border-radius:12px}

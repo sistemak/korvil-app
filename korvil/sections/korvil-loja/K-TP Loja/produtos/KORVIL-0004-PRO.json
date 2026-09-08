@@ -1,0 +1,23 @@
+{
+  "id": "prod-0004",
+  "codigo": "KORVIL-0004-PRO",
+  "nome_completo": "KORVIL-0004-PRO | DARKNESS Produto KORVIL Natural Caixa 30 caps | DARKNESS | Original",
+  "nome": "DARKNESS Produto KORVIL Natural Caixa 30 caps",
+  "marca": "DARKNESS",
+  "setor": "SISTEMA K Loja",
+  "categoria": "Suplementos",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "Natural",
+  "embalagem": "Caixa 30 caps",
+  "variante": "Original",
+  "preco": 36.7,
+  "estoque": 14,
+  "descricao": "Produto oficial KORVIL KORVIL-0004-PRO. DARKNESS Original com sabor Natural, embalagem Caixa 30 caps. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/SISTEMA K Loja/Fitness - Produtos/Suplementos/DARKNESS/Produto KORVIL/Caixa 30 caps/Natural/Original/KORVIL-0004-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0004-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0004-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "SISTEMA K Loja/Fitness - Produtos/Suplementos/DARKNESS/Produto KORVIL/Caixa 30 caps/Natural/Original"
+}

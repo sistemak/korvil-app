@@ -1,0 +1,23 @@
+{
+  "id": "prod-0022",
+  "codigo": "KORVIL-0022-PRO",
+  "nome_completo": "KORVIL-0022-PRO | Short Dry Fit Produto KORVIL Morango Bateria 4000mAh | Short Dry Fit | Original",
+  "nome": "Short Dry Fit Produto KORVIL Morango Bateria 4000mAh",
+  "marca": "Short Dry Fit",
+  "setor": "SISTEMA K Loja",
+  "categoria": "Suplementos",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "Morango",
+  "embalagem": "Bateria 4000mAh",
+  "variante": "Original",
+  "preco": 67.3,
+  "estoque": 32,
+  "descricao": "Produto oficial KORVIL KORVIL-0022-PRO. Short Dry Fit Original com sabor Morango, embalagem Bateria 4000mAh. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/SISTEMA K Loja/Fitness - Produtos/Suplementos/Short Dry Fit/Produto KORVIL/Bateria 4000mAh/Morango/Original/KORVIL-0022-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0022-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0022-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "SISTEMA K Loja/Fitness - Produtos/Suplementos/Short Dry Fit/Produto KORVIL/Bateria 4000mAh/Morango/Original"
+}

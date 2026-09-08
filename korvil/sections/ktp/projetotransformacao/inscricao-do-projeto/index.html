@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000">
+<title>INSCRIÇÃO K-TP Projeto TRANSFORMAÇÃO</title>
+<style>
+:root{--c:#00f5ff; --bg:#000; --card:#0a0a0a; --text:#fff; --text2:#aaa; --borda:#1f1f1f; --ok:#00ff88; --erro:#ff4444;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
+body{background:var(--bg);color:var(--text);padding:16px;max-width:700px;margin:auto;}
+h1{text-align:center;font-size:18px;font-weight:900;color:var(--c);margin:0 0 16px;}
+.card{background:var(--card);border:1.5px solid var(--borda);border-radius:12px;padding:16px;margin-bottom:12px;}
+.titulo{font-size:14px;font-weight:800;color:var(--c);margin-bottom:10px;border-left:3px solid var(--c);padding-left:8px;}
+.titulo-secao{font-size:14px;font-weight:800;color:var(--c);margin-bottom:10px;border-left:3px solid var(--c);padding-left:8px;}
+.plano{padding:14px;background:#111;border:1.5px solid var(--borda);border-radius:10px;margin-bottom:10px;cursor:pointer;}
+.plano:hover{border-color:var(--c);}
+.plano.sel{border-color:var(--c);background:rgba(0,245,255,.15);box-shadow:0 0 15px var(--c)40;}
+.topo{display:flex;justify-content:space-between;align-items:center;}
+.nome{font-weight:800;color:var(--c);font-size:14px;}
+.valor{font-weight:900;color:var(--ok);font-size:15px;}
+.info{font-size:11px;color:var(--text2);margin-top:4px;}
+.grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px;}
+.grid-4{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.grid-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;}
+.dia,.hora{padding:10px;background:#0a0a0a;border:1.5px solid var(--borda);border-radius:8px;text-align:center;font-size:12px;font-weight:700;cursor:not-allowed;opacity:0.4;}
+.dia.lib,.hora.lib{cursor:pointer;opacity:1;}
+.dia.lib:hover,.hora.lib:hover{border-color:var(--c);}
+.dia.sel,.hora.sel{border-color:var(--c);background:rgba(0,245,255,.15);opacity:1;}
+.dia.bloq{opacity:0.2;cursor:not-allowed;background:#050505;}
+.vagas{font-size:9px;color:var(--ok);}
+.btn{width:100%;padding:14px;background:var(--c);color:#000;text-align:center;border-radius:10px;font-weight:800;font-size:14px;border:0;cursor:pointer;margin-top:10px;}
+.btn.voltar{background:#222;color:var(--text);}
+.input-group{margin-bottom:10px;}
+.input-group label{font-size:12px;color:var(--text2);font-weight:700;margin-bottom:4px;display:block;}
+.input-group input,.input-group select,.input-group textarea{width:100%;padding:12px;background:#111;border:1.5px solid var(--borda);border-radius:8px;color:#fff;font-size:14px;}
+.input-group input[readonly]{background:#0a0a0a;color:var(--ok);font-weight:800;}
+.oculto{display:none;}
+.aviso{font-size:11px;color:var(--erro);margin-top:6px;font-weight:700;text-align:center;}
+.passos{display:flex;justify-content:space-between;margin-bottom:16px;padding:10px;background:#111;border-radius:8px;border:1px solid var(--borda);}
+.etapa{font-size:10px;color:var(--text2);text-align:center;flex:1;}
+.etapa.num{font-weight:900;font-size:12px;display:block;}
+.ativo{color:var(--c);}
+.sub{font-size:11px;color:var(--c);font-weight:700;margin:8px 0 6px;}
+.check-group{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;}
+.check-group input{width:18px;height:18px;}
+</style>
+</head>
+<body>
+
+<!-- TELA 1: ANAMNESE -->
+<div id="tela1">
+  <h1>K-TP Treinamento Personalizado | Projeto TRANSFORMAÇÃO</h1>
+  <div class="passos">
+    <div class="etapa ativo"><span class="num">1</span>ANAMNESE</div>
+    <div class="etapa"><span class="num">2</span>PLANOS</div>
+    <div class="etapa"><span class="num">3</span>DADOS</div>
+  </div>
+
+  <div class="card">
+    <div style="text-align:center;font-size:15px;font-weight:900;color:var(--c);margin-bottom:12px;">K-TP PROJETO TRANSFORMAÇÃO</div>
+    <div style="font-size:12px;color:var(--c);background:rgba(0,245,255,.1);border:1.5px solid var(--c);padding:10px;border-radius:8px;margin-bottom:12px;font-weight:700;text-align:center;">Preencha todos os dados. Assim o profissional consegue planejar os protocolos para seu projeto.</div>
+
+    <div class="titulo-secao">OBJETIVOS: Clique e escolha seus objetivos na ordem de prioridade. De 1 até no máximo 7</div>
+    <div id="listaObjetivosSelecionados" style="font-size:11px;color:var(--ok);margin-bottom:8px;font-weight:700;min-height:18px;"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Ganho de Peso">Ganho de Peso</div>
+      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Emagrecimento">Emagrecimento</div>
+      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Definição Muscular">Definição Muscular</div>
+      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Saúde">Saúde</div>
+      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Condicionamento Físico">Condicionamento Físico</div>
+      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Hipertrofia">Hipertrofia</div>
+      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Reabilitação Física">Reabilitação Física</div>
+    </div>
+    <input type="hidden" id="objetivos" value="">
+  </div>
+
+  <div class="card">
+    <div class="titulo-secao">ANAMNESE - HISTÓRICO</div>
+    <div class="input-group"><label>Nível de Atividade Física *</label>
+      <select id="nivelAtividade">
+        <option value="">Selecione</option>
+        <option value="Iniciante">Iniciante</option>
+        <option value="Intermediário">Intermediário</option>
+        <option value="Avançado">Avançado</option>
+      </select>
+    </div>
+    <div class="input-group"><label>1. Já praticou atividade física antes? *</label><textarea id="q1" rows="2"></textarea></div>
+    <div class="input-group"><label>2. Como você descreve sua ALIMENTAÇÃO atual? *</label><textarea id="q2" rows="2"></textarea></div>
+    <div class="input-group"><label>3. Quantas horas você DORME por noite? *</label><textarea id="q3" rows="2"></textarea></div>
+    <div class="input-group"><label>4. Possui alguma RESTRIÇÃO alimentar? *</label><textarea id="q4" rows="2"></textarea></div>
+    <div class="input-group"><label>5. Qual parte do corpo quer MELHORAR mais? *</label><textarea id="q5" rows="2"></textarea></div>
+    <div class="input-group"><label>6. Possui alguma DEFICIENCIA ou LIMITAÇÃO fisica? *</label><textarea id="q6" rows="2"></textarea></div>
+    <div class="input-group"><label>7. Está passando ou JÁ TEVE acompanhamento profissional PSICOLÓGICO? *</label><textarea id="q7" rows="2"></textarea></div>
+    <div class="input-group"><label>8. Está fazendo ALGUM TRATAMENTO fisico ou psicológico? *</label><textarea id="q8" rows="2"></textarea></div>
+    <div class="input-group"><label>9. Está fazendo USO DE MEDICAMENTOS? Quais? *</label><textarea id="q9" rows="2"></textarea></div>
+    <button class="btn" onclick="irParaPlanos()">CONTINUAR</button>
+    <button class="btn voltar" onclick="window.location.href='index.html'">Voltar</button>
+  </div>
+</div>
+
+<!-- TELA 2: PLANOS -->
+<div id="tela2" class="oculto">
+  <h1>K-TP | PROJETO TRANSFORMAÇÃO</h1>
+  <div class="passos">
+    <div class="etapa"><span class="num">1</span>ANAMNESE</div>
+    <div class="etapa ativo"><span class="num">2</span>PLANOS</div>
+    <div class="etapa"><span class="num">3</span>DADOS</div>
+  </div>
+
+  <div class="card">
+    <div class="titulo">1. ESCOLHA 1 PLANO</div>
+    <div class="plano" onclick="selPlano(this)" data-nome="Avulsa Online" data-valor="20" data-mat="0" data-tipo="avulso_online" data-freq="5">
+      <div class="topo"><div class="nome">AULA AVULSA ONLINE</div><div class="valor">R$20,00/aula</div></div>
+      <div class="info">1x a 5x Dias | WhatsApp | Matrícula: GRÁTIS</div>
+    </div>
+    <div class="plano" onclick="selPlano(this)" data-nome="Avulsa Presencial" data-valor="20" data-mat="0" data-tipo="avulso_pres" data-freq="1">
+      <div class="topo"><div class="nome">AULA AVULSA PRESENCIAL</div><div class="valor">R$20,00/aula</div></div>
+      <div class="info">1x Dia | Presencial | Matrícula: GRÁTIS | 7 vagas/horário</div>
+    </div>
+    <div class="plano" onclick="selPlano(this)" data-nome="Online Mensal" data-valor="60" data-mat="50" data-tipo="mensal_online" data-freq="5">
+      <div class="topo"><div class="nome">PLANO ONLINE MENSAL</div><div class="valor">R$60,00/mês</div></div>
+      <div class="info">Escolha dias | App + WhatsApp | Matrícula: R$50,00</div>
+    </div>
+    <div class="plano" onclick="selPlano(this)" data-nome="Presencial 1x" data-valor="60" data-mat="50" data-tipo="mensal_pres" data-freq="1">
+      <div class="topo"><div class="nome">PLANO PRESENCIAL 1x SEMANA</div><div class="valor">R$60,00/mês</div></div>
+      <div class="info">Matrícula: R$50,00</div>
+    </div>
+    <div class="plano" onclick="selPlano(this)" data-nome="Presencial 2x" data-valor="80" data-mat="50" data-tipo="mensal_pres" data-freq="2">
+      <div class="topo"><div class="nome">PLANO PRESENCIAL 2x SEMANA</div><div class="valor">R$80,00/mês</div></div>
+      <div class="info">Matrícula: R$50,00</div>
+    </div>
+    <div class="plano" onclick="selPlano(this)" data-nome="Presencial 3x" data-valor="100" data-mat="50" data-tipo="mensal_pres" data-freq="3">
+      <div class="topo"><div class="nome">PLANO PRESENCIAL 3x SEMANA</div><div class="valor">R$100,00/mês</div></div>
+      <div class="info">Matrícula: R$50,00</div>
+    </div>
+    <div class="plano" onclick="selPlano(this)" data-nome="Presencial 4x" data-valor="130" data-mat="50" data-tipo="mensal_pres" data-freq="4">
+      <div class="topo"><div class="nome">PLANO PRESENCIAL 4x SEMANA</div><div class="valor">R$130,00/mês</div></div>
+      <div class="info">Matrícula: R$50,00</div>
+    </div>
+    <div class="plano" onclick="selPlano(this)" data-nome="Presencial 5x" data-valor="150" data-mat="50" data-tipo="mensal_pres" data-freq="5">
+      <div class="topo"><div class="nome">PLANO PRESENCIAL 5x SEMANA</div><div class="valor">R$150,00/mês</div></div>
+      <div class="info">Matrícula: R$50,00</div>
+    </div>
+    <div style="font-size:10px;color:var(--text2);margin-top:8px;">*Matrícula R$50,00 obrigatória para novos. Válida até Dezembro.</div>
+  </div>
+
+  <div class="card">
+    <div class="titulo">2. ESCOLHA DIAS E HORÁRIO</div>
+    <div class="sub">DIAS: SEG À SEX</div>
+    <div class="grid-5" id="diasGrid">
+      <div class="dia" data-dia="Segunda">SEG</div>
+      <div class="dia" data-dia="Terça">TER</div>
+      <div class="dia" data-dia="Quarta">QUA</div>
+      <div class="dia" data-dia="Quinta">QUI</div>
+      <div class="dia" data-dia="Sexta">SEX</div>
+    </div>
+    <div id="avisoDias" class="aviso">Selecione um plano primeiro</div>
+    <div class="sub">HORÁRIO FIXO: 06h às 10h | 16h às 05h</div>
+    <div class="grid-4" id="horasGrid"></div>
+  </div>
+
+  <button class="btn" onclick="irParaDados()">CONTINUAR</button>
+  <button class="btn voltar" onclick="mostrarTela('tela1')">VOLTAR</button>
+</div>
+
+<!-- TELA 3: DADOS PESSOAIS -->
+<div id="tela3" class="oculto">
+  <h1>K-TP Treinamento Personalizado | Projeto TRANSFORMAÇÃO</h1>
+  <div class="passos">
+    <div class="etapa"><span class="num">1</span>ANAMNESE</div>
+    <div class="etapa"><span class="num">2</span>PLANOS</div>
+    <div class="etapa ativo"><span class="num">3</span>DADOS</div>
+  </div>
+
+  <div class="card">
+    <div class="titulo-secao">3. DADOS PESSOAIS</div>
+    <div class="input-group"><label>Nome Completo *</label><input type="text" id="nome"></div>
+    <div class="grid-2">
+      <div class="input-group"><label>CPF *</label><input type="text" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)"></div>
+      <div class="input-group"><label>Data Nasc *</label><input type="date" id="nasc" onchange="calcularIdade()"></div>
+    </div>
+    <div class="grid-2">
+      <div class="input-group"><label>Idade</label><input type="text" id="idade" readonly></div>
+      <div class="input-group"><label>Gênero *</label><select id="publico"><option>Selecione</option><option>Masculino</option><option>Feminino</option></select></div>
+    </div>
+    <div class="input-group"><label>WhatsApp *</label><input type="tel" id="whats" placeholder="(11) 99999-9999" oninput="mascaraWhats(this)"></div>
+    <div class="input-group"><label>Email</label><input type="email" id="email"></div>
+
+    <div class="titulo-secao" style="margin-top:16px;">ENDEREÇO</div>
+    <div class="input-group"><label>CEP *</label><input type="text" id="cep" maxlength="9" placeholder="00000-000" onblur="buscarCEP(this.value)" oninput="mascaraCEP(this)"></div>
+    <div class="grid-3">
+      <div class="input-group"><label>Rua</label><input type="text" id="rua"></div>
+      <div class="input-group"><label>Número *</label><input type="text" id="numero"></div>
+      <div class="input-group"><label>Bairro</label><input type="text" id="bairro"></div>
+    </div>
+    <div class="input-group"><label>Cidade</label><input type="text" id="cidade"></div>
+
+    <button class="btn" onclick="enviarWhatsApp()">FINALIZAR INSCRIÇÃO</button>
+    <button class="btn voltar" onclick="mostrarTela('tela2')">Voltar</button>
+  </div>
+</div>
+
+<script>
+let plano={}, dias=[], hora='', maxDias=0;
+let objetivosSelecionados = [];
+
+const horarios = ['06:00','07:00','08:00','09:00','10:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','00:00','01:00','02:00','03:00','04:00','05:00'];
+horarios.forEach(h=>{
+  document.getElementById('horasGrid').innerHTML += `<div class="hora" data-hora="${h}">${h}<div class="vagas">7 vagas</div></div>`;
+});
+
+function toggleObjetivo(el){
+  let obj = el.dataset.obj;
+  let index = objetivosSelecionados.indexOf(obj);
+  if(index > -1){
+    objetivosSelecionados.splice(index, 1);
+    el.classList.remove('sel');
+  } else {
+    if(objetivosSelecionados.length >= 7) return;
+    objetivosSelecionados.push(obj);
+    el.classList.add('sel');
+  }
+  document.querySelectorAll('.obj').forEach(item=>{
+    let nome = item.dataset.obj;
+    let pos = objetivosSelecionados.indexOf(nome);
+    if(pos > -1){
+      item.innerHTML = `<b style="color:#00ff88;">${pos+1}.</b> ${nome}`;
+    } else {
+      item.innerHTML = nome;
+    }
+  });
+  document.getElementById('listaObjetivosSelecionados').innerText = objetivosSelecionados.length > 0? 'PRIORIDADE: ' + objetivosSelecionados.map((o,i)=>`${i+1}º ${o}`).join(' > ') : '';
+  document.getElementById('objetivos').value = objetivosSelecionados.join(' | ');
+}
+
+function mostrarTela(id){
+  document.querySelectorAll('#tela1,#tela2,#tela3').forEach(t=>t.classList.add('oculto'));
+  document.getElementById(id).classList.remove('oculto');
+  window.scrollTo(0,0);
+}
+function irParaPlanos(){
+  if(objetivosSelecionados.length == 0){alert('Selecione pelo menos 1 objetivo');return;}
+  mostrarTela('tela2');
+}
+function selPlano(el){
+  document.querySelectorAll('.plano').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+  plano = {nome:el.dataset.nome, valor:el.dataset.valor, mat:el.dataset.mat, tipo:el.dataset.tipo, freq:parseInt(el.dataset.freq)};
+  dias=[]; hora='';
+  document.querySelectorAll('.dia,.hora').forEach(i=>i.classList.remove('sel','lib','bloq'));
+  maxDias=plano.freq;
+  document.querySelectorAll('.dia,.hora').forEach(i=>i.classList.add('lib'));
+  if(plano.freq==5){
+    document.querySelectorAll('.dia').forEach(d=>{d.classList.add('sel','bloq'); dias.push(d.dataset.dia);});
+    document.getElementById('avisoDias').innerText=`Dias: Segunda, Terça, Quarta, Quinta, Sexta`;
+  } else {
+    document.getElementById('avisoDias').innerText=`Faltam ${maxDias} dia(s)`;
+  }
+}
+document.querySelectorAll('.dia').forEach(dia=>{
+  dia.addEventListener('click', function(){
+    if(!this.classList.contains('lib') || this.classList.contains('bloq')) return;
+    if(this.classList.contains('sel')){this.classList.remove('sel'); dias=dias.filter(d=>d!=this.dataset.dia);}
+    else{if(dias.length>=maxDias)return; this.classList.add('sel'); dias.push(this.dataset.dia);}
+    document.querySelectorAll('.dia').forEach(d=>{if(!d.classList.contains('sel')&&dias.length>=maxDias)d.classList.add('bloq');else d.classList.remove('bloq');});
+    let faltam=maxDias-dias.length;
+    document.getElementById('avisoDias').innerText= faltam>0? `Faltam ${faltam} dia(s)` : `Dias: ${dias.join(', ')}`;
+  });
+});
+document.querySelectorAll('.hora').forEach(horaEl=>{
+  horaEl.addEventListener('click', function(){
+    if(!this.classList.contains('lib')) return;
+    document.querySelectorAll('.hora').forEach(h=>h.classList.remove('sel'));
+    this.classList.add('sel'); hora=this.dataset.hora;
+  });
+});
+function irParaDados(){
+  if(!plano.nome){alert('Selecione um plano');return;}
+  if(dias.length!=maxDias){alert(`Selecione ${maxDias} dia(s)`);return;}
+  if(!hora){alert('Selecione 1 horário');return;}
+  mostrarTela('tela3');
+}
+function calcularIdade(){let nasc = document.getElementById('nasc').value; if(!nasc) return;let idade = new Date().getFullYear() - new Date(nasc).getFullYear();document.getElementById('idade').value = idade + ' anos';}
+function mascaraCPF(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2"); }
+function mascaraWhats(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{2})(\d)/,"($1) $2").replace(/(\d{5})(\d)/,"$1-$2"); }
+function mascaraCEP(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{5})(\d)/,"$1-$2"); }
+
+async function buscarCEP(cep){
+  cep = cep.replace(/\D/g,'');
+  if(cep.length!== 8) return;
+  try{
+    let res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    let data = await res.json();
+    if(!data.erro){
+      document.getElementById('rua').value = data.logradouro;
+      document.getElementById('bairro').value = data.bairro;
+      document.getElementById('cidade').value = data.localidade;
+    }
+  }catch(e){}
+}
+
+function enviarWhatsApp(){
+  let nome = document.getElementById('nome').value;
+  if(nome==''){alert('Preencha o nome');return;}
+  if(document.getElementById('cpf').value==''){alert('Preencha o CPF');return;}
+  if(document.getElementById('whats').value==''){alert('Preencha o WhatsApp');return;}
+  if(document.getElementById('cep').value==''){alert('Preencha o CEP');return;}
+  if(document.getElementById('numero').value==''){alert('Preencha o Número');return;}
+
+  let total = parseInt(plano.valor)+parseInt(plano.mat);
+  let tipo_plano = `${plano.freq == 1? "Aula Avulsa" : "Mensal"} ${plano.tipo.includes('pres')? "Presencial" : "Online"} ${plano.freq}x`;
+  let hoje = new Date().toLocaleDateString('pt-BR');
+
+  let msg = `*🚨 NOVA INSCRIÇÃO K-TP PROJETO TRANSFORMAÇÃO 🚨*\n\n` +
+            `*==================================*\n` +
+            `*1. DADOS DO PLANO*\n` +
+            `*==================================*\n` +
+            `*Modalidade:* ${plano.tipo.includes('pres')? "PRESENCIAL" : "ONLINE"}\n` +
+            `*Tipo de Plano:* ${tipo_plano}\n` +
+            `*Dias:* ${dias.join(', ')}\n` +
+            `*Horário:* ${hora}\n` +
+            `*Frequência:* ${plano.freq}x na semana\n` +
+            `*Valor Mensal:* R$${plano.valor},00\n` +
+            `*Matrícula Paga:* R$${plano.mat},00 - ${hoje}\n` +
+            `*Total 1º Pagamento:* R$${total},00\n\n` +
+
+            `*==================================*\n` +
+            `*2. DADOS PESSOAIS*\n` +
+            `*==================================*\n` +
+            `*Nome:* ${nome}\n` +
+            `*CPF:* ${document.getElementById('cpf').value}\n` +
+            `*Data Nascimento:* ${document.getElementById('nasc').value.split('-').reverse().join('/')}\n` +
+            `*Idade:* ${document.getElementById('idade').value}\n` +
+            `*Gênero:* ${document.getElementById('publico').value}\n` +
+            `*WhatsApp:* ${document.getElementById('whats').value}\n` +
+            `*Email:* ${document.getElementById('email').value}\n\n` +
+
+            `*==================================*\n` +
+            `*3. ENDEREÇO*\n` +
+            `*==================================*\n` +
+            `*CEP:* ${document.getElementById('cep').value}\n` +
+            `*Rua:* ${document.getElementById('rua').value}\n` +
+            `*Número:* ${document.getElementById('numero').value}\n` +
+            `*Bairro:* ${document.getElementById('bairro').value}\n` +
+            `*Cidade:* ${document.getElementById('cidade').value}\n\n` +
+
+            `*==================================*\n` +
+            `*4. ANAMNESE - OBJETIVOS*\n` +
+            `*==================================*\n` +
+            `*Objetivos em Prioridade:* ${document.getElementById('objetivos').value}\n` +
+            `*Nível de Atividade:* ${document.getElementById('nivelAtividade').value}\n\n` +
+
+            `*==================================*\n` +
+            `*5. ANAMNESE - HISTÓRICO*\n` +
+            `*==================================*\n` +
+            `*Q1. Já praticou atividade física antes?* ${document.getElementById('q1').value}\n` +
+            `*Q2. Como descreve sua ALIMENTAÇÃO atual?* ${document.getElementById('q2').value}\n` +
+            `*Q3. Quantas horas DORME por noite?* ${document.getElementById('q3').value}\n` +
+            `*Q4. Possui RESTRIÇÃO alimentar?* ${document.getElementById('q4').value}\n` +
+            `*Q5. Qual parte do corpo quer MELHORAR mais?* ${document.getElementById('q5').value}\n` +
+            `*Q6. Possui DEFICIENCIA ou LIMITAÇÃO física?* ${document.getElementById('q6').value}\n` +
+            `*Q7. Está passando ou JÁ TEVE acompanhamento PSICOLÓGICO?* ${document.getElementById('q7').value}\n` +
+            `*Q8. Está fazendo ALGUM TRATAMENTO físico ou psicológico?* ${document.getElementById('q8').value}\n` +
+            `*Q9. Está fazendo USO DE MEDICAMENTOS? Quais?* ${document.getElementById('q9').value}\n\n` +
+
+            `*==================================*\n` +
+            `*STATUS: ATIVO*\n` +
+            `*==================================*`;
+
+  let numero = "5513997690898";
+  window.location.href = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
+}
+</script>
+</body>
+</html>

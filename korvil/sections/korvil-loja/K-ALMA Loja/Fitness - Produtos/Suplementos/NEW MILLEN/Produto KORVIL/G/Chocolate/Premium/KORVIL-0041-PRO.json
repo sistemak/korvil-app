@@ -1,0 +1,23 @@
+{
+  "id": "prod-0041",
+  "codigo": "KORVIL-0041-PRO",
+  "nome_completo": "KORVIL-0041-PRO | NEW MILLEN Produto KORVIL Chocolate G | NEW MILLEN | Premium",
+  "nome": "NEW MILLEN Produto KORVIL Chocolate G",
+  "marca": "NEW MILLEN",
+  "setor": "K-ALMA Loja",
+  "categoria": "Suplementos",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "Chocolate",
+  "embalagem": "G",
+  "variante": "Premium",
+  "preco": 99.6,
+  "estoque": 51,
+  "descricao": "Produto oficial KORVIL KORVIL-0041-PRO. NEW MILLEN Premium com sabor Chocolate, embalagem G. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/K-ALMA Loja/Fitness - Produtos/Suplementos/NEW MILLEN/Produto KORVIL/G/Chocolate/Premium/KORVIL-0041-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0041-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0041-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "K-ALMA Loja/Fitness - Produtos/Suplementos/NEW MILLEN/Produto KORVIL/G/Chocolate/Premium"
+}
