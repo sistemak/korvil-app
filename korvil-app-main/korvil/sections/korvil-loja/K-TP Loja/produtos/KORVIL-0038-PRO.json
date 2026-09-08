@@ -1,0 +1,23 @@
+{
+  "id": "prod-0038",
+  "codigo": "KORVIL-0038-PRO",
+  "nome_completo": "KORVIL-0038-PRO | DR. PEANUTS Produto KORVIL 128GB Unidade | DR. PEANUTS | Isolado",
+  "nome": "DR. PEANUTS Produto KORVIL 128GB Unidade",
+  "marca": "DR. PEANUTS",
+  "setor": "K-ALMA Loja",
+  "categoria": "Suplementos",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "128GB",
+  "embalagem": "Unidade",
+  "variante": "Isolado",
+  "preco": 94.5,
+  "estoque": 48,
+  "descricao": "Produto oficial KORVIL KORVIL-0038-PRO. DR. PEANUTS Isolado com sabor 128GB, embalagem Unidade. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/K-ALMA Loja/Fitness - Produtos/Suplementos/DR. PEANUTS/Produto KORVIL/Unidade/128GB/Isolado/KORVIL-0038-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0038-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0038-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "K-ALMA Loja/Fitness - Produtos/Suplementos/DR. PEANUTS/Produto KORVIL/Unidade/128GB/Isolado"
+}

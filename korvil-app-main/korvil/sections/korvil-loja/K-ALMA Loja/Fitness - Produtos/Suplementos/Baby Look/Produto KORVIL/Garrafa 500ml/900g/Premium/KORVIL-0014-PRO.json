@@ -1,0 +1,23 @@
+{
+  "id": "prod-0014",
+  "codigo": "KORVIL-0014-PRO",
+  "nome_completo": "KORVIL-0014-PRO | Baby Look Produto KORVIL 900g Garrafa 500ml | Baby Look | Premium",
+  "nome": "Baby Look Produto KORVIL 900g Garrafa 500ml",
+  "marca": "Baby Look",
+  "setor": "K-ALMA Loja",
+  "categoria": "Suplementos",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "900g",
+  "embalagem": "Garrafa 500ml",
+  "variante": "Premium",
+  "preco": 53.7,
+  "estoque": 24,
+  "descricao": "Produto oficial KORVIL KORVIL-0014-PRO. Baby Look Premium com sabor 900g, embalagem Garrafa 500ml. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/K-ALMA Loja/Fitness - Produtos/Suplementos/Baby Look/Produto KORVIL/Garrafa 500ml/900g/Premium/KORVIL-0014-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0014-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0014-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "K-ALMA Loja/Fitness - Produtos/Suplementos/Baby Look/Produto KORVIL/Garrafa 500ml/900g/Premium"
+}

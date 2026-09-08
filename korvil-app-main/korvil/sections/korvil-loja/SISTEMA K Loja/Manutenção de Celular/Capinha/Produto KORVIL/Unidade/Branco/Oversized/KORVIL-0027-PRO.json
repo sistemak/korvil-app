@@ -1,0 +1,23 @@
+{
+  "id": "prod-0027",
+  "codigo": "KORVIL-0027-PRO",
+  "nome_completo": "KORVIL-0027-PRO | Capinha Produto KORVIL Branco Unidade | Capinha | Oversized",
+  "nome": "Capinha Produto KORVIL Branco Unidade",
+  "marca": "Capinha",
+  "setor": "K-TP Loja",
+  "categoria": "Manutenção de Celular",
+  "produto_cor": "Produto KORVIL",
+  "sabor": "Branco",
+  "embalagem": "Unidade",
+  "variante": "Oversized",
+  "preco": 75.8,
+  "estoque": 37,
+  "descricao": "Produto oficial KORVIL KORVIL-0027-PRO. Capinha Oversized com sabor Branco, embalagem Unidade. Alta qualidade, entrega em todo Brasil. Código único para rastreio no GitHub: korvil/sections/korvil-loja/K-TP Loja/Manutenção de Celular/Capinha/Produto KORVIL/Unidade/Branco/Oversized/KORVIL-0027-PRO.json",
+  "imagens": [
+    "https://picsum.photos/seed/KORVIL-0027-PRO/400/400"
+  ],
+  "imagem_principal": "https://picsum.photos/seed/KORVIL-0027-PRO/400/400",
+  "videos": [],
+  "disponivel": true,
+  "fullPath": "K-TP Loja/Manutenção de Celular/Capinha/Produto KORVIL/Unidade/Branco/Oversized"
+}
