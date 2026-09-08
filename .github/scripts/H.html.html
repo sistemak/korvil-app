@@ -1,0 +1,21 @@
+Crie o sistema completo KORVIL BANC dentro da pasta /korvil-banc do repo korvil-app.
+
+MISSÃO: Ser um banco digital interno igual Asaas. 1 sistema que centraliza todos recebimentos e pagamentos do KORVIL.
+
+FUNCIONALIDADES OBRIGATORIAS:
+1. API REST com Express para: criar cliente, criar cobrança dinamica, listar extrato, listar repasses
+2. Integracao ASAAS: Criar cobrança com billingType UNDEFINED. Webhook para receber PAYMENT_RECEIVED
+3. Motor de Repasse: Ao receber webhook, colocar job na fila BullMQ para transferir valor liquido via Pix API Asaas para korvil.p@gmail.com
+4. Multi-Modulos: Pasta /modules com arquivos: k-th.js, whatsapp.js, kai.js, geral.js, afiliados.js. Cada um exportando nome e 3 descricoes
+5. Banco de Dados: Usar Prisma + SQLite. Tabelas: Cliente, Cobranca, Repasse, Log
+6. Dashboard HTML: /dashboard/index.html com tela de login, saldo atual, tabela de ultimas cobrancas, filtro por modulo. Estilo preto #050505 e neon #00f5ff
+7. Checkout: /public/checkout.html que recebe ?modulo=k-th&valor=150 e mostra 3 botoes: Assinatura, Unico 1-12x, Inscricao
+8. Integracao: Se pagamento OK, chamar webhook interno POST em /whatsapp-korvil/ pra enviar msg
+
+REGRAS DE NEGOCIO:
+- Nao cadastrar valor fixo no Asaas. Sempre dinamico billingType=UNDEFINED
+- Repasse D+0 para Pix. D+30 para Cartao
+- Logar tudo em /logs
+
+GERAR CODIGO COMPLETO DE TODOS ARQUIVOS. COMENTAR O CODIGO. USAR .env
+Usar Node.js, Express, Prisma, BullMQ, ioredis
