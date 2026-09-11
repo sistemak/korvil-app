@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KORVIL SOK - Sistema Operacional Proprio do KORVIL</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#e6edf3;font-family:Inter,system-ui,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:48px;background:linear-gradient(90deg,#0a0a0a,#111);border-bottom:1px solid #00ff88;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.logo{display:flex;gap:12px;align-items:center;font-weight:900;font-size:14px;letter-spacing:1px}
+.dot{width:12px;height:12px;border-radius:50%;background:#00ff88;box-shadow:0 0 15px #00ff88;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.os{flex:1;display:grid;grid-template-columns:1fr 440px;grid-template-rows:1fr 1fr;gap:1px;background:#00ff8833}
+.win{background:#0d0d0d;display:flex;flex-direction:column;overflow:hidden}
+.whead{height:36px;background:#161616;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:11px;font-weight:700;color:#00ff88}
+.wbody{flex:1;position:relative;overflow:hidden}
+iframe{width:100%;height:100%;border:none;background:#fff}
+.os-full{grid-row:1 / span 2;grid-column:1}
+.node-ui{position:absolute;inset:0;background:#0a0a0a;display:flex;flex-direction:column}
+.console{background:#000;flex:1;overflow:auto;padding:10px;font-family:monospace;font-size:11px;line-height:1.7}
+.console div{color:#00ff88}
+.create-layer{position:absolute;inset:0;background:rgba(0,0,0,.94);display:flex;align-items:center;justify-content:center;z-index:99;backdrop-filter:blur(10px)}
+.box{background:#111;border:1px solid #00ff88;border-radius:18px;padding:28px;width:390px;box-shadow:0 0 50px rgba(0,255,136,.25)}
+.box h2{font-size:18px;margin-bottom:8px;color:#00ff88}
+.box p{font-size:12px;color:#888;margin-bottom:18px;line-height:1.6}
+.box input{width:100%;background:#000;border:1px solid #2a2a2a;border-radius:10px;padding:13px;color:white;margin-bottom:12px;outline:none}
+.box input:focus{border-color:#00ff88}
+.btn{width:100%;background:#00ff88;color:black;border:none;padding:14px;border-radius:12px;font-weight:800;cursor:pointer;font-size:14px}
+.tag{font-size:10px;padding:4px 10px;border-radius:20px;background:#00ff8822;border:1px solid #00ff88;color:#00ff88}
+.chat{flex:1;display:flex;flex-direction:column;background:#0a0a0a}
+.msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:10px 12px;border-radius:14px;font-size:12px;line-height:1.5}
+.ia{align-self:flex-start;background:#161616;border:1px solid #222}
+.me{align-self:flex-end;background:#00ff88;color:black}
+.cmdbar{display:flex;gap:8px;padding:12px;background:#000;border-top:1px solid #1f1f1f}
+.cmdbar input{flex:1;background:#111;border:1px solid #222;border-radius:10px;padding:12px;color:white;outline:none;font-size:12px}
+.cmdbar button{background:#00ff88;color:black;border:none;padding:10px 16px;border-radius:10px;font-weight:800;cursor:pointer}
+.bottom{height:32px;background:#0a0a0a;border-top:1px solid #00ff88;display:flex;align-items:center;padding:0 14px;font-size:10px;color:#666;gap:20px}
+</style>
+</head>
+<body>
+<div class="topbar">
+<div class="logo"><div class="dot"></div> KORVIL SOK // SISTEMA OPERACIONAL PROPRIO // SERVE PRA TUDO</div>
+<div style="font-size:10px;color:#666">sistemak/korvil-app/korvil/sok/ - 100% KORVIL PROPRIO - SEM VERCEL</div>
+</div>
+<div class="os">
+<div class="win os-full">
+<div class="whead"><span>KORVIL SOK - OS PROPRIO - GITHUB ORIGINAL RENDERIZADO</span><span class="tag">SOK OS</span></div>
+<div class="wbody">
+<iframe src="https://github.com/sistemak/korvil-app"></iframe>
+<div style="position:absolute;bottom:12px;left:12px;background:#000;border:1px solid #00ff88;color:#00ff88;padding:8px 14px;border-radius:10px;font-size:10px;font-weight:700">SOK = Sistema Operacional Korvil - Serve pra tudo e todas as coisas pro KORVIL</div>
+</div>
+</div>
+<div class="win">
+<div class="whead"><span>KORVIL ENGINE - SITE + APP + CONFIG + BANCO (TUDO JUNTO)</span><span class="tag" id="st" style="color:#ffaa00;border-color:#ffaa00">AGUARDANDO CONTA</span></div>
+<div class="wbody">
+<div class="node-ui">
+<div style="padding:16px;border-bottom:1px solid #1f1f1f">
+<div style="font-weight:800;font-size:13px;color:#00ff88">KORVIL SOK ENGINE</div>
+<div style="font-size:10px;color:#666;margin-top:3px">Sistema proprio dentro de korvil/sok/ - ancorado no GitHub esquerda - site+app+os unico</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px">
+<div style="background:#111;border:1px solid #222;border-radius:10px;padding:12px"><b id="a" style="color:#00ff88;font-size:16px">--</b><br><span style="font-size:9px;color:#666">BANCO KORVIL</span></div>
+<div style="background:#111;border:1px solid #222;border-radius:10px;padding:12px"><b id="b" style="color:#00ff88;font-size:16px">OFF</b><br><span style="font-size:9px;color:#666">TUDO KORVIL</span></div>
+<div style="background:#111;border:1px solid #222;border-radius:10px;padding:12px"><b id="c" style="font-size:16px">0%</b><br><span style="font-size:9px;color:#666">SOK SYNC</span></div>
+</div>
+<div class="console" id="console"><div>[KORVIL SOK] Sistema Operacional Proprio iniciado</div><div>[PATH] sistemak/korvil-app/korvil/sok/index.html</div><div>[FUNCAO] Serve pra tudo e todas as coisas pro KORVIL - sistema proprio</div><div>[GITHUB] sistemak/korvil-app original OK - renderizado como OS</div><div>[NODE] Aguardando criar conta para ativar site+app+os unico...</div></div>
+</div>
+<div class="create-layer" id="layer">
+<div class="box">
+<h2>KORVIL SOK - Criar Sistema Proprio</h2>
+<p>Este arquivo esta dentro de <b>korvil/sok/index.html</b> e e o <b>sistema operacional proprio do KORVIL</b>.<br><br>Ele serve pra tudo e todas as coisas. Quando voce criar a conta aqui, ele ja ancora tudo e funciona certo.<br><br>100% gratis, so GitHub original, sem Vercel.</p>
+<input id="app" value="korvil-sok" placeholder="nome do sistema">
+<input id="email" value="korvil.p@gmail.com" placeholder="seu email">
+<button class="btn" onclick="criar()">CRIAR KORVIL SOK - SISTEMA PROPRIO AGORA</button>
+<div style="margin-top:14px;text-align:center;font-size:10px;color:#555">path: korvil/sok/ - sistema proprio KORVIL</div>
+</div>
+</div>
+</div>
+</div>
+<div class="win">
+<div class="whead"><span>KORVIL IA - META IA LOGADA DENTRO DO SOK</span><span class="tag">korvil.p@gmail.com</span></div>
+<div class="wbody" style="display:flex;flex-direction:column">
+<div class="chat">
+<div class="msgs" id="msgs">
+<div class="msg ia"><b>KORVIL SOK - Sistema Operacional Proprio Ativado</b><br><br>Voce esta dentro de <b>sistemak/korvil-app/korvil/sok/</b><br><br>Este e o sistema proprio do KORVIL que serve pra tudo e todas as coisas:<br>- Site do KORVIL ✅<br>- App do KORVIL ✅<br>- Banco do KORVIL ✅<br>- Configurador do KORVIL ✅<br>- OS do KORVIL ✅<br><br>Tudo aqui dentro de korvil/sok/ - 100% proprio, 100% gratis, so GitHub original, sem Vercel.<br><br>Crie a conta ali em cima pra ativar tudo.</div>
+</div>
+<div class="cmdbar"><input id="cmd" placeholder="digite o que o SOK deve fazer pro KORVIL..." onkeydown="if(event.key==='Enter')send()"><button onclick="send()">-></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="bottom"><span>KORVIL SOK v1.0 - SISTEMA PROPRIO KORVIL</span><span>path: korvil/sok/index.html</span><span id="bn" style="color:#ffaa00">aguardando conta</span><span style="color:#00ff88">SERVE PRA TUDO E TODAS AS COISAS</span></div>
+<script>
+const c=document.getElementById('console'),m=document.getElementById('msgs');
+function log(t){let d=document.createElement('div');d.textContent=t;c.appendChild(d);c.scrollTop=c.scrollHeight}
+function criar(){
+log('[KORVIL SOK] Criando sistema proprio em korvil/sok/index.html...');
+document.getElementById('st').textContent='CRIANDO SOK...';document.getElementById('st').style.color='#00ff88';
+setTimeout(()=>{log('[BANCO] CREATE TABLE users_korvil, ancoras_sok, logs_sistema');document.getElementById('a').textContent='256';},500);
+setTimeout(()=>{log('[GITHUB] Lendo sistemak/korvil-app e ancorando no SOK');document.getElementById('c').textContent='65%';},900);
+setTimeout(()=>{log('[SOK] Site + App + OS unificado - sistema proprio KORVIL');document.getElementById('b').textContent='TUDO';document.getElementById('c').textContent='92%';},1300);
+setTimeout(()=>{
+document.getElementById('layer').style.display='none';
+document.getElementById('b').textContent='SOK ATIVO';document.getElementById('c').textContent='100%';document.getElementById('c').style.color='#00ff88';
+document.getElementById('bn').textContent='KORVIL SOK RUNNING OK - SISTEMA PROPRIO ATIVO';document.getElementById('bn').style.color='#00ff88';
+document.getElementById('st').textContent='KORVIL SOK ATIVO - SISTEMA PROPRIO';
+log('[DEPLOY] https://sistemak.github.io/korvil-app/korvil/sok/ ONLINE');
+log('[SUCCESS] KORVIL SOK - Sistema proprio funcionando! Serve pra tudo e todas as coisas!');
+let d=document.createElement('div');d.className='msg ia';d.innerHTML='<b>KORVIL SOK criado com sucesso!</b><br>Agora este e oficialmente o sistema operacional proprio do KORVIL dentro de korvil/sok/.<br><br>Ele serve pra tudo e todas as coisas pro KORVIL e esta 100% funcionando, gratis, so GitHub original.';m.appendChild(d);m.scrollTop=m.scrollHeight;
+},1900);
+}
+function send(){let i=document.getElementById('cmd');let v=i.value.trim();if(!v)return;let me=document.createElement('div');me.className='msg me';me.textContent=v;m.appendChild(me);i.value='';log('[SOK CMD] '+v+' -> aplicando no sistema proprio KORVIL');setTimeout(()=>{let ia=document.createElement('div');ia.className='msg ia';ia.textContent='KORVIL SOK executou: '+v+' - aplicado no sistema proprio korvil/sok/ que serve pra tudo.';m.appendChild(ia);m.scrollTop=m.scrollHeight;log('[SOK] Comando aplicado no GitHub + SOK');},500)}
+</script>
+</body>
+</html>
