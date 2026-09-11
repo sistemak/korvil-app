@@ -304,7 +304,48 @@ console.log('K-TP pesos.html novo modelo - Semana:','${v}','Fase:','${S}','Total
 `)[1]||"SEMANA"})]}),w("div",{className:"semana-org-grid",children:w("div",{className:"topico",style:{gridColumn:"1 / -1"},children:w("div",{className:"topico-texto",style:{textAlign:"center"},children:(Pu[t]||"").split(`
 `).slice(2).join(`
 `)||Pu[t]||""})})}),x("div",{className:"semana-data",children:["Semana inicia em: ",zn(t)]})]})})]}),!zc&&x(qn,{children:[w("div",{id:"info-aluno-container",children:l&&x("div",{className:"card-aluno",children:[w("button",{className:"btn-fechar-resultado",onClick:Dp,children:"X"}),x("h2",{children:[l==="ktp0"?"\uD83D\uDC51 ADM - ":"✅ ",pn[l]?.nome||l]}),x("p",{children:["ID ",l]})]})}),w("div",{id:"peso-container",style:{display:l?"block":"none"},children:l&&x("div",{className:"peso-box",children:[x("h3",{children:["⚖️ REGISTRO DE PESO - Semana ",zn(ue())]}),w("div",{style:{fontSize:"10px",color:nr()?"var(--ok)":"var(--erro)",marginBottom:"8px"},children:nr()?"✅ Janela aberta: segunda 00:00 até sexta 00:00":"❌ Fora da janela"}),x("div",{className:"peso-input-row",children:[w("input",{type:"number",step:"0.1",placeholder:"Ex: 70.5",value:Q,onChange:(d)=>Pe(d.target.value)}),w("button",{className:"btn-peso",disabled:!nr(),onClick:Qp,children:(v[l]||[]).find((d)=>d.semanaISO===ue())?"CORRIGIR":"SALVAR"})]}),w("div",{style:{fontSize:"9px",color:"var(--text2)",marginBottom:"8px"},children:"Salvo com data dd/mm/aaaa"}),(v[l]||[]).slice().sort((d,C)=>new Date(C.semanaISO).getTime()-new Date(d.semanaISO).getTime()).map((d,C)=>x("div",{className:"peso-item",children:[x("div",{children:[x("b",{children:[d.peso," kg"]}),x("small",{children:["Semana: ",zn(d.semanaISO)," • ",d.dataRegistroBR," ",d.horaRegistro||""]})]}),w("div",{children:d.semanaISO===ue()&&nr()&&w("button",{style:{padding:"4px 8px",borderRadius:"6px",border:0,background:"var(--aviso)",color:"#000",fontWeight:900,fontSize:"9px",cursor:"pointer"},onClick:()=>Pe(String(d.peso)),children:"EDITAR"})})]},C))]})}),w("div",{id:"cronograma-container",style:{display:"block"},children:Ru?x(qn,{children:[w("div",{className:"titulo-crono",children:"\uD83D\uDCCB 42 ALUNOS - ADM KTP0"}),x("div",{className:"abas-plano",children:[w("button",{className:`aba-plano ${h==="PRESENCIAL"?"ativa":""}`,onClick:()=>y("PRESENCIAL"),children:"\uD83D\uDC65 PRESENCIAL (40)"}),w("button",{className:`aba-plano ${h==="ONLINE"?"ativa":""}`,onClick:()=>y("ONLINE"),children:"\uD83D\uDCBB ONLINE (2)"}),w("button",{className:`aba-plano ${h==="TODOS"?"ativa":""}`,onClick:()=>y("TODOS"),children:"\uD83D\uDCCB TODOS 42"})]}),w("div",{className:"lista-alunos",children:Kp.map((d)=>x("div",{className:"item-lista-aluno",onClick:()=>{o(d.id),f(!0)},children:[x("div",{children:[x("b",{children:[String(d.n).padStart(2,"0")," - ",d.aluno]}),x("small",{children:["ID: ",d.id," ",k[d.id]?.all?`• \uD83C\uDFAC ${k[d.id].all.length} fase(s) ${k[d.id].dataBR}`:k[d.id]?.dataUrl?`• \uD83C\uDFAC ${k[d.id].dataBR} - ${k[d.id].nomeArquivo}`:hc?"• ⏳ verificando...":"• sem gif"]})]}),w("div",{style:{textAlign:"right"},children:w("div",{className:"id-mini",children:d.id})})]},d.id))})]}):Mc&&x(qn,{children:[w("div",{className:"titulo-crono",children:"\uD83D\uDCCB MEU CRONOGRAMA"}),x("div",{className:"obs-pix",children:["Olá ",pn[l]?.nome,w("br",{}),w("b",{children:"Pix: korvilloja@gmail.com"})]}),rl?Uu({...rl.dados,hora:rl.bloco.hora},!1):Uu(Mc,!1)]})})]})]}),w("div",{id:"modal-aluno",className:M?"ativo":"",children:x("div",{className:"modal-card",children:[x("div",{className:"modal-header",children:[w("div",{style:{fontWeight:900,color:"var(--c)"},children:"ACESSAR ID"}),w("button",{className:"btn-fechar",onClick:()=>Z(!1),children:"X"})]}),x("div",{className:"busca-id",children:[w("input",{type:"text",placeholder:"DIGITE SEU ID",value:P,onChange:(d)=>L(d.target.value),onKeyDown:(d)=>{if(d.key==="Enter")Lc()}}),w("button",{onClick:Lc,children:"ENTRAR"})]}),w("div",{style:{marginTop:"10px",fontSize:"11px",color:ac.includes("DESATIVADO")?"var(--erro)":"var(--aviso)"},children:ac})]})}),w("div",{id:"modal-detalhe",className:c?"ativo":"",onClick:(d)=>{if(d.target===d.currentTarget)f(!1)},children:x("div",{className:"modal-card-grande",children:[w("button",{className:"btn-fechar-resultado",style:{top:"12px",right:"12px",width:"28px",height:"28px",lineHeight:"28px",fontSize:"14px"},onClick:()=>f(!1),children:"X"}),$u&&x(qn,{children:[x("div",{className:"titulo-crono",children:["\uD83D\uDCCB ",$u.aluno]}),Uu($u,!0)]})]})}),w("input",{type:"file",ref:dc,accept:"video/mp4,video/*,image/gif",style:{display:"none"},onChange:Hp}),Np&&w("div",{id:"modal-attach-choice",style:{position:"fixed",top:0,left:0,width:"100%",height:"100%",background:"rgba(0,0,0,.9)",zIndex:1200,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"},onClick:(d)=>{if(d.target===d.currentTarget)gt(!1)},children:x("div",{style:{background:"#0a0a0a",border:"2px solid var(--c)",borderRadius:"12px",padding:"16px",width:"100%",maxWidth:"360px"},children:[x("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"12px"},children:[x("b",{style:{color:"var(--c)",fontSize:"12px"},children:["\uD83D\uDCCE ",Du?.id]}),w("button",{className:"btn-fechar",onClick:()=>gt(!1),style:{background:"var(--erro)",color:"#fff",border:0,borderRadius:"4px",padding:"4px 8px",fontWeight:900,cursor:"pointer"},children:"X"})]}),x("div",{style:{display:"grid",gap:"10px"},children:[w("button",{onClick:Fp,style:{padding:"12px",background:"var(--c)",color:"#000",border:0,borderRadius:"8px",fontWeight:900,fontSize:"12px",cursor:"pointer"},children:"\uD83D\uDCF1 ANEXAR DO DISPOSITIVO"}),w("button",{onClick:Wp,style:{padding:"12px",background:"#24292e",color:"#fff",border:"1px solid var(--c)",borderRadius:"8px",fontWeight:900,fontSize:"12px",cursor:"pointer"},children:"\uD83C\uDF10 ABRIR SITE GITHUB (NÃO APP)"})]})]})})]})}_p.createRoot(document.getElementById("root")).render(w(Sp.default.StrictMode,{children:w(fc,{})}));
-</script>
+
+// COPIA E COLA ANTES DO </body> - NÃO APAGA NADA DO ORIGINAL
+const REPO_PESOS = "sistemak/korvil-app";
+const BASE_PESOS = "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos";
+const GH_TOKEN_PESOS = document.getElementById("gh-token-secure")?.value || "ghp_SEU_TOKEN_AQUI";
+
+function getSegundaSemana(data){let d=new Date(data);let day=d.getDay();let diff=d.getDate()-day+(day==0?-6:1);return new Date(d.setDate(diff));}
+function isDentroJanela(){let agora=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Sao_Paulo"}));let segunda=getSegundaSemana(agora);segunda.setHours(0,0,0,0);let sexta=new Date(segunda);sexta.setDate(segunda.getDate()+4);sexta.setHours(0,0,0,0);return agora>=segunda&&agora<sexta;}
+function getPathPeso(id){let tipo=(id.includes("tchuco")||id.includes("dani"))?"online":"presencial";return `${BASE_PESOS}/${tipo}/${id}/registros/pesos.html`;}
+
+// ESSA FUNÇÃO É CHAMADA QUANDO ALUNO REGISTRA PESO NO CRONOGRAMA DELE
+async function salvarAutomaticoPesoNoArquivo(pesoDigitado){
+  let id = localStorage.getItem("ktp_id") || localStorage.getItem("aluno_id") || window.alunoAtual || document.getElementById("idAluno")?.value;
+  if(!id) return;
+  if(!isDentroJanela()){alert("Fora do prazo - volta na próxima segunda 00h00");return;}
+  let agoraBRT=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Sao_Paulo"}));
+  let dataRegistro=agoraBRT.toLocaleString("pt-BR",{timeZone:"America/Sao_Paulo"});
+  let segunda=getSegundaSemana(agoraBRT);segunda.setHours(0,0,0,0);
+  let semanaStr=segunda.toLocaleDateString("pt-BR");
+  let path=getPathPeso(id);
+  let url=`https://api.github.com/repos/${REPO_PESOS}/contents/${path}`;
+  try{
+    let sha=null;let rGet=await fetch(url,{headers:{Authorization:`token ${GH_TOKEN_PESOS}`}});if(rGet.ok){let j=await rGet.json();sha=j.sha;}
+    let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${id} - pesos</title></head><body><h1>K-TP 11º ANO 2026 - ${id}</h1><p>Semana:${semanaStr} Peso:${pesoDigitado}kg Registro:${dataRegistro}</p><table border=1><tr><th>Semana</th><th>Data</th><th>Peso</th></tr><tr><td>${semanaStr}</td><td>${dataRegistro}</td><td>${pesoDigitado}kg</td></tr></table></body></html>`;
+    let base64=btoa(unescape(encodeURIComponent(html)));
+    let rPut=await fetch(url,{method:"PUT",headers:{Authorization:`token ${GH_TOKEN_PESOS}`,"Content-Type":"application/json"},body:JSON.stringify({message:`${id} peso ${pesoDigitado}kg ${dataRegistro}`,content:base64,branch:"main",...(sha?{sha}:{})})});
+    if(rPut.ok) console.log(`✅ salvo em ${path}`);
+  }catch(e){console.error(e);}
+}
+window.salvarAutomaticoPesoNoArquivo = salvarAutomaticoPesoNoArquivo;
+
+// LIGA AUTOMÁTICO NO SEU BOTÃO JÁ EXISTENTE - NÃO MUDA NADA
+document.addEventListener("DOMContentLoaded",()=>{
+  let btn=document.getElementById("btnRegistrarPeso")||document.getElementById("btnSalvarPeso")||document.querySelector("[onclick*='peso']");
+  if(btn){
+    btn.addEventListener("click",()=>{
+      let input=document.getElementById("inputPeso")||document.getElementById("peso");
+      if(input) salvarAutomaticoPesoNoArquivo(input.value);
+    });
+  }
+});
+  </script>
   <script>(function(){function m(a){var h=a.getAttribute("href");if(!h)return;try{var u=new URL(h,document.baseURI);if((u.protocol==="http:"||u.protocol==="https:")&&u.host!==location.host){a.target="_blank";a.rel="noopener noreferrer";}}catch(e){}}function s(){document.querySelectorAll("a[href]").forEach(m);}if(document.readyState!=="loading"){s();}else{document.addEventListener("DOMContentLoaded",s);}document.addEventListener("click",function(e){var a=e.target&&e.target.closest&&e.target.closest("a[href]");if(a){m(a);}},true);})();</script>
   
 </body>
