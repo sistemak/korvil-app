@@ -458,6 +458,47 @@ window.onload=function(){
 
   if(idLogado){mostrarDadosAluno(idLogado);mostrarCronograma();}
 };
+
+// COPIA E COLA ANTES DO </body> - NÃO APAGA NADA DO ORIGINAL
+const REPO_PESOS = "sistemak/korvil-app";
+const BASE_PESOS = "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos";
+const GH_TOKEN_PESOS = document.getElementById("gh-token-secure")?.value || "ghp_SEU_TOKEN_AQUI";
+
+function getSegundaSemana(data){let d=new Date(data);let day=d.getDay();let diff=d.getDate()-day+(day==0?-6:1);return new Date(d.setDate(diff));}
+function isDentroJanela(){let agora=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Sao_Paulo"}));let segunda=getSegundaSemana(agora);segunda.setHours(0,0,0,0);let sexta=new Date(segunda);sexta.setDate(segunda.getDate()+4);sexta.setHours(0,0,0,0);return agora>=segunda&&agora<sexta;}
+function getPathPeso(id){let tipo=(id.includes("tchuco")||id.includes("dani"))?"online":"presencial";return `${BASE_PESOS}/${tipo}/${id}/registros/pesos.html`;}
+
+// ESSA FUNÇÃO É CHAMADA QUANDO ALUNO REGISTRA PESO NO CRONOGRAMA DELE
+async function salvarAutomaticoPesoNoArquivo(pesoDigitado){
+  let id = localStorage.getItem("ktp_id") || localStorage.getItem("aluno_id") || window.alunoAtual || document.getElementById("idAluno")?.value;
+  if(!id) return;
+  if(!isDentroJanela()){alert("Fora do prazo - volta na próxima segunda 00h00");return;}
+  let agoraBRT=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Sao_Paulo"}));
+  let dataRegistro=agoraBRT.toLocaleString("pt-BR",{timeZone:"America/Sao_Paulo"});
+  let segunda=getSegundaSemana(agoraBRT);segunda.setHours(0,0,0,0);
+  let semanaStr=segunda.toLocaleDateString("pt-BR");
+  let path=getPathPeso(id);
+  let url=`https://api.github.com/repos/${REPO_PESOS}/contents/${path}`;
+  try{
+    let sha=null;let rGet=await fetch(url,{headers:{Authorization:`token ${GH_TOKEN_PESOS}`}});if(rGet.ok){let j=await rGet.json();sha=j.sha;}
+    let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${id} - pesos</title></head><body><h1>K-TP 11º ANO 2026 - ${id}</h1><p>Semana:${semanaStr} Peso:${pesoDigitado}kg Registro:${dataRegistro}</p><table border=1><tr><th>Semana</th><th>Data</th><th>Peso</th></tr><tr><td>${semanaStr}</td><td>${dataRegistro}</td><td>${pesoDigitado}kg</td></tr></table></body></html>`;
+    let base64=btoa(unescape(encodeURIComponent(html)));
+    let rPut=await fetch(url,{method:"PUT",headers:{Authorization:`token ${GH_TOKEN_PESOS}`,"Content-Type":"application/json"},body:JSON.stringify({message:`${id} peso ${pesoDigitado}kg ${dataRegistro}`,content:base64,branch:"main",...(sha?{sha}:{})})});
+    if(rPut.ok) console.log(`✅ salvo em ${path}`);
+  }catch(e){console.error(e);}
+}
+window.salvarAutomaticoPesoNoArquivo = salvarAutomaticoPesoNoArquivo;
+
+// LIGA AUTOMÁTICO NO SEU BOTÃO JÁ EXISTENTE - NÃO MUDA NADA
+document.addEventListener("DOMContentLoaded",()=>{
+  let btn=document.getElementById("btnRegistrarPeso")||document.getElementById("btnSalvarPeso")||document.querySelector("[onclick*='peso']");
+  if(btn){
+    btn.addEventListener("click",()=>{
+      let input=document.getElementById("inputPeso")||document.getElementById("peso");
+      if(input) salvarAutomaticoPesoNoArquivo(input.value);
+    });
+  }
+});
 </script>
 </body>
 </html>
