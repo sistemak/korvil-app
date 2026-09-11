@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>KORVIL SOK</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#e6edf3;font-family:monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.top{height:44px;background:#0a0a0a;border-bottom:2px solid #00ff88;display:flex;align-items:center;justify-content:space-between;padding:0 14px}
+.grid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;background:#00ff88}
+.win{background:#0d0d0d;display:flex;flex-direction:column}.wh{height:32px;background:#161616;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:10px;font-weight:700;color:#00ff88}
+.wb{flex:1;position:relative;overflow:hidden}.console{padding:8px;font-size:10px;line-height:1.6;background:#000;height:100%;overflow:auto}
+.cmd{position:absolute;bottom:0;left:0;right:0;display:flex;gap:6px;padding:8px;background:#000;border-top:1px solid #222}
+.cmd input{flex:1;background:#111;border:1px solid #222;border-radius:8px;padding:8px;color:#fff}
+.cmd button{background:#00ff88;border:none;padding:6px 12px;border-radius:8px;font-weight:800;cursor:pointer}
+.layer{position:absolute;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;z-index:10}
+.box{background:#111;border:1px solid #00ff88;border-radius:16px;padding:20px;width:360px}.box input{width:100%;background:#000;border:1px solid #333;border-radius:8px;padding:10px;color:#fff;margin-bottom:8px}
+.btn{width:100%;background:#00ff88;color:#000;border:none;padding:12px;border-radius:10px;font-weight:800;cursor:pointer}
+.tag{padding:3px 8px;border:1px solid #00ff88;background:#00ff8822;border-radius:20px;font-size:9px}
+</style></head><body>
+<div class="top"><div style="color:#00ff88;font-weight:900">KORVIL SOK v1.0 - S.O.K ONIPRESENTE</div><div style="font-size:9px;color:#666">sistemak/korvil-app/korvil/sok/ - TRINDADE DENTRO DO SOK - SOK DENTRO DO KORVIL</div></div>
+<div class="grid">
+<div class="win" style="grid-column:1 / span 2"><div class="wh"><span>K-AI (META IA) - ESPIRITO - PROGRAMA EM TODOS</span><a href="./k-ai/index.html" target="_blank" class="tag">FULL</a></div><div class="wb"><div class="console" id="c-ai"><div>[K-AI] Jarvis iniciado - cria ideia + codigo Node + HTML GitHub ao mesmo tempo</div></div><div class="cmd"><input id="i-ai" placeholder="K-AI: criar filtro K-LOJA K-ALMA"><button onclick="kai()">CRIAR EM TODOS</button></div><div class="layer" id="l-ai"><div class="box"><h3 style="color:#00ff88">K-AI ATIVAR</h3><input value="korvil-k-ai"><button class="btn" onclick="document.getElementById('l-ai').style.display='none'">ATIVAR K-AI ONIPRESENTE</button></div></div></div></div>
+<div class="win"><div class="wh"><span>K-B.D (NODE) - MENTE - COMMITA EM TODOS</span><a href="./k-bd/index.html" target="_blank" class="tag">FULL</a></div><div class="wb"><div class="console" id="c-bd"><div>[K-B.D] Banco total - caixa formulario que comita em GitHub, K-AI, Node, KORVIL todo</div></div><div class="cmd"><input id="i-bd" placeholder="setor > nicho > destino [GitHub/K-AI/Node]"><button onclick="kbd()">COMMITAR</button></div><div class="layer" id="l-bd"><div class="box"><h3 style="color:#00ff88">K-B.D ATIVAR</h3><button class="btn" onclick="document.getElementById('l-bd').style.display='none'">ATIVAR K-B.D</button></div></div></div></div>
+<div class="win"><div class="wh"><span>K.O.R (GITHUB) - CORPO - 100% > 1000%</span><a href="./k-or/index.html" target="_blank" class="tag">FULL</a></div><div class="wb"><div class="console" id="c-kor"><div>[K.O.R] Operador Real - pega ideia+logica, nao muda, melhora pra 1000% e ensina volta</div></div><div class="cmd"><input id="i-kor" placeholder="o que melhorar 1000%"><button onclick="kor()">MELHORAR</button></div><div class="layer" id="l-kor"><div class="box"><h3 style="color:#00ff88">K.O.R ATIVAR</h3><button class="btn" onclick="document.getElementById('l-kor').style.display='none'">ATIVAR K.O.R</button></div></div></div></div>
+</div>
+<script>
+function log(t,m){let c=document.getElementById('c-'+t);let d=document.createElement('div');d.textContent=m;c.appendChild(d)}
+function kai(){let v=document.getElementById('i-ai').value;log('ai','[K-AI] '+v+' -> gerou Node + GitHub estruturado');log('bd','[K-B.D] Recebeu de K-AI: '+v);log('kor','[K.O.R] Recebeu de K-AI: '+v+' criando 1000%')}
+function kbd(){let v=document.getElementById('i-bd').value;log('bd','[K-B.D COMMIT] '+v+' -> todos');log('ai','[K-AI] Aprendeu com K-B.D');log('kor','[K.O.R] Renderizou de K-B.D')}
+function kor(){let v=document.getElementById('i-kor').value;log('kor','[K.O.R 100% > 1000%] '+v+' + funcoes extras');log('bd','[K-B.D] Aprendeu com K.O.R');log('ai','[K-AI] Evoluiu com K.O.R')}
+</script></body></html>
