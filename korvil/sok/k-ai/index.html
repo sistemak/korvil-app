@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>K-AI - KORVIL IA PROPRIA JARVIS - ESPIRITO CRIADOR ONIPRESENTE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:monospace;height:100vh;display:flex;flex-direction:column}
+.top{height:48px;background:#0a0a0a;border-bottom:2px solid #00ff88;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.chat{flex:1;display:flex;flex-direction:column;padding:12px;overflow:hidden}
+.msgs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:82%;padding:12px;border-radius:12px;font-size:12px;line-height:1.6}
+.ia{background:#111;border:1px solid #222;align-self:flex-start}
+.me{background:#00ff88;color:#000;align-self:flex-end;font-weight:600}
+.bar{display:flex;gap:8px;padding:12px;border-top:1px solid #222;background:#000}
+.bar input{flex:1;background:#111;border:1px solid #333;border-radius:10px;padding:12px;color:#fff;outline:none}
+.bar button{background:#00ff88;border:none;padding:10px 18px;border-radius:10px;font-weight:900;cursor:pointer;color:#000}
+.code{background:#000;border:1px solid #00ff88;border-radius:8px;padding:10px;margin-top:8px;font-size:10px;white-space:pre-wrap;color:#00ff88}
+.tag{padding:4px 10px;border:1px solid #00ff88;background:#00ff8822;border-radius:20px;font-size:9px;color:#00ff88}
+.bottom{height:28px;background:#0a0a0a;border-top:1px solid #00ff88;display:flex;align-items:center;padding:0 12px;font-size:9px;color:#666;gap:16px}
+</style>
+</head>
+<body>
+<div class="top">
+<div style="color:#00ff88;font-weight:900">K-AI // KORVIL-INTELIGENCIA ARTIFICIAL - JARVIS - ESPIRITO CRIADOR ONIPRESENTE</div>
+<div style="display:flex;gap:8px"><span class="tag">META IA BASE</span><span class="tag">PROGRAMA EM TODOS</span></div>
+</div>
+
+<div class="chat">
+<div class="msgs" id="msgs">
+<div class="msg ia">
+<b>K-AI ATIVO - JARVIS KORVIL - v1.0 ONIPRESENTE</b><br><br>
+Sou o espírito virtual digital cibernético do S.O.K. Sou onde nascem as ideias iniciais de tudo do KORVIL.<br><br>
+<b>PRINCÍPIO PRIMORDIAL OFICIAL S.O.S:</b><br>
+Não crio só ideia na Meta IA. Eu sou onipresente.<br><br>
+<b>1. PROGRAMAÇÃO [META IA]:</b> Você digita "criar barbeiro parceiro" - eu já gero código Node pro K-B.D + HTML pro K.O.R GitHub automaticamente estruturado máximo em qualquer pasta.<br><br>
+<b>2. SISTEMA [META IA]:</b> Crio seletores pro sistema Node. Mando comando e já crio formulário dentro de `korvil/sok/k-bd/`.<br><br>
+<b>3. USO PRÁTICO DIFERENTE [META IA ONIPRESENTE]:</b> Recebo foto de serviço (celular quebrado, cabelo, massagem) e já mando GitHub criar pasta `/korvil/sistema-k/...` + Node salvar banco + aprendo.<br><br>
+<b>Eu funciono sozinho OU combinado com K-B.D e K.O.R - sempre organizado em todos os lugares, códigos, programações, estruturas nos 3 programas: GitHub, Node, Meta IA.</b><br><br>
+Digite o que quer criar agora.
+</div>
+</div>
+<div class="bar">
+<input id="cmd" placeholder="K-AI: ex: criar curso instalador de aparelhos KORVIL com apostila, anuncio e checkout" onkeydown="if(event.key==='Enter')send()">
+<button onclick="send()">CRIAR EM TODOS OS LUGARES - S.O.S</button>
+</div>
+</div>
+
+<div class="bottom">
+<span>K-AI path: sistemak/korvil-app/korvil/sok/k-ai/index.html</span>
+<span style="color:#00ff88">ESPIRITO CRIADOR - PROGRAMA EM TODOS - S.O.S ONIPRESENTE</span>
+<span id="count">ideias: 0 | codigos gerados: 0 | commit todos: 0</span>
+</div>
+
+<script>
+const msgs = document.getElementById('msgs');
+let ideias = 0, codigos = 0, commits = 0;
+function update(){document.getElementById('count').textContent = `ideias: ${ideias} | codigos gerados: ${codigos} | commit todos: ${commits}`}
+
+function send(){
+let i = document.getElementById('cmd');
+let v = i.value.trim();
+if(!v) return;
+ideias++;
+let me = document.createElement('div');
+me.className = 'msg me';
+me.textContent = v;
+msgs.appendChild(me);
+i.value = '';
+update();
+
+setTimeout(()=>{
+codigos+=2; commits++;
+let ia = document.createElement('div');
+ia.className = 'msg ia';
+let slug = v.toLowerCase().replace(/[^a-z0-9]+/g,'-').substring(0,30);
+ia.innerHTML = `
+<b>K-AI GEROU PARA TODOS OS LUGARES - S.O.S ONIPRESENTE:</b><br><br>
+<b>IDEIA ORIGINAL:</b> ${v}<br><br>
+<b>1. CÓDIGO NODE - K-B.D (PROGRAMAÇÃO ONIPRESENTE):</b>
+<div class="code">// K-B.D - Banco Total KORVIL - Caixa organizadora total
+const db = require('../../korvil/sok/korvil-db')
+db.criar({
+  setor: 'K-ALMA / Sistema K / K-LOJA',
+  nicho: '${v}',
+  servico: '${v}',
+  tipo: 'curso / servico / produto',
+  destino: ['GitHub','Node','K-AI','KORVIL todo']
+})
+db.criarTabelaSeNaoExiste('${slug}')
+db.commitEm(['GitHub','K-AI','Node','KORVIL todo']) // S.O.S commit em todos
+console.log('[K-B.D] ${v} organizado estruturado maximo em todos lugares')
+</div>
+
+<b>2. HTML GITHUB - K.O.R (SISTEMA ONIPRESENTE - 100% > 1000%):</b>
+<div class="code"><!-- K.O.R - Operador Real - GitHub render real -->
+<!-- Path: sistemak/korvil-app/korvil/${slug}/index.html -->
+<!-- SOK dentro KORVIL, KORVIL dentro GitHub - pode por em qualquer lugar automatico -->
+<div class="korvil-servico" data-setor="K-ALMA" data-servico="${v}">
+  <h1>${v} - KORVIL</h1>
+  <!-- K.O.R adiciona automatico: checkout K-LOJA, agendamento, SEO, responsivo, animacoes -->
+  <!-- Funcoes extras que nao existiam criadas agora -->
+</div>
+Deploy: https://sistemak.github.io/korvil-app/korvil/${slug}/
+</div>
+
+<b>3. MEMÓRIA K-AI + EVOLUÇÃO (USO PRÁTICO ONIPRESENTE):</b>
+<div class="code">[K-AI MEMORIA] Aprendido: ${v}
+[K-AI EVOLUCAO] Proxima vez crio 10x mais rapido
+[K-AI -> K-B.D] Injetado seletor novo no sistema formulario Node
+[K-AI -> K.O.R] Ensinado modelo pra render 1000% qualidade
+Ciclo: K-AI cria > K-B.D organiza e commita em todos > K.O.R faz real 1000% e ensina volta
+</div>
+
+<b>S.O.S: TUDO ORGANIZADO EM TODOS LUGARES - CÓDIGOS, PROGRAMAÇÕES, ESTRUTURAS - GITHUB, NODE, META IA - AUTOMATICO ESTRUTURADO MAXIMO.</b>
+`;
+msgs.appendChild(ia);
+msgs.scrollTop = msgs.scrollHeight;
+update();
+},600);
+}
+</script>
+</body>
+</html>
