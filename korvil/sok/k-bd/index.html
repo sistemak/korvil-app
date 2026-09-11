@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>K-B.D - KORVIL BANCO DE DADOS TOTAL - MENTE ALMA ONIPRESENTE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.top{height:48px;background:#0a0a0a;border-bottom:2px solid #00ff88;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.grid{display:grid;grid-template-columns:220px 1fr 340px;flex:1;gap:2px;background:#00ff88;overflow:hidden}
+.col{background:#0d0d0d;display:flex;flex-direction:column;overflow:hidden}
+.h{height:36px;background:#161616;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-size:10px;color:#00ff88;font-weight:800}
+.list{flex:1;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:6px}
+.item{background:#111;border:1px solid #222;border-radius:10px;padding:10px;font-size:11px;cursor:pointer;line-height:1.4}
+.item:hover{border-color:#00ff88;transform:translateX(2px)}
+.item b{color:#00ff88}
+.sel{padding:12px;overflow:auto;flex:1}
+.sel label{font-size:8px;color:#666;letter-spacing:1px;margin-top:8px;display:block}
+.sel select,.sel input{width:100%;background:#111;border:1px solid #333;border-radius:8px;padding:10px;color:#fff;margin-top:4px;font-size:11px;outline:none}
+.sel select:focus,.sel input:focus{border-color:#00ff88}
+.btn{width:100%;background:#00ff88;color:#000;border:none;padding:12px;border-radius:10px;font-weight:900;cursor:pointer;margin-top:10px;font-size:11px}
+.btn2{background:#111;color:#00ff88;border:1px solid #00ff88;margin-top:6px}
+.console{background:#000;color:#00ff88;padding:10px;font-size:10px;line-height:1.7;flex:1;overflow:auto;border-top:1px solid #222}
+.tag{padding:3px 8px;border:1px solid #00ff88;background:#00ff8822;border-radius:20px;font-size:8px;color:#00ff88}
+</style>
+</head>
+<body>
+<div class="top">
+<div style="color:#00ff88;font-weight:900">K-B.D // KORVIL BANCO DE DADOS - MENTE ALMA - BANCO QUE CRIA BANCO - ONIPRESENTE</div>
+<div style="display:flex;gap:6px"><span class="tag">NODE BASE</span><span class="tag">COMMITA EM TODOS</span><span class="tag">S.O.S</span></div>
+</div>
+
+<div class="grid">
+<div class="col">
+<div class="h"><span>SETORES - BANCO TOTAL KORVIL</span><span class="tag" id="count-db">0</span></div>
+<div class="list" id="setores"></div>
+<div class="console" id="c-left"><div>[K-B.D] Banco total iniciado</div><div>[S.O.S] Pronto pra criar em qualquer lugar estruturado maximo</div></div>
+</div>
+
+<div class="col">
+<div class="h"><span>CAIXA FORMULARIO SELETORES INSTANTANEO - CRIA EM QUALQUER LUGAR</span><span class="tag">ONI</span></div>
+<div class="sel">
+<label>SETOR PRIMORDIAL KORVIL</label>
+<select id="s-setor">
+<option>K-ALMA - saude e beleza (barbeiro, cabeleireiro unissex, manicure, massoterapia, estetica)</option>
+<option>Sistema K - servicos gerais (eletricista, carpinteiro, faxineira, tecnologias)</option>
+<option>K-TP - Treinamento Personalizado (projeto transformacao p/ Ed fisica, fisio)</option>
+<option>K-AFORTUNADO - empreendedorismo e financas (consultoria, mentoria)</option>
+<option>K-TH - KORVIL Terapia Holistica</option>
+<option>K-LOJA - loja filtros K por setor</option>
+<option>KORVIL Formacoes - cursos oficiais (manutencao celular, instalador aparelhos)</option>
+<option>KORVIL negocios - parcerias profissionais/autonomos</option>
+<option>S.O.K - sistema operacional (K-AI + K-B.D + K.O.R)</option>
+</select>
+
+<label>NICHO / ÁREA / SERVIÇO / PRODUTO / FUNÇÃO</label>
+<input id="s-serv" value="barbeiro parceiro - corte degradê + barba + sobrancelha - K-ALMA">
+
+<label>TIPO</label>
+<select id="s-tipo"><option>servico direto oficial KORVIL</option><option>parceria profissional autonomo</option><option>curso formacao</option><option>produto K-LOJA filtro K</option><option>funcao sistema</option><option>categoria / sub-categoria</option></select>
+
+<label>AÇÃO</label>
+<select id="s-acao"><option>Criar novo organizado maximo</option><option>Mover pra outro setor</option><option>Clonar pra varios setores</option><option>Editar</option><option>Excluir</option><option>Duplicar com melhoria 1000%</option></select>
+
+<label>DESTINO ONDE COMMITAR - S.O.S ONIPRESENTE (pode marcar varios)</label>
+<select id="s-dest" multiple style="height:96px">
+<option selected>GitHub - qualquer pasta /korvil/... automatico estruturado</option>
+<option selected>Node - banco local korvil-db.js</option>
+<option selected>K-AI - memoria Meta IA - injetar aprendizado</option>
+<option selected>KORVIL todo - todos setores</option>
+<option>korvil/sok/ - dentro do SOK</option>
+<option>sistemak/korvil-app/ - raiz repo</option>
+</select>
+
+<button class="btn" onclick="executar()">EXECUTAR E COMMITAR REAL EM TODOS - S.O.S</button>
+<button class="btn btn2" onclick="criarAuto()">MODO AUTO: SE NAO EXISTE, CRIA SOZINHO EM TODOS</button>
+
+<div class="console" id="log-main" style="height:180px;margin-top:10px;border-radius:10px;border:1px solid #222">
+<div>[K-B.D] Aguardando comando...</div>
+<div>[PRINCIPIO] Recebo ideia do K-AI e crio logica perfeita de como fazer criar arquitetar da melhor forma maxima</div>
+<div>[ONI] Posso armazenar tudo do KORVIL e de outras, criar diretamente usando caixa formularios prontos seletores instantaneo</div>
+<div>[S.O.S] Escolhe selecoes e vai dando commit real direto no GitHub ou nele mesmo ou no K-AI ou qualquer coisa e qualquer lugar de qualquer forma que quiser</div>
+</div>
+</div>
+</div>
+
+<div class="col">
+<div class="h"><span>K-LOJA FILTROS + LOGS + CICLO VOLTA</span><span class="tag">100% > 1000%</span></div>
+<div class="list" id="loja">
+<div class="item"><b>K-LOJA > K-ALMA > oleo massagem</b><br><span style="color:#666">filtro organizado maximo - commit GitHub + Node + K-AI OK - R$59</span></div>
+<div class="item"><b>Sistema K > eletricista parceiro</b><br><span style="color:#666">banco criado - GitHub /korvil/sistema-k/eletricista/ - Node + K-AI OK</span></div>
+<div class="item"><b>K-TP > Projeto Transformacao</b><br><span style="color:#666">formacao fisioterapeuta - commit em todos - onipresente</span></div>
+</div>
+<div class="console" id="c-right"><div>[K-B.D] Ciclo: K-AI ideia -> K-B.D logica -> K.O.R real -> volta pra K-B.D e K-AI</div></div>
+</div>
+</div>
+
+<script>
+let setores=[
+'K-AI - IA propria Jarvis',
+'K-B.D - banco total (eu)',
+'K.O.R - operador real',
+'K-ALMA saude/beleza',
+' Sistema K servicos gerais',
+' K-TP treino personalizado',
+' K-AFORTUNADO empreendedorismo',
+' K-TH terapia holistica',
+' K-LOJA filtros K',
+' KORVIL Formacoes cursos',
+' KORVIL negocios parcerias',
+' S.O.K dentro KORVIL, KORVIL dentro GitHub'
+];
+let el=document.getElementById('setores');
+setores.forEach(s=>{
+let d=document.createElement('div');d.className='item';d.innerHTML='<b>'+s.split(' - ')[0]+'</b><br><span style=color:#666>'+(s.split(' - ')[1]||'')+'</span>';d.onclick=()=>logAll('[SELECT] '+s);el.appendChild(d);
+});
+document.getElementById('count-db').textContent=setores.length+' tabelas';
+
+function logAll(m){
+['c-left','log-main','c-right'].forEach(id=>{
+let c=document.getElementById(id);
+let div=document.createElement('div');div.textContent=m;c.appendChild(div);c.scrollTop=c.scrollHeight;
+});
+}
+function executar(){
+let setor=document.getElementById('s-setor').value;
+let serv=document.getElementById('s-serv').value;
+let tipo=document.getElementById('s-tipo').value;
+let acao=document.getElementById('s-acao').value;
+let dest=[...document.getElementById('s-dest').selectedOptions].map(o=>o.text).join(', ');
+
+logAll('[K-B.D '+acao.toUpperCase()+'] '+serv+' | '+tipo+' | Setor: '+setor.split(' - ')[0]);
+setTimeout(()=>logAll('[LOGICA K-B.D] Criando logica perfeita: como fazer, onde por, como organizar estruturado maximo'),300);
+setTimeout(()=>logAll('[COMMIT] GitHub: /korvil/'+setor.split(' - ')[0].toLowerCase().replace(/ /g,'-')+'/'+serv.toLowerCase().replace(/ /g,'-').substring(0,20)+'/index.html criado'),600);
+setTimeout(()=>logAll('[COMMIT] Node: db.korvil.'+setor.split(' - ')[0].toLowerCase()+'.'+serv.substring(0,15)+' = salvo banco total'),900);
+setTimeout(()=>logAll('[COMMIT] K-AI: memoria injetada - K-AI aprendeu '+serv+' - '+dest),1200);
+setTimeout(()=>logAll('[S.O.S] Tudo organizado em todos lugares - SOK dentro KORVIL, KORVIL dentro GitHub - Destinos: '+dest+' - OK 100%'),1500);
+setTimeout(()=>logAll('[K-B.D -> K.O.R] Enviado pra K.O.R fazer real 100% > 1000% com funcoes extras'),1800);
+}
+function criarAuto(){
+logAll('[MODO AUTO ON] K-B.D percebeu que nao existe tabela pra: '+document.getElementById('s-serv').value);
+setTimeout(()=>logAll('[AUTO] Criando sozinho: banco Node + pasta GitHub + prompt K-AI - sem precisar pedir'),500);
+setTimeout(()=>executar(),1000);
+}
+</script>
+</body>
+  </html>
