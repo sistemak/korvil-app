@@ -1,1 +1,100 @@
- c
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev Orchestrator - GITHUB | NODE | META IA</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#e0e0e0;font-family:JetBrains Mono,monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.top-bar{background:#12121a;padding:10px 18px;display:flex;justify-content:space-between;border-bottom:1px solid #2a2a40;font-size:12px}
+.top-bar .live{color:#00ff9d}
+.main{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 340px;gap:2px;background:#1e1e32;overflow:hidden}
+.panel{background:#0f0f18;position:relative;display:flex;flex-direction:column;overflow:hidden}
+.panel-head{padding:10px 14px;background:#151525;border-bottom:1px solid #2a2a50;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:bold}
+.panel-head span{color:#7c7cff}
+.github-panel{grid-column:1;grid-row:1}
+.node-panel{grid-column:2;grid-row:1}
+.meta-panel{grid-column:1 / span 2;grid-row:2;background:#0c0c14}
+.code-area{flex:1;padding:14px;overflow:auto;font-size:11px;line-height:1.6}
+.node-preview{padding:20px}
+.stat-row{display:flex;gap:12px;margin:12px 0}
+.stat{background:#151525;border:1px solid #2a2a50;padding:12px;border-radius:8px;flex:1}
+.stat b{color:#00ff9d;font-size:18px}
+.chat-box{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:80%;padding:10px 14px;border-radius:10px;font-size:12px}
+.msg-user{align-self:flex-end;background:#5b4bff;color:white}
+.msg-ia{align-self:flex-start;background:#1a1a2e;border:1px solid #2a2a50}
+.input-bar{display:flex;gap:10px;padding:12px;background:#151525;border-top:1px solid #2a2a50}
+.input-bar input{flex:1;background:#0a0a0f;border:1px solid #2a2a50;border-radius:8px;padding:10px 14px;color:#fff;outline:none}
+.input-bar button{background:#7c5cff;color:white;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="top-bar">
+<div>⚡ Dev Orchestrator • SIMULTANEOUS SYSTEM • <span class="live">● All Systems Online</span></div>
+<div id="clock">GITHUB | NODE | META IA — ACTIVE</div>
+</div>
+<div class="main">
+  <div class="panel github-panel">
+    <div class="panel-head"><div>◉ GITHUB <span>myapp-node-api • main • main.js</span></div><div>Branch: main</div></div>
+    <div class="code-area" id="github-code">const express = require("express");
+const { Pool } = require("pg");
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL
+});
+const app = express();
+app.use(express.json());
+// Rotas injetadas pela META IA ↓
+app.get("/users", async (req,res)=>{
+  const {rows} = await pool.query("SELECT * FROM users");
+  res.json(rows);
+});
+</div>
+  </div>
+  <div class="panel node-panel">
+    <div class="panel-head"><div>⬢ NODE.JS APP • LIVE PREVIEW</div><div style="background:#00c67a;padding:2px 8px;border-radius:4px;color:#000">RUNNING</div></div>
+    <div class="node-preview">
+      <h2>Dashboard — Users</h2>
+      <p style="color:#888;font-size:12px">Live preview do Node.js Express</p>
+      <div class="stat-row">
+        <div class="stat"><div>Total Users</div><b id="total-users">128</b></div>
+        <div class="stat"><div>Active Now</div><b>14</b></div>
+        <div class="stat"><div>API Requests</div><b>1.2k</b></div>
+      </div>
+      <div style="background:#151525;padding:10px;border-radius:8px;font-size:11px;margin-top:10px" id="node-logs">[NODE] Server rodando...<br>[GITHUB] Sync OK<br>[META IA] Aguardando comando...</div>
+    </div>
+  </div>
+  <div class="panel meta-panel">
+    <div class="panel-head"><div>∞ META IA • CODE GENERATION • Conectado GITHUB + NODE</div><div style="color:#00ff9d">Hot Reload Enabled</div></div>
+    <div class="chat-box" id="chat">
+      <div class="msg msg-ia">Pronto! Digite embaixo: "crie banco de dados do repo no node" que eu crio nos dois lados em tempo real.</div>
+    </div>
+    <div class="input-bar">
+      <input id="cmd" placeholder="crie banco de dados do meu repositório no node..." onkeydown="if(event.key==='Enter')exec()">
+      <button onclick="exec()">▶</button>
+    </div>
+  </div>
+</div>
+<script>
+const githubCode=document.getElementById('github-code');
+const nodeLogs=document.getElementById('node-logs');
+const chat=document.getElementById('chat');
+const cmdInput=document.getElementById('cmd');
+function exec(){
+  const cmd=cmdInput.value.trim(); if(!cmd) return;
+  const u=document.createElement('div'); u.className='msg msg-user'; u.textContent=cmd; chat.appendChild(u); cmdInput.value='';
+  setTimeout(()=>{
+    let codeAdd=`\n// COMANDO META IA: ${cmd}\napp.get("/${cmd.split(' ')[0]}", (req,res)=>res.json({msg:"criado pela META IA"}));\n`;
+    if(cmd.toLowerCase().includes('banco')){
+      codeAdd=`\n// BANCO TOTAL GERADO PELA META IA\nasync function initDatabase(){\n  await pool.query('CREATE TABLE IF NOT EXISTS users (id SERIAL, name TEXT, email TEXT)');\n  console.log('✓ DB inicializado');\n}\ninitDatabase();\n`;
+      nodeLogs.innerHTML+='<br>[META IA] CREATE TABLE users OK<br>[ANCORA] github_esq → node_dir';
+    }
+    githubCode.textContent+=codeAdd;
+    const ia=document.createElement('div'); ia.className='msg msg-ia'; ia.innerHTML=`✓ Executado: ${cmd}<br><code style="color:#00ff9d">${codeAdd.substring(0,150)}</code>`; chat.appendChild(ia);
+    chat.scrollTop=chat.scrollHeight;
+  },600);
+}
+</script>
+</body>
+</html>
