@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>KTP - CRIAR TODOS pesos.html ZERADOS</title>
+<style>
+body{background:#0a0a0a;color:#fff;font-family:monospace;padding:20px}
+button{background:#00ff88;color:#000;padding:15px 30px;font-size:18px;font-weight:bold;border:0;border-radius:8px;cursor:pointer}
+button:disabled{background:#444;color:#888}
+input{width:100%;padding:12px;background:#111;color:#0f0;border:1px solid #333;border-radius:6px;margin:10px 0}
+.log{background:#111;border:1px solid #222;padding:10px;height:300px;overflow:auto;white-space:pre-wrap;margin-top:15px}
+.ok{color:#0f0}.err{color:#f55}.info{color:#0ff}
+</style>
+</head>
+<body>
+<h1>K-TP 2026 - CRIAR 42 pesos.html ZERADOS</h1>
+<p>Repo: sistemak/korvil-app | branch: main</p>
+
+<label>GH_TOKEN com permissão total (repo):</label>
+<input type="password" id="token" placeholder="ghp_... - cole seu token aqui">
+
+<button id="btnCommit" onclick="criarTudo()">🚀 COMMIT - CRIAR TODOS OS 42 ARQUIVOS AGORA</button>
+
+<div id="log" class="log"></div>
+
+<script>
+const REPO = "sistemak/korvil-app";
+const BASE_PATH = "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos";
+
+const ALUNOS = [
+  {tipo:"presencial", id:"01-mag1", nome:"Magda Gomes dos Santos"},
+  {tipo:"presencial", id:"02-mcarla2", nome:"Maria Carla"},
+  {tipo:"presencial", id:"03-vhellem3", nome:"Vhellem"},
+  {tipo:"presencial", id:"04-alexandra4", nome:"Alexandra"},
+  {tipo:"presencial", id:"05-michele5", nome:"Michele"},
+  {tipo:"presencial", id:"06-aline6", nome:"Aline"},
+  {tipo:"presencial", id:"07-adriana7", nome:"Adriana"},
+  {tipo:"presencial", id:"08-joss8", nome:"Joss"},
+  {tipo:"presencial", id:"09-amigaadrum9", nome:"Amiga Adriana 1"},
+  {tipo:"presencial", id:"10-amigaadrdois10", nome:"Amiga Adriana 2"},
+  {tipo:"presencial", id:"11-angel11", nome:"Angel"},
+  {tipo:"presencial", id:"12-anapaula12", nome:"Ana Paula"},
+  {tipo:"presencial", id:"13-gusta13", nome:"Gusta"},
+  {tipo:"presencial", id:"14-sueli14", nome:"Sueli"},
+  {tipo:"presencial", id:"15-fabi15", nome:"Fabi"},
+  {tipo:"presencial", id:"16-paula16", nome:"Paula"},
+  {tipo:"presencial", id:"17-nop17", nome:"Nop"},
+  {tipo:"presencial", id:"18-bianca18", nome:"Bianca"},
+  {tipo:"presencial", id:"19-lau19", nome:"Lau"},
+  {tipo:"presencial", id:"20-cass20", nome:"Cass"},
+  {tipo:"presencial", id:"21-katia21", nome:"Katia"},
+  {tipo:"presencial", id:"22-mara22", nome:"Mara"},
+  {tipo:"presencial", id:"23-edna23", nome:"Edna"},
+  {tipo:"presencial", id:"24-luciane24", nome:"Luciane"},
+  {tipo:"presencial", id:"25-marly25", nome:"Marly"},
+  {tipo:"presencial", id:"26-mcris26", nome:"M. Cris"},
+  {tipo:"presencial", id:"27-juci27", nome:"Juci"},
+  {tipo:"presencial", id:"28-joce28", nome:"Joce"},
+  {tipo:"presencial", id:"29-marcos29", nome:"Marcos"},
+  {tipo:"presencial", id:"30-lucas30", nome:"Lucas"},
+  {tipo:"presencial", id:"31-celi31", nome:"Celi"},
+  {tipo:"presencial", id:"32-jaque32", nome:"Jaque"},
+  {tipo:"presencial", id:"33-elisa33", nome:"Elisa"},
+  {tipo:"presencial", id:"34-gice34", nome:"Gice"},
+  {tipo:"presencial", id:"35-pati35", nome:"Pati"},
+  {tipo:"presencial", id:"36-mel36", nome:"Mel"},
+  {tipo:"presencial", id:"37-naty37", nome:"Naty"},
+  {tipo:"presencial", id:"38-gon38", nome:"Gon"},
+  {tipo:"presencial", id:"39-nicol39", nome:"Nicol"},
+  {tipo:"presencial", id:"40-madel40", nome:"Madel"},
+  {tipo:"online", id:"1-tchuco1", nome:"Tchuco"},
+  {tipo:"online", id:"2-dani2", nome:"Dani"}
+];
+
+function log(msg, cls="info"){
+  const el = document.getElementById("log");
+  el.innerHTML += `<span class="${cls}">[${new Date().toLocaleTimeString()}] ${msg}</span>\n`;
+  el.scrollTop = el.scrollHeight;
+}
+
+function modeloZerado(aluno){
+  const hoje = new Date().toLocaleDateString("pt-BR");
+  const tipoLabel = aluno.tipo.toUpperCase();
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-TP 2026 - pesos - ${aluno.id}</title>
+<style>
+body{font-family:Arial;background:#0a0a0a;color:#fff;padding:20px}
+.card{display:inline-block;background:#111;border:1px solid #222;padding:15px;margin:5px;border-radius:8px;min-width:160px}
+</style>
+</head>
+<body>
+<h1>K-TP PROJETO TRANSFORMAÇÃO 11º ANO - 2026</h1>
+<h2>${aluno.id.toUpperCase()} - REGISTRO DE PESOS - ${aluno.nome} | ${tipoLabel} | Atualizado: ${hoje}</h2>
+<div class="stats">
+<div class="card">Semanas: 0</div>
+<div class="card">Peso: -- kg</div>
+<div class="card">Fase Atual: --</div>
+<div class="card">Registro: --</div>
+</div>
+<p>Nenhum peso registrado ainda</p>
+<p>Aguardando primeiro registro - Segunda 00h00 até Sexta 00h00 BRT</p>
+<script>
+const pesos = [];
+const totalRegistros = 0;
+<\/script>
+</body>
+</html>`;
+}
+
+async function criarTudo(){
+  const token = document.getElementById("token").value.trim();
+  if(!token){ alert("Cole o GH_TOKEN!"); return; }
+
+  const btn = document.getElementById("btnCommit");
+  btn.disabled = true;
+  btn.innerText = "⏳ CRIANDO 42 ARQUIVOS...";
+
+  for(let i=0;i<ALUNOS.length;i++){
+    const aluno = ALUNOS[i];
+    const path = `${BASE_PATH}/${aluno.tipo}/${aluno.id}/registros/pesos.html`;
+    const url = `https://api.github.com/repos/${REPO}/contents/${path}`;
+
+    try{
+      log(`[${i+1}/42] ${aluno.id} -> ${path}...`);
+
+      // pega sha se já existe
+      let sha = null;
+      let resCheck = await fetch(url, { headers: { Authorization: `token ${token}` } });
+      if(resCheck.ok){
+        let data = await resCheck.json();
+        sha = data.sha;
+      }
+
+      const conteudo = modeloZerado(aluno);
+      const base64 = btoa(unescape(encodeURIComponent(conteudo)));
+
+      const body = {
+        message: `KTP 2026 - cria zera pesos.html ${aluno.id} - sem registros - ${new Date().toISOString()}`,
+        content: base64,
+        branch: "main",
+       ...(sha? {sha} : {})
+      };
+
+      const res = await fetch(url, {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+
+      if(res.ok){
+        log(`✅ OK ${aluno.id} criado zerado`, "ok");
+      } else {
+        let err = await res.text();
+        log(`❌ ERRO ${aluno.id}: ${err}`, "err");
+      }
+
+      await new Promise(r=>setTimeout(r,400));
+
+    }catch(e){
+      log(`❌ EXCEÇÃO ${aluno.id}: ${e.message}`, "err");
+    }
+  }
+
+  log("==== FINALIZADO TODOS 42 ARQUIVOS ZERADOS ====", "ok");
+  btn.disabled = false;
+  btn.innerText = "🚀 COMMIT - CRIAR TODOS OS 42 ARQUIVOS AGORA";
+}
+</script>
+</body>
+</html>
