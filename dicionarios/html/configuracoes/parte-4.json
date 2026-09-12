@@ -1,0 +1,23 @@
+{
+  "k-ai": true,
+  "path": "dicionarios/html/configuracoes/parte-4.json",
+  "forged": "2026-09-12T13:40:52.239Z",
+  "lang": "html",
+  "tipo": "configuracao",
+  "parte": 4,
+  "tokens": [
+    "html_cfg_4_a",
+    "html_cfg_4_b",
+    "html_cfg_4_c"
+  ],
+  "regras": {
+    "evolutivo": true,
+    "nivel": 4,
+    "compat": [
+      "v1",
+      "v2",
+      "neuro"
+    ]
+  },
+  "prompt": "Gerar html config 4 com auto-evolução"
+}
