@@ -1,0 +1,8 @@
+# PATA-PROGRAMACAO KORVIL #024
+@forja instantanea
+def pata_024(entrada):
+  memoria = carregar("mem_4")
+  saida = gerador_24.forge(entrada + memoria)
+  return saida + " :: FORJADO_024"
+
+# ::END PATA 024 ::
