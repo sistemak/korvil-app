@@ -1,0 +1,23 @@
+{
+  "k-ai": true,
+  "path": "dicionarios/html/configuracoes/parte-6.json",
+  "forged": "2026-09-12T13:40:52.239Z",
+  "lang": "html",
+  "tipo": "configuracao",
+  "parte": 6,
+  "tokens": [
+    "html_cfg_6_a",
+    "html_cfg_6_b",
+    "html_cfg_6_c"
+  ],
+  "regras": {
+    "evolutivo": true,
+    "nivel": 1,
+    "compat": [
+      "v1",
+      "v2",
+      "neuro"
+    ]
+  },
+  "prompt": "Gerar html config 6 com auto-evolução"
+}
