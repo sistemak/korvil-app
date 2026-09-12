@@ -1,0 +1,15 @@
+{
+  "k-ai": true,
+  "path": "dicionarios/html/criador/parte-6.json",
+  "forged": "2026-09-12T13:40:52.239Z",
+  "lang": "html",
+  "tipo": "criador",
+  "parte": 6,
+  "factory": "html_creator_6",
+  "capacidade": "validar",
+  "blueprint": {
+    "inputs": 3,
+    "outputs": 2,
+    "recursivo": true
+  }
+}
