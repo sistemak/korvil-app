@@ -1,0 +1,15 @@
+{
+  "k-ai": true,
+  "path": "dicionarios/html/criador/parte-4.json",
+  "forged": "2026-09-12T13:40:52.239Z",
+  "lang": "html",
+  "tipo": "criador",
+  "parte": 4,
+  "factory": "html_creator_4",
+  "capacidade": "gerar",
+  "blueprint": {
+    "inputs": 3,
+    "outputs": 2,
+    "recursivo": false
+  }
+}
