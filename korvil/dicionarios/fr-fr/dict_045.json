@@ -1,0 +1,68 @@
+{
+  "lang": "fr-fr",
+  "id": "DICT_FR-FR_045",
+  "entries": [
+    {
+      "k": "termo_0_fr-fr",
+      "v": "tradução_fr-fr_0_brky",
+      "p": 0.8409366928971216
+    },
+    {
+      "k": "termo_1_fr-fr",
+      "v": "tradução_fr-fr_1_64gp",
+      "p": 0.18464439385735054
+    },
+    {
+      "k": "termo_2_fr-fr",
+      "v": "tradução_fr-fr_2_sa84",
+      "p": 0.16157673306891862
+    },
+    {
+      "k": "termo_3_fr-fr",
+      "v": "tradução_fr-fr_3_vf1e",
+      "p": 0.5858054386756714
+    },
+    {
+      "k": "termo_4_fr-fr",
+      "v": "tradução_fr-fr_4_xxgu",
+      "p": 0.04600484405581351
+    },
+    {
+      "k": "termo_5_fr-fr",
+      "v": "tradução_fr-fr_5_dn0b",
+      "p": 0.9721151250906961
+    },
+    {
+      "k": "termo_6_fr-fr",
+      "v": "tradução_fr-fr_6_69he",
+      "p": 0.9278939930304889
+    },
+    {
+      "k": "termo_7_fr-fr",
+      "v": "tradução_fr-fr_7_tugf",
+      "p": 0.834164271325178
+    },
+    {
+      "k": "termo_8_fr-fr",
+      "v": "tradução_fr-fr_8_sset",
+      "p": 0.5440661215314894
+    },
+    {
+      "k": "termo_9_fr-fr",
+      "v": "tradução_fr-fr_9_xam7",
+      "p": 0.8010408186687098
+    },
+    {
+      "k": "termo_10_fr-fr",
+      "v": "tradução_fr-fr_10_42gj",
+      "p": 0.11237191952979808
+    },
+    {
+      "k": "termo_11_fr-fr",
+      "v": "tradução_fr-fr_11_ia8c",
+      "p": 0.44410130617705423
+    }
+  ],
+  "forged": "2026-09-12T14:03:39.650Z",
+  "hash": "hp_kitext8jta"
+}
