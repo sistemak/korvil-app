@@ -1,0 +1,23 @@
+{
+  "k-ai": true,
+  "path": "dicionarios/html/configuracoes/parte-3.json",
+  "forged": "2026-09-12T13:40:52.239Z",
+  "lang": "html",
+  "tipo": "configuracao",
+  "parte": 3,
+  "tokens": [
+    "html_cfg_3_a",
+    "html_cfg_3_b",
+    "html_cfg_3_c"
+  ],
+  "regras": {
+    "evolutivo": true,
+    "nivel": 3,
+    "compat": [
+      "v1",
+      "v2",
+      "neuro"
+    ]
+  },
+  "prompt": "Gerar html config 3 com auto-evolução"
+}
