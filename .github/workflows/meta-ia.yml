@@ -16,14 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
 
-      - name: IA SEMPRE ATIVA - FIX
+      - name: IA ATIVA
         run: |
           git config user.name "sistemak"
           git config user.email "korvil.tp@gmail.com"
-          echo "IA ATIVA - $(date) - @K-TP.p - sistemak/korvil-app - GH_TOKEN OK" > IA_ATIVA.txt
+          echo "IA ATIVA - $(date) - @K-TP.p - ATIVO PRA SEMPRE" > IA_ATIVA.txt
           git add IA_ATIVA.txt
-          git diff --staged --quiet || git commit -m "🤖 IA ATIVA - $(date) [skip ci]"
-          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/sistemak/korvil-app.git HEAD:main || git push
+          git commit -m "🤖 IA ATIVA - $(date)" || echo "ok"
+          git push
