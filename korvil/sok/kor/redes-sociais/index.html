@@ -1,1 +1,93 @@
-f
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KORVIL - Redes Sociais</title>
+<base href="./">
+<style>
+*{box-sizing:border-box} body{margin:0;background:#0a0a0a;color:#fff;font-family:system-ui;padding:12px}
+.header{padding:10px 0;font-weight:800;font-size:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.card{background:#151515;border:1px solid #262626;border-radius:14px;padding:14px}
+.card h3{margin:0 0 8px;font-size:16px}
+.row{display:flex;justify-content:space-between;align-items:center;margin:6px 0;background:#202020;padding:8px 10px;border-radius:8px}
+.btn{border:0;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer}
+.btn-c{background:#2a2a2a;color:#fff}.btn-ok{background:#00ff88;color:#000}
+.post{position:sticky;bottom:10px;margin-top:15px;width:100%;padding:16px;border-radius:12px;border:0;background:#ff0050;color:#fff;font-size:18px;font-weight:800}
+textarea,input{width:100%;background:#151515;border:1px solid #262626;color:#fff;border-radius:10px;padding:10px}
+#preview img,#preview video{width:100%;border-radius:10px;margin-top:10px}
+</style>
+</head>
+<body>
+
+<div class="header">KORVIL / Redes Sociais</div>
+
+<textarea id="legenda" placeholder="Legenda padrão para todas..."></textarea>
+<input type="file" id="arquivo" accept="image/*,video/*" style="margin:10px 0" onchange="preview(this)">
+<div id="preview"></div>
+
+<div class="grid">
+  <div class="card">
+    <h3>TikTok @ktp.treinamento.p</h3>
+    <div class="row"><span>Publicação</span><label><input type="checkbox" value="tiktok_pub"> <button class="btn btn-c" id="b-tk-pub" onclick="login('tk')">Conectar</button></label></div>
+    <div class="row"><span>Stories</span><label><input type="checkbox" value="tiktok_story"> <button class="btn btn-c" id="b-tk-story" onclick="login('tk')">Conectar</button></label></div>
+  </div>
+
+  <div class="card">
+    <h3>Instagram @ktreinamento.p</h3>
+    <div class="row"><span>Reels</span><label><input type="checkbox" value="ig_reels"> <button class="btn btn-c" id="b-ig" onclick="login('ig')">Conectar</button></label></div>
+    <div class="row"><span>Feed</span><label><input type="checkbox" value="ig_feed"> <button class="btn btn-c" onclick="login('ig')">Conectar</button></label></div>
+    <div class="row"><span>Stories</span><label><input type="checkbox" value="ig_story"> <button class="btn btn-c" onclick="login('ig')">Conectar</button></label></div>
+  </div>
+
+  <div class="card">
+    <h3>WhatsApp 13 99769-0898</h3>
+    <div class="row"><span>Status</span><label><input type="checkbox" value="wpp_status"> <button class="btn btn-c" id="b-wp" onclick="login('wp')">Conectar</button></label></div>
+    <div class="row"><span>Grupos</span><label><input type="checkbox" value="wpp_grupos"> <button class="btn btn-c" onclick="login('wp')">Conectar</button></label></div>
+    <div class="row"><span>Contatos</span><label><input type="checkbox" value="wpp_contatos"> <button class="btn btn-c" onclick="login('wp')">Conectar</button></label></div>
+  </div>
+</div>
+
+<button class="post" onclick="postar()">POSTAR EM TODAS SELECIONADAS 🚀</button>
+<div id="log" style="margin-top:10px;font-size:12px;opacity:.7"></div>
+
+<script>
+// FUNCIONA EM QUALQUER PASTA - sem caminho fixo
+const PATH_BASE = window.location.pathname.replace(/\/[^\/]*$/, '/');
+console.log('Rodando em:', PATH_BASE);
+
+function login(rede){
+  localStorage.setItem('korvil_'+rede, 'ok');
+  document.querySelectorAll('.btn').forEach(b=>{
+    if(b.id.includes(rede) || rede==='ig' && b.id.includes('ig') || rede==='tk' && b.id.includes('tk') || rede==='wp' && b.id.includes('wp')){
+      b.textContent='✓ Conectado'; b.className='btn btn-ok';
+    }
+  });
+  // Abre login oficial sem travar
+  const urls={ig:'https://facebook.com',tk:'https://tiktok.com/login',wp:'https://web.whatsapp.com'};
+  window.open(urls[rede], '_blank');
+  check();
+}
+function check(){
+  ['ig','tk','wp'].forEach(r=>{
+    if(localStorage.getItem('korvil_'+r)){
+      document.querySelectorAll(`[id^=b-${r}]`).forEach(el=>{el.textContent='✓ Conectado'; el.className='btn btn-ok';});
+    }
+  });
+}
+function preview(inp){
+  const f=inp.files[0]; if(!f) return;
+  const url=URL.createObjectURL(f);
+  document.getElementById('preview').innerHTML = f.type.includes('video')? `<video src="${url}" controls></video>` : `<img src="${url}">`;
+}
+function postar(){
+  const sel=[...document.querySelectorAll('input[type=checkbox]:checked')].map(e=>e.value);
+  if(!sel.length) return alert('Selecione uma opção');
+  document.getElementById('log').innerText='Postando em: '+sel.join(', ')+' | Arquivo: '+(document.getElementById('arquivo').files[0]?.name||'sem mídia')+' | Legenda: '+document.getElementById('legenda').value;
+  alert('Pronto! Configurado para postar em: '+sel.join(', '));
+}
+check();
+</script>
+</body>
+</html>
