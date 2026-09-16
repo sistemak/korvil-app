@@ -1,32 +1,29 @@
 name: META IA PERMANENTE - sistemak/korvil-app
-
 on:
   push:
+    branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: '*/15 * * * *' # sempre ativo pra sempre
-  issue_comment:
-    types: [created]
+    - cron: '*/30 * * * *'
 
 permissions:
   contents: write
-  issues: write
 
 jobs:
   meta-ia:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'IA ATIVA')"
     steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
 
-      - name: IA SEMPRE ATIVA - sistemak/korvil-app
+      - name: IA SEMPRE ATIVA - FIX
         run: |
-          git config user.name "Meta IA - korvil.tp@gmail.com"
+          git config user.name "sistemak"
           git config user.email "korvil.tp@gmail.com"
-          echo "IA ATIVA - $(date) - @K-TP.p - @ktreinamento.p - 13997690898 - sistemak/korvil-app" > IA_ATIVA.txt
-          echo "GH_TOKEN salvo pra sempre" >> IA_ATIVA.txt
-          git add IA_ATIVA.txt || true
-          git diff --staged --quiet || git commit -m "🤖 meta-ia.yml - IA sempre ativa - $(date)"
-          git push || true
+          echo "IA ATIVA - $(date) - @K-TP.p - sistemak/korvil-app - GH_TOKEN OK" > IA_ATIVA.txt
+          git add IA_ATIVA.txt
+          git diff --staged --quiet || git commit -m "🤖 IA ATIVA - $(date) [skip ci]"
+          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/sistemak/korvil-app.git HEAD:main || git push
