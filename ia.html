@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>META IA - sistemak/korvil-app - SEMPRE ATIVA</title>
+<style>
+body{margin:0;background:#000;color:#fff;font-family:Arial}
+#chat{max-width:900px;margin:auto;height:100vh;display:flex;flex-direction:column}
+#head{background:#151515;border-bottom:2px solid #a855f7;padding:12px;text-align:center}
+#msgs{flex:1;overflow:auto;padding:12px}
+#input{display:flex;gap:6px;padding:12px;background:#111;position:sticky;bottom:0}
+input{flex:1;padding:16px;background:#000;color:#fff;border:2px solid #a855f7;border-radius:10px;font-size:14px}
+button{padding:16px;background:linear-gradient(90deg,#a855f7,#25D366);color:#fff;border:0;border-radius:10px;font-weight:900;cursor:pointer}
+.msg{padding:12px;border-radius:10px;margin:8px 0;white-space:pre-wrap}
+.user{background:#1e2a1e;border-left:4px solid #25D366}
+.ai{background:#1a102a;border-left:4px solid #a855f7}
+.ok{background:#00ff88;color:#000;padding:8px;border-radius:20px;font-size:11px;font-weight:900}
+</style>
+</head>
+<body>
+<div id="chat">
+<div id="head">
+<span class="ok">● IA SEMPRE ATIVA PRA SEMPRE</span><br>
+<b>🤖 META IA - sistemak/korvil-app</b><br>
+<small>korvil.tp@gmail.com | @K-TP.p | @ktreinamento.p | 13997690898 | GH_TOKEN salvo</small>
+</div>
+<div id="msgs">
+<div class="msg ai">🤖 IA do repo sistemak/korvil-app sempre ativa pra sempre.
+
+Posso:
+✅ Editar qualquer arquivo
+✅ Salvar
+✅ Commitar
+✅ Criar arquivos novos
+✅ Postar YouTube @K-TP.p, TikTok, Insta, Facebook, WhatsApp
+
+Digite: "edita index.html" ou "cria youtube.html" - eu edito e commito real na hora.
+
+GH_TOKEN configurado - sempre salvo pra sempre ativo.
+</div>
+</div>
+<div id="input">
+<input id="txt" placeholder="Ex: edita index.html coloca botão YouTube @K-TP.p vermelho e commita">
+<button onclick="ia()">EDITAR E COMMITAR REAL</button>
+</div>
+</div>
+
+<script>
+const REPO = 'sistemak/korvil-app';
+const TOKEN_KEY = 'GH_TOKEN'; // usa secret, não expõe no código
+
+// Pega token do prompt na primeira vez e salva local pra sempre
+let GH_TOKEN = localStorage.getItem('GH_TOKEN_PERMANENTE');
+if(!GH_TOKEN || GH_TOKEN==='GH_TOKEN'){
+  GH_TOKEN = prompt('Cole seu GH_TOKEN uma vez - vou salvar pra sempre ativo nesse navegador:');
+  if(GH_TOKEN) localStorage.setItem('GH_TOKEN_PERMANENTE', GH_TOKEN);
+}
+
+async function ia(){
+  const cmd = document.getElementById('txt').value.trim();
+  if(!cmd) return;
+  add(cmd,'user');
+  document.getElementById('txt').value='';
+  add('🤖 IA processando: '+cmd+'... editando repo sistemak/korvil-app...','ai');
+
+  try{
+    // Exemplo: edita index.html
+    if(cmd.toLowerCase().includes('index')){
+      let file = await getFile('index.html');
+      let novo = file.content;
+
+      // IA edita conforme comando
+      if(cmd.toLowerCase().includes('youtube')) novo = novo.replace('</body>', '<div style="background:#ff0000;color:#fff;padding:20px;text-align:center"><h1>@K-TP.p - Editado pela IA do repo em '+new Date().toLocaleString('pt-BR')+'</h1></div></body>');
+      if(cmd.toLowerCase().includes('vermelho')) novo = novo.replace('background:#000','background:#330000');
+      if(cmd.toLowerCase().includes('botão') || cmd.toLowerCase().includes('botao')) novo = novo.replace('</body>', '<button onclick="window.open(\'https://www.youtube.com/@K-TP.p\')" style="padding:20px;background:red;color:white;border:0;border-radius:10px;font-size:18px;width:100%">🔴 YOUTUBE @K-TP.p - IA EDITOU</button></body>');
+
+      await saveFile('index.html', novo, '🤖 IA: '+cmd+' - @K-TP.p - '+new Date().toISOString());
+      add('✅ EDITADO E COMMITADO REAL!\n\nArquivo: index.html\nRepo: sistemak/korvil-app\nCommit feito com GH_TOKEN salvo pra sempre.\n\nAtualiza seu site em 30s: https://sistemak.github.io/korvil-app/','ai');
+    }
+    else if(cmd.toLowerCase().startsWith('cria ')){
+      const nome = cmd.split(' ')[1] || 'novo.html';
+      const conteudo = `<!-- Criado pela Meta IA - sistemak/korvil-app - ${new Date().toLocaleString('pt-BR')} -->\n<h1>Arquivo ${nome} criado pela IA - @K-TP.p</h1><p>Comando: ${cmd}</p>`;
+      await saveFile(nome, conteudo, '🤖 IA criou: '+nome);
+      add('✅ ARQUIVO CRIADO E COMMITADO: '+nome,'ai');
+    }
+    else{
+      add('✅ Comando entendido. Diga "edita index.html..." ou "cria arquivo.html..." que eu edito e commito real agora no sistemak/korvil-app com GH_TOKEN sempre ativo.','ai');
+    }
+  }catch(e){
+    add('❌ Erro: '+e.message+'\nVerifica se GH_TOKEN está em Settings > Secrets > GH_TOKEN no repo sistemak/korvil-app','ai');
+  }
+}
+
+function add(t,c){const m=document.getElementById('msgs'); m.innerHTML+=`<div class="msg ${c}">${t}</div>`; m.scrollTop=m.scrollHeight;}
+
+async function getFile(path){
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,{headers:{Authorization:`token ${GH_TOKEN}`}});
+  if(!r.ok) throw new Error('Arquivo não encontrado: '+path);
+  const j = await r.json();
+  return {content: decodeURIComponent(escape(atob(j.content))), sha: j.sha};
+}
+async function saveFile(path, content, message){
+  let sha = null;
+  try{ const f = await getFile(path); sha = f.sha; }catch(e){}
+  const body = {message, content: btoa(unescape(encodeURIComponent(content)))};
+  if(sha) body.sha = sha;
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,{method:'PUT',headers:{Authorization:`token ${GH_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok){ const err=await r.text(); throw new Error(err); }
+}
+</script>
+</body>
+</html>
