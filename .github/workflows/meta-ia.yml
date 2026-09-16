@@ -1,28 +1,16 @@
 name: META IA PERMANENTE - sistemak/korvil-app
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
   schedule:
     - cron: '*/30 * * * *'
 
-permissions:
-  contents: write
-
 jobs:
   meta-ia:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'IA ATIVA')"
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: IA ATIVA
+      - name: IA PERMANENTE ATIVA
         run: |
-          git config user.name "sistemak"
-          git config user.email "korvil.tp@gmail.com"
-          echo "IA ATIVA - $(date) - @K-TP.p - ATIVO PRA SEMPRE" > IA_ATIVA.txt
-          git add IA_ATIVA.txt
-          git commit -m "🤖 IA ATIVA - $(date)" || echo "ok"
-          git push
+          echo "IA ATIVA - $(date)"
+          echo "sistemak - korvil-app - PERMANENTE"
+          sleep 5
+          echo "✅ IA ATIVA PRA SEMPRE"
