@@ -1,93 +1,118 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KORVIL - Redes Sociais</title>
-<base href="./">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KORVIL - CALENDARIO NA EDICAO</title>
 <style>
-*{box-sizing:border-box} body{margin:0;background:#0a0a0a;color:#fff;font-family:system-ui;padding:12px}
-.header{padding:10px 0;font-weight:800;font-size:22px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
-.card{background:#151515;border:1px solid #262626;border-radius:14px;padding:14px}
-.card h3{margin:0 0 8px;font-size:16px}
-.row{display:flex;justify-content:space-between;align-items:center;margin:6px 0;background:#202020;padding:8px 10px;border-radius:8px}
-.btn{border:0;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer}
-.btn-c{background:#2a2a2a;color:#fff}.btn-ok{background:#00ff88;color:#000}
-.post{position:sticky;bottom:10px;margin-top:15px;width:100%;padding:16px;border-radius:12px;border:0;background:#ff0050;color:#fff;font-size:18px;font-weight:800}
-textarea,input{width:100%;background:#151515;border:1px solid #262626;color:#fff;border-radius:10px;padding:10px}
-#preview img,#preview video{width:100%;border-radius:10px;margin-top:10px}
+*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Arial;padding:10px}
+.top{max-width:1250px;margin:auto;background:#151515;border:2px solid #a855f7;border-radius:16px;padding:12px}
+.grid{max-width:1250px;margin:10px auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:12px}
+.card{background:#151515;border:1px solid #262626;border-radius:16px;padding:12px;border-left:5px solid #333;position:relative}
+.card.ok{border-color:#00ff88}
+.drop{border:2px dashed #555;border-radius:12px;padding:14px;text-align:center;background:#0f0f0f;cursor:pointer}
+.preview img,.preview video{width:100%;border-radius:10px;margin-top:6px;max-height:320px;object-fit:contain;background:#000}
+.calBox{display:none;background:linear-gradient(135deg,#1a102a,#0f2a14);border:2px solid #a855f7;border-radius:14px;padding:12px;margin:10px 0;animation:pop.2s}
+.calBox.show{display:block}
+@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.calBox input[type=datetime-local]{font-size:18px;padding:14px;width:100%;background:#000;color:#fff;border:2px solid #a855f7;border-radius:10px}
+.btn{border:0;border-radius:8px;padding:10px 12px;font-weight:900;cursor:pointer;margin:2px}
+.btn-ia{background:linear-gradient(90deg,#a855f7,#25D366);color:#fff;width:100%;padding:14px;font-size:14px}
+.btn-e{background:#222;color:#fff}.btn-ok{background:#00ff88;color:#000}
+.edit-bar{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0;background:#0a0a0a;padding:6px;border-radius:8px}
+.badge{position:absolute;top:8px;right:8px;font-size:9px;padding:4px 7px;border-radius:20px;font-weight:900}
+canvas{display:none}
 </style>
 </head>
 <body>
 
-<div class="header">KORVIL / Redes Sociais</div>
-
-<textarea id="legenda" placeholder="Legenda padrão para todas..."></textarea>
-<input type="file" id="arquivo" accept="image/*,video/*" style="margin:10px 0" onchange="preview(this)">
-<div id="preview"></div>
-
-<div class="grid">
-  <div class="card">
-    <h3>TikTok @ktp.treinamento.p</h3>
-    <div class="row"><span>Publicação</span><label><input type="checkbox" value="tiktok_pub"> <button class="btn btn-c" id="b-tk-pub" onclick="login('tk')">Conectar</button></label></div>
-    <div class="row"><span>Stories</span><label><input type="checkbox" value="tiktok_story"> <button class="btn btn-c" id="b-tk-story" onclick="login('tk')">Conectar</button></label></div>
-  </div>
-
-  <div class="card">
-    <h3>Instagram @ktreinamento.p</h3>
-    <div class="row"><span>Reels</span><label><input type="checkbox" value="ig_reels"> <button class="btn btn-c" id="b-ig" onclick="login('ig')">Conectar</button></label></div>
-    <div class="row"><span>Feed</span><label><input type="checkbox" value="ig_feed"> <button class="btn btn-c" onclick="login('ig')">Conectar</button></label></div>
-    <div class="row"><span>Stories</span><label><input type="checkbox" value="ig_story"> <button class="btn btn-c" onclick="login('ig')">Conectar</button></label></div>
-  </div>
-
-  <div class="card">
-    <h3>WhatsApp 13 99769-0898</h3>
-    <div class="row"><span>Status</span><label><input type="checkbox" value="wpp_status"> <button class="btn btn-c" id="b-wp" onclick="login('wp')">Conectar</button></label></div>
-    <div class="row"><span>Grupos</span><label><input type="checkbox" value="wpp_grupos"> <button class="btn btn-c" onclick="login('wp')">Conectar</button></label></div>
-    <div class="row"><span>Contatos</span><label><input type="checkbox" value="wpp_contatos"> <button class="btn btn-c" onclick="login('wp')">Conectar</button></label></div>
-  </div>
+<div class="top">
+<h3>🤖 KORVIL - Escolhe na hora que editar - korvil.tp@gmail.com</h3>
+<div class="drop" id="dropGlobal" onclick="document.getElementById('fileGlobal').click()"><b>📁 ANEXAR IGUAL PRA TODAS - ARRASTE AQUI</b></div>
+<input type="file" id="fileGlobal" accept="image/*,video/*" hidden onchange="handleGlobal(this.files)">
+<div id="previewGlobal" class="preview"></div>
+<div id="editGlobal" class="edit-bar"></div>
+<div id="calGlobal" class="calBox">
+<b>📅 ESCOLHE QUANDO POSTAR ESSE ARQUIVO EDITADO:</b><br><br>
+<input type="datetime-local" id="dtGlobal"><br><br>
+<div style="display:flex;gap:6px">
+<select id="repGlobal" style="flex:1;background:#000;color:#fff;border:1px solid #333;padding:10px;border-radius:8px"><option value="uma">Só uma vez</option><option value="diario">Repetir todo dia mesmo horário</option><option value="semana">Toda semana</option></select>
+<select id="tipoGlobal" style="flex:1;background:#000;color:#fff;border:1px solid #333;padding:10px;border-radius:8px"><option value="todas">TODAS JUNTAS</option><option value="individual">Só essa edição</option></select>
+</div><br>
+<button class="btn btn-ia" onclick="confirmarAgenda('global')">⏰ CONFIRMAR HORÁRIO ESCOLHIDO AGORA</button>
+</div>
 </div>
 
-<button class="post" onclick="postar()">POSTAR EM TODAS SELECIONADAS 🚀</button>
-<div id="log" style="margin-top:10px;font-size:12px;opacity:.7"></div>
+<div class="grid">
+<div class="card ok"><span class="badge" style="background:#ff0050">TIKTOK</span><h4>TikTok Individual</h4>
+<div class="drop" onclick="document.getElementById('f-tk').click()">📎 Anexar só TikTok</div><input type="file" id="f-tk" accept="image/*,video/*" hidden onchange="handle(this,'tk')">
+<div id="p-tk" class="preview"></div><div id="e-tk" class="edit-bar"></div><div id="cal-tk" class="calBox"><b>📅 Quando postar esse TikTok editado?</b><br><br><input type="datetime-local" id="dt-tk"><br><br><button class="btn btn-ia" onclick="confirmarAgenda('tk')">⏰ Confirmar TikTok</button></div></div>
+
+<div class="card ok"><span class="badge" style="background:#e1306c">INSTAGRAM</span><h4>Instagram Individual</h4>
+<div class="drop" onclick="document.getElementById('f-ig').click()">📎 Anexar só Instagram</div><input type="file" id="f-ig" accept="image/*,video/*" hidden onchange="handle(this,'ig')">
+<div id="p-ig" class="preview"></div><div id="e-ig" class="edit-bar"></div><div id="cal-ig" class="calBox"><b>📅 Quando postar esse Insta editado?</b><br><br><input type="datetime-local" id="dt-ig"><br><br><button class="btn btn-ia" onclick="confirmarAgenda('ig')">⏰ Confirmar Instagram</button></div></div>
+
+<div class="card ok"><span class="badge" style="background:#1877f2">FACEBOOK</span><h4>Facebook Individual</h4>
+<div class="drop" onclick="document.getElementById('f-fb').click()">📎 Anexar só Facebook</div><input type="file" id="f-fb" accept="image/*,video/*" hidden onchange="handle(this,'fb')">
+<div id="p-fb" class="preview"></div><div id="e-fb" class="edit-bar"></div><div id="cal-fb" class="calBox"><b>📅 Quando postar esse Face editado?</b><br><br><input type="datetime-local" id="dt-fb"><br><br><button class="btn btn-ia" onclick="confirmarAgenda('fb')">⏰ Confirmar Facebook</button></div></div>
+
+<div class="card ok" style="border-left-color:#25D366"><span class="badge" style="background:#25D366;color:#000">WHATSAPP 13997690898</span><h4>WhatsApp Individual</h4>
+<div class="drop" onclick="document.getElementById('f-wp').click()">📎 Anexar só WhatsApp</div><input type="file" id="f-wp" accept="*/*" hidden onchange="handle(this,'wp')">
+<div id="p-wp" class="preview"></div><div id="e-wp" class="edit-bar"></div><div id="cal-wp" class="calBox"><b>📅 Quando postar esse WhatsApp editado? Status/Grupos</b><br><br><input type="datetime-local" id="dt-wp"><br><br><button class="btn btn-ia" onclick="confirmarAgenda('wp')">⏰ Confirmar WhatsApp</button></div></div>
+</div>
+
+<div style="max-width:1250px;margin:15px auto;background:#111;border-radius:12px;padding:12px;font-size:12px" id="painel">📋 Nenhum agendamento - edite um arquivo que o calendário aparece</div>
+
+<canvas id="canvas"></canvas>
 
 <script>
-// FUNCIONA EM QUALQUER PASTA - sem caminho fixo
-const PATH_BASE = window.location.pathname.replace(/\/[^\/]*$/, '/');
-console.log('Rodando em:', PATH_BASE);
+let arquivos={};
+let agenda=JSON.parse(localStorage.getItem('korvil_cal')||'[]');
+function handleGlobal(f){if(!f[0])return;arquivos.global=f[0];mostrar(f[0],'previewGlobal','editGlobal','global');}
+function handle(inp,r){if(!inp.files[0])return;arquivos[r]=inp.files[0];mostrar(inp.files[0],'p-'+r,'e-'+r,r);}
 
-function login(rede){
-  localStorage.setItem('korvil_'+rede, 'ok');
-  document.querySelectorAll('.btn').forEach(b=>{
-    if(b.id.includes(rede) || rede==='ig' && b.id.includes('ig') || rede==='tk' && b.id.includes('tk') || rede==='wp' && b.id.includes('wp')){
-      b.textContent='✓ Conectado'; b.className='btn btn-ok';
-    }
-  });
-  // Abre login oficial sem travar
-  const urls={ig:'https://facebook.com',tk:'https://tiktok.com/login',wp:'https://web.whatsapp.com'};
-  window.open(urls[rede], '_blank');
-  check();
+function mostrar(file,prev,edit,rede){
+  const url=URL.createObjectURL(file);
+  document.getElementById(prev).innerHTML=file.type.includes('video')?`<video id="v-${rede}" src="${url}" controls></video>`:`<img id="img-${rede}" src="${url}">`;
+  document.getElementById(edit).innerHTML=`<button class="btn btn-e" onclick="editar('${rede}','clarear')">☀️ Clarear</button><button class="btn btn-e" onclick="editar('${rede}','cor')">🎨 Cor</button><button class="btn btn-e" onclick="editar('${rede}','1:1')">✂️ 1:1</button><button class="btn btn-e" onclick="editar('${rede}','9:16')">✂️ 9:16</button><button class="btn btn-e" onclick="editar('${rede}','texto')">@ Texto</button><br><small>Arquivo: ${file.name}</small>`;
+  // ao editar já mostra calendário
 }
-function check(){
-  ['ig','tk','wp'].forEach(r=>{
-    if(localStorage.getItem('korvil_'+r)){
-      document.querySelectorAll(`[id^=b-${r}]`).forEach(el=>{el.textContent='✓ Conectado'; el.className='btn btn-ok';});
-    }
-  });
+
+function editar(rede,tipo){
+  const img=document.getElementById('img-'+rede);
+  if(img){
+    if(tipo==='clarear') img.style.filter='brightness(1.25) contrast(1.15)';
+    if(tipo==='cor') img.style.filter='saturate(1.3) contrast(1.15)';
+    if(tipo==='texto'){const c=document.getElementById('canvas'),ctx=c.getContext('2d'); c.width=img.naturalWidth;c.height=img.naturalHeight; ctx.drawImage(img,0,0); ctx.fillStyle='white'; ctx.strokeStyle='black'; ctx.lineWidth=6; ctx.font=`bold ${c.width/22}px Arial`; ctx.strokeText('@ktreinamento.p #ktp',30,c.height-30); ctx.fillText('@ktreinamento.p #ktp',30,c.height-30); img.src=c.toDataURL();}
+  }
+  if(tipo==='1:1'||tipo==='9:16'){cortar(rede,tipo);}
+  // MOSTRA CALENDARIO NA HORA QUE EDITAR
+  document.getElementById('cal-'+rede).classList.add('show');
+  // coloca data sugerida agora + 5 min
+  const agora=new Date(); agora.setMinutes(agora.getMinutes()+5);
+  const iso=agora.toISOString().slice(0,16);
+  document.getElementById('dt-'+rede).value=iso;
 }
-function preview(inp){
-  const f=inp.files[0]; if(!f) return;
-  const url=URL.createObjectURL(f);
-  document.getElementById('preview').innerHTML = f.type.includes('video')? `<video src="${url}" controls></video>` : `<img src="${url}">`;
+
+function cortar(rede,f){const img=document.getElementById('img-'+rede); if(!img) return; const c=document.getElementById('canvas'),ctx=c.getContext('2d'); let w=img.naturalWidth,h=img.naturalHeight,nw=w,nh=h; if(f==='1:1'){const s=Math.min(w,h); nw=s; nh=s;} if(f==='9:16'){nw=w*0.8; nh=nw*16/9;} c.width=nw;c.height=nh; ctx.drawImage(img,(w-nw)/2,(h-nh)/2,nw,nh,0,0,nw,nh); img.src=c.toDataURL();}
+
+function confirmarAgenda(rede){
+  const dt=document.getElementById('dt-'+rede).value;
+  if(!dt) return alert('Escolha dia e hora no calendário');
+  const rep=document.getElementById('repGlobal')?.value||'uma';
+  const item={id:Date.now(),rede:rede,data:dt,rep:rep,arquivo:arquivos[rede]?.name||'editado'};
+  agenda.push(item); localStorage.setItem('korvil_cal',JSON.stringify(agenda)); render();
+  alert(`✅ Agendado! ${rede.toUpperCase()} - ${new Date(dt).toLocaleString('pt-BR')} - ${rep==='uma'?'uma vez':'repetir sempre com arquivo novo diferente'}`);
+  document.getElementById('cal-'+rede).classList.remove('show');
 }
-function postar(){
-  const sel=[...document.querySelectorAll('input[type=checkbox]:checked')].map(e=>e.value);
-  if(!sel.length) return alert('Selecione uma opção');
-  document.getElementById('log').innerText='Postando em: '+sel.join(', ')+' | Arquivo: '+(document.getElementById('arquivo').files[0]?.name||'sem mídia')+' | Legenda: '+document.getElementById('legenda').value;
-  alert('Pronto! Configurado para postar em: '+sel.join(', '));
+
+function render(){
+  if(!agenda.length){document.getElementById('painel').innerHTML='📋 Nenhum - edite que calendário aparece'; return;}
+  let h='<b>📅 AGENDADOS - VOCÊ ESCOLHEU NA HORA DA EDIÇÃO:</b><br>';
+  agenda.forEach(a=>{h+=`<div style="background:#1e1e1e;padding:8px;border-radius:8px;margin:5px 0;display:flex;justify-content:space-between">⏰ ${new Date(a.data).toLocaleString('pt-BR')} - ${a.rede.toUpperCase()} - ${a.rep} - ${a.arquivo} <button onclick="del(${a.id})" style="background:#ff0050;border:0;color:#fff;border-radius:4px">X</button></div>`;});
+  document.getElementById('painel').innerHTML=h;
 }
-check();
+function del(id){agenda=agenda.filter(a=>a.id!==id); localStorage.setItem('korvil_cal',JSON.stringify(agenda)); render();}
+render();
 </script>
 </body>
 </html>
