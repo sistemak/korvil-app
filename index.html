@@ -1,38 +1,42 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KORVIL V3 - IA REAL</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KORVIL V3 - IA REAL 24H</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:system-ui;height:100dvh;display:flex;flex-direction:column}
-#top{background:#111;padding:12px;text-align:center;border-bottom:1px solid #0f0;color:#0f0;font-weight:bold;font-size:14px}
-#chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
-.msg{padding:12px 16px;border-radius:18px;max-width:88%;line-height:1.5;white-space:pre-wrap}
+body{background:#000;color:#fff;font-family:-apple-system,system-ui;height:100dvh;display:flex;flex-direction:column}
+#top{background:#0a0a0a;padding:14px;text-align:center;border-bottom:1px solid #0f0;color:#0f0;font-weight:800;letter-spacing:.5px}
+#chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:#000}
+.msg{padding:12px 16px;border-radius:18px;max-width:88%;line-height:1.5;white-space:pre-wrap;font-size:15px}
 .user{background:#0f0;color:#000;align-self:flex-end;border-bottom-right-radius:4px}
-.bot{background:#1c1c1c;border:1px solid #2a2a2a;align-self:flex-start;border-bottom-left-radius:4px}
-#bar{display:flex;padding:12px;background:#111;gap:8px;position:sticky;bottom:0}
+.bot{background:#151515;border:1px solid #252525;align-self:flex-start;border-bottom-left-radius:4px;color:#eaffea}
+#bar{display:flex;padding:12px;background:#0f0f0f;gap:8px;border-top:1px solid #222}
 #inp{flex:1;padding:14px 16px;border-radius:24px;border:1px solid #333;background:#222;color:#fff;outline:none;font-size:16px}
-button{padding:14px 20px;border-radius:24px;background:#0f0;color:#000;border:0;font-weight:bold;cursor:pointer}
-.typing{opacity:.6;font-style:italic}
+button{padding:14px 22px;border-radius:24px;background:#0f0;color:#000;border:0;font-weight:900;cursor:pointer}
+.typing{opacity:.7;font-style:italic}
+small{color:#0f0;font-size:11px;display:block;margin-top:6px;opacity:.8}
 </style>
 </head>
 <body>
-<div id="top">🧠 KORVIL V3 - IA REAL - ONLINE 24H - @K-TP.p ✅</div>
+<div id="top">🧠 KORVIL V3 - IA REAL - ONLINE 24H - @K-TP.p - sistemak ✅</div>
 <div id="chat">
-<div class="msg bot">Salve @K-TP.p! Agora sou V3 com cérebro de verdade. Pode perguntar QUALQUER coisa que eu respondo igual Meta AI, com internet. O que quer saber?</div>
+<div class="msg bot">Salve @K-TP.p! Eu sou o KORVIL V3, agora com cérebro de verdade igual a Meta AI.
+Pode me perguntar QUALQUER coisa. Tô online 24h por causa do workflow Success 11s que você criou.
+Manda aí!</div>
 </div>
 <div id="bar">
-<input id="inp" placeholder="Pergunte qualquer coisa...">
-<button onclick="falar()">Enviar</button>
+<input id="inp" placeholder="Pergunte qualquer coisa..." autocomplete="off">
+<button onclick="falar()">➤</button>
 </div>
 <script>
 const chat=document.getElementById('chat'), inp=document.getElementById('inp');
-let hist=[{role:"system",content:"Você é KORVIL, IA permanente criada por sistemak @K-TP.p. Hospedado em sistemak.github.io/korvil-app. Você é brasileiro, fala igual Meta AI, prestativo, direto, divertido, responde em pt-br. Você está ONLINE 24H. Workflow: Success 11s. Se perguntarem status, diga que está 100% ativo."}];
-
+let hist=[
+{role:"system",content:"Você é KORVIL V3, IA permanente criada por @K-TP.p (sistemak) em Bertioga-SP. Você roda 24h em sistemak.github.io/korvil-app via GitHub Pages + Workflow Success 11s. Você é brasileiro, informal, prestativo, fala igual Meta AI, responde em pt-br, usa emoji moderado, é inteligente e direto. Se perguntarem status, diga: ONLINE 100%, Workflow Success, Pages ativo, Bertioga."}
+];
 function add(t,c){let d=document.createElement('div');d.className='msg '+c;d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d}
-
 async function falar(){
  let txt=inp.value.trim(); if(!txt) return;
  add(txt,'user'); inp.value='';
@@ -41,10 +45,11 @@ async function falar(){
  try{
   const resp = await puter.ai.chat(hist, {model:"gpt-4o-mini"});
   load.remove();
-  add('🤖 '+resp, 'bot');
+  add('🤖 '+resp,'bot');
   hist.push({role:"assistant",content:resp});
  }catch(e){
-  load.textContent='🤖 Erro, mas tô online! Tenta de novo. '+e;
+  load.remove();
+  add('🤖 Tô online mas meu cérebro deu um delay. Tenta de novo! Erro: '+e,'bot');
  }
 }
 inp.addEventListener('keydown',e=>{if(e.key==='Enter')falar()});
