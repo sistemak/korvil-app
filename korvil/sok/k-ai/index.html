@@ -1,182 +1,203 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>K-AI • V25 COMIC AUTO + SIM/NÃO INTELIGENTE • korvil/sok/k-ai</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter} :root{--neon:#00f5ff;--green:#00ff88} body{background:#000;color:#eaffff;height:100dvh;overflow:hidden}
-#bg{position:fixed;inset:0;background:radial-gradient(ellipse at 30% 10%,#001a1f 0%,#000 60%);z-index:0}
-#badge{position:fixed;left:12px;top:12px;z-index:70;background:#000;border:1px solid var(--neon);color:var(--neon);padding:6px 12px;border-radius:20px;font-size:10px;box-shadow:0 0 10px var(--neon)}
-#left-panel{position:fixed;left:0;top:0;bottom:0;width:300px;background:#080e12;border-right:1px solid #00f5ff33;z-index:65;display:flex;flex-direction:column;transform:translateX(-100%);transition:.3s}#left-panel.open{transform:translateX(0)}
-#k-icon{position:fixed;left:50%;top:36%;width:112px;height:112px;border-radius:50%;z-index:100;cursor:grab;box-shadow:0 0 0 2px var(--neon),0 0 35px var(--neon);transform:translate(-50%,-50%);background:#000;overflow:hidden}#k-icon img{width:100%;height:100%;border-radius:50%;object-fit:cover}#k-icon.listening{box-shadow:0 0 0 4px var(--green),0 0 60px var(--green)}#k-icon.waiting{box-shadow:0 0 0 3px #ffaa00,0 0 50px #ffaa00}
-#k-window{position:fixed;left:50%;top:calc(36% + 105px);width:min(700px,94vw);height:min(600px,70dvh);background:rgba(10,15,20,.97);border:1px solid var(--neon);border-radius:20px;z-index:90;display:flex;flex-direction:column;transform:translateX(-50%)}
-#k-header{height:48px;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid #00f5ff33;background:#001214;color:var(--neon)}
-#k-chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}.bubble{padding:11px 14px;border-radius:16px;max-width:86%;font-size:13px;white-space:pre-wrap}.user{background:linear-gradient(135deg,#00f5ff,#00e5cc);color:#000;align-self:flex-end;font-weight:700}.bot{background:#0e1a1f;border:1px solid #00f5ff33;align-self:flex-start;color:#c8f8ff}
-#k-input-area{padding:10px;border-top:1px solid #00f5ff22;background:#000d12}#bar{display:flex;align-items:center;background:#001419;border:1px solid var(--neon);border-radius:24px;padding:4px 4px 4px 14px;gap:6px}#inp{flex:1;background:transparent;border:0;outline:none;color:#eaffff;font-size:13px;padding:6px 0}#send{width:32px;height:32px;border-radius:50%;background:var(--neon);color:#000;border:0;font-weight:900;cursor:pointer}
-#github-panel{position:fixed;right:0;top:0;bottom:0;width:390px;background:rgba(0,12,15,.98);border-left:1px solid var(--neon);z-index:80;display:flex;flex-direction:column;transform:translateX(100%);transition:.35s}#github-panel.open{transform:translateX(0)}
-#toggle-gh{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:85;background:#000;border:1px solid var(--neon);color:var(--neon);border-radius:20px;padding:12px 8px;writing-mode:vertical-rl;cursor:pointer}
-#gh-tree{flex:1;overflow-y:auto;padding:6px;font-family:monospace;font-size:11.5px}.tree-folder{padding:7px 8px;color:#00f5ffdd;cursor:pointer;border-radius:8px;display:flex;gap:6px}.tree-children{margin-left:16px;border-left:1px dashed #00f5ff22;padding-left:6px;display:none}.tree-children.open{display:block}.tree-file{padding:6px 8px 6px 24px;color:#7cf9ff;cursor:grab;border-radius:8px;margin:1px 0;display:flex;gap:6px}.tree-file.selected{background:#00f5ff33;border:1px solid var(--neon)}.tree-file.self{color:#00ff88;background:#00ff8811}
-#context-menu{position:fixed;background:#0a141a;border:1px solid var(--neon);border-radius:12px;z-index:900;display:none;flex-direction:column;min-width:210px;box-shadow:0 0 25px #00f5ff66}#context-menu.show{display:flex}.ctx-item{padding:10px 14px;font-size:11.5px;color:#7cf9ff;cursor:pointer;display:flex;justify-content:space-between}.ctx-item:hover{background:#00f5ff22;color:var(--neon)}.ctx-item.danger{color:#ff6b6b}
-#k-voice-orb{position:fixed;left:14px;bottom:14px;width:60px;height:60px;border-radius:50%;background:#000;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;z-index:500;cursor:pointer;box-shadow:0 0 20px var(--green);font-size:24px}#k-voice-orb.listening{background:var(--green);color:#000}#k-voice-orb.waiting{background:#ffaa00;border-color:#ffaa00;color:#000}
-#k-voice-hud{position:fixed;left:84px;bottom:20px;background:#000;border:1px solid var(--neon);color:var(--neon);padding:10px 16px;border-radius:20px;font-size:12px;z-index:500;display:none;max-width:70vw}#k-voice-hud.show{display:block}
-#confirm-modal{position:fixed;inset:0;background:#000d;z-index:999;display:none;align-items:center;justify-content:center}#confirm-modal.show{display:flex}.confirm-box{background:#0a141a;border:2px solid var(--neon);border-radius:16px;padding:20px;width:90%;max-width:380px;box-shadow:0 0 30px #00f5ff66;color:#eaffff}
-</style>
-</head>
-<body>
-<div id="bg"></div>
-<div id="badge">● V25 • COMIC AUTO • SIM/NÃO INTELIGENTE • korvil/sok/k-ai/</div>
-<div id="k-icon"><img id="logoKai" src="assets/logokai/logokai.png" onerror="this.src='https://image.pollinations.ai/prompt/cyber%20raven%20logo%20K-AI?width=400&height=400&nologo=true'"></div>
-<div id="k-window"><div id="k-header"><img src="assets/logokai/logokai.png" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--neon)" onerror="this.style.display='none'"><b>K-AI V25</b><span style="font-size:10px">COMIC AUTO + SIM/NÃO</span><span style="margin-left:auto;cursor:pointer" onclick="this.closest('#k-window').classList.add('hidden')">✕</span></div><div id="k-chat"><div class="bubble bot">🦅 V25 INTELIGENTE ATIVO, Criador @K-TP.p!
-
-✅ COMIC AUTOMÁTICO: moveu, copiou, editou, excluiu na árvore direita → já commita automático sozinho em korvil/sok/k-ai/memory/
-
-✅ SIM/NÃO INTELIGENTE:
-- Fala "Kai, exclui pasta X" → ele pergunta "Deseja excluir sok/k-ai/X? Diga SIM ou NÃO" → você fala SIM ou escreve SIM → executa
-- Fala "não" ou escreve "não" → cancela
-- Funciona por voz e por texto!
-
-✅ LOGO: assets/logokai/logokai.png
-
-Testa: clica direito em um arquivo → Excluir → ele vai perguntar SIM/NÃO
-</div></div><div id="k-input-area"><div id="bar"><input id="inp" placeholder="Digite SIM/NÃO ou comando..."><button id="send">↑</button></div></div></div>
-<div id="toggle-gh" onclick="toggleGh()">📁 RAIZ</div>
-<div id="github-panel"><div style="padding:10px;border-bottom:1px solid #00f5ff33;color:var(--neon);display:flex;justify-content:space-between"><b>🌲 RAIZ COMPLETA + COMIC AUTO</b><span onclick="toggleGh()" style="cursor:pointer">✕</span></div><div id="gh-tree">Carregando...</div><div id="commitLog" style="padding:8px;font-size:9px;color:#00ff88;border-top:1px solid #00f5ff22;max-height:80px;overflow:auto"></div></div>
-<div id="context-menu"><div class="ctx-item" onclick="askConfirm('COPIAR',()=>copySel())">📋 Copiar</div><div class="ctx-item" onclick="askConfirm('RECORTAR',()=>cutSel())">✂️ Recortar</div><div class="ctx-item" onclick="pasteSel()">📥 Colar (auto-commit)</div><div class="ctx-item" onclick="askConfirm('DUPLICAR',()=>duplicateSel())">⎘ Duplicar</div><div class="ctx-item" onclick="renameSel()">✏️ Renomear (auto-commit)</div><div class="ctx-item" onclick="downloadSel()">⬇️ Baixar</div><div class="ctx-item danger" onclick="askConfirm('EXCLUIR',()=>deleteSel(),true)">🗑️ Excluir</div></div>
-<div id="confirm-modal"><div class="confirm-box"><div id="confirmText" style="margin-bottom:14px;font-size:13px;line-height:1.5"></div><div style="display:flex;gap:8px"><button id="btnYes" style="flex:1;background:var(--neon);color:#000;border:0;padding:10px;border-radius:10px;font-weight:900;cursor:pointer">SIM (diga SIM ou escreva SIM)</button><button id="btnNo" style="flex:1;background:#001519;border:1px solid var(--neon);color:var(--neon);padding:10px;border-radius:10px;cursor:pointer">NÃO</button></div><div style="font-size:10px;color:#00f5ff88;margin-top:10px">🎤 Você pode falar SIM/NÃO ou digitar</div></div></div>
-<div id="k-voice-orb" class="standby">🎤</div><div id="k-voice-hud">Clique e diga KAI</div>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>K-AI v44</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>*{-webkit-touch-callout:none!important;-webkit-user-select:none!important;-webkit-tap-highlight-color:transparent!important;user-select:none!important;margin:0;padding:0;box-sizing:border-box;font-family:Inter}input{-webkit-user-select:text!important;user-select:text!important}img{pointer-events:none!important}body{background:#000;color:#eaffff;min-height:100dvh;display:flex;flex-direction:column;overflow:hidden}.top{height:56px;background:#000;border-bottom:2px solid #00f5ff;display:flex;align-items:center;justify-content:space-between;padding:0 12px}.main{flex:1;display:grid;grid-template-columns:280px 1fr 300px;gap:6px;background:#001214;padding:6px;overflow:hidden}@media(max-width:980px){.main{grid-template-columns:1fr;overflow:auto;padding-bottom:170px}}.panel{background:#0d0d0d;border:1px solid #00f5ff33;border-radius:18px;display:flex;flex-direction:column;overflow:hidden}.h{height:40px;background:#161616;border-bottom:1px solid #222;display:flex;align-items:center;padding:0 12px;color:#00f5ff;font-family:JetBrains Mono;font-size:9px;font-weight:800}.content{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:8px;touch-action:pan-y}.bubble{background:#111;border:1px solid #222;border-radius:14px;padding:10px;font-size:12px;line-height:1.4;max-width:90%;white-space:pre-wrap}.bubble.user{background:#001a1f;border-color:#00f5ff55;align-self:flex-end}.bubble.ai.say{border-color:#ffcc0055}.bubble.ai.say::before{content:'💛 Say Korvil • ';color:#ffcc00;font-size:9px;font-weight:800}.bubble.ai.criador{border-color:#00ff8855}.bubble.ai.criador::before{content:'🦅 K-RIADOR • ';color:#00ff88;font-size:9px;font-weight:800}.bubble.ai.chefe{border-color:#00f5ff55}.bubble.ai.chefe::before{content:'🫡 Chefe • ';color:#00f5ff;font-size:9px;font-weight:800}#wrapper{position:fixed;left:50%;bottom:10px;width:min(760px,94vw);transform:translateX(-50%);z-index:80;display:flex;flex-direction:column;align-items:center;gap:8px;touch-action:none}#hud{width:100%;background:#000;border:1px solid #00f5ff;border-radius:16px;padding:10px 14px;display:flex;gap:10px;align-items:center;min-height:48px}#icon{width:68px;height:68px;border-radius:50%;background:#000;border:2px solid #00f5ff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 25px #00f5ff;position:relative;touch-action:none;cursor:pointer}#icon img{width:100%;height:100%;object-fit:contain;padding:6px;border-radius:50%}#icon.listening{border-color:#00ff88;box-shadow:0 0 35px #00ff88;animation:pulse 0.8s infinite}#icon.waiting{border-color:#ffcc00;box-shadow:0 0 35px #ffcc00}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}#hold-ring{position:absolute;inset:-10px;width:calc(100% + 20px);height:calc(100% + 20px);transform:rotate(-90deg);display:none}#hold-ring.show{display:block}#hold-ring circle{fill:none;stroke:#00f5ff;stroke-width:5;stroke-dasharray:283;stroke-dashoffset:283}#hold-count{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#000;border:1px solid #00f5ff;color:#00f5ff;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:900;display:none}#box{width:100%;background:#0a1216;border:1px solid #00f5ff;border-radius:22px;padding:6px;display:flex;gap:6px;align-items:center;position:relative}#inp{flex:1;background:transparent;border:0;outline:none;color:#eaffff;font-size:14px;padding:8px}#send{width:38px;height:38px;border-radius:50%;background:#00f5ff;color:#000;border:0;font-weight:900;cursor:pointer}#mic{width:38px;height:38px;border-radius:50%;background:#111;color:#00f5ff;border:1px solid #00f5ff;cursor:pointer}#mic.on{background:#00ff88;color:#000}#timer{position:absolute;top:-22px;right:10px;background:#ffcc00;color:#000;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:900;display:none}#timer.show{display:block}#mini-menu{position:fixed;z-index:9999;background:#0a141a;border:2px solid #00f5ff;border-radius:22px;box-shadow:0 0 50px #00f5ff88;min-width:320px;display:none;flex-direction:column;overflow:hidden}#mini-menu.show{display:flex}.m-h{padding:14px 16px;background:#001214;border-bottom:1px solid #00f5ff33;color:#00f5ff;font-size:11px;font-weight:900;display:flex;justify-content:space-between}.m-item{padding:12px 16px;font-size:12px;color:#b8f0f5;display:flex;align-items:center;gap:10px;border-bottom:1px solid #00f5ff11;cursor:pointer}#helmet{position:fixed;inset:0;background:#000;z-index:9000;display:none;flex-direction:column}#helmet.show{display:flex}#helmet video{width:100%;height:100%;object-fit:cover;filter:brightness(1.1) hue-rotate(175deg)}#octa{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:120px;height:120px;border:2px solid #00ff88;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:none;box-shadow:0 0 30px #00ff88;animation:spin 3s linear infinite}#octa.show{display:block}@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}.codebox{background:#000;border:1px solid #00ff8855;border-radius:12px;padding:10px;font-family:JetBrains Mono;font-size:10px;max-height:260px;overflow:auto;white-space:pre-wrap}.marker{display:inline-block;background:#00f5ff22;border:1px solid #00f5ff55;border-radius:6px;padding:0 4px;margin:1px;font-size:10px;color:#00f5ff}.marker.action{background:#00ff8822;border-color:#00ff88;color:#00ff88}.marker.delete{background:#ff444422;border-color:#ff4444;color:#ff4444}</style></head><body oncontextmenu="return false">
+<div id="helmet"><video id="cam" autoplay playsinline muted></video><div id="octa"></div><div style="position:absolute;inset:0;border:2px solid #00f5ff66;display:flex;flex-direction:column;justify-content:space-between;padding:16px;pointer-events:none"><div style="display:flex;justify-content:space-between;pointer-events:auto"><div style="background:#000a;border:1px solid #00f5ff;padding:8px 14px;border-radius:20px;color:#00f5ff;font-size:10px;font-family:JetBrains Mono">🪖 K-AI v44 • CAPACETE</div><button onclick="closeHelmet()" style="background:#000a;border:1px solid #ff4444;color:#ff4444;padding:8px 14px;border-radius:20px;font-size:10px;cursor:pointer;pointer-events:auto">✕ FECHAR</button></div><div style="text-align:center;pointer-events:auto"><div style="background:#000c;border:1px solid #00f5ff;padding:10px;border-radius:14px;display:inline-block"><div style="color:#00f5ff;font-size:10px;font-family:JetBrains Mono">VISOR: <span id="visorMode">NORMAL 3D</span></div><div style="display:flex;gap:6px;margin-top:8px;justify-content:center"><button onclick="setVisor('NORMAL 3D')" style="padding:6px 10px;border-radius:12px;background:#00f5ff;color:#000;border:0;font-size:9px;font-weight:800;cursor:pointer">NORMAL</button><button onclick="setVisor('NOTURNA 4D')" style="padding:6px 10px;border-radius:12px;background:#111;color:#00f5ff;border:1px solid #00f5ff;font-size:9px;cursor:pointer">NOTURNA</button><button onclick="setVisor('RAIO X 3D')" style="padding:6px 10px;border-radius:12px;background:#111;color:#00f5ff;border:1px solid #00f5ff;font-size:9px;cursor:pointer">RAIO X</button><button onclick="setVisor('SCANNER 4D OCTAEDRO')" style="padding:6px 10px;border-radius:12px;background:#00ff88;color:#000;border:0;font-size:9px;font-weight:800;cursor:pointer">SCANNER ⬡</button></div></div></div></div></div>
+<div class="top"><div style="display:flex;gap:8px;align-items:center"><div style="width:32px;height:32px;background:#00f5ff;color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:9px">K-AI</div><b style="font-family:JetBrains Mono;font-size:11px">K-AI v44 • K-RIADOR</b><span id="statusWake" style="font-size:8px;color:#00ff88;border:1px solid #00ff88;padding:2px 6px;border-radius:10px">🎤 OUVINDO NOME: K-AI, Kai, Cai...</span></div><div style="display:flex;gap:6px"><button onclick="location.href='../index.html'" style="padding:6px 12px;border-radius:20px;background:#111;color:#00f5ff;border:1px solid #00f5ff33;font-size:10px;cursor:pointer">S.O.K</button><button onclick="clearChat()" style="padding:6px 12px;border-radius:20px;background:#111;color:#ffcc00;border:1px solid #ffcc0033;font-size:10px;cursor:pointer">LIMPAR</button></div></div>
+<div class="main"><div class="panel"><div class="h">ABAS + MEMÓRIA</div><div class="content" id="tabs"></div><button onclick="newTab()" style="margin:10px;padding:10px;border-radius:14px;background:#001a1f;border:1px solid #00f5ff33;color:#00f5ff;font-size:11px;cursor:pointer">+ NOVA ABA</button></div><div class="panel"><div class="h">K-AI v44 • CHAT - VOZ FALA CRIADOR / TEXTO K-RIADOR</div><div class="content" id="chat"></div><div id="liveMarkers" style="padding:8px;border-top:1px solid #222;display:none"><div style="font-size:8px;color:#00f5ff">MARCADORES AO VIVO:</div><div id="markers" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"></div></div></div><div class="panel"><div class="h">CÓDIGO + CÉREBRO</div><div class="content"><div class="codebox" id="pendingCode">Nenhum pendente</div><div id="memBox" class="codebox" style="margin-top:6px;max-height:120px">Memória pronta</div></div></div></div>
+<div id="wrapper"><div id="hud"><div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ffdd44,#ffaa00);display:flex;align-items:center;justify-content:center">🦅</div><div id="hudText" style="flex:1">K-RIADOR pronto - diga: K-AI, Kai, Cai, kai, cai... + comando</div></div><div id="icon"><img src="assets/logokai/logokai.png" onerror="this.src='../k-ai/assets/logokai/logokai.png'"><svg id="hold-ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45"/></svg><div id="hold-count">0s</div></div><div id="box"><div id="timer">7s</div><input id="inp" placeholder="Diga: K-AI, Cai, Kai... ou digite ordem"><button id="mic" title="Ativar escuta nome">🎤</button><button id="send">↑</button></div></div>
+<div id="mini-menu"><div class="m-h"><span>K-AI v44 • 5s</span><span onclick="closeMenu()" style="cursor:pointer">✕</span></div><div class="m-item" onclick="openHelmet();closeMenu()">🪖 Capacete 3D</div><div class="m-item" onclick="toggleWake();closeMenu()">🎤 Ligar/Desligar escuta nome K-AI</div><div class="m-item" onclick="closeMenu()">❌ Fechar</div></div>
+<script src="korvil-db.js"></script><script src="kor-engine.js"></script><script src="kai-core/core.js"></script><script src="kai-core/memory.js"></script><script src="kai-core/brain.js"></script><script src="kai-core/evolution.js"></script><script src="kai-core/voice.js"></script>
 <script>
-const SELF_ROOT='sok/k-ai/'; let virtualFS=JSON.parse(localStorage.getItem('k_ai_fs')||'{}'); let historyStack=JSON.parse(localStorage.getItem('k_ai_history')||'[]'); let selectedFiles=new Set(); let clipboard={type:null,files:[]}; let draggedPath=null; let pendingAction=null; let chat=document.getElementById('k-chat'),inp=document.getElementById('inp'),icon=document.getElementById('k-icon'),win=document.getElementById('k-window');
-function addBubble(t,isU){let d=document.createElement('div');d.className='bubble '+(isU?'user':'bot');d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d}
-function saveAll(){localStorage.setItem('k_ai_fs',JSON.stringify(virtualFS));localStorage.setItem('k_ai_history',JSON.stringify(historyStack));}
-function log(m){let l=document.getElementById('commitLog');if(l) l.innerHTML='['+new Date().toLocaleTimeString()+'] '+m+'<br>'+l.innerHTML;}
-function toggleGh(){document.getElementById('github-panel').classList.toggle('open')}
-function pushHistory(a,d){let snap=JSON.parse(JSON.stringify(virtualFS));historyStack.push({time:Date.now(),action:a,detail:d,fs:snap});if(historyStack.length>100) historyStack.shift();saveAll();log('HIST: '+a+' '+d);autoCommit()}
-// COMIC AUTOMÁTICO - SEMPRE QUE MEXE NA ÁRVORE
-function autoCommit(){
- // 1. Salva dentro de korvil/sok/k-ai/memory/
- virtualFS['sok/k-ai/memory/k-ai-fs.json']=JSON.stringify(virtualFS,null,2);
- virtualFS['sok/k-ai/memory/k-ai-history.json']=JSON.stringify(historyStack,null,2);
- virtualFS['sok/k-ai/memory/k-ai-memory.json']=JSON.stringify({usos:historyStack.length,time:Date.now()},null,2);
- saveAll();
- // 2. Se tiver token, commita no GitHub automaticamente
- let token=localStorage.getItem('gh_token');
- if(token){
-   let path='sok/k-ai/memory/k-ai-fs.json';
-   fetch('https://api.github.com/repos/sistemak/korvil-app/contents/'+path,{headers:{Authorization:'token '+token}}).then(r=>r.ok?r.json():{sha:null}).then(d=>{
-     let b64=btoa(unescape(encodeURIComponent(virtualFS[path])));
-     return fetch('https://api.github.com/repos/sistemak/korvil-app/contents/'+path,{method:'PUT',headers:{Authorization:'token '+token,'Content-Type':'application/json'},body:JSON.stringify({message:'K-AI AUTO-COMMIT: '+new Date().toISOString(),content:b64,sha:d.sha})});
-   }).then(()=>log('🚀 COMIC AUTO: commitado em sok/k-ai/memory/')).catch(()=>log('⚠️ Auto-commit local (sem token ou offline) - salvo em korvil/sok/k-ai/memory/'));
- }else{
-   log('💾 COMIC AUTO LOCAL: salvo em korvil/sok/k-ai/memory/ (adicione token pra push GitHub)');
- }
+document.addEventListener('contextmenu',e=>{e.preventDefault();return false},true);
+document.addEventListener('dragstart',e=>e.preventDefault());
+
+// === NOME K-AI - VÁRIAS SONORIDADES E PRONÚNCIAS ===
+const WAKE_WORDS = ['k-ai','kai','kaai','cai','caí','caí','kay','kay ai','k ai','ke ai','caii','k a i','k-ai v44','cai v44','kai v44'];
+function isWakeWord(text){
+  let l=text.toLowerCase().trim();
+  return WAKE_WORDS.some(w=> l.includes(w) || l===w);
 }
 
-// CONFIRMAÇÃO INTELIGENTE SIM/NÃO - VOZ E TEXTO
-function askConfirm(action,callback,isDanger=false){
- let files=[...selectedFiles].join('\n');
- let text=isDanger?`⚠️ ${action} - Deseja excluir ${selectedFiles.size} arquivo(s)?\n${files}\n\nIsso apaga de korvil/sok/k-ai/ e dá commit automático. Diga SIM para confirmar ou NÃO para cancelar.`:`${action} - Deseja ${action.toLowerCase()} ${selectedFiles.size} arquivo(s)?\n${files}\n\nDiga SIM ou NÃO`;
- document.getElementById('confirmText').textContent=text;
- document.getElementById('confirm-modal').classList.add('show');
- pendingAction=callback;
- addBubble('🦅 K-AI: '+text,false);
- speakMale(text);
- // Foca no input pra pessoa poder escrever SIM/NÃO também
- inp.placeholder='Digite SIM ou NÃO para: '+action;
- inp.focus();
- // Escuta SIM/NÃO por voz automaticamente se já estiver em standby
- if(!isListening) startStandby();
+// === VOZ FALA CRIADOR / TEXTO MOSTRA K-RIADOR ===
+function falarTexto(textoTela){
+  let textoFala = textoTela
+  .replace(/K-RIADOR \(Criador\)/g,'CRIADOR')
+  .replace(/K-RIADOR/g,'CRIADOR')
+  .replace(/K-AI v44/g,'KAI versão quarenta e quatro')
+  .replace(/K-AI/g,'KAI')
+  .replace(/S\.O\.K/g,'SOK')
+  .replace(/Say Korvil/g,'SAY Corvil');
+  try{
+    speechSynthesis.cancel();
+    let u=new SpeechSynthesisUtterance(textoFala);
+    u.lang='pt-BR'; u.pitch=0.85; u.rate=1.0;
+    let vs=speechSynthesis.getVoices();
+    let v=vs.find(v=>v.lang==='pt-BR'&&v.name.toLowerCase().includes('male'))||vs.find(v=>v.lang==='pt-BR');
+    if(v) u.voice=v;
+    speechSynthesis.speak(u);
+  }catch(e){}
 }
-function confirmYes(){
- if(pendingAction){addBubble('✅ SIM confirmado',true);pendingAction();pendingAction=null;document.getElementById('confirm-modal').classList.remove('show');inp.placeholder='Comando...';speakMale('Executado, Criador. Commit automático feito.');}
-}
-function confirmNo(){
- addBubble('❌ NÃO - cancelado',true);pendingAction=null;document.getElementById('confirm-modal').classList.remove('show');inp.placeholder='Comando...';speakMale('Cancelado, Criador');
-}
-document.getElementById('btnYes').onclick=confirmYes;
-document.getElementById('btnNo').onclick=confirmNo;
 
-// RAIZ COLAPSÁVEL
-async function loadTree(){let div=document.getElementById('gh-tree');div.innerHTML='Lendo RAIZ...';try{let r=await fetch('https://api.github.com/repos/sistemak/korvil-app/git/trees/main?recursive=1');let j=await r.json();let tree=j.tree||[];let root={};tree.forEach(i=>{let parts=i.path.split('/');let cur=root;parts.forEach((p,idx)=>{if(idx===parts.length-1){if(!cur.files) cur.files=[];cur.files.push({name:p,path:i.path})}else{if(!cur[p]) cur[p]={};cur=cur[p]}})});div.innerHTML=renderTree(root,'');attachDrag();}catch(e){div.innerHTML='Erro '+e}}
-function renderTree(node,base){let html='';for(let k in node){if(k==='files') continue;let fp=base?base+'/'+k:k;html+=`<div class="tree-folder" data-path="${fp}" onclick="toggleFolder(this)"><span>▶</span> 📁 ${k}</div><div class="tree-children">${renderTree(node[k],fp)}${(node[k].files||[]).map(f=>`<div class="tree-file" draggable="true" data-path="${f.path}" oncontextmenu="showCtx(event,'${f.path}')" onclick="selectFile('${f.path}')" ondragstart="dragStart(event)">📄 ${f.name}</div>`).join('')}</div>`}if(base===''&&node.files){html+=node.files.map(f=>`<div class="tree-file" draggable="true" data-path="${f.path}" oncontextmenu="showCtx(event,'${f.path}')" onclick="selectFile('${f.path}')" ondragstart="dragStart(event)">📄 ${f.path}</div>`).join('')}return html}
-window.toggleFolder=function(el){el.nextElementSibling.classList.toggle('open')}
-window.selectFile=function(p){selectedFiles.clear();selectedFiles.add(p);document.querySelectorAll('.tree-file').forEach(f=>f.classList.toggle('selected',f.dataset.path===p));}
-window.showCtx=function(e,p){e.preventDefault();if(!selectedFiles.has(p)){selectedFiles.clear();selectedFiles.add(p)}let m=document.getElementById('context-menu');m.style.left=e.clientX+'px';m.style.top=e.clientY+'px';m.classList.add('show')}
-window.addEventListener('click',()=>{document.getElementById('context-menu').classList.remove('show')})
-// DRAG MOVE COM COMIC AUTO
-window.dragStart=function(e){draggedPath=e.currentTarget.dataset.path;e.dataTransfer.effectAllowed='move'}
-function attachDrag(){document.querySelectorAll('.tree-folder').forEach(el=>{el.addEventListener('dragover',e=>e.preventDefault());el.addEventListener('drop',async e=>{e.preventDefault();if(!draggedPath) return;let dest=el.dataset.path;let name=draggedPath.split('/').pop();let np=dest+'/'+name;if(draggedPath===np) return;askConfirm(`MOVER ${draggedPath} → ${np}`,()=>{let c=virtualFS[draggedPath];if(!c){fetch('https://raw.githubusercontent.com/sistemak/korvil-app/main/'+draggedPath).then(r=>r.text()).then(t=>{virtualFS[np]=t;delete virtualFS[draggedPath];pushHistory('MOVER',draggedPath+'→'+np);loadTree();});return}virtualFS[np]=c;delete virtualFS[draggedPath];pushHistory('MOVER',draggedPath+'→'+np);loadTree();});});});}
-window.copySel=function(){clipboard={type:'copy',files:[...selectedFiles]};addBubble('📋 Copiado '+clipboard.files.length,false);pushHistory('COPIAR',clipboard.files.join(','));}
-window.cutSel=function(){clipboard={type:'cut',files:[...selectedFiles]};addBubble('✂️ Recortado '+clipboard.files.length+' - cole em outra pasta (commit auto)',false);pushHistory('RECORTAR',clipboard.files.join(','));}
-window.pasteSel=function(){if(!clipboard.files.length) return;let dest=prompt('Colar em:','sok/k-ai');if(!dest) return;clipboard.files.forEach(async p=>{let name=p.split('/').pop();let np=dest+'/'+name;let c=virtualFS[p]||await fetch('https://raw.githubusercontent.com/sistemak/korvil-app/main/'+p).then(r=>r.text()).catch(()=>'');virtualFS[np]=c;if(clipboard.type==='cut') delete virtualFS[p];pushHistory('COLAR',p+'→'+np);});saveAll();loadTree();addBubble('📥 Colado + commit automático em korvil/'+dest,false);}
-window.duplicateSel=function(){selectedFiles.forEach(p=>{let np=p.replace(/(\.[^.]+)$/,'-copia$1');virtualFS[np]=virtualFS[p]||'';pushHistory('DUPLICAR',np);});saveAll();loadTree();}
-window.renameSel=function(){let p=[...selectedFiles][0];if(!p) return;let nn=prompt('Novo nome:','');if(!nn) return;let np=p.split('/').slice(0,-1).join('/')+'/'+nn;askConfirm(`RENOMEAR ${p} → ${np}`,()=>{virtualFS[np]=virtualFS[p]||'';delete virtualFS[p];pushHistory('RENOMEAR',p+'→'+np);saveAll();loadTree();});}
-window.deleteSel=function(){if(!selectedFiles.size) return;selectedFiles.forEach(p=>{delete virtualFS[p];pushHistory('EXCLUIR',p);});saveAll();loadTree();addBubble('🗑️ Excluído + commit auto em korvil/sok/k-ai/memory/',false);}
-window.downloadSel=function(){selectedFiles.forEach(async p=>{let c=virtualFS[p]||await fetch('https://raw.githubusercontent.com/sistemak/korvil-app/main/'+p).then(r=>r.text());let b=new Blob([c],{type:'text/plain'});let u=URL.createObjectURL(b);let a=document.createElement('a');a.href=u;a.download=p.split('/').pop();a.click();});}
-// DRAG ICON ACOPLADO
-let drag=false,sx,sy,ox,oy,wx,wy;icon.addEventListener('mousedown',e=>{drag=true;sx=e.clientX;sy=e.clientY;let r=icon.getBoundingClientRect();ox=r.left;oy=r.top;let wr=win.getBoundingClientRect();wx=wr.left;wy=wr.top});window.addEventListener('mousemove',e=>{if(!drag) return;icon.style.left=(ox+e.clientX-sx)+'px';icon.style.top=(oy+e.clientY-sy)+'px';icon.style.transform='none';win.style.left=(wx+e.clientX-sx)+'px';win.style.top=(wy+e.clientY-sy)+'px';win.style.transform='none'});window.addEventListener('mouseup',()=>drag=false);icon.addEventListener('click',()=>{if(!drag) win.classList.remove('hidden')});
-// SEND COM SIM/NÃO INTELIGENTE POR TEXTO TAMBÉM
-async function send(){
-let txt=inp.value.trim();if(!txt) return;
-let low=txt.toLowerCase();
-// SE ESTÁ AGUARDANDO CONFIRMAÇÃO E DIGITOU SIM/NÃO
-if(pendingAction && (low==='sim'||low==='s'||low.includes('sim')&&low.length<10)){
-inp.value='';confirmYes();return;
+// BIP CURTO
+function playBip(){
+  try{
+    let ctx=new (window.AudioContext||window.webkitAudioContext)();
+    let o=ctx.createOscillator(); let g=ctx.createGain();
+    o.frequency.value=1200; o.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.5, ctx.currentTime);
+    o.start(); g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime+0.15); o.stop(ctx.currentTime+0.15);
+    if(navigator.vibrate) navigator.vibrate(50);
+  }catch(e){}
 }
-if(pendingAction && (low==='não'||low==='nao'||low==='n'||low.includes('não')||low.includes('nao')&&low.length<10)){
-inp.value='';confirmNo();return;
+
+// TABS
+let tabs=JSON.parse(localStorage.getItem('k_ai_tabs_v44')||'[{"id":"tab_1","title":"Chat 1","msgs":[]}]');
+let activeTab=tabs[0].id; let pendingAction=null;
+function saveTabs(){localStorage.setItem('k_ai_tabs_v44',JSON.stringify(tabs));}
+function renderTabs(){document.getElementById('tabs').innerHTML=tabs.map(t=>`<div class="tab-item ${t.id===activeTab?'active':''}" onclick="switchTab('${t.id}')">${t.title}</div>`).join('');}
+function renderChat(){let tab=tabs.find(t=>t.id===activeTab);document.getElementById('chat').innerHTML=(tab.msgs||[]).map(m=>`<div class="bubble ${m.cls}">${m.text}</div>`).join('');document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;}
+function switchTab(id){activeTab=id;renderTabs();renderChat();}function newTab(){let id='tab_'+Date.now();tabs.push({id,title:'Chat '+(tabs.length+1),msgs:[]});activeTab=id;saveTabs();renderTabs();renderChat();}function clearChat(){let tab=tabs.find(t=>t.id===activeTab);tab.msgs=[];saveTabs();renderChat();}
+window.switchTab=switchTab;window.newTab=newTab;window.clearChat=clearChat;
+
+// PERSONAS
+function detectPersona(t){let l=t.toLowerCase(); if(['aviso','orienta','recomenda','sugest','dica','alerta','cuidado','atenção','opção','escolha','conselho'].some(k=>l.includes(k))) return 'say'; if(['analisa','profissional','relatório','melhores opções','3 opções','qual melhor','compara','análise'].some(k=>l.includes(k))) return 'chefe'; return 'criador';}
+const SIM=['sim','é','faz','isso','agora','com certeza','use','confirmo','confirmado','aceito','permitido','concordo','crie','atualize','claro','quero','executa','pode','ok','positivo','vai','bora','manda','cria','beleza','fechado'];const NAO=['não','nao','nunca','jamais','esquece','excluir','exclua','delete','apague','joga fora','jogue fora','descarte','destruir','destrua','cancela','para'];
+function isSim(t){let l=t.toLowerCase();return SIM.some(k=>l.includes(k));}function isAtualize(t){return t.toLowerCase().includes('atualiz');}function isExclua(t){let l=t.toLowerCase();return l.includes('exclu')||l.includes('apag')||l.includes('delet')||l.includes('joga')||l.includes('descart')||l.includes('destru');}
+function gerarCodigo(v2){if(!v2)return `<!-- K-AI v44 v1 K-RIADOR --><script>function organizarCodigos(){console.log('K-RIADOR organizando');}<\/script>`;else return `<!-- K-AI v44 v2 ATUALIZADO K-RIADOR --><script>function organizarCodigosV2(){function sorter(){}function cleaner(){}function renamer(){}sorter();cleaner();renamer();}<\/script>`;}
+
+// MARCADORES AO VIVO - combina reconhecimentos de cada palavra
+function criarMarcadores(text){
+  let live=document.getElementById('liveMarkers'); let cont=document.getElementById('markers'); live.style.display='block'; cont.innerHTML='';
+  let palavras=text.split(' ');
+  palavras.forEach(p=>{
+    let l=p.toLowerCase();
+    let tipo='marker';
+    if(['crie','cria','criar','atualiz','atualiza','organiza'].some(k=>l.includes(k))) tipo='marker action';
+    if(['exclu','apag','delet','joga','descart','destru'].some(k=>l.includes(k))) tipo='marker delete';
+    let span=document.createElement('span'); span.className=tipo; span.textContent=p; cont.appendChild(span);
+  });
+  // digita na caixa exatamente como falou - transcrevendo
+  document.getElementById('inp').value=text;
 }
-addBubble(txt,true);inp.value='';
-// DETECTA COMANDOS DE EXCLUSÃO/MOVER/COPIAR POR TEXTO E PERGUNTA SIM/NÃO
-if(/excluir|apagar|deletar|remover/i.test(txt)){
-let m=txt.match(/([a-z0-9_\-\/]+\.[a-z0-9\/]+)/i);
-let target=m?m[1]:[...selectedFiles][0]||'arquivo';
-if(target){selectedFiles.clear();selectedFiles.add(target);askConfirm('EXCLUIR',()=>deleteSel(),true);return}
+
+function aiReply(txt){
+  let persona=detectPersona(txt); let tab=tabs.find(t=>t.id===activeTab);
+  if(pendingAction&&isAtualize(txt)&&!isExclua(txt)){let novo=gerarCodigo(true);pendingAction={code:novo};document.getElementById('pendingCode').textContent=novo;let textoTela='Certo K-RIADOR (Criador) código atualizado! Ajustes diferentes v2 mais otimizado. Como vai funcionar: organiza em pastas. O que programei: sorter+cleaner+renamer. K-RIADOR (Criador) posso executar? Diga sim/não.';tab.msgs.push({cls:'ai criador',text:textoTela});saveTabs();renderChat();falarTexto(textoTela);return;}
+  if(pendingAction&&isSim(txt)&&!isAtualize(txt)&&!isExclua(txt)){let msg='🦅 K-RIADOR (Criador) EXECUTADO 1000%! Código:\n'+pendingAction.code;if(window.korvilDB)korvilDB.salvar('last',pendingAction.code);if(window.kaiMemory)kaiMemory.set('lastCreatedCode',pendingAction.code);pendingAction=null;document.getElementById('pendingCode').textContent='EXECUTADO';tab.msgs.push({cls:'ai criador',text:msg});saveTabs();renderChat();falarTexto(msg);return;}
+  if(isExclua(txt)&&txt.toLowerCase().includes('sok')&&txt.toLowerCase().includes('k-ai')){let code=(window.kaiMemory?kaiMemory.get('lastCreatedCode'):'<!-- código -->');let msg='🦅 K-RIADOR (Criador) TROCA 1000% PRECISÃO: 1️⃣ Excluí código index sok = em branco 2️⃣ Excluí código index k-ai = vazio 3️⃣ Colei código criado no k-ai:\n'+code;if(window.korEngine)korEngine.executarReal({type:'swap_code',from:'sok/index.html',to:'k-ai/index.html'});tab.msgs.push({cls:'ai criador',text:msg});saveTabs();renderChat();falarTexto(msg);return;}
+  if(txt.toLowerCase().includes('crie')&&txt.toLowerCase().includes('código')){let cod=gerarCodigo(false);pendingAction={code:cod};document.getElementById('pendingCode').textContent=cod;let textoTela='';if(persona==='say')textoTela='💛 Say Korvil, amigo leal, aviso cuidadoso: criei código organização. Recomendo usar, dica backup, alerta não apaga sem confirmar. K-RIADOR (Criador) está pronto, deseja confirmar?';else if(persona==='chefe')textoTela='🫡 Chefe, modo profissional analítico: 3 melhores opções:\n1️⃣ A simples rápido\n2️⃣ B completo 1000% RECOMENDADO\n3️⃣ C com IA\nQual prefere Chefe? A/B/C?';else textoTela='🦅 K-RIADOR (Criador) ordem direta 1000% precisão:\nComo vai funcionar: organiza códigos em pastas\nO que programei: organizarCodigos()+limparDuplicados()\nO que planejei: backup antes\nO que ajustei: títulos fixos K-AI v44\n\nCódigo:\n'+cod+'\n\nK-RIADOR (Criador) posso executar? Diga sim/não/atualize';tab.msgs.push({cls:'ai '+persona,text:textoTela});saveTabs();renderChat();falarTexto(textoTela);return;}
+  let final='';if(persona==='say')final='💛 Say Korvil, aviso cuidadoso sobre "'+txt.slice(0,50)+'": recomendo calma, dica, alerta cuidadoso.';else if(persona==='chefe')final='🫡 Chefe, 3 opções sobre "'+txt.slice(0,50)+'": 1️⃣ rápida 2️⃣ segura com backup 3️⃣ 1000% completa. Qual escolhe?';else final='🦅 K-RIADOR (Criador) ordem direta 1000%: "'+txt.slice(0,60)+'" vou fazer exatamente como pediu. Como vai funcionar: lógica original. K-RIADOR (Criador) posso executar?';tab.msgs.push({cls:'ai '+persona,text:final});saveTabs();renderChat();falarTexto(final);
 }
-if(/mover|move/i.test(txt)){
-let m=txt.match(/([a-z0-9_\-\/]+\.[a-z0-9]+)\s+(para|->|pra)\s+([a-z0-9_\-\/]+)/i);
-if(m){let src=m[1],dest=m[3];selectedFiles.clear();selectedFiles.add(src);draggedPath=src;let name=src.split('/').pop();let np=dest+'/'+name;askConfirm(`MOVER ${src} → ${np}`,()=>{virtualFS[np]=virtualFS[src]||'';delete virtualFS[src];pushHistory('MOVER',src+'→'+np);saveAll();loadTree();});return}
+
+function send(){let i=document.getElementById('inp');let t=i.value.trim();if(!t)return;let tab=tabs.find(x=>x.id===activeTab);tab.msgs.push({cls:'user',text:t});i.value='';document.getElementById('liveMarkers').style.display='none';saveTabs();renderChat();setTimeout(()=>aiReply(t),400);}
+document.getElementById('send').onclick=send;document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter')send();});
+
+// === SISTEMA DE VOZ COM NOME K-AI + BIP + 7 SEGUNDOS + TRANSCRIÇÃO AO VIVO ===
+let wakeRecognition=null; let commandRecognition=null; let isWakeActive=false; let waitingCommand=false; let timer7=null; let timeLeft=7;
+
+function updateTimer(){
+  let el=document.getElementById('timer');
+  if(!waitingCommand){el.classList.remove('show'); return;}
+  el.classList.add('show'); el.textContent=timeLeft+'s - fale agora';
+  document.getElementById('icon').classList.add('waiting');
+  if(timeLeft<=0){
+    waitingCommand=false; el.classList.remove('show'); document.getElementById('icon').classList.remove('waiting');
+    document.getElementById('hudText').textContent='K-RIADOR standby - diga K-AI, Kai, Cai... novamente';
+    document.getElementById('statusWake').textContent='🎤 Standby - diga K-AI, Kai, Cai...';
+    startWakeListening();
+    return;
+  }
+  timeLeft--; timer7=setTimeout(updateTimer,1000);
 }
-let path=txt.match(/([a-z0-9_\-\/]+\.[a-z0-9]+)/i);path=path?path[1]:'sok/k-ai/novo-'+Date.now()+'.html';
-if(!path.startsWith('sok/k-ai/')) path='sok/k-ai/'+path.split('/').pop();
-virtualFS[path]=txt;pushHistory('CRIAR',path);saveAll();loadTree();
-addBubble('✅ Criado em korvil/'+path+' + commit auto em memory/',false);
+
+function startWakeListening(){
+  if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)){document.getElementById('statusWake').textContent='❌ Navegador sem voz - use Chrome'; return;}
+  if(waitingCommand) return;
+  if(wakeRecognition) try{wakeRecognition.stop();}catch(e){}
+  let SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  wakeRecognition=new SR();
+  wakeRecognition.lang='pt-BR'; wakeRecognition.continuous=true; wakeRecognition.interimResults=true;
+  wakeRecognition.onstart=()=>{isWakeActive=true; document.getElementById('statusWake').textContent='🎤 Ouvindo nome: K-AI, Kai, Cai, kai, cai...'; document.getElementById('mic').classList.remove('on');}
+  wakeRecognition.onresult=(event)=>{
+    let last = event.results[event.results.length-1][0].transcript.toLowerCase();
+    // reconhece várias sonoridades
+    if(isWakeWord(last)){
+      playBip();
+      waitingCommand=true; timeLeft=7;
+      document.getElementById('statusWake').textContent='✅ K-AI acordou! BIP! Aguardando comando 7s...';
+      document.getElementById('hudText').textContent='🦅 K-RIADOR (Criador) ouvindo... diga seu comando agora - 7s';
+      document.getElementById('icon').classList.add('waiting');
+      try{wakeRecognition.stop();}catch(e){}
+      updateTimer();
+      startCommandListening();
+    }
+  };
+  wakeRecognition.onerror=()=>{if(!waitingCommand) setTimeout(startWakeListening,1000);};
+  wakeRecognition.onend=()=>{if(isWakeActive &&!waitingCommand) setTimeout(startWakeListening,500);};
+  try{wakeRecognition.start();}catch(e){}
 }
-document.getElementById('send').onclick=send;inp.addEventListener('keydown',e=>{if(e.key==='Enter') send()});
-// VOZ COM SIM/NÃO
-let recognition,isListening=false,wake=false,pendingCmd=null,audioCtx=null;
-function beep(){try{if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=1200;g.gain.setValueAtTime(0.3,audioCtx.currentTime);o.start();o.stop(audioCtx.currentTime+0.15)}catch{}}
-function speakMale(t){try{speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t.replace(/Say Korvil/gi,'Sái Corvil'));u.lang='pt-BR';u.pitch=0.7;u.rate=0.95;speechSynthesis.speak(u);}catch{}}
-function startStandby(){
-let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR) return;recognition=new SR();recognition.lang='pt-BR';recognition.continuous=true;recognition.interimResults=true;
-let orb=document.getElementById('k-voice-orb'),hud=document.getElementById('k-voice-hud');
-recognition.onstart=()=>{isListening=true;orb.classList.add('listening');orb.textContent='👂';hud.textContent='🎧 STANDBY - diga KAI';hud.classList.add('show')}
-recognition.onresult=(e)=>{
-let tr='';for(let i=e.resultIndex;i<e.results.length;i++) tr+=e.results[i][0].transcript;
-let low=tr.toLowerCase().trim();console.log('VOZ',low);
-if(pendingAction){
-// ESTÁ AGUARDANDO SIM/NÃO - VOZ
-if(low.includes('sim')||low==='s'||low==='isso'){confirmYes();return}
-if(low.includes('não')||low.includes('nao')||low==='n'){confirmNo();return}
+
+function startCommandListening(){
+  if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
+  if(commandRecognition) try{commandRecognition.stop();}catch(e){}
+  let SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  commandRecognition=new SR();
+  commandRecognition.lang='pt-BR'; commandRecognition.continuous=true; commandRecognition.interimResults=true;
+  commandRecognition.onstart=()=>{document.getElementById('mic').classList.add('on'); document.getElementById('icon').classList.add('listening');}
+  commandRecognition.onresult=(event)=>{
+    let interim=''; let final='';
+    for(let i=event.resultIndex;i<event.results.length;i++){
+      if(event.results[i].isFinal) final+=event.results[i][0].transcript+' ';
+      else interim+=event.results[i][0].transcript+' ';
+    }
+    let texto = (final||interim).trim();
+    if(!texto) return;
+    // SE FALAR ALGO EM QUALQUER SEGUNDO DOS 7s - PARA DE CONTAR E JÁ VAI OUVINDO
+    if(waitingCommand && texto.length>2){
+      clearTimeout(timer7); waitingCommand=false; timeLeft=7;
+      document.getElementById('timer').classList.remove('show');
+      document.getElementById('icon').classList.remove('waiting');
+      // transcreve na caixa exatamente como falar + marcadores
+      criarMarcadores(texto);
+      document.getElementById('hudText').textContent='Transcrevendo: "'+texto.slice(0,60)+'" - analisando...';
+    }
+    // quando parar de falar - analisa automático instantâneo
+    if(event.results[event.results.length-1].isFinal && texto.length>2){
+      setTimeout(()=>{
+        try{commandRecognition.stop();}catch(e){}
+        document.getElementById('icon').classList.remove('listening');
+        document.getElementById('mic').classList.remove('on');
+        // executa exatamente seu pedido de acordo com lógicas
+        let tab=tabs.find(x=>x.id===activeTab);
+        tab.msgs.push({cls:'user',text:texto});
+        saveTabs(); renderChat();
+        setTimeout(()=>{ aiReply(texto); startWakeListening(); }, 600);
+      }, 800);
+    }
+  };
+  commandRecognition.onend=()=>{document.getElementById('icon').classList.remove('listening'); document.getElementById('mic').classList.remove('on'); if(waitingCommand){/* ainda nos 7s, continua ouvindo */ setTimeout(()=>{if(waitingCommand) try{commandRecognition.start();}catch(e){}},300);} };
+  try{commandRecognition.start();}catch(e){}
 }
-if(!wake){
-if(low.includes('kai')||low.includes('cai')){beep();wake=true;hud.textContent='✅ BIP! Fale comando (ex: exclui tal arquivo)';speakMale('Fala Criador');win.classList.remove('hidden');setTimeout(()=>{if(wake&&!pendingAction){wake=false;hud.textContent='🎧 STANDBY - diga KAI'}},8000);}
-}else{
-if(low.length>3&&!low.includes('kai')){
-let cmd=low.replace(/kai|cai/gi,'').trim();
-if(cmd.length>2){
-if(/excluir|apagar|deletar/i.test(cmd)){
-let m=cmd.match(/([a-z0-9_\-\/]+\.[a-z0-9]+)/i);let target=m?m[1]:[...selectedFiles][0];if(target){selectedFiles.clear();selectedFiles.add(target);wake=false;askConfirm('EXCLUIR',()=>deleteSel(),true);return}
+
+function toggleWake(){
+  if(isWakeActive){ isWakeActive=false; waitingCommand=false; if(wakeRecognition) try{wakeRecognition.stop();}catch(e){} if(commandRecognition) try{commandRecognition.stop();}catch(e){} document.getElementById('statusWake').textContent='🔇 Escuta desligada'; document.getElementById('icon').classList.remove('listening','waiting'); clearTimeout(timer7); document.getElementById('timer').classList.remove('show');}
+  else{ startWakeListening(); }
 }
-wake=false;pendingCmd=cmd;hud.textContent=`🤔 Você quer que eu ${cmd}? Diga SIM ou NÃO`;addBubble(`🎤 "${cmd}"\nDeseja executar? SIM/NÃO`,false);speakMale(`Deseja ${cmd}? Diga sim ou não`);askConfirm(cmd,()=>{inp.value=cmd;send();},false);pendingCmd=null;
-}
-}
-}
-};
-recognition.onend=()=>{if(isListening) try{recognition.start()}catch{}};try{recognition.start()}catch{}
-}
-document.getElementById('k-voice-orb').addEventListener('click',()=>{if(isListening){isListening=false;recognition.stop();document.getElementById('k-voice-orb').classList.remove('listening');document.getElementById('k-voice-hud').classList.remove('show')}else startStandby()});
-loadTree();
-</script>
-</body>
-</html>
+window.toggleWake=toggleWake;
+
+document.getElementById('mic').onclick=()=>{ if(waitingCommand){ waitingCommand=false; clearTimeout(timer7); document.getElementById('timer').classList.remove('show'); if(commandRecognition) try{commandRecognition.stop();}catch(e){} startWakeListening(); } else { startWakeListening(); } };
+
+// HOLD 5S
+let icon=document.getElementById('icon'),ring=document.getElementById('hold-ring'),count=document.getElementById('hold-count'),menu=document.getElementById('mini-menu');let timer=null,active=false;
+function startHold(e){e.preventDefault();if(active)return;active=true;ring.classList.add('show');count.style.display='block';let c=ring.querySelector('circle');let s=Date.now();timer=setInterval(()=>{let el=(Date.now()-s)/1000;let p=Math.min(el/5,1);c.style.strokeDashoffset=283-(283*p);count.textContent=Math.ceil(el)+'s / 5s';if(p>=1){clearInterval(timer);ring.classList.remove('show');count.style.display='none';active=false;let r=icon.getBoundingClientRect();menu.style.left=Math.min(r.left,window.innerWidth-320)+'px';menu.style.bottom=(window.innerHeight-r.top+20)+'px';menu.classList.add('show');}},50)}
+function cancelHold(){if(!active)return;clearInterval(timer);active=false;ring.classList.remove('show');count.style.display='none';ring.querySelector('circle').style.strokeDashoffset=283}
+icon.addEventListener('pointerdown',startHold);icon.addEventListener('touchstart',startHold,{passive:false});window.addEventListener('pointerup',cancelHold);window.addEventListener('touchend',cancelHold);
+function closeMenu(){menu.classList.remove('show');}window.closeMenu=closeMenu;
+let camStream=null,camFacing='environment';
+async function openHelmet(){try{let v=document.getElementById('cam');let s=await navigator.mediaDevices.getUserMedia({video:{facingMode:camFacing}});camStream=s;v.srcObject=s;document.getElementById('helmet').classList.add('show');}catch(e){alert('câmera erro '+e.message);}}
+function closeHelmet(){if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null}document.getElementById('helmet').classList.remove('show');document.getElementById('octa').classList.remove('show');}
+function setVisor(m){document.getElementById('visorMode').textContent=m;let v=document.getElementById('cam');let o=document.getElementById('octa');if(m==='NOTURNA 4D')v.style.filter='brightness(0.8) hue-rotate(80deg)';else if(m==='RAIO X 3D')v.style.filter='brightness(1.5) contrast(2) invert(0.2)';else if(m==='SCANNER 4D OCTAEDRO'){v.style.filter='brightness(1.1) hue-rotate(175deg)';o.classList.add('show');}else{v.style.filter='brightness(1.1) hue-rotate(175deg)';o.classList.remove('show');}}
+window.openHelmet=openHelmet;window.closeHelmet=closeHelmet;window.setVisor=setVisor;
+document.getElementById('cam').addEventListener('dblclick',()=>{camFacing=camFacing==='environment'?'user':'environment';if(camStream)camStream.getTracks().forEach(t=>t.stop());openHelmet();});
+window.addEventListener('load',()=>{renderTabs();renderChat();speechSynthesis.getVoices(); setTimeout(startWakeListening,1000); document.getElementById('memBox').textContent='K-AI v44 pronto - diga K-AI, Kai, Cai...';});
+</script></body></html>
