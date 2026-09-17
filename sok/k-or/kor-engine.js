@@ -1,4 +1,4 @@
-// K-O.R v44 - 2026-09-17T08:26:53.686Z
+// K-O.R v44 - 2026-09-17T08:31:51.893Z
 export const korEngine = {
   melhorar1000(n,c){ return '<div style="background:#fff;color:#000;padding:20px;border-radius:20px"><b>'+n.toUpperCase()+' 1000% - K-O.R v44</b><br>'+c+'</div>'; },
   async executarReal(p,h){
