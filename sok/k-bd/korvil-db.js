@@ -1,4 +1,4 @@
-// K-B.D v44 - 2026-09-17T08:32:43.824Z
+// K-B.D v44 - 2026-09-17T08:33:13.881Z
 export const korvilDB = {
   mem: JSON.parse(localStorage.getItem('korvil-db')||'[]'),
   criar(d){ d.id=Date.now(); d.path='korvil/'+d.nicho.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'/index.html'; this.mem.push(d); localStorage.setItem('korvil-db',JSON.stringify(this.mem)); this.autoCommit(d); return d; },
