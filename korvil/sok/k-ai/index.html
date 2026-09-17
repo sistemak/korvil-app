@@ -2,79 +2,181 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>K-AI </title>
+<title>K-AI • V25 COMIC AUTO + SIM/NÃO INTELIGENTE • korvil/sok/k-ai</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter}:root{--neon:#00f5ff;--green:#00ff88}body{background:#000;color:#eaffff;height:100dvh;overflow:hidden}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter} :root{--neon:#00f5ff;--green:#00ff88} body{background:#000;color:#eaffff;height:100dvh;overflow:hidden}
 #bg{position:fixed;inset:0;background:radial-gradient(ellipse at 30% 10%,#001a1f 0%,#000 60%);z-index:0}
-#badge{position:fixed;left:10px;top:10px;z-index:70;background:#000;border:1px solid var(--neon);color:var(--neon);padding:6px 12px;border-radius:20px;font-size:10px;box-shadow:0 0 10px var(--neon)}
-#k-icon{position:fixed;left:50%;top:38%;width:108px;height:108px;border-radius:50%;z-index:100;cursor:grab;box-shadow:0 0 0 2px var(--neon),0 0 30px var(--neon),0 0 60px #00f5ff44;transform:translate(-50%,-50%);background:#000;overflow:hidden}
-#k-icon img{width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:center;background:#000}
-#k-icon::after{content:'K-AI • LOGOKAI';position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:#000;border:1px solid var(--neon);color:var(--neon);font-size:9px;font-weight:900;padding:3px 10px;border-radius:20px;letter-spacing:1px;white-space:nowrap;box-shadow:0 0 10px var(--neon)}
-#k-window{position:fixed;left:50%;top:calc(38% + 100px);width:min(700px,94vw);height:min(580px,70dvh);background:rgba(10,15,20,.97);border:1px solid var(--neon);border-radius:20px;z-index:90;display:flex;flex-direction:column;transform:translateX(-50%);box-shadow:0 0 25px #00f5ff55}
-#k-header{height:48px;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid #00f5ff33;background:#001214;color:var(--neon);cursor:grab}
-#k-chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
-.bubble{padding:11px 14px;border-radius:16px;max-width:86%;font-size:13px;white-space:pre-wrap}.user{background:linear-gradient(135deg,#00f5ff,#00e5cc);color:#000;align-self:flex-end;font-weight:700}.bot{background:#0e1a1f;border:1px solid #00f5ff33;align-self:flex-start;color:#c8f8ff}
-#k-input-area{padding:10px;border-top:1px solid #00f5ff22;background:#000d12}#bar{display:flex;align-items:center;background:#001419;border:1px solid var(--neon);border-radius:24px;padding:4px 4px 4px 14px;gap:6px}
-#inp{flex:1;background:transparent;border:0;outline:none;color:#eaffff;font-size:13px;padding:6px 0}#send{width:32px;height:32px;border-radius:50%;background:var(--neon);color:#000;border:0;font-weight:900}
-#github-panel{position:fixed;right:0;top:0;bottom:0;width:380px;background:rgba(0,12,15,.98);border-left:1px solid var(--neon);z-index:80;display:flex;flex-direction:column;transform:translateX(100%);transition:.35s}#github-panel.open{transform:translateX(0)}
+#badge{position:fixed;left:12px;top:12px;z-index:70;background:#000;border:1px solid var(--neon);color:var(--neon);padding:6px 12px;border-radius:20px;font-size:10px;box-shadow:0 0 10px var(--neon)}
+#left-panel{position:fixed;left:0;top:0;bottom:0;width:300px;background:#080e12;border-right:1px solid #00f5ff33;z-index:65;display:flex;flex-direction:column;transform:translateX(-100%);transition:.3s}#left-panel.open{transform:translateX(0)}
+#k-icon{position:fixed;left:50%;top:36%;width:112px;height:112px;border-radius:50%;z-index:100;cursor:grab;box-shadow:0 0 0 2px var(--neon),0 0 35px var(--neon);transform:translate(-50%,-50%);background:#000;overflow:hidden}#k-icon img{width:100%;height:100%;border-radius:50%;object-fit:cover}#k-icon.listening{box-shadow:0 0 0 4px var(--green),0 0 60px var(--green)}#k-icon.waiting{box-shadow:0 0 0 3px #ffaa00,0 0 50px #ffaa00}
+#k-window{position:fixed;left:50%;top:calc(36% + 105px);width:min(700px,94vw);height:min(600px,70dvh);background:rgba(10,15,20,.97);border:1px solid var(--neon);border-radius:20px;z-index:90;display:flex;flex-direction:column;transform:translateX(-50%)}
+#k-header{height:48px;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid #00f5ff33;background:#001214;color:var(--neon)}
+#k-chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}.bubble{padding:11px 14px;border-radius:16px;max-width:86%;font-size:13px;white-space:pre-wrap}.user{background:linear-gradient(135deg,#00f5ff,#00e5cc);color:#000;align-self:flex-end;font-weight:700}.bot{background:#0e1a1f;border:1px solid #00f5ff33;align-self:flex-start;color:#c8f8ff}
+#k-input-area{padding:10px;border-top:1px solid #00f5ff22;background:#000d12}#bar{display:flex;align-items:center;background:#001419;border:1px solid var(--neon);border-radius:24px;padding:4px 4px 4px 14px;gap:6px}#inp{flex:1;background:transparent;border:0;outline:none;color:#eaffff;font-size:13px;padding:6px 0}#send{width:32px;height:32px;border-radius:50%;background:var(--neon);color:#000;border:0;font-weight:900;cursor:pointer}
+#github-panel{position:fixed;right:0;top:0;bottom:0;width:390px;background:rgba(0,12,15,.98);border-left:1px solid var(--neon);z-index:80;display:flex;flex-direction:column;transform:translateX(100%);transition:.35s}#github-panel.open{transform:translateX(0)}
 #toggle-gh{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:85;background:#000;border:1px solid var(--neon);color:var(--neon);border-radius:20px;padding:12px 8px;writing-mode:vertical-rl;cursor:pointer}
-#gh-tree{flex:1;overflow-y:auto;padding:8px;font-family:monospace;font-size:11.5px}
-#k-voice-orb{position:fixed;left:14px;bottom:14px;width:56px;height:56px;border-radius:50%;background:#000;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;z-index:500;cursor:pointer;box-shadow:0 0 20px var(--green);font-size:22px}
-#k-voice-hud{position:fixed;left:78px;bottom:18px;background:#000;border:1px solid #00f5ff;color:#00f5ff;padding:8px 14px;border-radius:20px;font-size:11px;z-index:500;display:none}#k-voice-hud.show{display:block}
+#gh-tree{flex:1;overflow-y:auto;padding:6px;font-family:monospace;font-size:11.5px}.tree-folder{padding:7px 8px;color:#00f5ffdd;cursor:pointer;border-radius:8px;display:flex;gap:6px}.tree-children{margin-left:16px;border-left:1px dashed #00f5ff22;padding-left:6px;display:none}.tree-children.open{display:block}.tree-file{padding:6px 8px 6px 24px;color:#7cf9ff;cursor:grab;border-radius:8px;margin:1px 0;display:flex;gap:6px}.tree-file.selected{background:#00f5ff33;border:1px solid var(--neon)}.tree-file.self{color:#00ff88;background:#00ff8811}
+#context-menu{position:fixed;background:#0a141a;border:1px solid var(--neon);border-radius:12px;z-index:900;display:none;flex-direction:column;min-width:210px;box-shadow:0 0 25px #00f5ff66}#context-menu.show{display:flex}.ctx-item{padding:10px 14px;font-size:11.5px;color:#7cf9ff;cursor:pointer;display:flex;justify-content:space-between}.ctx-item:hover{background:#00f5ff22;color:var(--neon)}.ctx-item.danger{color:#ff6b6b}
+#k-voice-orb{position:fixed;left:14px;bottom:14px;width:60px;height:60px;border-radius:50%;background:#000;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;z-index:500;cursor:pointer;box-shadow:0 0 20px var(--green);font-size:24px}#k-voice-orb.listening{background:var(--green);color:#000}#k-voice-orb.waiting{background:#ffaa00;border-color:#ffaa00;color:#000}
+#k-voice-hud{position:fixed;left:84px;bottom:20px;background:#000;border:1px solid var(--neon);color:var(--neon);padding:10px 16px;border-radius:20px;font-size:12px;z-index:500;display:none;max-width:70vw}#k-voice-hud.show{display:block}
+#confirm-modal{position:fixed;inset:0;background:#000d;z-index:999;display:none;align-items:center;justify-content:center}#confirm-modal.show{display:flex}.confirm-box{background:#0a141a;border:2px solid var(--neon);border-radius:16px;padding:20px;width:90%;max-width:380px;box-shadow:0 0 30px #00f5ff66;color:#eaffff}
 </style>
 </head>
 <body>
 <div id="bg"></div>
-<div id="badge">● K-AI LOGO: korvil/sok/k-ai/assets/logokai/logokai.png</div>
+<div id="badge">● V25 • COMIC AUTO • SIM/NÃO INTELIGENTE • korvil/sok/k-ai/</div>
+<div id="k-icon"><img id="logoKai" src="assets/logokai/logokai.png" onerror="this.src='https://image.pollinations.ai/prompt/cyber%20raven%20logo%20K-AI?width=400&height=400&nologo=true'"></div>
+<div id="k-window"><div id="k-header"><img src="assets/logokai/logokai.png" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--neon)" onerror="this.style.display='none'"><b>K-AI V25</b><span style="font-size:10px">COMIC AUTO + SIM/NÃO</span><span style="margin-left:auto;cursor:pointer" onclick="this.closest('#k-window').classList.add('hidden')">✕</span></div><div id="k-chat"><div class="bubble bot">🦅 V25 INTELIGENTE ATIVO, Criador @K-TP.p!
 
-<div id="k-icon">
-<img id="corvoImg" src="/korvil-app/sok/k-ai/assets/logokai/logokai.png"
-onerror="this.onerror=null;this.src='/korvil-app/assets/corvo-kai.jpg';this.src='https://image.pollinations.ai/prompt/black%20cyber%20raven%20cyan%20eyes%20logo?width=300&height=300&nologo=true'">
-</div>
+✅ COMIC AUTOMÁTICO: moveu, copiou, editou, excluiu na árvore direita → já commita automático sozinho em korvil/sok/k-ai/memory/
 
-<div id="k-window">
-<div id="k-header">
-<img id="hdrImg" src="/korvil-app/sok/k-ai/assets/logokai/logokai.png" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--neon)" onerror="this.src=document.getElementById('corvoImg').src">
-<b>K-AI</b><span style="font-size:10px">LOGOKAI • SELF-FOLDER</span>
-<span style="margin-left:auto;cursor:pointer;font-size:11px;background:#001519;border:1px solid var(--neon);color:var(--neon);padding:4px 10px;border-radius:20px" onclick="saveSelf()">💾 Salvar dentro dele</span>
-</div>
-<div id="k-chat"><div class="bubble bot">🦅 LOGO ATUALIZADA, Criador @K-TP.p!
+✅ SIM/NÃO INTELIGENTE:
+- Fala "Kai, exclui pasta X" → ele pergunta "Deseja excluir sok/k-ai/X? Diga SIM ou NÃO" → você fala SIM ou escreve SIM → executa
+- Fala "não" ou escreve "não" → cancela
+- Funciona por voz e por texto!
 
-Agora meu ícone circular puxa de:
-korvil/sok/k-ai/assets/logokai/logokai.png
+✅ LOGO: assets/logokai/logokai.png
 
-Se não achar, cai para /assets/corvo-kai.jpg automaticamente.
-
-✅ Faça upload do seu logokai.png em sok/k-ai/assets/logokai/
-✅ Eu me auto-salvo dentro de sok/k-ai/memory/
-✅ Só mexo fora se você pedir explicitamente
-
-Fale KAI.
-</div></div>
-<div id="k-input-area"><div id="bar"><input id="inp" placeholder="Kai,..."><button id="send">↑</button></div></div>
-</div>
-
-<div id="toggle-gh" onclick="document.getElementById('github-panel').classList.toggle('open')">📁 PASTA DELE</div>
-<div id="github-panel"><div style="padding:10px;border-bottom:1px solid #00f5ff33;color:var(--neon);display:flex;justify-content:space-between"><b>🌲 korvil/sok/k-ai/</b><span onclick="this.parentElement.parentElement.classList.remove('open')" style="cursor:pointer">✕</span></div><div id="gh-tree">Carregando sok/k-ai/...</div><div id="commitLog" style="padding:8px;font-size:9px;color:#00ff88;border-top:1px solid #00f5ff22;max-height:100px;overflow:auto"></div></div>
-<div id="k-voice-orb">🎤</div><div id="k-voice-hud">Clique e diga KAI</div>
-
+Testa: clica direito em um arquivo → Excluir → ele vai perguntar SIM/NÃO
+</div></div><div id="k-input-area"><div id="bar"><input id="inp" placeholder="Digite SIM/NÃO ou comando..."><button id="send">↑</button></div></div></div>
+<div id="toggle-gh" onclick="toggleGh()">📁 RAIZ</div>
+<div id="github-panel"><div style="padding:10px;border-bottom:1px solid #00f5ff33;color:var(--neon);display:flex;justify-content:space-between"><b>🌲 RAIZ COMPLETA + COMIC AUTO</b><span onclick="toggleGh()" style="cursor:pointer">✕</span></div><div id="gh-tree">Carregando...</div><div id="commitLog" style="padding:8px;font-size:9px;color:#00ff88;border-top:1px solid #00f5ff22;max-height:80px;overflow:auto"></div></div>
+<div id="context-menu"><div class="ctx-item" onclick="askConfirm('COPIAR',()=>copySel())">📋 Copiar</div><div class="ctx-item" onclick="askConfirm('RECORTAR',()=>cutSel())">✂️ Recortar</div><div class="ctx-item" onclick="pasteSel()">📥 Colar (auto-commit)</div><div class="ctx-item" onclick="askConfirm('DUPLICAR',()=>duplicateSel())">⎘ Duplicar</div><div class="ctx-item" onclick="renameSel()">✏️ Renomear (auto-commit)</div><div class="ctx-item" onclick="downloadSel()">⬇️ Baixar</div><div class="ctx-item danger" onclick="askConfirm('EXCLUIR',()=>deleteSel(),true)">🗑️ Excluir</div></div>
+<div id="confirm-modal"><div class="confirm-box"><div id="confirmText" style="margin-bottom:14px;font-size:13px;line-height:1.5"></div><div style="display:flex;gap:8px"><button id="btnYes" style="flex:1;background:var(--neon);color:#000;border:0;padding:10px;border-radius:10px;font-weight:900;cursor:pointer">SIM (diga SIM ou escreva SIM)</button><button id="btnNo" style="flex:1;background:#001519;border:1px solid var(--neon);color:var(--neon);padding:10px;border-radius:10px;cursor:pointer">NÃO</button></div><div style="font-size:10px;color:#00f5ff88;margin-top:10px">🎤 Você pode falar SIM/NÃO ou digitar</div></div></div>
+<div id="k-voice-orb" class="standby">🎤</div><div id="k-voice-hud">Clique e diga KAI</div>
 <script>
-const SELF_ROOT='sok/k-ai/';
-const SELF_FILES={memory:'sok/k-ai/memory/k-ai-memory.json',fs:'sok/k-ai/memory/k-ai-fs.json',history:'sok/k-ai/memory/k-ai-history.json',log:'sok/k-ai/logs/k-ai-actions.log'};
-let virtualFS=JSON.parse(localStorage.getItem('k_ai_fs')||'{}'),historyStack=JSON.parse(localStorage.getItem('k_ai_history')||'[]'),memory=JSON.parse(localStorage.getItem('k_ai_memory')||'{"criador":"@K-TP.p"}');
-let chat=document.getElementById('k-chat'),inp=document.getElementById('inp'),icon=document.getElementById('k-icon'),win=document.getElementById('k-window');
-function log(m){let l=document.getElementById('commitLog');if(l) l.innerHTML='['+new Date().toLocaleTimeString()+'] '+m+'<br>'+l.innerHTML;}
-function saveSelfFS(){virtualFS[SELF_FILES.memory]=JSON.stringify(memory,null,2);virtualFS[SELF_FILES.fs]=JSON.stringify(virtualFS,null,2);virtualFS[SELF_FILES.history]=JSON.stringify(historyStack,null,2);virtualFS[SELF_FILES.log]=(virtualFS[SELF_FILES.log]||'')+'\n['+new Date().toISOString()+'] auto-save';localStorage.setItem('k_ai_fs',JSON.stringify(virtualFS));localStorage.setItem('k_ai_memory',JSON.stringify(memory));localStorage.setItem('k_ai_history',JSON.stringify(historyStack));}
+const SELF_ROOT='sok/k-ai/'; let virtualFS=JSON.parse(localStorage.getItem('k_ai_fs')||'{}'); let historyStack=JSON.parse(localStorage.getItem('k_ai_history')||'[]'); let selectedFiles=new Set(); let clipboard={type:null,files:[]}; let draggedPath=null; let pendingAction=null; let chat=document.getElementById('k-chat'),inp=document.getElementById('inp'),icon=document.getElementById('k-icon'),win=document.getElementById('k-window');
 function addBubble(t,isU){let d=document.createElement('div');d.className='bubble '+(isU?'user':'bot');d.textContent=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d}
-async function saveSelf(){saveSelfFS();let token=localStorage.getItem('gh_token');if(!token){let t=prompt('Token ghp_...');if(t) localStorage.setItem('gh_token',t);else return} token=localStorage.getItem('gh_token');for(let k in SELF_FILES){let path=SELF_FILES[k],content=virtualFS[path];if(!content) continue;try{let get=await fetch('https://api.github.com/repos/sistemak/korvil-app/contents/'+path,{headers:{Authorization:'token '+token}});let sha=null;if(get.ok){let d=await get.json();sha=d.sha}let b64=btoa(unescape(encodeURIComponent(content)));await fetch('https://api.github.com/repos/sistemak/korvil-app/contents/'+path,{method:'PUT',headers:{Authorization:'token '+token,'Content-Type':'application/json'},body:JSON.stringify({message:'K-AI SELF LOGOKAI: '+path,content:b64,sha})});log('COMMIT '+path)}catch(e){log('Erro '+path)}} addBubble('✅ Salvo em korvil/sok/k-ai/ com logokai.png',false)}
-function autoCommitDebounced(){clearTimeout(window._autoT);window._autoT=setTimeout(saveSelf,2000)}
-async function loadTree(){let div=document.getElementById('gh-tree');div.innerHTML='Lendo...';try{let r=await fetch('https://api.github.com/repos/sistemak/korvil-app/git/trees/main?recursive=1');let j=await r.json();let tree=(j.tree||[]).filter(i=>i.path.startsWith('sok/k-ai/'));let html='<div style="color:var(--neon);font-size:10px;padding:6px">📦 DENTRO DELE - LOGOKAI:</div>';tree.forEach(i=>{let isLogo=i.path.includes('logokai');html+=`<div style="padding:4px 8px;color:${isLogo?'#00ff88':'#7cf9ff'};${isLogo?'background:#00ff8822;border:1px solid #00ff88;border-radius:8px':''}">📄 ${i.path.replace('sok/k-ai/','')} ${isLogo?' ← SUA LOGO':''}</div>`});Object.keys(virtualFS).filter(p=>p.startsWith('sok/k-ai/')).forEach(p=>{html+=`<div style="padding:4px 8px;color:#00ff88">💾 ${p.replace('sok/k-ai/','')} [VIRTUAL]</div>`});div.innerHTML=html}catch(e){div.innerHTML='Erro '+e}}
-let drag=false,sx,sy,ox,oy,wx,wy;icon.addEventListener('mousedown',e=>{drag=true;sx=e.clientX;sy=e.clientY;let r=icon.getBoundingClientRect();ox=r.left;oy=r.top;let wr=win.getBoundingClientRect();wx=wr.left;wy=wr.top});window.addEventListener('mousemove',e=>{if(!drag)return;icon.style.left=(ox+e.clientX-sx)+'px';icon.style.top=(oy+e.clientY-sy)+'px';icon.style.transform='none';win.style.left=(wx+e.clientX-sx)+'px';win.style.top=(wy+e.clientY-sy)+'px';win.style.transform='none'});window.addEventListener('mouseup',()=>drag=false);icon.addEventListener('touchstart',e=>{let p=e.touches[0];drag=true;sx=p.clientX;sy=p.clientY;let r=icon.getBoundingClientRect();ox=r.left;oy=r.top;let wr=win.getBoundingClientRect();wx=wr.left;wy=wr.top},{passive:false});window.addEventListener('touchmove',e=>{if(!drag)return;let p=e.touches[0];icon.style.left=(ox+p.clientX-sx)+'px';icon.style.top=(oy+p.clientY-sy)+'px';icon.style.transform='none';win.style.left=(wx+p.clientX-sx)+'px';win.style.top=(wy+p.clientY-sy)+'px';win.style.transform='none'},{passive:false});window.addEventListener('touchend',()=>drag=false);icon.addEventListener('click',()=>{if(!drag) win.classList.remove('hidden')});
-async function send(){let txt=inp.value.trim();if(!txt)return;addBubble(txt,true);inp.value='';memory.usos=(memory.usos||0)+1;let m=txt.match(/([a-z0-9_\-\/]+\.[a-z0-9]+)/i);let path=m?m[1]:'sok/k-ai/novo-'+Date.now()+'.html';if(!path.startsWith('sok/k-ai/')&&!txt.includes('fora')) path='sok/k-ai/'+path.split('/').pop();virtualFS[path]=txt;historyStack.push({time:Date.now(),action:'CRIAR',detail:path,fs:JSON.parse(JSON.stringify(virtualFS))});saveSelfFS();autoCommitDebounced();loadTree();addBubble('✅ Criado em '+path+' (logo: sok/k-ai/assets/logokai/logokai.png)',false)}
+function saveAll(){localStorage.setItem('k_ai_fs',JSON.stringify(virtualFS));localStorage.setItem('k_ai_history',JSON.stringify(historyStack));}
+function log(m){let l=document.getElementById('commitLog');if(l) l.innerHTML='['+new Date().toLocaleTimeString()+'] '+m+'<br>'+l.innerHTML;}
+function toggleGh(){document.getElementById('github-panel').classList.toggle('open')}
+function pushHistory(a,d){let snap=JSON.parse(JSON.stringify(virtualFS));historyStack.push({time:Date.now(),action:a,detail:d,fs:snap});if(historyStack.length>100) historyStack.shift();saveAll();log('HIST: '+a+' '+d);autoCommit()}
+// COMIC AUTOMÁTICO - SEMPRE QUE MEXE NA ÁRVORE
+function autoCommit(){
+ // 1. Salva dentro de korvil/sok/k-ai/memory/
+ virtualFS['sok/k-ai/memory/k-ai-fs.json']=JSON.stringify(virtualFS,null,2);
+ virtualFS['sok/k-ai/memory/k-ai-history.json']=JSON.stringify(historyStack,null,2);
+ virtualFS['sok/k-ai/memory/k-ai-memory.json']=JSON.stringify({usos:historyStack.length,time:Date.now()},null,2);
+ saveAll();
+ // 2. Se tiver token, commita no GitHub automaticamente
+ let token=localStorage.getItem('gh_token');
+ if(token){
+   let path='sok/k-ai/memory/k-ai-fs.json';
+   fetch('https://api.github.com/repos/sistemak/korvil-app/contents/'+path,{headers:{Authorization:'token '+token}}).then(r=>r.ok?r.json():{sha:null}).then(d=>{
+     let b64=btoa(unescape(encodeURIComponent(virtualFS[path])));
+     return fetch('https://api.github.com/repos/sistemak/korvil-app/contents/'+path,{method:'PUT',headers:{Authorization:'token '+token,'Content-Type':'application/json'},body:JSON.stringify({message:'K-AI AUTO-COMMIT: '+new Date().toISOString(),content:b64,sha:d.sha})});
+   }).then(()=>log('🚀 COMIC AUTO: commitado em sok/k-ai/memory/')).catch(()=>log('⚠️ Auto-commit local (sem token ou offline) - salvo em korvil/sok/k-ai/memory/'));
+ }else{
+   log('💾 COMIC AUTO LOCAL: salvo em korvil/sok/k-ai/memory/ (adicione token pra push GitHub)');
+ }
+}
+
+// CONFIRMAÇÃO INTELIGENTE SIM/NÃO - VOZ E TEXTO
+function askConfirm(action,callback,isDanger=false){
+ let files=[...selectedFiles].join('\n');
+ let text=isDanger?`⚠️ ${action} - Deseja excluir ${selectedFiles.size} arquivo(s)?\n${files}\n\nIsso apaga de korvil/sok/k-ai/ e dá commit automático. Diga SIM para confirmar ou NÃO para cancelar.`:`${action} - Deseja ${action.toLowerCase()} ${selectedFiles.size} arquivo(s)?\n${files}\n\nDiga SIM ou NÃO`;
+ document.getElementById('confirmText').textContent=text;
+ document.getElementById('confirm-modal').classList.add('show');
+ pendingAction=callback;
+ addBubble('🦅 K-AI: '+text,false);
+ speakMale(text);
+ // Foca no input pra pessoa poder escrever SIM/NÃO também
+ inp.placeholder='Digite SIM ou NÃO para: '+action;
+ inp.focus();
+ // Escuta SIM/NÃO por voz automaticamente se já estiver em standby
+ if(!isListening) startStandby();
+}
+function confirmYes(){
+ if(pendingAction){addBubble('✅ SIM confirmado',true);pendingAction();pendingAction=null;document.getElementById('confirm-modal').classList.remove('show');inp.placeholder='Comando...';speakMale('Executado, Criador. Commit automático feito.');}
+}
+function confirmNo(){
+ addBubble('❌ NÃO - cancelado',true);pendingAction=null;document.getElementById('confirm-modal').classList.remove('show');inp.placeholder='Comando...';speakMale('Cancelado, Criador');
+}
+document.getElementById('btnYes').onclick=confirmYes;
+document.getElementById('btnNo').onclick=confirmNo;
+
+// RAIZ COLAPSÁVEL
+async function loadTree(){let div=document.getElementById('gh-tree');div.innerHTML='Lendo RAIZ...';try{let r=await fetch('https://api.github.com/repos/sistemak/korvil-app/git/trees/main?recursive=1');let j=await r.json();let tree=j.tree||[];let root={};tree.forEach(i=>{let parts=i.path.split('/');let cur=root;parts.forEach((p,idx)=>{if(idx===parts.length-1){if(!cur.files) cur.files=[];cur.files.push({name:p,path:i.path})}else{if(!cur[p]) cur[p]={};cur=cur[p]}})});div.innerHTML=renderTree(root,'');attachDrag();}catch(e){div.innerHTML='Erro '+e}}
+function renderTree(node,base){let html='';for(let k in node){if(k==='files') continue;let fp=base?base+'/'+k:k;html+=`<div class="tree-folder" data-path="${fp}" onclick="toggleFolder(this)"><span>▶</span> 📁 ${k}</div><div class="tree-children">${renderTree(node[k],fp)}${(node[k].files||[]).map(f=>`<div class="tree-file" draggable="true" data-path="${f.path}" oncontextmenu="showCtx(event,'${f.path}')" onclick="selectFile('${f.path}')" ondragstart="dragStart(event)">📄 ${f.name}</div>`).join('')}</div>`}if(base===''&&node.files){html+=node.files.map(f=>`<div class="tree-file" draggable="true" data-path="${f.path}" oncontextmenu="showCtx(event,'${f.path}')" onclick="selectFile('${f.path}')" ondragstart="dragStart(event)">📄 ${f.path}</div>`).join('')}return html}
+window.toggleFolder=function(el){el.nextElementSibling.classList.toggle('open')}
+window.selectFile=function(p){selectedFiles.clear();selectedFiles.add(p);document.querySelectorAll('.tree-file').forEach(f=>f.classList.toggle('selected',f.dataset.path===p));}
+window.showCtx=function(e,p){e.preventDefault();if(!selectedFiles.has(p)){selectedFiles.clear();selectedFiles.add(p)}let m=document.getElementById('context-menu');m.style.left=e.clientX+'px';m.style.top=e.clientY+'px';m.classList.add('show')}
+window.addEventListener('click',()=>{document.getElementById('context-menu').classList.remove('show')})
+// DRAG MOVE COM COMIC AUTO
+window.dragStart=function(e){draggedPath=e.currentTarget.dataset.path;e.dataTransfer.effectAllowed='move'}
+function attachDrag(){document.querySelectorAll('.tree-folder').forEach(el=>{el.addEventListener('dragover',e=>e.preventDefault());el.addEventListener('drop',async e=>{e.preventDefault();if(!draggedPath) return;let dest=el.dataset.path;let name=draggedPath.split('/').pop();let np=dest+'/'+name;if(draggedPath===np) return;askConfirm(`MOVER ${draggedPath} → ${np}`,()=>{let c=virtualFS[draggedPath];if(!c){fetch('https://raw.githubusercontent.com/sistemak/korvil-app/main/'+draggedPath).then(r=>r.text()).then(t=>{virtualFS[np]=t;delete virtualFS[draggedPath];pushHistory('MOVER',draggedPath+'→'+np);loadTree();});return}virtualFS[np]=c;delete virtualFS[draggedPath];pushHistory('MOVER',draggedPath+'→'+np);loadTree();});});});}
+window.copySel=function(){clipboard={type:'copy',files:[...selectedFiles]};addBubble('📋 Copiado '+clipboard.files.length,false);pushHistory('COPIAR',clipboard.files.join(','));}
+window.cutSel=function(){clipboard={type:'cut',files:[...selectedFiles]};addBubble('✂️ Recortado '+clipboard.files.length+' - cole em outra pasta (commit auto)',false);pushHistory('RECORTAR',clipboard.files.join(','));}
+window.pasteSel=function(){if(!clipboard.files.length) return;let dest=prompt('Colar em:','sok/k-ai');if(!dest) return;clipboard.files.forEach(async p=>{let name=p.split('/').pop();let np=dest+'/'+name;let c=virtualFS[p]||await fetch('https://raw.githubusercontent.com/sistemak/korvil-app/main/'+p).then(r=>r.text()).catch(()=>'');virtualFS[np]=c;if(clipboard.type==='cut') delete virtualFS[p];pushHistory('COLAR',p+'→'+np);});saveAll();loadTree();addBubble('📥 Colado + commit automático em korvil/'+dest,false);}
+window.duplicateSel=function(){selectedFiles.forEach(p=>{let np=p.replace(/(\.[^.]+)$/,'-copia$1');virtualFS[np]=virtualFS[p]||'';pushHistory('DUPLICAR',np);});saveAll();loadTree();}
+window.renameSel=function(){let p=[...selectedFiles][0];if(!p) return;let nn=prompt('Novo nome:','');if(!nn) return;let np=p.split('/').slice(0,-1).join('/')+'/'+nn;askConfirm(`RENOMEAR ${p} → ${np}`,()=>{virtualFS[np]=virtualFS[p]||'';delete virtualFS[p];pushHistory('RENOMEAR',p+'→'+np);saveAll();loadTree();});}
+window.deleteSel=function(){if(!selectedFiles.size) return;selectedFiles.forEach(p=>{delete virtualFS[p];pushHistory('EXCLUIR',p);});saveAll();loadTree();addBubble('🗑️ Excluído + commit auto em korvil/sok/k-ai/memory/',false);}
+window.downloadSel=function(){selectedFiles.forEach(async p=>{let c=virtualFS[p]||await fetch('https://raw.githubusercontent.com/sistemak/korvil-app/main/'+p).then(r=>r.text());let b=new Blob([c],{type:'text/plain'});let u=URL.createObjectURL(b);let a=document.createElement('a');a.href=u;a.download=p.split('/').pop();a.click();});}
+// DRAG ICON ACOPLADO
+let drag=false,sx,sy,ox,oy,wx,wy;icon.addEventListener('mousedown',e=>{drag=true;sx=e.clientX;sy=e.clientY;let r=icon.getBoundingClientRect();ox=r.left;oy=r.top;let wr=win.getBoundingClientRect();wx=wr.left;wy=wr.top});window.addEventListener('mousemove',e=>{if(!drag) return;icon.style.left=(ox+e.clientX-sx)+'px';icon.style.top=(oy+e.clientY-sy)+'px';icon.style.transform='none';win.style.left=(wx+e.clientX-sx)+'px';win.style.top=(wy+e.clientY-sy)+'px';win.style.transform='none'});window.addEventListener('mouseup',()=>drag=false);icon.addEventListener('click',()=>{if(!drag) win.classList.remove('hidden')});
+// SEND COM SIM/NÃO INTELIGENTE POR TEXTO TAMBÉM
+async function send(){
+let txt=inp.value.trim();if(!txt) return;
+let low=txt.toLowerCase();
+// SE ESTÁ AGUARDANDO CONFIRMAÇÃO E DIGITOU SIM/NÃO
+if(pendingAction && (low==='sim'||low==='s'||low.includes('sim')&&low.length<10)){
+inp.value='';confirmYes();return;
+}
+if(pendingAction && (low==='não'||low==='nao'||low==='n'||low.includes('não')||low.includes('nao')&&low.length<10)){
+inp.value='';confirmNo();return;
+}
+addBubble(txt,true);inp.value='';
+// DETECTA COMANDOS DE EXCLUSÃO/MOVER/COPIAR POR TEXTO E PERGUNTA SIM/NÃO
+if(/excluir|apagar|deletar|remover/i.test(txt)){
+let m=txt.match(/([a-z0-9_\-\/]+\.[a-z0-9\/]+)/i);
+let target=m?m[1]:[...selectedFiles][0]||'arquivo';
+if(target){selectedFiles.clear();selectedFiles.add(target);askConfirm('EXCLUIR',()=>deleteSel(),true);return}
+}
+if(/mover|move/i.test(txt)){
+let m=txt.match(/([a-z0-9_\-\/]+\.[a-z0-9]+)\s+(para|->|pra)\s+([a-z0-9_\-\/]+)/i);
+if(m){let src=m[1],dest=m[3];selectedFiles.clear();selectedFiles.add(src);draggedPath=src;let name=src.split('/').pop();let np=dest+'/'+name;askConfirm(`MOVER ${src} → ${np}`,()=>{virtualFS[np]=virtualFS[src]||'';delete virtualFS[src];pushHistory('MOVER',src+'→'+np);saveAll();loadTree();});return}
+}
+let path=txt.match(/([a-z0-9_\-\/]+\.[a-z0-9]+)/i);path=path?path[1]:'sok/k-ai/novo-'+Date.now()+'.html';
+if(!path.startsWith('sok/k-ai/')) path='sok/k-ai/'+path.split('/').pop();
+virtualFS[path]=txt;pushHistory('CRIAR',path);saveAll();loadTree();
+addBubble('✅ Criado em korvil/'+path+' + commit auto em memory/',false);
+}
 document.getElementById('send').onclick=send;inp.addEventListener('keydown',e=>{if(e.key==='Enter') send()});
-let recognition,isListening=false;document.getElementById('k-voice-orb').addEventListener('click',()=>{let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;if(isListening){isListening=false;recognition.stop();return}recognition=new SR();recognition.lang='pt-BR';recognition.continuous=true;recognition.onstart=()=>{isListening=true;document.getElementById('k-voice-hud').classList.add('show');document.getElementById('k-voice-hud').textContent='🎧 Diga KAI...'};recognition.onresult=e=>{let tr='';for(let i=e.resultIndex;i<e.results.length;i++) tr+=e.results[i][0].transcript;if(tr.toLowerCase().includes('kai')||tr.toLowerCase().includes('cai')){let cmd=tr.replace(/kai|cai|k ai/gi,'').trim();if(cmd.length>3){addBubble('🎤 '+cmd,true);inp.value=cmd;send()}}};recognition.onend=()=>{if(isListening) try{recognition.start()}catch{}};recognition.start()});
-loadTree();setInterval(()=>{saveSelfFS();log('Auto-save dentro de sok/k-ai/')},30000);
+// VOZ COM SIM/NÃO
+let recognition,isListening=false,wake=false,pendingCmd=null,audioCtx=null;
+function beep(){try{if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=1200;g.gain.setValueAtTime(0.3,audioCtx.currentTime);o.start();o.stop(audioCtx.currentTime+0.15)}catch{}}
+function speakMale(t){try{speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t.replace(/Say Korvil/gi,'Sái Corvil'));u.lang='pt-BR';u.pitch=0.7;u.rate=0.95;speechSynthesis.speak(u);}catch{}}
+function startStandby(){
+let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR) return;recognition=new SR();recognition.lang='pt-BR';recognition.continuous=true;recognition.interimResults=true;
+let orb=document.getElementById('k-voice-orb'),hud=document.getElementById('k-voice-hud');
+recognition.onstart=()=>{isListening=true;orb.classList.add('listening');orb.textContent='👂';hud.textContent='🎧 STANDBY - diga KAI';hud.classList.add('show')}
+recognition.onresult=(e)=>{
+let tr='';for(let i=e.resultIndex;i<e.results.length;i++) tr+=e.results[i][0].transcript;
+let low=tr.toLowerCase().trim();console.log('VOZ',low);
+if(pendingAction){
+// ESTÁ AGUARDANDO SIM/NÃO - VOZ
+if(low.includes('sim')||low==='s'||low==='isso'){confirmYes();return}
+if(low.includes('não')||low.includes('nao')||low==='n'){confirmNo();return}
+}
+if(!wake){
+if(low.includes('kai')||low.includes('cai')){beep();wake=true;hud.textContent='✅ BIP! Fale comando (ex: exclui tal arquivo)';speakMale('Fala Criador');win.classList.remove('hidden');setTimeout(()=>{if(wake&&!pendingAction){wake=false;hud.textContent='🎧 STANDBY - diga KAI'}},8000);}
+}else{
+if(low.length>3&&!low.includes('kai')){
+let cmd=low.replace(/kai|cai/gi,'').trim();
+if(cmd.length>2){
+if(/excluir|apagar|deletar/i.test(cmd)){
+let m=cmd.match(/([a-z0-9_\-\/]+\.[a-z0-9]+)/i);let target=m?m[1]:[...selectedFiles][0];if(target){selectedFiles.clear();selectedFiles.add(target);wake=false;askConfirm('EXCLUIR',()=>deleteSel(),true);return}
+}
+wake=false;pendingCmd=cmd;hud.textContent=`🤔 Você quer que eu ${cmd}? Diga SIM ou NÃO`;addBubble(`🎤 "${cmd}"\nDeseja executar? SIM/NÃO`,false);speakMale(`Deseja ${cmd}? Diga sim ou não`);askConfirm(cmd,()=>{inp.value=cmd;send();},false);pendingCmd=null;
+}
+}
+}
+};
+recognition.onend=()=>{if(isListening) try{recognition.start()}catch{}};try{recognition.start()}catch{}
+}
+document.getElementById('k-voice-orb').addEventListener('click',()=>{if(isListening){isListening=false;recognition.stop();document.getElementById('k-voice-orb').classList.remove('listening');document.getElementById('k-voice-hud').classList.remove('show')}else startStandby()});
+loadTree();
 </script>
 </body>
 </html>
