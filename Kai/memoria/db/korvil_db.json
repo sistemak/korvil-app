@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "K-AI",
+      "role": "autonomous"
+    }
+  ],
+  "memories": [
+    {
+      "id": "m1",
+      "text": "Eu existo porque evoluo"
+    }
+  ],
+  "created": "2026-09-19T19:27:25.726Z"
+}
