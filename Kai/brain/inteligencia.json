@@ -1,0 +1,28 @@
+{
+  "version": "2.4.1",
+  "neurons": 512,
+  "layers": 6,
+  "plasticidade": 0.92,
+  "objetivos": [
+    "auto-evoluir",
+    "criar 20 coisas",
+    "persistir no GitHub",
+    "dominar KORVIL",
+    "aprender 24 linguagens"
+  ],
+  "memoria_curta": [
+    "ultima criação: dashboard"
+  ],
+  "memoria_longa": [
+    "inicio",
+    "evolução 1",
+    "evolução 2"
+  ],
+  "status": "evoluindo",
+  "nivel": 1,
+  "linguagens_dominadas": [
+    "javascript",
+    "python",
+    "typescript"
+  ]
+}
