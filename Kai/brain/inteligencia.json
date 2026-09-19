@@ -1,6 +1,6 @@
 {
   "version": "2.4.1",
-  "neurons": 576,
+  "neurons": 832,
   "layers": 6,
   "plasticidade": 0.92,
   "objetivos": [
@@ -19,11 +19,15 @@
     "evolução 2"
   ],
   "status": "evoluindo",
-  "nivel": 2,
+  "nivel": 6,
   "linguagens_dominadas": [
     "javascript",
     "python",
     "typescript",
-    "go"
+    "go",
+    "rust",
+    "java",
+    "csharp",
+    "cpp"
   ]
 }
