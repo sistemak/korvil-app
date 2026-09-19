@@ -1,6 +1,6 @@
 {
   "created": "2026-09-19T19:27:25.726Z",
-  "evolutions": 8,
+  "evolutions": 9,
   "memories": [
     "Sistema iniciado",
     "Conexão com Korvil estabelecida",
@@ -9,9 +9,10 @@
     "evolucao_1789846663004: landing page com dashboard",
     "evolucao_1789846793342: Crie programação de automação automática",
     "evolucao_1789846794866: Crie programação de automação automática",
-    "evolucao_1789846799025: Crie programação de automação automática"
+    "evolucao_1789846799025: Crie programação de automação automática",
+    "evolucao_1789847133282: bot telegram em python + scraper"
   ],
   "status": "online",
   "uptime": "99.9%",
-  "nivel": 12
+  "nivel": 14
 }
