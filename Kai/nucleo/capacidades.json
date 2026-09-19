@@ -1,5 +1,5 @@
 {
-  "nivel": 10,
+  "nivel": 14,
   "capacidades": [
     "criar_site",
     "criar_api",
@@ -24,7 +24,10 @@
     "dominar_c",
     "dashboard",
     "criar_php",
-    "dominar_php"
+    "dominar_php",
+    "site",
+    "criar_ruby",
+    "dominar_ruby"
   ],
   "desbloqueadas": [
     "javascript",
@@ -35,14 +38,16 @@
     "csharp",
     "cpp",
     "c",
-    "php"
+    "php",
+    "ruby"
   ],
   "proxima": "typescript",
-  "ultima_evolucao": 1789846663004,
-  "ultimo_prompt": "landing page com dashboard",
+  "ultima_evolucao": 1789846799025,
+  "ultimo_prompt": "Crie programação de automação automática de auto evolução própria, quero que você se evolua sozinho a partir de agora",
   "linguagens_detectadas": [
-    "html"
+    "go",
+    "lua"
   ],
-  "intent": "dashboard",
-  "total_arquivos": 88
+  "intent": "site",
+  "total_arquivos": 113
 }
