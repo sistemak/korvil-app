@@ -18,11 +18,11 @@
     ]
   },
   "go": {
-    "nivel": 3,
+    "nivel": 6,
     "dominado": true,
     "desbloqueado_em": "2026-09-19T19:31:29.464Z",
     "auto": true,
-    "arquivos": 2
+    "arquivos": 5
   },
   "rust": {
     "nivel": 3,
@@ -69,6 +69,19 @@
     "nivel": 10,
     "dominado": true,
     "desbloqueado_em": "2026-09-19T19:37:44.489Z",
+    "auto": true,
+    "arquivos": 1
+  },
+  "lua": {
+    "nivel": 3,
+    "dominado": false,
+    "arquivos": 3,
+    "aprendido_em": "2026-09-19T19:39:53.346Z"
+  },
+  "ruby": {
+    "nivel": 14,
+    "dominado": true,
+    "desbloqueado_em": "2026-09-19T19:41:00.746Z",
     "auto": true,
     "arquivos": 1
   }
