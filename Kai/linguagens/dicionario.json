@@ -1,0 +1,346 @@
+{
+  "javascript": {
+    "name": "JavaScript",
+    "ext": "js",
+    "keywords": [
+      "javascript",
+      "js",
+      "node",
+      "express",
+      "react",
+      "next.js",
+      "vue"
+    ],
+    "libs": [
+      "express",
+      "jsonwebtoken",
+      "bcryptjs",
+      "react"
+    ],
+    "desc": "Linguagem universal web"
+  },
+  "typescript": {
+    "name": "TypeScript",
+    "ext": "ts",
+    "keywords": [
+      "typescript",
+      " ts ",
+      "tsx"
+    ],
+    "libs": [
+      "express",
+      "@types/node",
+      "zod"
+    ],
+    "desc": "JS tipado"
+  },
+  "python": {
+    "name": "Python",
+    "ext": "py",
+    "keywords": [
+      "python",
+      "fastapi",
+      "django",
+      "flask",
+      "pandas",
+      "python3"
+    ],
+    "libs": [
+      "fastapi",
+      "uvicorn",
+      "pydantic",
+      "requests"
+    ],
+    "desc": "IA, APIs, automação"
+  },
+  "go": {
+    "name": "Go",
+    "ext": "go",
+    "keywords": [
+      "go",
+      "golang",
+      "gin",
+      "fiber"
+    ],
+    "libs": [
+      "gin",
+      "jwt-go"
+    ],
+    "desc": "Backend performático"
+  },
+  "rust": {
+    "name": "Rust",
+    "ext": "rs",
+    "keywords": [
+      "rust",
+      "cargo",
+      "actix",
+      "axum"
+    ],
+    "libs": [
+      "actix-web",
+      "serde",
+      "tokio"
+    ],
+    "desc": "Sistema seguro"
+  },
+  "java": {
+    "name": "Java",
+    "ext": "java",
+    "keywords": [
+      "java",
+      "spring",
+      "spring boot"
+    ],
+    "libs": [
+      "spring-boot",
+      "jjwt"
+    ],
+    "desc": "Enterprise"
+  },
+  "csharp": {
+    "name": "C#",
+    "ext": "cs",
+    "keywords": [
+      "c#",
+      "csharp",
+      "dotnet",
+      ".net"
+    ],
+    "libs": [
+      "ASP.NET",
+      "JWT"
+    ],
+    "desc": "Microsoft stack"
+  },
+  "cpp": {
+    "name": "C++",
+    "ext": "cpp",
+    "keywords": [
+      "c++",
+      "cpp",
+      "cmake"
+    ],
+    "libs": [
+      "std",
+      "boost"
+    ],
+    "desc": "Alta performance"
+  },
+  "c": {
+    "name": "C",
+    "ext": "c",
+    "keywords": [
+      "linguagem c",
+      " c program",
+      "clang"
+    ],
+    "libs": [
+      "stdio"
+    ],
+    "desc": "Sistema baixo nível"
+  },
+  "php": {
+    "name": "PHP",
+    "ext": "php",
+    "keywords": [
+      "php",
+      "laravel",
+      "symfony"
+    ],
+    "libs": [
+      "laravel",
+      "composer"
+    ],
+    "desc": "Web clássico"
+  },
+  "ruby": {
+    "name": "Ruby",
+    "ext": "rb",
+    "keywords": [
+      "ruby",
+      "rails",
+      "sinatra"
+    ],
+    "libs": [
+      "rails",
+      "sinatra",
+      "jwt"
+    ],
+    "desc": "Produtividade"
+  },
+  "swift": {
+    "name": "Swift",
+    "ext": "swift",
+    "keywords": [
+      "swift",
+      "ios",
+      "xcode"
+    ],
+    "libs": [
+      "Vapor",
+      "JWTKit"
+    ],
+    "desc": "iOS"
+  },
+  "kotlin": {
+    "name": "Kotlin",
+    "ext": "kt",
+    "keywords": [
+      "kotlin",
+      "android",
+      "ktor"
+    ],
+    "libs": [
+      "ktor",
+      "jwt"
+    ],
+    "desc": "Android moderno"
+  },
+  "dart": {
+    "name": "Dart",
+    "ext": "dart",
+    "keywords": [
+      "dart",
+      "flutter"
+    ],
+    "libs": [
+      "flutter",
+      "dio"
+    ],
+    "desc": "Multiplataforma"
+  },
+  "elixir": {
+    "name": "Elixir",
+    "ext": "ex",
+    "keywords": [
+      "elixir",
+      "phoenix",
+      "ecto"
+    ],
+    "libs": [
+      "phoenix",
+      "guardian"
+    ],
+    "desc": "Concorrência massiva"
+  },
+  "haskell": {
+    "name": "Haskell",
+    "ext": "hs",
+    "keywords": [
+      "haskell",
+      "ghc",
+      "stack"
+    ],
+    "libs": [
+      "servant",
+      "yesod"
+    ],
+    "desc": "Funcional puro"
+  },
+  "lua": {
+    "name": "Lua",
+    "ext": "lua",
+    "keywords": [
+      "lua",
+      "openresty",
+      "love2d"
+    ],
+    "libs": [
+      "lapis"
+    ],
+    "desc": "Script leve"
+  },
+  "shell": {
+    "name": "Shell",
+    "ext": "sh",
+    "keywords": [
+      "bash",
+      "shell",
+      "zsh",
+      "script sh"
+    ],
+    "libs": [
+      "curl",
+      "jq"
+    ],
+    "desc": "Automação"
+  },
+  "sql": {
+    "name": "SQL",
+    "ext": "sql",
+    "keywords": [
+      "sql",
+      "postgres",
+      "mysql",
+      "database"
+    ],
+    "libs": [
+      "postgres",
+      "mysql"
+    ],
+    "desc": "Banco de dados"
+  },
+  "html": {
+    "name": "HTML",
+    "ext": "html",
+    "keywords": [
+      "html",
+      "landing",
+      "site",
+      "página",
+      "pagina",
+      "web page"
+    ],
+    "libs": [
+      "tailwind"
+    ],
+    "desc": "Marcação"
+  },
+  "css": {
+    "name": "CSS",
+    "ext": "css",
+    "keywords": [
+      "css",
+      "tailwind",
+      "style"
+    ],
+    "libs": [
+      "tailwind"
+    ],
+    "desc": "Estilo"
+  },
+  "json": {
+    "name": "JSON",
+    "ext": "json",
+    "keywords": [
+      "json",
+      "config"
+    ],
+    "libs": [],
+    "desc": "Dados"
+  },
+  "yaml": {
+    "name": "YAML",
+    "ext": "yaml",
+    "keywords": [
+      "yaml",
+      "yml",
+      "docker-compose"
+    ],
+    "libs": [],
+    "desc": "Config"
+  },
+  "markdown": {
+    "name": "Markdown",
+    "ext": "md",
+    "keywords": [
+      "markdown",
+      "md",
+      "readme",
+      "blog"
+    ],
+    "libs": [],
+    "desc": "Documentação"
+  }
+}
