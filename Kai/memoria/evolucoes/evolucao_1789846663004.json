@@ -1,0 +1,21 @@
+{
+  "id": 1789846663004,
+  "prompt": "landing page com dashboard",
+  "linguagens_detectadas": [
+    "html"
+  ],
+  "intent": "dashboard",
+  "nivel": 8,
+  "slug": "landing_page_com_dashboard",
+  "arquivos_gerados": [
+    "K-AI/linguagens/html/projetos/landing_page_com_dashboard_1789846663004/main.html",
+    "K-AI/linguagens/html/projetos/landing_page_com_dashboard_1789846663004/README.md",
+    "K-AI/projetos/landing_page_com_dashboard_1789846663004/index.html",
+    "K-AI/projetos/landing_page_com_dashboard_1789846663004/main.html"
+  ],
+  "timestamp": "2026-09-19T19:37:43.007Z",
+  "hash": "MTc4OTg0NjY2",
+  "real": true,
+  "funcional": true,
+  "dicionario": 24
+}
