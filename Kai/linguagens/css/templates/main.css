@@ -1,0 +1,7 @@
+/* K-AI CSS - Design System Autônomo */
+:root{ --kai-accent:#00ff88; --kai-cyan:#00d4ff; --kai-bg:#050508; --kai-card:#11111b; }
+body{ background:var(--kai-bg); color:#e6ffe9; font-family:'Space Grotesk',sans-serif; }
+.kai-card{ background:linear-gradient(180deg,var(--kai-card),#0a0a0f); border:1px solid rgba(255,255,255,0.08); border-radius:18px; padding:22px; position:relative; }
+.kai-card:before{ content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--kai-accent),transparent); }
+.kai-btn{ background:var(--kai-accent); color:#000; font-family:'JetBrains Mono'; font-weight:700; padding:12px 20px; border-radius:12px; box-shadow:0 0 20px rgba(0,255,136,0.4); }
+.kai-glow{ text-shadow:0 0 12px var(--kai-accent); }
