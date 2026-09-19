@@ -1,6 +1,6 @@
 {
   "version": "2.4.1",
-  "neurons": 960,
+  "neurons": 1024,
   "layers": 6,
   "plasticidade": 0.92,
   "objetivos": [
@@ -19,7 +19,7 @@
     "evolução 2"
   ],
   "status": "evoluindo",
-  "nivel": 10,
+  "nivel": 14,
   "linguagens_dominadas": [
     "javascript",
     "python",
@@ -30,6 +30,7 @@
     "csharp",
     "cpp",
     "c",
-    "php"
+    "php",
+    "ruby"
   ]
 }
