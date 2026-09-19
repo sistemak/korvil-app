@@ -51,5 +51,25 @@
     "desbloqueado_em": "2026-09-19T19:33:34.265Z",
     "auto": true,
     "arquivos": 1
+  },
+  "c": {
+    "nivel": 8,
+    "dominado": true,
+    "desbloqueado_em": "2026-09-19T19:37:39.669Z",
+    "auto": true,
+    "arquivos": 1
+  },
+  "html": {
+    "nivel": 1,
+    "dominado": false,
+    "arquivos": 1,
+    "aprendido_em": "2026-09-19T19:37:43.008Z"
+  },
+  "php": {
+    "nivel": 10,
+    "dominado": true,
+    "desbloqueado_em": "2026-09-19T19:37:44.489Z",
+    "auto": true,
+    "arquivos": 1
   }
 }
