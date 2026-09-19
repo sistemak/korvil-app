@@ -1,0 +1,32 @@
+{
+  "javascript": {
+    "nivel": 10,
+    "dominado": true,
+    "arquivos": 12
+  },
+  "typescript": {
+    "nivel": 7,
+    "dominado": true
+  },
+  "python": {
+    "nivel": 8,
+    "dominado": true,
+    "templates": [
+      "fastapi",
+      "bot",
+      "scraper"
+    ]
+  },
+  "go": {
+    "nivel": 2,
+    "aprendendo": true
+  },
+  "rust": {
+    "nivel": 1,
+    "bloqueado": false
+  },
+  "java": {
+    "nivel": 0,
+    "bloqueado": true
+  }
+}
