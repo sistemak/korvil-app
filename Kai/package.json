@@ -1,0 +1,14 @@
+{
+  "name": "k-ai",
+  "version": "2.4.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "evoluir": "node funcoes/evoluir.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "fastapi": "python",
+    "jsonwebtoken": "^9.0.0"
+  }
+}
