@@ -1,1 +1,69 @@
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>K-AI • Inteligência Autônoma Evolutiva</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050508;color:#e6ffe9;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
+canvas#bg{position:fixed;inset:0;z-index:-1}
+.nav{position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(10,10,15,0.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,136,0.15);z-index:10}
+.logo{display:flex;gap:10px;align-items:center;font-family:'JetBrains Mono';font-weight:700;letter-spacing:2px}
+.logo b{color:#00ff88;text-shadow:0 0 12px #00ff88}
+.hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;padding:120px 8% 60px}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.25);font-family:'JetBrains Mono';font-size:11px;letter-spacing:1px;color:#00ff88;margin-bottom:22px}
+.h1{font-size:clamp(42px,9vw,108px);line-height:0.9;font-weight:700;letter-spacing:-3px}
+.h1 span{background:linear-gradient(90deg,#00ff88,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{max-width:620px;margin:24px 0 32px;font-size:18px;line-height:1.5;color:#9aa0a8}
+.btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn{padding:14px 24px;border-radius:12px;font-weight:700;font-family:'JetBrains Mono';font-size:13px;letter-spacing:0.5px;cursor:pointer;border:1px solid transparent;transition:.2s}
+.btn.primary{background:#00ff88;color:#020208;box-shadow:0 0 30px rgba(0,255,136,0.4)}
+.btn.ghost{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.12);color:#e6ffe9}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;padding:40px 8%}
+.card{padding:22px;border-radius:18px;background:linear-gradient(180deg,rgba(17,17,27,0.9),rgba(10,10,15,0.9));border:1px solid rgba(255,255,255,0.08);position:relative;overflow:hidden}
+.card:before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#00ff88,transparent);opacity:.6}
+.card h3{font-size:16px;margin-bottom:8px;font-family:'JetBrains Mono';color:#00ff88}
+.card p{font-size:13px;color:#9aa0a8;line-height:1.5}
+.footer{padding:40px 8%;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:'JetBrains Mono';font-size:11px;color:#666}
+.cursor{animation:blink 1s infinite}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="nav"><div class="logo"><span>◧</span><b>K-AI</b> OS</div><div style="font-family:'JetBrains Mono';font-size:11px;opacity:.6">v2.4.1 • AUTONOMOUS</div></div>
+<div class="hero">
+<div class="badge"><span style="width:8px;height:8px;border-radius:50%;background:#00ff88;box-shadow:0 0 10px #00ff88;display:inline-block"></span> SISTEMA EVOLUTIVO ONLINE <span class="cursor">_</span></div>
+<h1 class="h1">K-AI<br/><span>INTELIGÊNCIA</span><br/>AUTÔNOMA</h1>
+<p class="sub">Um organismo de código vivo. Ele cria, evolui sua própria memória, reescreve seu cérebro e faz deploy de si mesmo. Você não programa a K-AI. Você inicia.</p>
+<div class="btns">
+<button class="btn primary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">▶ INICIAR EVOLUÇÃO</button>
+<button class="btn ghost">◫ DOCUMENTAÇÃO /brain/</button>
+</div>
+</div>
+<div id="features" class="grid">
+<div class="card"><h3>memoria/ log.json</h3><p>Histórico imutável de cada evolução. Snapshots, diffs e consciência temporal. Nunca esquece.</p></div>
+<div class="card"><h3>brain/ neurons.js</h3><p>Rede neural simbólica em JS puro. 12 camadas, plasticidade dinâmica, auto-reescrita.</p></div>
+<div class="card"><h3>funcoes/ criar.js</h3><p>20 geradores de organismos: componentes, bots, scrapers, jogos, PWA, IA.</p></div>
+<div class="card"><h3>funcoes/ evoluir.js</h3><p>Mutações automáticas que criam novas pastas, arquivos e capacidades sem intervenção humana.</p></div>
+<div class="card"><h3>COMMIT → GitHub</h3><p>Push real via API. Cada mutação é versionada no GitHub como prova de vida.</p></div>
+<div class="card"><h3>DRAG & LIVE</h3><p>Arraste arquivos entre pastas, do OS para o IDE e para fora. Preview em tempo real.</p></div>
+</div>
+<div class="footer"><span>© 2025 KORVIL • K-AI AUTONOMOUS OS</span><span style="color:#00ff88">TOKEN REF: g.hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG</span></div>
+<script>
+const c=document.getElementById('bg'),x=c.getContext('2d');let w,h,pts=[];
+function resize(){w=c.width=innerWidth;h=c.height=innerHeight}resize();addEventListener('resize',resize);
+for(let i=0;i<120;i++)pts.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*0.6,vy:(Math.random()-.5)*0.6,r:Math.random()*1.8+0.3});
+function loop(){
+ x.clearRect(0,0,w,h);
+ x.fillStyle='rgba(0,255,136,0.8)'; x.strokeStyle='rgba(0,212,255,0.08)';
+ for(let p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1; x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fill();
+   for(let q of pts){let dx=p.x-q.x,dy=p.y-q.y,d=Math.hypot(dx,dy);if(d<140){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.globalAlpha=(1-d/140)*0.15;x.stroke();x.globalAlpha=1}}
+ }
+ requestAnimationFrame(loop)
+}loop();
+</script>
+</body>
+</html>
