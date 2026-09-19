@@ -1,0 +1,10 @@
+{
+  "app": "K-AI",
+  "version": "2.4.1",
+  "env": "production",
+  "github": "sistemak/korvil-app",
+  "branch": "main",
+  "autoCommit": true,
+  "dicionario": "24 linguagens",
+  "comando_universal": true
+}
