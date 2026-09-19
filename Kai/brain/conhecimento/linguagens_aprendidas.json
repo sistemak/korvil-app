@@ -1,8 +1,8 @@
 {
   "javascript": {
-    "nivel": 10,
+    "nivel": 11,
     "dominado": true,
-    "arquivos": 12
+    "arquivos": 13
   },
   "typescript": {
     "nivel": 7,
@@ -18,18 +18,38 @@
     ]
   },
   "go": {
-    "nivel": 2,
+    "nivel": 3,
     "dominado": true,
     "desbloqueado_em": "2026-09-19T19:31:29.464Z",
     "auto": true,
-    "arquivos": 1
+    "arquivos": 2
   },
   "rust": {
-    "nivel": 1,
-    "bloqueado": false
+    "nivel": 3,
+    "dominado": true,
+    "desbloqueado_em": "2026-09-19T19:32:28.541Z",
+    "auto": true,
+    "arquivos": 1
   },
   "java": {
-    "nivel": 0,
-    "bloqueado": true
+    "nivel": 4,
+    "dominado": true,
+    "desbloqueado_em": "2026-09-19T19:33:08.376Z",
+    "auto": true,
+    "arquivos": 1
+  },
+  "csharp": {
+    "nivel": 5,
+    "dominado": true,
+    "desbloqueado_em": "2026-09-19T19:33:11.320Z",
+    "auto": true,
+    "arquivos": 1
+  },
+  "cpp": {
+    "nivel": 6,
+    "dominado": true,
+    "desbloqueado_em": "2026-09-19T19:33:34.265Z",
+    "auto": true,
+    "arquivos": 1
   }
 }
