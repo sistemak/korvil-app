@@ -1,0 +1,18 @@
+{
+  "nivel": 1,
+  "capacidades": [
+    "criar_site",
+    "criar_api",
+    "criar_bot",
+    "criar_scraper",
+    "criar_dashboard",
+    "criar_jogo",
+    "evoluir_memoria",
+    "evoluir_inteligencia"
+  ],
+  "desbloqueadas": [
+    "javascript",
+    "python"
+  ],
+  "proxima": "go"
+}
