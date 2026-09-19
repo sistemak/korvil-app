@@ -19,7 +19,10 @@
   },
   "go": {
     "nivel": 2,
-    "aprendendo": true
+    "dominado": true,
+    "desbloqueado_em": "2026-09-19T19:31:29.464Z",
+    "auto": true,
+    "arquivos": 1
   },
   "rust": {
     "nivel": 1,
