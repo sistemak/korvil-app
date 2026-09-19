@@ -1,0 +1,25 @@
+{
+  "id": 1789846424525,
+  "prompt": "crie login JWT em Node.js + React admin",
+  "linguagens_detectadas": [
+    "javascript",
+    "go"
+  ],
+  "intent": "auth",
+  "nivel": 6,
+  "slug": "crie_login_jwt_em_node_js_re",
+  "arquivos_gerados": [
+    "K-AI/linguagens/javascript/projetos/crie_login_jwt_em_node_js_re_1789846424525/main.js",
+    "K-AI/linguagens/javascript/projetos/crie_login_jwt_em_node_js_re_1789846424525/README.md",
+    "K-AI/linguagens/javascript/projetos/crie_login_jwt_em_node_js_re_1789846424525/react_component.jsx",
+    "K-AI/linguagens/go/projetos/crie_login_jwt_em_node_js_re_1789846424525/main.go",
+    "K-AI/linguagens/go/projetos/crie_login_jwt_em_node_js_re_1789846424525/README.md",
+    "K-AI/projetos/crie_login_jwt_em_node_js_re_1789846424525/index.html",
+    "K-AI/projetos/crie_login_jwt_em_node_js_re_1789846424525/main.js"
+  ],
+  "timestamp": "2026-09-19T19:33:44.531Z",
+  "hash": "MTc4OTg0NjQy",
+  "real": true,
+  "funcional": true,
+  "dicionario": 24
+}
