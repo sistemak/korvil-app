@@ -1,5 +1,5 @@
 {
-  "nivel": 6,
+  "nivel": 10,
   "capacidades": [
     "criar_site",
     "criar_api",
@@ -19,7 +19,12 @@
     "dominar_csharp",
     "criar_cpp",
     "dominar_cpp",
-    "auth"
+    "auth",
+    "criar_c",
+    "dominar_c",
+    "dashboard",
+    "criar_php",
+    "dominar_php"
   ],
   "desbloqueadas": [
     "javascript",
@@ -28,15 +33,16 @@
     "rust",
     "java",
     "csharp",
-    "cpp"
+    "cpp",
+    "c",
+    "php"
   ],
   "proxima": "typescript",
-  "ultima_evolucao": 1789846424525,
-  "ultimo_prompt": "crie login JWT em Node.js + React admin",
+  "ultima_evolucao": 1789846663004,
+  "ultimo_prompt": "landing page com dashboard",
   "linguagens_detectadas": [
-    "javascript",
-    "go"
+    "html"
   ],
-  "intent": "auth",
-  "total_arquivos": 79
+  "intent": "dashboard",
+  "total_arquivos": 88
 }
