@@ -1,5 +1,5 @@
 {
-  "nivel": 1,
+  "nivel": 2,
   "capacidades": [
     "criar_site",
     "criar_api",
@@ -8,11 +8,14 @@
     "criar_dashboard",
     "criar_jogo",
     "evoluir_memoria",
-    "evoluir_inteligencia"
+    "evoluir_inteligencia",
+    "criar_go",
+    "dominar_go"
   ],
   "desbloqueadas": [
     "javascript",
-    "python"
+    "python",
+    "go"
   ],
-  "proxima": "go"
+  "proxima": "typescript"
 }
