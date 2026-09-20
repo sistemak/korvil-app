@@ -1,29 +1,29 @@
-// src/github/commit-all.js - commit REAL com base_tree merge (nunca apaga)
-const BASE_PATH='korvil/sok/k-or/k-onversa/';
+// src/github/commit-all.js - CODIGO MESTRE LEVE
+// Usa GH_TOKEN de process.env e nunca apaga nada (base_tree)
+import fs from 'fs';
+
 const REPO='sistemak/korvil-app';
-async function commitAll(token){
-  if(!token) throw new Error('GH_TOKEN required');
-  const headers={ Authorization: 'token '+token, Accept:'application/vnd.github.v3+json' };
-  const log = console.log;
-  log('1) GET ref main');
-  const refRes = await fetch('https://api.github.com/repos/'+REPO+'/git/ref/heads/main',{headers});
-  if(!refRes.ok) throw new Error('ref failed '+await refRes.text());
-  const ref = await refRes.json();
-  const mainSha = ref.object.sha;
-  log('mainSha',mainSha);
-  log('2) GET commit '+mainSha);
-  const commitRes = await fetch('https://api.github.com/repos/'+REPO+'/git/commits/'+mainSha,{headers});
-  const commitData = await commitRes.json();
-  const baseTreeSha = commitData.tree.sha;
-  log('baseTreeSha',baseTreeSha);
-  // blobs seriam criados aqui via POST /git/blobs com base64
-  // tree com base_tree para preservar tudo
-  // commit e patch ref
-  log('3) blobs + tree + commit + patch - usando base_tree para NUNCA apagar');
-  return { mainSha, baseTreeSha, basePath:BASE_PATH, note:'fluxo real implementado no artefato React - este arquivo é backup' };
+const BASE_PATH='korvil/sok/k-or/k-onversa';
+const MSG='feat: atualiza k-onversa completo k-or - código mestre';
+
+async function commitAll(files){
+  const token=process.env.GH_TOKEN;
+  if(!token) throw new Error('GH_TOKEN ausente');
+  const gh=(u,o={})=>fetch(`https://api.github.com${u}`,{...o, headers:{ Authorization:`Bearer ${token}`, Accept:'application/vnd.github+json', 'Content-Type':'application/json', ...(o.headers||{})}});
+  const ref=await gh(`/repos/${REPO}/git/ref/heads/main`).then(r=>r.json());
+  const latest=ref.object.sha;
+  const baseTree=await gh(`/repos/${REPO}/git/commits/${latest}`).then(r=>r.json()).then(j=>j.tree.sha);
+  const entries=[];
+  for(const f of files){
+    const b64=Buffer.from(f.content,'utf8').toString('base64');
+    const blob=await gh(`/repos/${REPO}/git/blobs`,{method:'POST', body:JSON.stringify({content:b64, encoding:'base64'})}).then(r=>r.json());
+    entries.push({ path:`${BASE_PATH}/${f.path}`, mode:'100644', type:'blob', sha:blob.sha });
+    console.log('blob ok', f.path, blob.sha.slice(0,7));
+  }
+  const newTree=await gh(`/repos/${REPO}/git/trees`,{method:'POST', body:JSON.stringify({base_tree:baseTree, tree:entries})}).then(r=>r.json());
+  const newCommit=await gh(`/repos/${REPO}/git/commits`,{method:'POST', body:JSON.stringify({message:MSG, tree:newTree.sha, parents:[latest]})}).then(r=>r.json());
+  await gh(`/repos/${REPO}/git/refs/heads/main`,{method:'PATCH', body:JSON.stringify({sha:newCommit.sha})});
+  console.log('COMMIT REAL OK', newCommit.sha, `https://github.com/${REPO}/commit/${newCommit.sha}`);
+  return newCommit;
 }
-module.exports={commitAll};
-if(require.main===module){
-  const t=process.env.GH_TOKEN||process.argv[2];
-  commitAll(t).then(r=>console.log('OK',r)).catch(e=>console.error(e));
-}
+export { commitAll };
