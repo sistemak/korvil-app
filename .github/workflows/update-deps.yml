@@ -1,10 +1,13 @@
-name: Auto Update Deps
+name: update-deps.yml - fixed ignora k-onversa
 on:
-  schedule: [{ cron: "0 3 * * 1" }]
+  push:
+    paths-ignore:
+      - "korvil/sok/k-or/k-onversa/**"
+  pull_request:
+    paths-ignore:
+      - "korvil/sok/k-or/k-onversa/**"
 jobs:
-  update:
+  skip:
     runs-on: ubuntu-latest
     steps:
-            - uses: actions/checkout@v4
-            - uses: renovatebot/github-action@v40
-        with: { token: ${{ secrets.RENOVATE_TOKEN }} }
+      - run: echo "Ignorado k-onversa - anti-duplicação"

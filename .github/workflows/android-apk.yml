@@ -1,0 +1,14 @@
+name: Build APK Real 1000%
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+        working-directory: korvil/sok/k-or/k-onversa
+      - run: npm start &
+        working-directory: korvil/sok/k-or/k-onversa

@@ -1,1 +1,17 @@
-{"name":"k-onversa","version":"11.0.0","type":"module"}
+{
+  "name": "k-onversa",
+  "version": "14.0.0",
+  "description": "K-Onversa 1000% perfeito - Status real WhatsApp + Auto-post Instagram Facebook TikTok YouTube + Automação inteligente + Google rápido - sistemak/korvil-app",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

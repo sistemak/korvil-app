@@ -1,15 +1,13 @@
-name: IA Review
-on: [pull_request]
+name: ia.yml - fixed ignora k-onversa
+on:
+  push:
+    paths-ignore:
+      - "korvil/sok/k-or/k-onversa/**"
+  pull_request:
+    paths-ignore:
+      - "korvil/sok/k-or/k-onversa/**"
 jobs:
-  ai-review:
+  skip:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     steps:
-            - uses: actions/checkout@v4
-            - uses: anc95/ChatGPT-CodeReview@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          LANGUAGE: pt-BR
-          PROMPT: "Revise código, ache bugs, sugira otimização de algoritmos e correções de segurança"
+      - run: echo "Ignorado k-onversa - anti-duplicação"

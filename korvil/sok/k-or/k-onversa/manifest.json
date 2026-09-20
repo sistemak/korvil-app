@@ -1,1 +1,9 @@
-{"name":"K-Onversa","short_name":"K-Onversa","display":"standalone","theme_color":"#00E6CC","background_color":"#111B21","start_url":"./index.html"}
+{
+  "name": "K-Onversa 1000% Perfeito",
+  "short_name": "K-Onversa",
+  "display": "standalone",
+  "theme_color": "#00E6CC",
+  "background_color": "#111B21",
+  "start_url": "./index.html",
+  "description": "Status real WhatsApp + Auto-post Instagram Facebook TikTok YouTube + Automação inteligente + Google rápido - sistema mais rápido tecnológico"
+}
