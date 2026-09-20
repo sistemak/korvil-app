@@ -1,0 +1,22 @@
+{
+  "name": "k-onversa",
+  "version": "1.0.0",
+  "description": "K-ONVERSA final - caminho k-or/k-onversa com commit real",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "commit": "node src/github/commit-all.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0"
+  },
+  "path": "korvil/sok/k-or/k-onversa/",
+  "theme": {
+    "primary": "#00E6CC",
+    "whatsapp_clone": true,
+    "sidebar": "30%",
+    "kai_pulse": true
+  }
+}

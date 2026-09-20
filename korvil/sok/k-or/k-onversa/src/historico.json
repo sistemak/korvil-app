@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "data": "2026-09-20T11:27:51.208Z",
+    "acao": "criacao",
+    "caminho": "korvil/sok/k-or/k-onversa/",
+    "status": "pendente commit real",
+    "arquivos": [
+      "index.html",
+      "server.js",
+      "manifest.json",
+      "sw.js",
+      "package.json",
+      "public/style.css",
+      "public/app.js",
+      "src/historico.json",
+      "src/github/commit-all.js"
+    ]
+  }
+]

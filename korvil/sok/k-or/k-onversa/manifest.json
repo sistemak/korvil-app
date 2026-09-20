@@ -1,0 +1,16 @@
+{
+  "name": "K-ONVERSA",
+  "short_name": "K-ONVERSA",
+  "description": "WhatsApp clone turquesa com commit real para sistemak/korvil-app",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#efeae2",
+  "theme_color": "#00E6CC",
+  "icons": [
+    {
+      "src": "../../../k-ai/assets/logokai/logokai.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
