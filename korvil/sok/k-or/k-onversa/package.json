@@ -1,18 +1,1 @@
-{
-  "name": "k-onversa",
-  "type": "module",
-  "version": "1.0.0-mestre",
-  "description": "K-Onversa - WhatsApp clone cyan #00E6CC - codigo mestre leve",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "socket.io": "^4.7.2",
-    "cors": "^2.8.5",
-    "web-push": "^3.6.7",
-    "dotenv": "^16.3.1"
-  }
-}
+{"name":"k-onversa","type":"module"}

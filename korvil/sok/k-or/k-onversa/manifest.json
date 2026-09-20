@@ -1,14 +1,1 @@
-{
-  "name": "K-Onversa - K-AI",
-  "short_name": "K-Onversa",
-  "description": "WhatsApp clone cyan #00E6CC com K-AI 49px pulsante",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#111b21",
-  "theme_color": "#00E6CC",
-  "orientation": "portrait",
-  "icons": [
-    { "src": "../../../k-ai/assets/logokai/logokai.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "../../../k-ai/assets/logokai/logokai.png", "sizes": "512x512", "type": "image/png" }
-  ]
-}
+{"name":"K-Onversa","short_name":"K-Onversa","display":"standalone","theme_color":"#00E6CC","background_color":"#111B21","start_url":"./index.html"}
