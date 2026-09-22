@@ -43,18 +43,12 @@ h1{text-align:center;font-size:18px;font-weight:900;color:var(--c);margin:0 0 16
 .etapa.num{font-weight:900;font-size:12px;display:block;}
 .ativo{color:var(--c);}
 .sub{font-size:11px;color:var(--c);font-weight:700;margin:8px 0 6px;}
-.check-group{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;}
-.check-group input{width:18px;height:18px;}
 </style>
 </head>
 <body>
 <div id="tela1">
   <h1>K-TP Treinamento Personalizado | Projeto TRANSFORMAÇÃO</h1>
-  <div class="passos">
-    <div class="etapa ativo"><span class="num">1</span>ANAMNESE</div>
-    <div class="etapa"><span class="num">2</span>PLANOS</div>
-    <div class="etapa"><span class="num">3</span>DADOS</div>
-  </div>
+  <div class="passos"><div class="etapa ativo"><span class="num">1</span>ANAMNESE</div><div class="etapa"><span class="num">2</span>PLANOS</div><div class="etapa"><span class="num">3</span>DADOS</div></div>
   <div class="card">
     <div style="text-align:center;font-size:15px;font-weight:900;color:var(--c);margin-bottom:12px;">K-TP PROJETO TRANSFORMAÇÃO</div>
     <div style="font-size:12px;color:var(--c);background:rgba(0,245,255,.1);border:1.5px solid var(--c);padding:10px;border-radius:8px;margin-bottom:12px;font-weight:700;text-align:center;">Preencha todos os dados. Assim o profissional consegue planejar os protocolos para seu projeto.</div>
@@ -84,7 +78,6 @@ h1{text-align:center;font-size:18px;font-weight:900;color:var(--c);margin:0 0 16
     <div class="input-group"><label>8. Está fazendo ALGUM TRATAMENTO fisico ou psicológico? *</label><textarea id="q8" rows="2"></textarea></div>
     <div class="input-group"><label>9. Está fazendo USO DE MEDICAMENTOS? Quais? *</label><textarea id="q9" rows="2"></textarea></div>
     <button class="btn" onclick="irParaPlanos()">CONTINUAR</button>
-    <button class="btn voltar" onclick="window.location.href='index.html'">Voltar</button>
   </div>
 </div>
 <div id="tela2" class="oculto">
@@ -100,7 +93,6 @@ h1{text-align:center;font-size:18px;font-weight:900;color:var(--c);margin:0 0 16
     <div class="plano" onclick="selPlano(this)" data-nome="Presencial 3x" data-valor="100" data-mat="50" data-tipo="mensal_pres" data-freq="3"><div class="topo"><div class="nome">PLANO PRESENCIAL 3x SEMANA</div><div class="valor">R$100,00/mês</div></div><div class="info">Matrícula: R$50,00</div></div>
     <div class="plano" onclick="selPlano(this)" data-nome="Presencial 4x" data-valor="130" data-mat="50" data-tipo="mensal_pres" data-freq="4"><div class="topo"><div class="nome">PLANO PRESENCIAL 4x SEMANA</div><div class="valor">R$130,00/mês</div></div><div class="info">Matrícula: R$50,00</div></div>
     <div class="plano" onclick="selPlano(this)" data-nome="Presencial 5x" data-valor="150" data-mat="50" data-tipo="mensal_pres" data-freq="5"><div class="topo"><div class="nome">PLANO PRESENCIAL 5x SEMANA</div><div class="valor">R$150,00/mês</div></div><div class="info">Matrícula: R$50,00</div></div>
-    <div style="font-size:10px;color:var(--text2);margin-top:8px;">*Matrícula R$50,00 obrigatória para novos. Válida até Dezembro.</div>
   </div>
   <div class="card"><div class="titulo">2. ESCOLHA DIAS E HORÁRIO</div><div class="sub">DIAS: SEG À SEX</div><div class="grid-5" id="diasGrid"><div class="dia" data-dia="Segunda">SEG</div><div class="dia" data-dia="Terça">TER</div><div class="dia" data-dia="Quarta">QUA</div><div class="dia" data-dia="Quinta">QUI</div><div class="dia" data-dia="Sexta">SEX</div></div><div id="avisoDias" class="aviso">Selecione um plano primeiro</div><div class="sub">HORÁRIO FIXO: 06h às 10h | 16h às 05h</div><div class="grid-4" id="horasGrid"></div></div>
   <button class="btn" onclick="irParaDados()">CONTINUAR</button>
@@ -171,10 +163,7 @@ function calcularIdade(){let nasc = document.getElementById('nasc').value; if(!n
 function mascaraCPF(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2"); }
 function mascaraWhats(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{2})(\d)/,"($1) $2").replace(/(\d{5})(\d)/,"$1-$2"); }
 function mascaraCEP(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{5})(\d)/,"$1-$2"); }
-async function buscarCEP(cep){
-  cep = cep.replace(/\D/g,''); if(cep.length!== 8) return;
-  try{ let res = await fetch(`https://viacep.com.br/ws/${cep}/json/`); let data = await res.json(); if(!data.erro){ document.getElementById('rua').value = data.logradouro; document.getElementById('bairro').value = data.bairro; document.getElementById('cidade').value = data.localidade; } }catch(e){}
-}
+async function buscarCEP(cep){ cep = cep.replace(/\D/g,''); if(cep.length!== 8) return; try{ let res = await fetch(`https://viacep.com.br/ws/${cep}/json/`); let data = await res.json(); if(!data.erro){ document.getElementById('rua').value = data.logradouro; document.getElementById('bairro').value = data.bairro; document.getElementById('cidade').value = data.localidade; } }catch(e){} }
 async function enviarWhatsApp(){
   let nome = document.getElementById('nome').value;
   if(nome==''){alert('Preencha o nome');return;}
@@ -183,105 +172,30 @@ async function enviarWhatsApp(){
   if(document.getElementById('cep').value==''){alert('Preencha o CEP');return;}
   if(document.getElementById('numero').value==''){alert('Preencha o Número');return;}
   let gh_token = localStorage.getItem('GH_TOKEN');
-  if(!gh_token){ gh_token = prompt('Cole seu GH_TOKEN com permissao repo e workflow'); if(!gh_token) return; localStorage.setItem('GH_TOKEN', gh_token); }
+  if(!gh_token){ gh_token = prompt('Cole seu GH_TOKEN com repo + workflow'); if(!gh_token) return; localStorage.setItem('GH_TOKEN', gh_token); }
   let total = parseInt(plano.valor)+parseInt(plano.mat);
   let tipo_plano = `${plano.freq == 1? "Aula Avulsa" : "Mensal"} ${plano.tipo.includes('pres')? "Presencial" : "Online"} ${plano.freq}x`;
   let hoje = new Date().toLocaleDateString('pt-BR');
   let tipoReal = plano.tipo.includes('pres')? 'presencial' : 'online';
   let primeiroNomeReal = nome.split(' ')[0].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  let dadosReais = {
-    nome_completo: nome,
-    cpf: document.getElementById('cpf').value,
-    nascimento: document.getElementById('nasc').value,
-    idade: document.getElementById('idade').value,
-    genero: document.getElementById('publico').value,
-    whatsapp: document.getElementById('whats').value,
-    email: document.getElementById('email').value,
-    cep: document.getElementById('cep').value,
-    rua: document.getElementById('rua').value,
-    numero: document.getElementById('numero').value,
-    bairro: document.getElementById('bairro').value,
-    cidade: document.getElementById('cidade').value,
-    objetivos: document.getElementById('objetivos').value,
-    nivelAtividade: document.getElementById('nivelAtividade').value,
-    q1: document.getElementById('q1').value,
-    q2: document.getElementById('q2').value,
-    q3: document.getElementById('q3').value,
-    q4: document.getElementById('q4').value,
-    q5: document.getElementById('q5').value,
-    q6: document.getElementById('q6').value,
-    q7: document.getElementById('q7').value,
-    q8: document.getElementById('q8').value,
-    q9: document.getElementById('q9').value,
-    plano: plano.nome,
-    valor: plano.valor,
-    matricula: plano.mat,
-    freq: plano.freq,
-    dias: dias,
-    hora: hora,
-    tipo: tipoReal,
-    data_inscricao: hoje,
-    status: 'ATIVO',
-    total: total
-  };
+  let dadosReais = { nome_completo: nome, cpf: document.getElementById('cpf').value, nascimento: document.getElementById('nasc').value, idade: document.getElementById('idade').value, genero: document.getElementById('publico').value, whatsapp: document.getElementById('whats').value, email: document.getElementById('email').value, cep: document.getElementById('cep').value, rua: document.getElementById('rua').value, numero: document.getElementById('numero').value, bairro: document.getElementById('bairro').value, cidade: document.getElementById('cidade').value, objetivos: document.getElementById('objetivos').value, nivelAtividade: document.getElementById('nivelAtividade').value, q1: document.getElementById('q1').value, q2: document.getElementById('q2').value, q3: document.getElementById('q3').value, q4: document.getElementById('q4').value, q5: document.getElementById('q5').value, q6: document.getElementById('q6').value, q7: document.getElementById('q7').value, q8: document.getElementById('q8').value, q9: document.getElementById('q9').value, plano: plano.nome, valor: plano.valor, matricula: plano.mat, freq: plano.freq, dias: dias, hora: hora, tipo: tipoReal, data_inscricao: hoje, status: 'ATIVO', total: total };
   let dadosJsonStr = JSON.stringify(dadosReais, null, 2);
   let conteudoBase64 = btoa(unescape(encodeURIComponent(dadosJsonStr)));
   let basePath = `korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/${tipoReal}`;
   let ultimo = 0;
   try{
-    let res = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}`, { headers: { Authorization: `Bearer ${gh_token}`, Accept: 'application/vnd.github.v3+json' } });
-    if(res.status===401 || res.status===403){ localStorage.removeItem('GH_TOKEN'); alert('Token invalido ou expirado'); return; }
-    if(res.ok){
-      let arquivos = await res.json();
-      for(let f of arquivos){
-        let m = f.name.match(/^(\d+)-/); if(m) ultimo = Math.max(ultimo, parseInt(m[1]));
-        if(f.type==='dir' && /^\d+$/.test(f.name)){
-          ultimo = Math.max(ultimo, parseInt(f.name));
-          let res2 = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}/${f.name}`, { headers: { Authorization: `Bearer ${gh_token}`, Accept: 'application/vnd.github.v3+json' } });
-          if(res2.ok){ let sub = await res2.json(); sub.forEach(sf=>{ let mm=sf.name.match(/^(\d+)-/); if(mm) ultimo=Math.max(ultimo, parseInt(mm[1])); }); }
-        }
-      }
-    }
+    let res = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}`, { headers: { Authorization: `Bearer ${gh_token}` } });
+    if(res.ok){ let arquivos = await res.json(); arquivos.forEach(f=>{ let m=f.name.match(/^(\d+)-/); if(m) ultimo=Math.max(ultimo,parseInt(m[1])); if(f.type==='dir'&&/^\d+$/.test(f.name)) ultimo=Math.max(ultimo,parseInt(f.name)); }); }
   }catch(e){}
   let prox = ultimo + 1;
   let nomeArq = `${prox}-${primeiroNomeReal}${prox}.json`;
   try{
-    await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}/${nomeArq}`, {
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${gh_token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: `feat: nova inscricao ${tipoReal} ${nomeArq}`, content: conteudoBase64 })
-    });
-    await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}/${prox}/${nomeArq}`, {
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${gh_token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: `feat: ${tipoReal}/${prox}/${nomeArq}`, content: conteudoBase64 })
-    });
-    await fetch(`https://api.github.com/repos/sistemak/korvil-app/actions/workflows/inscricao-do-projeto.yml/dispatches`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${gh_token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ref: 'main', inputs: { dados_json: dadosJsonStr, primeiro_nome: primeiroNomeReal, tipo: tipoReal } })
-    });
-  }catch(e){}
-  let msg = `*🚨 NOVA INSCRIÇÃO K-TP PROJETO TRANSFORMAÇÃO 🚨*\n\n` +
-            `*==================================*\n*1. DADOS DO PLANO*\n*==================================*\n` +
-            `*Modalidade:* ${tipoReal.toUpperCase()}\n*Tipo de Plano:* ${tipo_plano}\n*Dias:* ${dias.join(', ')}\n*Horário:* ${hora}\n*Frequência:* ${plano.freq}x na semana\n*Valor Mensal:* R$${plano.valor},00\n*Matrícula Paga:* R$${plano.mat},00 - ${hoje}\n*Total 1º Pagamento:* R$${total},00\n*Arquivo Criado:* ${nomeArq}\n\n` +
-            `*==================================*\n*2. DADOS PESSOAIS*\n*==================================*\n` +
-            `*Nome:* ${nome}\n*CPF:* ${document.getElementById('cpf').value}\n*Data Nascimento:* ${document.getElementById('nasc').value.split('-').reverse().join('/')}\n*Idade:* ${document.getElementById('idade').value}\n*Gênero:* ${document.getElementById('publico').value}\n*WhatsApp:* ${document.getElementById('whats').value}\n*Email:* ${document.getElementById('email').value}\n\n` +
-            `*==================================*\n*3. ENDEREÇO*\n*==================================*\n` +
-            `*CEP:* ${document.getElementById('cep').value}\n*Rua:* ${document.getElementById('rua').value}\n*Número:* ${document.getElementById('numero').value}\n*Bairro:* ${document.getElementById('bairro').value}\n*Cidade:* ${document.getElementById('cidade').value}\n\n` +
-            `*==================================*\n*4. ANAMNESE - OBJETIVOS*\n*==================================*\n` +
-            `*Objetivos em Prioridade:* ${document.getElementById('objetivos').value}\n*Nível de Atividade:* ${document.getElementById('nivelAtividade').value}\n\n` +
-            `*==================================*\n*5. ANAMNESE - HISTÓRICO*\n*==================================*\n` +
-            `*Q1. Já praticou atividade física antes?* ${document.getElementById('q1').value}\n` +
-            `*Q2. Como descreve sua ALIMENTAÇÃO atual?* ${document.getElementById('q2').value}\n` +
-            `*Q3. Quantas horas DORME por noite?* ${document.getElementById('q3').value}\n` +
-            `*Q4. Possui RESTRIÇÃO alimentar?* ${document.getElementById('q4').value}\n` +
-            `*Q5. Qual parte do corpo quer MELHORAR mais?* ${document.getElementById('q5').value}\n` +
-            `*Q6. Possui DEFICIENCIA ou LIMITAÇÃO física?* ${document.getElementById('q6').value}\n` +
-            `*Q7. Está passando ou JÁ TEVE acompanhamento PSICOLÓGICO?* ${document.getElementById('q7').value}\n` +
-            `*Q8. Está fazendo ALGUM TRATAMENTO físico ou psicológico?* ${document.getElementById('q8').value}\n` +
-            `*Q9. Está fazendo USO DE MEDICAMENTOS? Quais?* ${document.getElementById('q9').value}\n\n` +
-            `*==================================*\n*STATUS: ATIVO*\n*==================================*`;
+    await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}/${nomeArq}`, { method: 'PUT', headers: { Authorization: `Bearer ${gh_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `feat: ${tipoReal} ${nomeArq}`, content: conteudoBase64 }) });
+    await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}/${prox}/${nomeArq}`, { method: 'PUT', headers: { Authorization: `Bearer ${gh_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `feat: ${tipoReal}/${prox}/${nomeArq}`, content: conteudoBase64 }) });
+    await fetch(`https://api.github.com/repos/sistemak/korvil-app/actions/workflows/inscricao-do-projeto.yml/dispatches`, { method: 'POST', headers: { Authorization: `Bearer ${gh_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ ref: 'main', inputs: { dados_json: dadosJsonStr, primeiro_nome: primeiroNomeReal, tipo: tipoReal } }) });
+    alert(`✅ CRIADO NO REPO: ${basePath}/${nomeArq} e ${basePath}/${prox}/${nomeArq}`);
+  }catch(e){ alert('ERRO: '+e.message); return; }
+  let msg = `*🚨 NOVA INSCRIÇÃO K-TP PROJETO TRANSFORMAÇÃO 🚨*\nModalidade: ${tipoReal.toUpperCase()}\nTipo: ${tipo_plano}\nDias: ${dias.join(', ')}\nHorário: ${hora}\nArquivo: ${nomeArq}\nNome: ${nome}\nCPF: ${document.getElementById('cpf').value}\nWhatsApp: ${document.getElementById('whats').value}`;
   window.open(`https://wa.me/5513997690898?text=${encodeURIComponent(msg)}`, '_blank');
 }
 </script>
