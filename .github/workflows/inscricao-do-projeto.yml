@@ -1,0 +1,49 @@
+name: KTP - Inscricao do Projeto
+
+on:
+  workflow_dispatch:
+    inputs:
+      dados_json:
+        description: 'JSON completo dados reais preenchidos telas 1 2 3'
+        required: true
+        type: string
+      primeiro_nome:
+        description: 'primeiro nome real normalizado'
+        required: true
+        type: string
+      tipo:
+        description: 'presencial ou online'
+        required: true
+        type: string
+
+jobs:
+  salvar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repositorio original
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Gerar arquivos JSON reais com dados reais
+        run: node korvil/sections/ktp/projetotransformacao/inscricao-do-projeto/gerar.js
+        env:
+          DADOS: ${{ inputs.dados_json }}
+          PNOME: ${{ inputs.primeiro_nome }}
+          TIPO: ${{ inputs.tipo }}
+
+      - name: Commit e Push automatico real direto no original
+        run: |
+          git config user.name "KTP Bot"
+          git config user.email "bot@korvil.com"
+          git add korvil/sections/ktp/projetotransformacao/projetos/
+          git commit -m "feat: nova inscricao ${{ inputs.tipo }} ${{ inputs.primeiro_nome }} - ${{ github.run_number }}"
+          git push
