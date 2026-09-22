@@ -1,0 +1,115 @@
+name: GERAR ALUNO K-TP 2026 - V5 FINAL
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'primeiro_nome / slug ex: mag1'
+        required: true
+        type: string
+      tipo:
+        description: 'presencial ou online'
+        required: true
+        default: 'presencial'
+        type: choice
+        options: [presencial, online]
+      nome_completo:
+        description: 'Nome completo'
+        required: true
+        type: string
+      dados_json:
+        description: 'Conteudo do 42-slug.json'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: LIMPEZA 42-45 SAFETY - DELETE PASTA INTEIRA
+        run: |
+          echo ">> Limpando 42-45 presencial e online..."
+          rm -rf korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/42-*
+          rm -rf korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/43-*
+          rm -rf korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/44-*
+          rm -rf korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/45-*
+          rm -rf korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/online/42-*
+          rm -rf korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/online/43-*
+          rm -rf korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/online/44-*
+          rm -rf korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/online/45-*
+          echo ">> Limpeza concluida"
+
+      - name: VALIDAR E CRIAR PASTA MAE MODELO 01-mag01
+        env:
+          SLUG_INPUT: ${{ inputs.slug }}
+          TIPO_INPUT: ${{ inputs.tipo }}
+          NOME_INPUT: ${{ inputs.nome_completo }}
+          JSON_INPUT: ${{ inputs.dados_json }}
+        run: |
+          set -e
+          SLUG=$(echo "$SLUG_INPUT" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9')
+          if [ -z "$SLUG" ]; then echo "SLUG invalido"; exit 1; fi
+          TIPO="$TIPO_INPUT"
+          BASE="korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/$TIPO"
+
+          # Descobrir ultimo numero <42
+          ULTIMO=$(ls -1 "$BASE" 2>/dev/null | grep -E "^[0-9]{2}-" | cut -d'-' -f1 | sort -n | awk '$1 < 42' | tail -n1)
+          if [ -z "$ULTIMO" ]; then ULTIMO=0; fi
+          PROX=$((10#$ULTIMO + 1))
+          if [ "$PROX" -lt 42 ]; then PROX=42; fi
+          PAD=$(printf "%02d" $PROX)
+          PASTA="$PAD-$SLUG"
+          LOCAL="$BASE/$PASTA"
+
+          # Anti-duplicata
+          if [ -d "$LOCAL" ]; then echo "PASTA $PASTA ja existe"; exit 1; fi
+
+          echo ">> Criando $LOCAL"
+          mkdir -p "$LOCAL/assets/gifs"
+          mkdir -p "$LOCAL/registros"
+
+          # 1) PASTA.json - tudo dentro da mae
+          echo "$JSON_INPUT" > "$LOCAL/$PASTA.json"
+
+          # 2) assets/index.html
+          echo "nada ainda" > "$LOCAL/assets/index.html"
+
+          # 3) assets/gifs/index.html
+          echo "nada ainda" > "$LOCAL/assets/gifs/index.html"
+
+          # 4) cutting.mp4 placeholder - copia template se existir
+          if [ -f "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/01-mag01/assets/gifs/cutting.mp4" ]; then
+            cp "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/01-mag01/assets/gifs/cutting.mp4" "$LOCAL/assets/gifs/cutting.mp4"
+          else
+            touch "$LOCAL/assets/gifs/cutting.mp4"
+          fi
+
+          # 5) registros/pesos.html modelo vazio
+          cat > "$LOCAL/registros/pesos.html" <<EOF
+          <!DOCTYPE html>
+          <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>K-TP 2026 - $PASTA</title>
+          <style>body{font-family:Arial;background:#0a0a0a;color:#fff;padding:20px}.card{display:inline-block;background:#111;border:1px solid #222;padding:15px;margin:5px;border-radius:8px;min-width:160px}</style>
+          </head><body>
+          <h1>K-TP PROJETO TRANSFORMACAO 11o ANO - 2026</h1>
+          <h2>$PASTA - $NOME_INPUT | $TIPO</h2>
+          <div><div class="card">Semanas: 0</div><div class="card">Peso: -- kg</div></div>
+          <p>Nenhum peso registrado ainda</p><p>Aguardando primeiro registro</p>
+          <script>const pesos=[];const totalRegistros=0;</script>
+          </body></html>
+          EOF
+
+          echo ">> Estrutura criada:"
+          find "$LOCAL" -type f
+
+      - name: Commit & Push
+        run: |
+          git config user.name "korvil-bot"
+          git config user.email "bot@korvil.com"
+          git add -A
+          git commit -m "feat: cria pasta mae modelo 01-mag01 + limpa 42-45" || echo "nada para commit"
+          git push
