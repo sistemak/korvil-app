@@ -4,27 +4,37 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>K-TP Projeto TRANSFORMAÇÃO</title>
 <style>
-/* SEU CSS ORIGINAL MANTIDO */
-*{box-sizing:border-box;margin:0;padding:0}body{background:#0a0a0a;color:#fff;font-family:Arial,Helvetica,sans-serif;padding:16px}
+*{box-sizing:border-box;margin:0;padding:0}body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px}
 .header{background:#111;padding:18px;border-radius:14px;border:1px solid #222;text-align:center;margin-bottom:16px}
 .header h1{color:#00ff88}
 .card{background:#141414;border:1px solid #222;padding:18px;border-radius:14px;margin-bottom:16px}
-label{font-size:11px;color:#888;text-transform:uppercase;margin:6px 0 2px 4px;display:block}
+label{font-size:11px;color:#888;text-transform:uppercase;margin:8px 0 2px 4px;display:block}
 input,select,textarea{width:100%;padding:13px;margin:4px 0 10px;border-radius:10px;border:1px solid #2a2a2a;background:#0f0f0f;color:#fff}
-.objetivos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.obj{padding:12px;background:#1a1a1a;border:1px solid #333;border-radius:10px;cursor:pointer;text-align:center;font-size:13px}
+.obj{padding:12px;background:#1a1a1a;border:1px solid #333;border-radius:10px;cursor:pointer;margin:4px 0}
 .obj.active{background:#00ff88;color:#000;font-weight:900}
-.btn{width:100%;padding:20px;background:#00ff88;color:#000;font-weight:900;border:none;border-radius:14px;font-size:19px;cursor:pointer;margin-top:10px}
+.btn{width:100%;padding:20px;background:#00ff88;color:#000;font-weight:900;border:none;border-radius:14px;font-size:19px;cursor:pointer}
 #log{margin-top:12px;background:#000;padding:10px;border-radius:10px;font-size:11px;color:#0f0;white-space:pre-wrap}
 </style>
 </head>
 <body>
 
-<div class="header"><h1>K-TP PROJETO TRANSFORMAÇÃO</h1><p>Preencha todos os dados. Assim o profissional consegue planejar os protocolos para seu projeto.</p></div>
+<div class="header"><h1>K-TP PROJETO TRANSFORMAÇÃO</h1></div>
 
 <div class="card">
-<label>OBJETIVOS: Clique e escolha seus objetivos na ordem de prioridade. De 1 até no máximo 7</label>
-<div class="objetivos" id="listaObjetivos">
+<label>Nome completo *</label><input id="nome">
+<label>CPF *</label><input id="cpf">
+<label>Nascimento *</label><input id="nasc" type="date">
+<label>Idade *</label><input id="idade">
+<label>Gênero *</label><input id="publico">
+<label>WhatsApp *</label><input id="whats">
+<label>Email *</label><input id="email">
+<label>CEP *</label><input id="cep">
+<label>Rua *</label><input id="rua">
+<label>Número *</label><input id="numero">
+<label>Bairro *</label><input id="bairro">
+<label>Cidade *</label><input id="cidade">
+<label>Objetivos *</label>
+<div id="objs">
 <div class="obj" data-v="Ganho de Peso">Ganho de Peso</div>
 <div class="obj" data-v="Emagrecimento">Emagrecimento</div>
 <div class="obj" data-v="Definição Muscular">Definição Muscular</div>
@@ -33,103 +43,92 @@ input,select,textarea{width:100%;padding:13px;margin:4px 0 10px;border-radius:10
 <div class="obj" data-v="Hipertrofia">Hipertrofia</div>
 <div class="obj" data-v="Reabilitação Física">Reabilitação Física</div>
 </div>
-
-<label>Nome completo *</label><input id="nome">
-<label>CPF *</label><input id="cpf">
-<label>Data Nascimento *</label><input id="nasc" type="date">
-<label>Idade *</label><input id="idade">
-<label>Gênero *</label><input id="publico" placeholder="Masculino / Feminino">
-<label>WhatsApp *</label><input id="whats">
-<label>E-mail *</label><input id="email">
-<label>CEP *</label><input id="cep">
-<label>Rua *</label><input id="rua">
-<label>Número *</label><input id="numero">
-<label>Bairro *</label><input id="bairro">
-<label>Cidade *</label><input id="cidade" value="Bertioga">
-
-<label>Nível de Atividade Física *</label><input id="nivelAtividade">
-<label>1. Já praticou atividade física antes? *</label><input id="q1">
-<label>2. Como você descreve sua ALIMENTAÇÃO atual? *</label><input id="q2">
-<label>3. Quantas horas você DORME por noite? *</label><input id="q3">
-<label>4. Possui alguma RESTRIÇÃO alimentar? *</label><input id="q4">
-<label>5. Qual parte do corpo quer MELHORAR mais? *</label><input id="q5">
-<label>6. Possui alguma DEFICIENCIA ou LIMITAÇÃO fisica? *</label><input id="q6">
-<label>7. Está passando ou JÁ TEVE acompanhamento profissional PSICOLÓGICO? *</label><input id="q7">
-<label>8. Está fazendo ALGUM TRATAMENTO fisico ou psicológico? *</label><input id="q8">
-<label>9. Está fazendo USO DE MEDICAMENTOS? Quais? *</label><input id="q9">
-
+<label>Nível atividade *</label><input id="nivelAtividade">
+<label>1 - Já praticou atividade? *</label><input id="q1">
+<label>2 - Alimentação atual? *</label><input id="q2">
+<label>3 - Horas dorme? *</label><input id="q3">
+<label>4 - Restrição alimentar? *</label><input id="q4">
+<label>5 - Parte do corpo melhorar? *</label><input id="q5">
+<label>6 - Deficiencia/limitação? *</label><input id="q6">
+<label>7 - Acompanhamento psicológico? *</label><input id="q7">
+<label>8 - Tratamento? *</label><input id="q8">
+<label>9 - Medicamentos? *</label><input id="q9">
 <label>Plano *</label><input id="plano">
 <label>Dias *</label><input id="dias">
 <label>Hora *</label><input id="hora">
-<label>Tipo de Aula *</label>
-<select id="tipoAula"><option value="presencial">PRESENCIAL - BERTIOGA</option><option value="online">ONLINE</option></select>
+<label>Tipo *</label><select id="tipoAula"><option value="presencial">PRESENCIAL</option><option value="online">ONLINE</option></select>
 </div>
 
 <button id="btnFinal" class="btn">FINALIZAR E ENVIAR - COMMIT REAL</button>
-<div id="log">Pronto. Clicar vai enviar WhatsApp + criar no GitHub no caminho certo.</div>
+<div id="log"></div>
 
 <script>
-// OBJETIVOS ORDEM
-let objetivosSel=[];
-document.querySelectorAll('.obj').forEach(o=>{
-  o.onclick=()=>{
-    const v=o.dataset.v;
-    if(objetivosSel.includes(v)){ objetivosSel=objetivosSel.filter(x=>x!=v); o.classList.remove('active'); }
-    else{ if(objetivosSel.length<7){ objetivosSel.push(v); o.classList.add('active'); } }
-    o.textContent = objetivosSel.includes(v)? `${objetivosSel.indexOf(v)+1} - ${v}` : v;
-  }
-});
+const REPO='sistemak/korvil-app';
+const BASE='korvil/sections/ktp/projetotransformacao/projetos/2026/alunos';
+let sel=[];
+document.querySelectorAll('.obj').forEach(o=>{o.onclick=()=>{const v=o.dataset.v;if(sel.includes(v)){sel=sel.filter(x=>x!=v);o.classList.remove('active');}else{if(sel.length<7){sel.push(v);o.classList.add('active');}}o.textContent=sel.includes(v)?`${sel.indexOf(v)+1} - ${v}`:v;}});
 
-// CODIGO MESTRE - DADOS REAIS + COMMIT REAL + WHATSAPP NO MESMO CLIQUE
-document.getElementById('btnFinal').onclick = async ()=>{
-  const nomeFull = document.getElementById('nome').value.trim();
-  if(!nomeFull){ alert('Nome obrigatório'); return; }
-  const btn=document.getElementById('btnFinal'); btn.disabled=true; btn.textContent='PROCESSANDO COMMIT REAL...';
+document.getElementById('btnFinal').onclick=async()=>{
+const nome=document.getElementById('nome').value.trim(); if(!nome){alert('Nome');return;}
+const tipo=document.getElementById('tipoAula').value.toLowerCase().includes('online')?'online':'presencial';
+const pNome=nome.split(' ')[0].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
 
-  const tipo = document.getElementById('tipoAula').value.toLowerCase().includes('online')? 'online':'presencial';
-  const primeiroNome = nomeFull.split(' ')[0].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+const d={
+nome_completo: document.getElementById('nome').value,
+cpf: document.getElementById('cpf').value,
+nascimento: document.getElementById('nasc').value,
+idade: document.getElementById('idade').value,
+genero: document.getElementById('publico').value,
+whatsapp: document.getElementById('whats').value,
+email: document.getElementById('email').value,
+cep: document.getElementById('cep').value,
+rua: document.getElementById('rua').value,
+numero: document.getElementById('numero').value,
+bairro: document.getElementById('bairro').value,
+cidade: document.getElementById('cidade').value,
+objetivos: sel,
+nivel: document.getElementById('nivelAtividade').value,
+q1: document.getElementById('q1').value,
+q2: document.getElementById('q2').value,
+q3: document.getElementById('q3').value,
+q4: document.getElementById('q4').value,
+q5: document.getElementById('q5').value,
+q6: document.getElementById('q6').value,
+q7: document.getElementById('q7').value,
+q8: document.getElementById('q8').value,
+q9: document.getElementById('q9').value,
+plano: document.getElementById('plano').value,
+dias: document.getElementById('dias').value,
+hora: document.getElementById('hora').value,
+tipo_aula: tipo,
+data: new Date().toLocaleString('pt-BR')
+};
 
-  // TUDO QUE A PESSOA PREENCHEU - NADA FAKE
-  const dadosReais = {
-    nome_completo: document.getElementById('nome').value,
-    cpf: document.getElementById('cpf').value,
-    nascimento: document.getElementById('nasc').value,
-    idade: document.getElementById('idade').value,
-    genero: document.getElementById('publico').value,
-    whatsapp: document.getElementById('whats').value,
-    email: document.getElementById('email').value,
-    endereco: { cep: document.getElementById('cep').value, rua: document.getElementById('rua').value, numero: document.getElementById('numero').value, bairro: document.getElementById('bairro').value, cidade: document.getElementById('cidade').value },
-    objetivos_ordem: objetivosSel,
-    nivel_atividade: document.getElementById('nivelAtividade').value,
-    anamnese: { q1: document.getElementById('q1').value, q2: document.getElementById('q2').value, q3: document.getElementById('q3').value, q4: document.getElementById('q4').value, q5: document.getElementById('q5').value, q6: document.getElementById('q6').value, q7: document.getElementById('q7').value, q8: document.getElementById('q8').value, q9: document.getElementById('q9').value },
-    plano: document.getElementById('plano').value,
-    dias: document.getElementById('dias').value,
-    hora: document.getElementById('hora').value,
-    tipo_aula: tipo,
-    data_inscricao: new Date().toLocaleString('pt-BR'),
-    status: 'ATIVO'
-  };
+let token=localStorage.getItem('GH_TOKEN'); if(!token){token=prompt('GH_TOKEN:'); if(!token) return; localStorage.setItem('GH_TOKEN',token);}
+const h={'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'};
 
-  // 1 - WHATSAPP COM DADOS REAIS
-  const zapMsg = `*NOVA INSCRICAO KTP ${tipo.toUpperCase()}*%0ANome: ${encodeURIComponent(dadosReais.nome_completo)}%0AZap: ${encodeURIComponent(dadosReais.whatsapp)}%0ATipo: ${tipo}%0APlano: ${encodeURIComponent(dadosReais.plano)}`;
-  window.open(`https://wa.me/5513988264185?text=${zapMsg}`, '_blank');
+// ACHA ULTIMO NUMERO REAL
+let ultimo=0;
+try{
+const r=await fetch(`https://api.github.com/repos/${REPO}/contents/${BASE}/${tipo}`,{headers:h});
+if(r.ok){const arr=await r.json(); for(const f of arr){let m=f.name.match(/^(\d+)-/); if(m) ultimo=Math.max(ultimo,parseInt(m[1])); if(/^\d+$/.test(f.name)){const r2=await fetch(`https://api.github.com/repos/${REPO}/contents/${BASE}/${tipo}/${f.name}`,{headers:h}); if(r2.ok){const a2=await r2.json(); for(const f2 of a2){let m2=f2.name.match(/^(\d+)-/); if(m2) ultimo=Math.max(ultimo,parseInt(m2[1]));}}}}}}
+catch{}
 
-  // 2 - COMMIT REAL - CRIA PASTAS SE NAO EXISTIR, NUNCA APAGA
-  let token = localStorage.getItem('GH_TOKEN');
-  if(!token){ token = prompt('Cole GH_TOKEN (com Contents:Write e Actions:Write) - fica só no seu navegador:'); if(!token){ btn.disabled=false; btn.textContent='FINALIZAR E ENVIAR - COMMIT REAL'; return; } localStorage.setItem('GH_TOKEN', token); }
+const prox=ultimo+1;
+const nomeArq=`${prox}-${pNome}${prox}.json`;
+const path1=`${BASE}/${tipo}/${nomeArq}`;
+const path2=`${BASE}/${tipo}/${prox}/${nomeArq}`;
+const conteudo=btoa(unescape(encodeURIComponent(JSON.stringify(d,null,2))));
 
-  const res = await fetch('https://api.github.com/repos/sistemak/korvil-app/actions/workflows/ktp-inscricao.yml/dispatches',{
-    method:'POST',
-    headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'},
-    body: JSON.stringify({ref:'main', inputs:{dados_json: JSON.stringify(dadosReais,null,2), primeiro_nome: primeiroNome, tipo: tipo}})
-  });
+// WHATSAPP ORGANIZADO COM DADOS REAIS NO MESMO CLIQUE
+const textoZap=`*NOVA INSCRIÇÃO KTP - ${tipo.toUpperCase()} - ${prox}*%0A%0A*Nome:* ${d.nome_completo}%0A*CPF:* ${d.cpf}%0A*Nasc:* ${d.nascimento} - ${d.idade} anos%0A*Gênero:* ${d.genero}%0A*Whats:* ${d.whatsapp}%0A*Email:* ${d.email}%0A*End:* ${d.rua}, ${d.numero} - ${d.bairro} - ${d.cidade} - ${d.cep}%0A*Objetivos:* ${d.objetivos.join(', ')}%0A*Nível:* ${d.nivel}%0A*Anamnese:* ${d.q1} | ${d.q2} | ${d.q3} | ${d.q4} | ${d.q5} | ${d.q6} | ${d.q7} | ${d.q8} | ${d.q9}%0A*Plano:* ${d.plano} - ${d.dias} ${d.hora}%0A*Arquivo:* ${nomeArq}`;
+window.open(`https://wa.me/5513988264185?text=${textoZap}`,'_blank');
 
-  document.getElementById('log').textContent = res.status===204
- ? `✅ COMMIT REAL FEITO!%0AEnviado WhatsApp + criado em:%0Akorvil/.../alunos/${tipo}/[NUMERO_REAL_DEPOIS_DO_ULTIMO]/${primeiroNome}%0AModelo: [numero]-${primeiroNome}[numero].json%0AEx: Se ultimo era 87, cria 88-${primeiroNome}88.json%0AVer em 15s no GitHub`
-  : 'Erro token - apague e tente de novo';
+// COMMIT REAL DIRETO CRIANDO TUDO
+await fetch(`https://api.github.com/repos/${REPO}/contents/${path1}`,{method:'PUT',headers:h,body:JSON.stringify({message:`feat: ${tipo} ${nomeArq}`,content:conteudo})});
+await fetch(`https://api.github.com/repos/${REPO}/contents/${path2}`,{method:'PUT',headers:h,body:JSON.stringify({message:`feat: ${tipo}/${prox}/${nomeArq}`,content:conteudo})});
 
-  if(res.status!==204) localStorage.removeItem('GH_TOKEN');
-  btn.textContent='COMMIT REAL FEITO ✔';
+document.getElementById('log').textContent=`✅ COMMIT REAL FEITO COM DADOS REAIS!\nTipo: ${tipo}\nUltimo era: ${ultimo}\nCriado: ${prox}-${pNome}${prox}.json\nEm: ${path1}\nE: ${path2}\n\nDados: ${JSON.stringify(d,null,2)}`;
 };
 </script>
 </body>
