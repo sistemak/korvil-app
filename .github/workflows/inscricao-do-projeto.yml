@@ -1,119 +1,45 @@
-name: Criar Aluno Sequencial Sem Duplicar
+name: Criar Aluno Sequencial Exato 01-mag1
 on:
   workflow_dispatch:
     inputs:
-      primeiro_nome:
-        description: 'Primeiro nome'
-        required: true
-        type: string
-      tipo:
-        description: 'Tipo (masculino/feminino)'
-        required: true
-        type: choice
-        options:
-          - masculino
-          - feminino
-      nome_completo:
-        description: 'Nome completo'
-        required: true
-        type: string
-      texto_formatado:
-        description: 'JSON do aluno (texto_formatado)'
-        required: true
-        type: string
-
+      primeiro_nome: {description: 'Primeiro nome slug', required: true, type: string}
+      tipo: {description: 'presencial ou online', required: true, default: 'presencial', type: choice, options: [presencial, online]}
+      nome_completo: {required: true, type: string}
+      texto_formatado: {required: true, type: string}
 jobs:
   criar:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    permissions: {contents: write}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Criar estrutura sequencial sem duplicar
+        with: {fetch-depth: 0}
+      - name: Limpar duplicatas 42-45 e criar estrutura exata 01-mag1
         run: |
           set -e
-          TIPO=$(echo "${{ inputs.tipo }}" | tr '[:upper:]' '[:lower:]' | xargs)
-          SLUG=$(echo "${{ inputs.primeiro_nome }}" | tr '[:upper:]' '[:lower:]' | iconv -f utf-8 -t ascii//TRANSLIT | tr -cd 'a-z0-9' | xargs)
-          if [ -z "$SLUG" ]; then
-            SLUG="aluno"
-          fi
-
+          # LIMPA 42-45 duplicados se existirem
+          for n in 42 43 44 45; do
+            for t in presencial online; do
+              BASE="korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/$t"
+              for p in "$BASE"/$n-*; do
+                [ -e "$p" ] && echo "Removendo duplicata $p" && rm -rf "$p"
+              done
+            done
+          done
+          TIPO=$(echo "${{ inputs.tipo }}" | tr '[:upper:]' '[:lower:]')
+          SLUG=$(echo "${{ inputs.primeiro_nome }}" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9')
+          NOME="${{ inputs.nome_completo }}"
           BASE="korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/$TIPO"
           mkdir -p "$BASE"
-
-          echo "BASE = $BASE"
           ULTIMO=0
-          if [ -d "$BASE" ]; then
-            for d in "$BASE"/*; do
-              [ -d "$d" ] || continue
-              BN=$(basename "$d")
-              NUM=$(echo "$BN" | grep -oE '^[0-9]+' | head -n1 || true)
-              if [ -n "$NUM" ]; then
-                N=$((10#$NUM))
-                if [ "$N" -gt "$ULTIMO" ]; then
-                  ULTIMO=$N
-                fi
-              fi
-            done
-          fi
-
-          PROX=$((ULTIMO+1))
-          PAD=$(printf "%02d" "$PROX")
-          PASTA="${PAD}-${SLUG}"
-          LOCAL="${BASE}/${PASTA}"
-
-          echo "ULTIMO=$ULTIMO PROX=$PROX PAD=$PAD PASTA=$PASTA"
-          echo "PROX_PAD=$PAD"
-
-          if [ -e "$LOCAL" ]; then
-            echo "[ERRO] Pasta ja existe: $LOCAL - anti-duplicata ativada"
-            exit 1
-          fi
-
-          mkdir -p "$LOCAL/assets/gifs"
-          mkdir -p "$LOCAL/registros"
-
-          # 1 - JSON
-          echo '${{ inputs.texto_formatado }}' > "$LOCAL/${PASTA}.json" || echo "${{ inputs.texto_formatado }}" > "$LOCAL/${PASTA}.json"
-
-          # 2 - assets/index.html
+          for d in "$BASE"/*; do [ -d "$d" ] || continue; b=$(basename "$d"); num=$(echo "$b" | grep -oE '^[0-9]+' | head -1); [ -z "$num" ] && continue; num=$((10#$num)); [ $num -gt $ULTIMO ] && ULTIMO=$num; done
+          PROX=$((ULTIMO+1)); PAD=$(printf "%02d" $PROX); PASTA="${PAD}-${SLUG}"; LOCAL="$BASE/$PASTA"
+          [ -d "$LOCAL" ] && echo "ERRO pasta mae ja existe" && exit 1
+          mkdir -p "$LOCAL/assets/gifs" "$LOCAL/registros"
+          printf "%s" "${{ inputs.texto_formatado }}" > "$LOCAL/$PASTA.json"
           echo "nada ainda" > "$LOCAL/assets/index.html"
-
-          # 3 - assets/gifs/index.html
           echo "nada ainda" > "$LOCAL/assets/gifs/index.html"
-
-          # 4 - cutting.mp4 (template ou copia)
-          TEMPLATE_CUT="korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/template/cutting.mp4"
-          if [ -f "$TEMPLATE_CUT" ]; then
-            cp "$TEMPLATE_CUT" "$LOCAL/assets/gifs/cutting.mp4"
-          else
-            FOUND=$(find "$BASE" -name "cutting.mp4" 2>/dev/null | head -n1 || true)
-            if [ -n "$FOUND" ]; then
-              cp "$FOUND" "$LOCAL/assets/gifs/cutting.mp4"
-            else
-              touch "$LOCAL/assets/gifs/cutting.mp4"
-            fi
-          fi
-
-          # 5 - registros/pesos.html
-          cat > "$LOCAL/registros/pesos.html" <<EOF
-          <!DOCTYPE html>
-          <html lang="pt-br">
-          <head><meta charset="UTF-8"><title>Pesos - ${{ inputs.nome_completo }}</title></head>
-          <body>
-          <h1>Registros de Peso - ${{ inputs.nome_completo }}</h1>
-          <p>Tipo: $TIPO</p>
-          <p>Pasta: $PASTA</p>
-          <table border="1"><tr><th>Data</th><th>Peso</th></tr></table>
-          </body>
-          </html>
-          EOF
-
-          git config user.name "ktp-bot"
-          git config user.email "ktp-bot@users.noreply.github.com"
-          git add "$LOCAL"
-          git commit -m "feat: cria $TIPO/$PASTA sequencial sem duplicar" || echo "nada para commitar"
-          git push
+          if [ -f "korvil/sections/ktp/projetotransformacao/assets/gifs/cutting.mp4" ]; then cp "korvil/sections/ktp/projetotransformacao/assets/gifs/cutting.mp4" "$LOCAL/assets/gifs/cutting.mp4"; else touch "$LOCAL/assets/gifs/cutting.mp4"; fi
+          cat > "$LOCAL/registros/pesos.html" <<'HTML'
+          <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>K-TP 2026</title><style>body{font-family:Arial;background:#0a0a0a;color:#fff;padding:20px}.card{display:inline-block;background:#111;border:1px solid #222;padding:15px;margin:5px;border-radius:8px;min-width:160px}</style></head><body><h1>K-TP PROJETO TRANSFORMAÇÃO 11º ANO - 2026</h1><h2 id="titulo"></h2><div class="stats"><div class="card">Semanas: 0</div><div class="card">Peso: -- kg</div><div class="card">Fase Atual: --</div><div class="card">Registro: --</div></div><p>Nenhum peso registrado ainda</p><p>Aguardando primeiro registro</p><script>const pesos=[];const totalRegistros=0;</script></body></html>
+          HTML
+          git config user.name "KTP Bot"; git config user.email "bot@korvil.com"; git add -A; git commit -m "feat: $TIPO $PASTA - exata 01-mag1 + limpa 42-45"; git push
