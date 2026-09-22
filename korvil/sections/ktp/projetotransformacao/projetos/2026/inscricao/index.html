@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inscrição 2026 - KTP Transformação</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#000;color:#e5e5e5;font-family:ui-monospace,Menlo,monospace;padding:24px}
+.card{max-width:760px;margin:0 auto;background:#0a0a0a;border:1px solid #222;padding:24px;border-radius:12px}
+h1{font-size:20px;letter-spacing:0.12em}label{display:block;margin-top:14px;font-size:11px;color:#888;letter-spacing:0.1em}
+input,select,textarea{width:100%;margin-top:6px;background:#000;border:1px solid #222;color:#fff;padding:10px;border-radius:8px;font-family:inherit}
+button{background:#7af9ff;color:#000;border:0;padding:12px 18px;border-radius:8px;font-weight:800;letter-spacing:0.08em;cursor:pointer;margin-top:18px;width:100%}
+.hint{font-size:11px;color:#666;margin-top:8px;line-height:1.5}
+.ok{color:#00ff88}.err{color:#ff4d4d}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>INSCRICAO // 2026 // KTP</h1>
+<p class="hint">Este form dispara o workflow <b>inscricao-do-projeto.yml</b> via API. Ele vai criar a estrutura sequencial <b>sem duplicar</b>: escaneia BASE = korvil/.../2026/alunos/{tipo}, acha último número, PROX = ULTIMO+1, PAD %02d, anti-duplicata.</p>
+
+<label>GH_TOKEN (contents:write)</label>
+<input id="token" type="password" placeholder="ghp_...">
+
+<label>PRIMEIRO_NOME (slug)</label>
+<input id="primeiro_nome" placeholder="ex: joao">
+
+<label>TIPO</label>
+<select id="tipo">
+  <option value="masculino">masculino</option>
+  <option value="feminino">feminino</option>
+</select>
+
+<label>NOME_COMPLETO</label>
+<input id="nome_completo" placeholder="João Silva">
+
+<label>TEXTO_FORMATADO (JSON do aluno)</label>
+<textarea id="texto_formatado" rows="8" placeholder='{"nome":"Joao","idade":28,...}'></textarea>
+
+<button id="btn">DISPARAR WORKFLOW - CRIAR SEQUENCIAL</button>
+<div id="log" class="hint"></div>
+</div>
+
+<script>
+const logEl = document.getElementById('log');
+function log(m,c=''){ logEl.innerHTML += '<div class="'+c+'">'+m+'</div>'; }
+
+document.getElementById('btn').onclick = async () => {
+  const token = document.getElementById('token').value.trim();
+  const primeiro_nome = document.getElementById('primeiro_nome').value.trim();
+  const tipo = document.getElementById('tipo').value;
+  const nome_completo = document.getElementById('nome_completo').value.trim();
+  const texto_formatado = document.getElementById('texto_formatado').value.trim();
+  if(!token || !primeiro_nome || !nome_completo || !texto_formatado){ log('[ERRO] preencha todos','err'); return; }
+  log('[INFO] disparando workflow_dispatch...');
+
+  try{
+    const res = await fetch('https://api.github.com/repos/sistemak/korvil-app/actions/workflows/inscricao-do-projeto.yml/dispatches',{
+      method:'POST',
+      headers:{
+        'Authorization':'Bearer '+token,
+        'Accept':'application/vnd.github+json',
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({
+        ref: 'main',
+        inputs: { primeiro_nome, tipo, nome_completo, texto_formatado }
+      })
+    });
+    if(res.status===204){ log('[OK] workflow disparado! Veja Actions no GitHub','ok'); }
+    else{
+      const t = await res.text();
+      log('[ERRO] '+res.status+' '+t,'err');
+    }
+  }catch(e){ log('[ERRO] '+e.message,'err'); }
+};
+</script>
+</body>
+</html>
