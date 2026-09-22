@@ -1,14 +1,13 @@
-name: KTP - Inscricao do Projeto
-
+name: inscricao-do-projeto
 on:
   workflow_dispatch:
     inputs:
       dados_json:
-        description: 'JSON completo dados reais preenchidos telas 1 2 3'
+        description: 'JSON da inscricao'
         required: true
         type: string
       primeiro_nome:
-        description: 'primeiro nome real normalizado'
+        description: 'primeiro nome'
         required: true
         type: string
       tipo:
@@ -17,33 +16,25 @@ on:
         type: string
 
 jobs:
-  salvar:
+  gerar:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
     steps:
-      - name: Checkout repositorio original
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Gerar arquivos JSON reais com dados reais
+      - name: Gerar arquivos da inscricao
         run: node korvil/sections/ktp/projetotransformacao/inscricao-do-projeto/gerar.js
         env:
-          DADOS: ${{ inputs.dados_json }}
-          PNOME: ${{ inputs.primeiro_nome }}
+          DADOS_JSON: ${{ inputs.dados_json }}
+          PRIMEIRO_NOME: ${{ inputs.primeiro_nome }}
           TIPO: ${{ inputs.tipo }}
-
-      - name: Commit e Push automatico real direto no original
+      - name: Commit e Push
         run: |
-          git config user.name "KTP Bot"
+          git config user.name "korvil-bot"
           git config user.email "bot@korvil.com"
-          git add korvil/sections/ktp/projetotransformacao/projetos/
-          git commit -m "feat: nova inscricao ${{ inputs.tipo }} ${{ inputs.primeiro_nome }} - ${{ github.run_number }}"
+          git add korvil/sections/ktp/projetotransformacao/projetos/2026/
+          git diff --cached --quiet || git commit -m "feat: nova inscricao ${{ inputs.tipo }} ${{ inputs.primeiro_nome }}"
           git push
