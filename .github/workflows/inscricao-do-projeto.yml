@@ -1,40 +1,119 @@
-name: inscricao-do-projeto
+name: Criar Aluno Sequencial Sem Duplicar
 on:
   workflow_dispatch:
     inputs:
-      dados_json:
-        description: 'JSON da inscricao'
-        required: true
-        type: string
       primeiro_nome:
-        description: 'primeiro nome'
+        description: 'Primeiro nome'
         required: true
         type: string
       tipo:
-        description: 'presencial ou online'
+        description: 'Tipo (masculino/feminino)'
+        required: true
+        type: choice
+        options:
+          - masculino
+          - feminino
+      nome_completo:
+        description: 'Nome completo'
+        required: true
+        type: string
+      texto_formatado:
+        description: 'JSON do aluno (texto_formatado)'
         required: true
         type: string
 
 jobs:
-  gerar:
+  criar:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - name: Gerar arquivos da inscricao
-        run: node korvil/sections/ktp/projetotransformacao/inscricao-do-projeto/gerar.js
-        env:
-          DADOS_JSON: ${{ inputs.dados_json }}
-          PRIMEIRO_NOME: ${{ inputs.primeiro_nome }}
-          TIPO: ${{ inputs.tipo }}
-      - name: Commit e Push
+          fetch-depth: 0
+
+      - name: Criar estrutura sequencial sem duplicar
         run: |
-          git config user.name "korvil-bot"
-          git config user.email "bot@korvil.com"
-          git add korvil/sections/ktp/projetotransformacao/projetos/2026/
-          git diff --cached --quiet || git commit -m "feat: nova inscricao ${{ inputs.tipo }} ${{ inputs.primeiro_nome }}"
+          set -e
+          TIPO=$(echo "${{ inputs.tipo }}" | tr '[:upper:]' '[:lower:]' | xargs)
+          SLUG=$(echo "${{ inputs.primeiro_nome }}" | tr '[:upper:]' '[:lower:]' | iconv -f utf-8 -t ascii//TRANSLIT | tr -cd 'a-z0-9' | xargs)
+          if [ -z "$SLUG" ]; then
+            SLUG="aluno"
+          fi
+
+          BASE="korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/$TIPO"
+          mkdir -p "$BASE"
+
+          echo "BASE = $BASE"
+          ULTIMO=0
+          if [ -d "$BASE" ]; then
+            for d in "$BASE"/*; do
+              [ -d "$d" ] || continue
+              BN=$(basename "$d")
+              NUM=$(echo "$BN" | grep -oE '^[0-9]+' | head -n1 || true)
+              if [ -n "$NUM" ]; then
+                N=$((10#$NUM))
+                if [ "$N" -gt "$ULTIMO" ]; then
+                  ULTIMO=$N
+                fi
+              fi
+            done
+          fi
+
+          PROX=$((ULTIMO+1))
+          PAD=$(printf "%02d" "$PROX")
+          PASTA="${PAD}-${SLUG}"
+          LOCAL="${BASE}/${PASTA}"
+
+          echo "ULTIMO=$ULTIMO PROX=$PROX PAD=$PAD PASTA=$PASTA"
+          echo "PROX_PAD=$PAD"
+
+          if [ -e "$LOCAL" ]; then
+            echo "[ERRO] Pasta ja existe: $LOCAL - anti-duplicata ativada"
+            exit 1
+          fi
+
+          mkdir -p "$LOCAL/assets/gifs"
+          mkdir -p "$LOCAL/registros"
+
+          # 1 - JSON
+          echo '${{ inputs.texto_formatado }}' > "$LOCAL/${PASTA}.json" || echo "${{ inputs.texto_formatado }}" > "$LOCAL/${PASTA}.json"
+
+          # 2 - assets/index.html
+          echo "nada ainda" > "$LOCAL/assets/index.html"
+
+          # 3 - assets/gifs/index.html
+          echo "nada ainda" > "$LOCAL/assets/gifs/index.html"
+
+          # 4 - cutting.mp4 (template ou copia)
+          TEMPLATE_CUT="korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/template/cutting.mp4"
+          if [ -f "$TEMPLATE_CUT" ]; then
+            cp "$TEMPLATE_CUT" "$LOCAL/assets/gifs/cutting.mp4"
+          else
+            FOUND=$(find "$BASE" -name "cutting.mp4" 2>/dev/null | head -n1 || true)
+            if [ -n "$FOUND" ]; then
+              cp "$FOUND" "$LOCAL/assets/gifs/cutting.mp4"
+            else
+              touch "$LOCAL/assets/gifs/cutting.mp4"
+            fi
+          fi
+
+          # 5 - registros/pesos.html
+          cat > "$LOCAL/registros/pesos.html" <<EOF
+          <!DOCTYPE html>
+          <html lang="pt-br">
+          <head><meta charset="UTF-8"><title>Pesos - ${{ inputs.nome_completo }}</title></head>
+          <body>
+          <h1>Registros de Peso - ${{ inputs.nome_completo }}</h1>
+          <p>Tipo: $TIPO</p>
+          <p>Pasta: $PASTA</p>
+          <table border="1"><tr><th>Data</th><th>Peso</th></tr></table>
+          </body>
+          </html>
+          EOF
+
+          git config user.name "ktp-bot"
+          git config user.email "ktp-bot@users.noreply.github.com"
+          git add "$LOCAL"
+          git commit -m "feat: cria $TIPO/$PASTA sequencial sem duplicar" || echo "nada para commitar"
           git push
