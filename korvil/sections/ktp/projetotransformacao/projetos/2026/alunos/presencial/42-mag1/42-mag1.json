@@ -1,0 +1,19 @@
+{
+  "nome": "Magno Silva",
+  "slug": "mag1",
+  "tipo": "presencial",
+  "idade": 28,
+  "peso": 78.5,
+  "altura": 1.75,
+  "objetivo": "Hipertrofia + Definição",
+  "anamnese": {
+    "lesoes": "Nenhuma",
+    "treina_ha": "2 anos",
+    "frequencia": "5x semana",
+    "alimentacao": "Equilibrada",
+    "sono": "7h",
+    "observacoes": "Foco total no K-TP 11º Ano"
+  },
+  "data_inscricao": "2026-01-01",
+  "status": "ativo"
+}
