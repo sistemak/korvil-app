@@ -1,45 +1,150 @@
-name: Criar Aluno Sequencial Exato 01-mag1
+name: Inscricao do Projeto - MASTER V14 FIX 404
+
 on:
   workflow_dispatch:
     inputs:
-      primeiro_nome: {description: 'Primeiro nome slug', required: true, type: string}
-      tipo: {description: 'presencial ou online', required: true, default: 'presencial', type: choice, options: [presencial, online]}
-      nome_completo: {required: true, type: string}
-      texto_formatado: {required: true, type: string}
+      primeiro_nome:
+        description: "slug primeiro nome real normalizado"
+        required: true
+        type: string
+      tipo:
+        description: "online ou presencial - determinado pelo plano"
+        required: true
+        type: string
+      nome_completo:
+        description: "nome completo real"
+        required: true
+        type: string
+      plano:
+        description: "plano real contendo presencial ou online"
+        required: true
+        type: string
+      texto_formatado:
+        description: "JSON exato ordem TELA1-2-3 com dados reais"
+        required: true
+        type: string
+      mensagem_whatsapp:
+        description: "mensagem formatada ordem TELA1-2-3 para WhatsApp"
+        required: true
+        type: string
+
 jobs:
-  criar:
+  criar-pasta-mae-real:
     runs-on: ubuntu-latest
-    permissions: {contents: write}
     steps:
       - uses: actions/checkout@v4
-        with: {fetch-depth: 0}
-      - name: Limpar duplicatas 42-45 e criar estrutura exata 01-mag1
+        with:
+          fetch-depth: 0
+
+      - name: Determinar tipo e proximo numero ignorando 43
+        id: calc
         run: |
-          set -e
-          # LIMPA 42-45 duplicados se existirem
-          for n in 42 43 44 45; do
-            for t in presencial online; do
-              BASE="korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/$t"
-              for p in "$BASE"/$n-*; do
-                [ -e "$p" ] && echo "Removendo duplicata $p" && rm -rf "$p"
-              done
-            done
-          done
-          TIPO=$(echo "${{ inputs.tipo }}" | tr '[:upper:]' '[:lower:]')
-          SLUG=$(echo "${{ inputs.primeiro_nome }}" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9')
-          NOME="${{ inputs.nome_completo }}"
-          BASE="korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/$TIPO"
+          TIPO_INPUT="${{ inputs.tipo }}"
+          PLANO_INPUT="${{ inputs.plano }}"
+          if echo "$PLANO_INPUT" | grep -i -q "presencial"; then
+            TIPO="presencial"
+          else
+            TIPO="online"
+          fi
+          echo "Tipo detectado: $TIPO (plano: $PLANO_INPUT)"
+          echo "tipo=$TIPO" >> $GITHUB_OUTPUT
+          
+          BASE="korvil/sections/ktp/projetotransformacao/alunos/$TIPO"
           mkdir -p "$BASE"
+          
           ULTIMO=0
-          for d in "$BASE"/*; do [ -d "$d" ] || continue; b=$(basename "$d"); num=$(echo "$b" | grep -oE '^[0-9]+' | head -1); [ -z "$num" ] && continue; num=$((10#$num)); [ $num -gt $ULTIMO ] && ULTIMO=$num; done
-          PROX=$((ULTIMO+1)); PAD=$(printf "%02d" $PROX); PASTA="${PAD}-${SLUG}"; LOCAL="$BASE/$PASTA"
-          [ -d "$LOCAL" ] && echo "ERRO pasta mae ja existe" && exit 1
-          mkdir -p "$LOCAL/assets/gifs" "$LOCAL/registros"
-          printf "%s" "${{ inputs.texto_formatado }}" > "$LOCAL/$PASTA.json"
-          echo "nada ainda" > "$LOCAL/assets/index.html"
-          echo "nada ainda" > "$LOCAL/assets/gifs/index.html"
-          if [ -f "korvil/sections/ktp/projetotransformacao/assets/gifs/cutting.mp4" ]; then cp "korvil/sections/ktp/projetotransformacao/assets/gifs/cutting.mp4" "$LOCAL/assets/gifs/cutting.mp4"; else touch "$LOCAL/assets/gifs/cutting.mp4"; fi
-          cat > "$LOCAL/registros/pesos.html" <<'HTML'
-          <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>K-TP 2026</title><style>body{font-family:Arial;background:#0a0a0a;color:#fff;padding:20px}.card{display:inline-block;background:#111;border:1px solid #222;padding:15px;margin:5px;border-radius:8px;min-width:160px}</style></head><body><h1>K-TP PROJETO TRANSFORMAÇÃO 11º ANO - 2026</h1><h2 id="titulo"></h2><div class="stats"><div class="card">Semanas: 0</div><div class="card">Peso: -- kg</div><div class="card">Fase Atual: --</div><div class="card">Registro: --</div></div><p>Nenhum peso registrado ainda</p><p>Aguardando primeiro registro</p><script>const pesos=[];const totalRegistros=0;</script></body></html>
-          HTML
-          git config user.name "KTP Bot"; git config user.email "bot@korvil.com"; git add -A; git commit -m "feat: $TIPO $PASTA - exata 01-mag1 + limpa 42-45"; git push
+          if [ -d "$BASE" ]; then
+            for d in "$BASE"/*/; do
+              [ -d "$d" ] || continue
+              bn=$(basename "$d")
+              if [[ $bn =~ ^([0-9]+)- ]]; then
+                num=${BASH_REMATCH[1]}
+                if [ "$num" -eq 43 ]; then
+                  echo "Ignorando pasta 43- : $bn"
+                  continue
+                fi
+                if [ "$num" -gt "$ULTIMO" ]; then
+                  ULTIMO=$num
+                fi
+              fi
+            done
+          fi
+          
+          PROX=$((ULTIMO+1))
+          if [ "$PROX" -eq 43 ]; then
+            echo "Pulando numero 43, indo para 44"
+            PROX=44
+          fi
+          
+          SLUG="${{ inputs.primeiro_nome }}"
+          PASTA="${PROX}-${SLUG}${PROX}"
+          
+          echo "Ultimo numero: $ULTIMO"
+          echo "Proximo: $PROX"
+          echo "Pasta mae: $PASTA"
+          echo "prox=$PROX" >> $GITHUB_OUTPUT
+          echo "pasta=$PASTA" >> $GITHUB_OUTPUT
+          echo "base=$BASE" >> $GITHUB_OUTPUT
+
+      - name: Criar APENAS pasta mae e json dentro - NUNCA assets aqui
+        run: |
+          TIPO="${{ steps.calc.outputs.tipo }}"
+          PASTA="${{ steps.calc.outputs.pasta }}"
+          BASE="korvil/sections/ktp/projetotransformacao/alunos/$TIPO"
+          LOCAL="$BASE/$PASTA"
+          
+          echo "Criando APENAS pasta mae: $LOCAL"
+          mkdir -p "$LOCAL"
+          printf '%s' '${{ inputs.texto_formatado }}' > "$LOCAL/${PASTA}.json"
+          
+          echo "Arquivo criado: $LOCAL/${PASTA}.json"
+          ls -la "$LOCAL/"
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$LOCAL"
+          git commit -m "feat: inscricao $PASTA - ${{ inputs.nome_completo }} [$TIPO] - MASTER V14" || echo "nada novo para commit"
+          git push origin HEAD:${{ github.ref_name }}
+
+      - name: Enviar WhatsApp Real para 5513997690898
+        env:
+          WHATSAPP_TOKEN: ${{ secrets.WHATSAPP_TOKEN }}
+          PHONE_ID: ${{ secrets.PHONE_ID }}
+        run: |
+          node -e "
+          const https = require('https');
+          const mensagem = `${{ inputs.mensagem_whatsapp }}`;
+          const phoneId = process.env.PHONE_ID;
+          const token = process.env.WHATSAPP_TOKEN;
+          if(!phoneId || !token){
+            console.log('Secrets WHATSAPP_TOKEN ou PHONE_ID nao configurados - pular envio');
+            process.exit(0);
+          }
+          const to = '5513997690898';
+          const payload = JSON.stringify({
+            messaging_product: 'whatsapp',
+            to: to,
+            type: 'text',
+            text: { body: mensagem }
+          });
+          console.log('Enviando WhatsApp real para', to);
+          const opts = {
+            hostname: 'graph.facebook.com',
+            path: '/v20.0/' + phoneId + '/messages',
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + token,
+              'Content-Type': 'application/json',
+              'Content-Length': Buffer.byteLength(payload)
+            }
+          };
+          const req = https.request(opts, (res) => {
+            console.log('WhatsApp API status:', res.statusCode);
+            let data='';
+            res.on('data', c=>data+=c);
+            res.on('end', ()=>console.log('Response:', data));
+          });
+          req.on('error', (e)=>{ console.error('Erro WhatsApp', e); process.exit(1); });
+          req.write(payload);
+          req.end();
+          "
