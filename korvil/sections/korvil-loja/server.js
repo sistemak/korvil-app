@@ -1,107 +1,163 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { Octokit } from '@octokit/rest';
-import crypto from 'crypto';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+// server.js - KORVIL LOJA - Node puro - ATUALIZADO
+// Só cria conta quando TODOS dados preenchidos e válidos. Exclui conta via GitHub API.
 
-dotenv.config();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const http = require('http');
+const https = require('https');
+const crypto = require('crypto');
+const url = require('url');
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname)));
-
-const GH_TOKEN = process.env.GH_TOKEN;
 const REPO_OWNER = 'sistemak';
 const REPO_NAME = 'korvil-app';
-const BRANCH = 'main';
+const REPO_BRANCH = 'main';
 
-function gerarNomePasta(nomeCompleto) {
-  // Remove acento
-  const semAcento = nomeCompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const partes = semAcento.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  if (partes.length === 0) return '';
-  if (partes.length === 1) return partes[0];
+// --- Util: remover acento, gerar pasta mãe ---
+function removerAcentos(str){
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+function gerarNomePasta(nomeCompleto){
+  if(!nomeCompleto) return '';
+  const limpo = removerAcentos(nomeCompleto.trim()).toLowerCase();
+  const partes = limpo.split(/\s+/).filter(Boolean);
+  if(partes.length === 0) return '';
+  if(partes.length === 1) return partes[0];
   const primeiro = partes[0];
-  const iniciais = partes.slice(1).map(p => p[0]).join('_');
-  return `${primeiro}_${iniciais}`;
-  // Ex: João Silva Santos -> joao_s_s
-  // Ana Maria Oliveira Costa -> ana_m_o_c
+  const iniciais = partes.slice(1).map(p=>p[0]).join('');
+  return `${primeiro}_${iniciais}`.replace(/[^a-z0-9_]/g,'').slice(0,40);
 }
 
-app.post('/criar-conta', async (req, res) => {
-  try {
-    const { nome, email, senha } = req.body;
+function hashSenha(senha){
+  return crypto.createHash('sha256').update(senha).digest('hex');
+}
 
-    if (!nome || !email || !senha) {
-      return res.status(400).json({ erro: 'Todos campos obrigatórios' });
-    }
-    if (nome.trim().length < 3) {
-      return res.status(400).json({ erro: 'Nome min 3 chars' });
-    }
+function validarEmail(email){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
-    const pastaMae = gerarNomePasta(nome);
-    const filePath = `korvil/sections/korvil-loja/login/contas/${pastaMae}/${pastaMae}.json`;
+// --- GitHub API: excluir conta ---
+async function excluirConta(pastaMae, githubToken){
+  const path = `korvil/sections/korvil-loja/login/contas/${pastaMae}/${pastaMae}.json`;
+  const apiUrl = `/repos/${REPO_OWNER}/${REPO_NAME}/contents/${encodeURIComponent(path)}`;
 
-    const hash = crypto.createHash('sha256').update(senha).digest('hex');
-    const conteudo = {
-      id: crypto.randomUUID(),
-      pasta: pastaMae,
-      nome: nome.trim(),
-      email: email.trim().toLowerCase(),
-      senha_hash: hash,
-      criado_em: new Date().toISOString()
-    };
-
-    const conteudoBase64 = Buffer.from(JSON.stringify(conteudo, null, 2)).toString('base64');
-
-    if (!GH_TOKEN) {
-      return res.status(500).json({ erro: 'GH_TOKEN não configurado no .env' });
-    }
-
-    const octokit = new Octokit({ auth: GH_TOKEN });
-
-    let sha;
-    try {
-      const { data } = await octokit.repos.getContent({
-        owner: REPO_OWNER,
-        repo: REPO_NAME,
-        path: filePath,
-        ref: BRANCH
-      });
-      // @ts-ignore
-      if (!Array.isArray(data)) sha = data.sha;
-    } catch (e) {
-      // 404 = não existe, vai criar
-    }
-
-    await octokit.repos.createOrUpdateFileContents({
-      owner: REPO_OWNER,
-      repo: REPO_NAME,
-      path: filePath,
-      message: `KORVIL AUTO: nova conta ${pastaMae}`,
-      content: conteudoBase64,
-      branch: BRANCH,
-      ...(sha ? { sha } : {})
-    });
-
-    return res.json({ ok: true, pasta: pastaMae, path: filePath });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ erro: 'Erro interno', detalhe: String(err) });
+  // 1. GET para pegar SHA
+  const getSha = await githubRequest('GET', apiUrl, null, githubToken);
+  if(!getSha || !getSha.sha){
+    throw new Error('Arquivo não encontrado para exclusão: ' + path);
   }
+
+  // 2. DELETE com SHA
+  const body = JSON.stringify({
+    message: `KORVIL: exclui conta ${pastaMae} [auto]`,
+    sha: getSha.sha,
+    branch: REPO_BRANCH
+  });
+  const del = await githubRequest('DELETE', apiUrl, body, githubToken);
+  return del;
+}
+
+function githubRequest(method, apiPath, body, token){
+  return new Promise((resolve, reject)=>{
+    const options = {
+      hostname: 'api.github.com',
+      path: apiPath + (apiPath.includes('?')?'&':'?') + 'ref=' + REPO_BRANCH,
+      method,
+      headers: {
+        'User-Agent': 'korvil-loja-server',
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      }
+    };
+    const req = https.request(options, (res)=>{
+      let data='';
+      res.on('data', c=>data+=c);
+      res.on('end', ()=>{
+        try{
+          const json = JSON.parse(data || '{}');
+          if(res.statusCode>=200 && res.statusCode<300) resolve(json);
+          else reject(new Error(`GitHub ${res.statusCode}: ${data}`));
+        }catch(e){ resolve({raw:data, status: res.statusCode}); }
+      });
+    });
+    req.on('error', reject);
+    if(body) req.write(body);
+    req.end();
+  });
+}
+
+function githubGetContas(token){
+  return githubRequest('GET', `/repos/${REPO_OWNER}/${REPO_NAME}/contents/korvil/sections/korvil-loja/login/contas`, null, token);
+}
+
+// --- Server ---
+const server = http.createServer(async (req,res)=>{
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization');
+  if(req.method==='OPTIONS'){ res.writeHead(204); return res.end(); }
+
+  const parsed = url.parse(req.url, true);
+
+  if(req.method==='POST' && parsed.pathname==='/criar-conta'){
+    let body=''; req.on('data', c=>body+=c);
+    req.on('end', async ()=>{
+      try{
+        const { nome, email, senha, confirmarSenha } = JSON.parse(body);
+        // VALIDAÇÃO COMPLETA - NUNCA cria incompleto
+        if(!nome || !email || !senha || !confirmarSenha){
+          res.writeHead(400); return res.end(JSON.stringify({ok:false, erro:'Preencha todos os dados'}));
+        }
+        if(nome.trim().length < 3){ res.writeHead(400); return res.end(JSON.stringify({ok:false, erro:'Nome deve ter >=3'})); }
+        if(!validarEmail(email)){ res.writeHead(400); return res.end(JSON.stringify({ok:false, erro:'Email inválido'})); }
+        if(senha.length < 6){ res.writeHead(400); return res.end(JSON.stringify({ok:false, erro:'Senha >=6 caracteres'})); }
+        if(senha !== confirmarSenha){ res.writeHead(400); return res.end(JSON.stringify({ok:false, erro:'Senhas não conferem'})); }
+
+        const pastaMae = gerarNomePasta(nome);
+        if(!pastaMae){ res.writeHead(400); return res.end(JSON.stringify({ok:false, erro:'Nome inválido para pasta'})); }
+
+        // verifica se já existe
+        try{
+          const existe = await githubRequest('GET', `/repos/${REPO_OWNER}/${REPO_NAME}/contents/korvil/sections/korvil-loja/login/contas/${pastaMae}/${pastaMae}.json`, null, process.env.GH_TOKEN);
+          if(existe && existe.sha){ res.writeHead(409); return res.end(JSON.stringify({ok:false, erro:'Conta já existe: '+pastaMae})); }
+        }catch(_){ /* não existe, pode criar */ }
+
+        const contaJson = {
+          id: crypto.randomUUID(),
+          pasta: pastaMae,
+          nome: nome.trim(),
+          email: email.trim().toLowerCase(),
+          senha_hash: hashSenha(senha),
+          criado_em: new Date().toISOString()
+        };
+
+        const path = `korvil/sections/korvil-loja/login/contas/${pastaMae}/${pastaMae}.json`;
+        const putBody = JSON.stringify({
+          message: `KORVIL: cria conta ${pastaMae}`,
+          content: Buffer.from(JSON.stringify(contaJson, null, 2)).toString('base64'),
+          branch: REPO_BRANCH
+        });
+        await githubRequest('PUT', `/repos/${REPO_OWNER}/${REPO_NAME}/contents/${encodeURIComponent(path)}`, putBody, process.env.GH_TOKEN);
+
+        res.writeHead(201); res.end(JSON.stringify({ok:true, pastaMae, conta: contaJson}));
+      }catch(e){ res.writeHead(500); res.end(JSON.stringify({ok:false, erro: e.message})); }
+    });
+    return;
+  }
+
+  if(req.method==='POST' && parsed.pathname==='/excluir-conta'){
+    let body=''; req.on('data', c=>body+=c);
+    req.on('end', async ()=>{
+      try{
+        const { pastaMae, token } = JSON.parse(body);
+        const ghToken = token || process.env.GH_TOKEN;
+        if(!pastaMae){ res.writeHead(400); return res.end(JSON.stringify({ok:false, erro:'pastaMae obrigatória'})); }
+        const result = await excluirConta(pastaMae, ghToken);
+        res.writeHead(200); res.end(JSON.stringify({ok:true, result}));
+      }catch(e){ res.writeHead(500); res.end(JSON.stringify({ok:false, erro:e.message})); }
+    });
+    return;
+  }
+
+  res.writeHead(404); res.end('Not found');
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'login', 'index.html'));
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`KORVIL NODE RODANDO ${PORT} - SEM VERCEL PORRA`);
-});
+server.listen(3000, ()=>console.log('KORVIL server 3000 - só cria conta completa'));
