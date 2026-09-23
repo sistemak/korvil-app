@@ -1,176 +1,238 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>KORVIL | Criar Conta</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>KORVIL - Criar Conta | Pasta Mãe + JSON Real</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto}
-  body{background:#050507;color:#fff;min-height:100vh}
-  .wrap{max-width:720px;margin:0 auto;padding:28px 18px 80px}
-  .badge{display:inline-flex;background:#ff5c00;color:#000;font-weight:900;padding:4px 10px;border-radius:999px;font-size:11px;letter-spacing:.08em}
-  h1{font-size:34px;letter-spacing:-.04em;margin:12px 0 6px;font-weight:900}
-  h1 span{color:#ff5c00}
-  .sub{color:#8a8a8a;font-size:13px;margin-bottom:22px;line-height:1.5}
-  .card{background:#0e0e11;border:1px solid #1f1f22;border-radius:18px;padding:18px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media(max-width:640px){.grid{grid-template-columns:1fr}}
-  label{font-size:11px;color:#a1a1a1;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:block}
-  input,select{width:100%;background:#16161a;border:1px solid #252529;color:#fff;border-radius:12px;padding:13px 14px;font-size:14px;outline:none}
-  input:focus,select:focus{border-color:#ff5c00}
-  .foto{display:flex;gap:14px;align-items:center;background:#121215;border:1px dashed #2a2a2e;border-radius:14px;padding:12px;margin-bottom:14px}
-  .foto img{width:68px;height:68px;border-radius:50%;object-fit:cover;background:#222}
-  .req{color:#ff5c00}
-  .btn{width:100%;margin-top:18px;background:#ff5c00;color:#000;border:0;border-radius:14px;padding:16px;font-weight:900;letter-spacing:.06em;cursor:pointer;font-size:14px}
-  .btn:disabled{opacity:.5}
-  .ok{background:#0b1a0f;border:1px solid #173d20;color:#6ef08a;padding:12px;border-radius:12px;margin-top:14px;display:none;font-size:13px}
-  .err{background:#1a0b0b;border:1px solid #4a1b1b;color:#ff8a8a;padding:12px;border-radius:12px;margin-top:14px;display:none;font-size:13px}
-  .hint{font-size:11px;color:#666;margin-top:10px}
+*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Inter,system-ui,Arial}
+.top{border-bottom:2px solid #ff6a00;padding:18px 24px;display:flex;justify-content:space-between;align-items:center}
+.top b{color:#ff6a00;letter-spacing:2px}
+.form-wrap{max-width:880px;margin:32px auto;padding:24px;border:1px solid #1f1f1f;border-radius:18px;background:#0a0a0a}
+h1{margin:0 0 8px;font-size:28px}h1 span{color:#ff6a00}
+label{font-size:12px;color:#aaa;display:block;margin:14px 0 6px;text-transform:uppercase;letter-spacing:1px}
+input,select{width:100%;padding:13px 14px;border-radius:10px;border:1px solid #2a2a2a;background:#111;color:#fff;outline:none}
+input:focus{border-color:#ff6a00}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
+.btn{width:100%;margin-top:22px;padding:16px;border-radius:12px;border:0;background:#ff6a00;color:#000;font-weight:900;font-size:16px;cursor:pointer;letter-spacing:1px}
+.btn:disabled{opacity:.5}
+.preview{margin-top:18px;padding:14px;background:#111;border:1px dashed #333;border-radius:12px;font-family:monospace;font-size:12px;color:#ff8c42;word-break:break-all}
+.foto-preview{width:92px;height:92px;border-radius:50%;object-fit:cover;border:2px solid #ff6a00;display:none;margin-top:10px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="badge">KORVIL • LOGIN REAL</div>
-  <h1>CRIAR <span>CONTA</span></h1>
-  <p class="sub">Usuário final NÃO cola token. Preenche e clica criar. O server.js já tem <b>GH_TOKEN total acesso geral automático</b> e cria pasta mãe + JSON real no repo <b>sistemak/korvil-app</b> em <code>korvil/sections/korvil-loja/login/contas/</code>.</p>
+<div class="top"><b>KORVIL LOJA</b><small id="pathPreview" style="color:#666"></small></div>
+<div class="form-wrap">
+<h1>CRIAR CONTA <span>→ PASTA MÃE + JSON</span></h1>
+<p style="color:#777;font-size:13px;margin:0 0 18px">Todos os dados exatamente como preencher vão para <code>login/contas/{pasta-mae}/{pasta-mae}.json</code></p>
 
-  <div class="card">
-    <div class="foto">
-      <img id="previewFoto" src="" alt="" />
-      <div style="flex:1">
-        <label>Foto de perfil (opcional)</label>
-        <input type="file" id="foto" accept="image/*" />
-        <div class="hint">Vai virar base64 no JSON exatamente como preencher.</div>
-      </div>
-    </div>
+<label>Foto Perfil (1000161809.png)</label>
+<input type="file" id="foto" accept="image/*"/>
+<img id="fotoPrev" class="foto-preview"/>
 
-    <div class="grid">
-      <div style="grid-column:1/-1"><label>Nome completo <span class="req">*</span></label><input id="nome" placeholder="Ex: Sistema K" /></div>
-      <div><label>Email <span class="req">*</span></label><input id="email" type="email" placeholder="sistemak.srv@gmail.com" /></div>
-      <div><label>WhatsApp</label><input id="whatsapp" placeholder="(13)99769-0898" /></div>
-      <div><label>Senha <span class="req">*</span></label><input id="senha" type="password" /></div>
-      <div><label>Confirmar senha <span class="req">*</span></label><input id="confSenha" type="password" /></div>
-      <div><label>CPF</label><input id="cpf" placeholder="453.814.988-88" /></div>
-      <div><label>CEP</label><input id="cep" placeholder="11250-524" /></div>
-      <div><label>Número</label><input id="numero" placeholder="2407" /></div>
-      <div style="grid-column:1/-1"><label>Rua</label><input id="rua" placeholder="Oswaldo Cruz" /></div>
-      <div><label>Bairro</label><input id="bairro" placeholder="Jardim Vicente Carvalho" /></div>
-      <div><label>Cidade</label><input id="cidade" placeholder="Bertioga" /></div>
-      <div><label>Estado UF</label><select id="estado"><option value="">UF</option><option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option selected>SP</option><option>SE</option><option>TO</option></select></div>
-    </div>
+<label>Nome Completo *</label>
+<input id="nome" placeholder="Sistema K" required/>
 
-    <button class="btn" id="btnCriar">CRIAR CONTA → PASTA MÃE + JSON</button>
-    <div id="ok" class="ok"></div>
-    <div id="err" class="err"></div>
-    <div class="hint" id="pastaHint"></div>
-  </div>
+<div class="grid2">
+<div><label>Email *</label><input id="email" type="email" placeholder="sistemak.srv@gmail.com" required/></div>
+<div><label>WhatsApp</label><input id="whatsapp" placeholder="(13)99769-0898"/></div>
+</div>
+
+<div class="grid2">
+<div><label>Senha *</label><input id="senha" type="password" required/></div>
+<div><label>Confirmar Senha *</label><input id="confSenha" type="password" required/></div>
+</div>
+
+<div class="grid2">
+<div><label>CPF</label><input id="cpf" placeholder="453.814.988-88"/></div>
+<div><label>CEP</label><input id="cep" placeholder="11250-524" maxlength="9"/></div>
+</div>
+
+<div class="grid2">
+<div><label>Número</label><input id="numero" placeholder="2407"/></div>
+<div><label>Rua</label><input id="rua" placeholder="Rua Oswaldo Cruz"/></div>
+</div>
+
+<div class="grid2">
+<div><label>Bairro</label><input id="bairro" placeholder="Jardim Vicente de Carvalho"/></div>
+<div><label>Cidade</label><input id="cidade" placeholder="Bertioga"/></div>
+</div>
+
+<div class="grid2">
+<div><label>Estado UF</label><input id="estado" placeholder="SP" maxlength="2" style="text-transform:uppercase"/></div>
+<div><label>ViaCEP Status</label><input id="viaStatus" disabled placeholder="Aguardando CEP..."/></div>
+</div>
+
+<button class="btn" id="btnCriar">CRIAR CONTA → PASTA MÃE + JSON</button>
+<div class="preview" id="logBox">Pronto para criar...</div>
 </div>
 
 <script>
-const $ = s=>document.querySelector(s);
-let fotoBase64 = "";
-$("#foto").addEventListener("change", e=>{
-  const f = e.target.files[0]; if(!f) return;
-  const r = new FileReader();
-  r.onload = ()=>{ fotoBase64 = r.result; $("#previewFoto").src = fotoBase64; };
-  r.readAsDataURL(f);
-});
-$("#cep").addEventListener("blur", async ()=>{
-  const cep = $("#cep").value.replace(/\D/g,"");
-  if(cep.length!==8) return;
-  try{
-    const res = await fetch("https://viacep.com.br/ws/"+cep+"/json/");
-    const j = await res.json();
-    if(!j.erro){ $("#rua").value=j.logradouro||""; $("#bairro").value=j.bairro||""; $("#cidade").value=j.localidade||""; $("#estado").value=j.uf||"SP"; }
-  }catch{}
-});
-
-function gerarPastaMae(nomeCompleto){
-  const partes = nomeCompleto.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().split(/\s+/).filter(Boolean);
-  if(partes.length===0) return "usuario";
+function gerarPastaMae(nome){
+  const sem = nome.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim();
+  const partes = sem.split(/\s+/).filter(Boolean);
+  if(!partes.length) return '';
   if(partes.length===1) return partes[0];
-  if(partes.length===2) return partes[0]+"-"+partes[1][0];
-  return partes[0]+"-"+partes[1][0]+"-"+partes[2][0];
+  const primeiro = partes[0];
+  const iniciais = partes.slice(1).map(p=>p[0]);
+  return [primeiro, ...iniciais].join('-');
 }
 async function sha256(str){
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+  const enc = new TextEncoder().encode(str);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-function uuid(){ return (crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random().toString(16).slice(2)); }
+let fotoBase64 = '';
 
-$("#nome").addEventListener("input", ()=>{ $("#pastaHint").textContent = "Pasta mãe: "+gerarPastaMae($("#nome").value||"sistema k") + " | Arquivo: "+gerarPastaMae($("#nome").value||"sistema k")+".json"; });
+document.getElementById('foto').addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    fotoBase64 = r.result;
+    const img = document.getElementById('fotoPrev');
+    img.src = fotoBase64;
+    img.style.display='block';
+  };
+  r.readAsDataURL(file);
+});
 
-$("#btnCriar").addEventListener("click", async ()=>{
-  const nome = $("#nome").value.trim();
-  const email = $("#email").value.trim();
-  const senha = $("#senha").value;
-  const conf = $("#confSenha").value;
-  if(!nome || !email || !senha){ $("#err").style.display="block"; $("#err").textContent="Preencha nome, email e senha *"; return; }
-  if(senha!==conf){ $("#err").style.display="block"; $("#err").textContent="Senhas não conferem"; return; }
-  $("#err").style.display="none"; $("#btnCriar").disabled=true; $("#btnCriar").textContent="CRIANDO CONTA REAL...";
+document.getElementById('cep').addEventListener('blur', async e=>{
+  const cep = e.target.value.replace(/\D/g,'');
+  if(cep.length!==8) return;
+  document.getElementById('viaStatus').value='Buscando ViaCEP...';
   try{
-    const pastaMae = gerarPastaMae(nome);
-    const arquivo = pastaMae + ".json";
-    const senha_hash = await sha256(senha);
-    const payload = {
-      id: uuid(),
-      arquivo, pasta_mae: pastaMae,
-      nome_completo: nome,
-      primeiro_nome: nome.split(/\s+/)[0],
-      email, senha_hash,
-      senha_plana_debug: senha, // só pra lembrar exatamente como preencher
-      cpf: $("#cpf").value.trim() || "453.814.988-88",
-      whatsapp: $("#whatsapp").value.trim() || "(13)99769-0898",
-      cep: $("#cep").value.trim() || "11250-524",
-      numero: $("#numero").value.trim() || "2407",
-      rua: $("#rua").value.trim() || "Oswaldo Cruz",
-      bairro: $("#bairro").value.trim() || "Jardim Vicente Carvalho",
-      cidade: $("#cidade").value.trim() || "Bertioga",
-      estado: $("#estado").value || "SP",
-      foto_perfil: fotoBase64 || "",
-      criado_em: new Date().toISOString(),
-      atualizado_em: new Date().toISOString()
-    };
-
-    // 1) Tenta MODO NODE /api/criar-conta com parse seguro (nunca res.json direto)
-    let feito = false;
-    try{
-      const res = await fetch("/api/criar-conta",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-      const txt = await res.text();
-      let data; try{ data = JSON.parse(txt); }catch{ throw new Error("Resposta não-JSON: "+txt.slice(0,200)); }
-      if(res.ok && data.ok){ feito=true; localStorage.setItem("korvil_user", JSON.stringify(payload)); localStorage.setItem("korvil_primeiro_uso_feito","1"); $("#ok").style.display="block"; $("#ok").textContent="✓ Conta criada real! Pasta mãe: "+data.pastaMae+" Arquivo: "+data.arquivo+" Indo pra loja..."; setTimeout(()=>location.href="../index.html",1200); return; }
-      else { throw new Error(data.error||txt); }
-    }catch(e){
-      console.warn("Node falhou, tentando modo GitHub puro automático", e);
-      // 2) MODO GITHUB PURO FUNCIONA REAL SEM TOKEN NO LOGIN: usa token que código mestre já ativou e salvou em localStorage korvil_gh_token
-      const ghToken = localStorage.getItem("korvil_gh_token") || window.__KORVIL_GH_TOKEN__ || "";
-      if(!ghToken){ throw new Error("Sem Node e sem GH_TOKEN interno ativado. Abra o KORVIL MASTER e ative o token uma vez. Erro: "+e.message); }
-      const path = "korvil/sections/korvil-loja/login/contas/"+pastaMae+"/"+arquivo;
-      // get sha se existe
-      let sha;
-      try{
-        const getRes = await fetch("https://api.github.com/repos/sistemak/korvil-app/contents/"+path, {headers:{Authorization:"Bearer "+ghToken, Accept:"application/vnd.github.v3+json"}});
-        if(getRes.ok){ const j = await getRes.json(); sha = j.sha; }
-      }catch{}
-      const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
-      const putRes = await fetch("https://api.github.com/repos/sistemak/korvil-app/contents/"+path,{
-        method:"PUT",
-        headers:{Authorization:"Bearer "+ghToken, Accept:"application/vnd.github.v3+json","Content-Type":"application/json"},
-        body: JSON.stringify({message:"feat: criar conta real "+pastaMae+"/"+arquivo+" via login sem token usuário", content: contentB64, sha: sha||undefined, branch:"main"})
-      });
-      const putTxt = await putRes.text();
-      let putData; try{ putData = JSON.parse(putTxt);}catch{ throw new Error("GitHub PUT não-JSON: "+putTxt.slice(0,300)); }
-      if(!putRes.ok) throw new Error("GitHub erro: "+(putData.message||putTxt));
-      feito=true;
-      localStorage.setItem("korvil_user", JSON.stringify(payload));
-      localStorage.setItem("korvil_primeiro_uso_feito","1");
-      $("#ok").style.display="block";
-      $("#ok").innerHTML = "✓ Conta criada REAL direto no repositório!<br>https://github.com/sistemak/korvil-app/tree/main/"+path+"<br>Indo pra loja...";
-      setTimeout(()=>location.href="../index.html",1500);
+    const res = await fetch('https://viacep.com.br/ws/'+cep+'/json/');
+    const txt = await res.text();
+    let data;
+    try{ data = JSON.parse(txt); }catch{
+      // Corrige Unexpected token '<' da foto - nunca res.json() direto
+      document.getElementById('viaStatus').value='Erro ViaCEP, preencha manual';
+      return;
     }
+    if(data.erro){ document.getElementById('viaStatus').value='CEP não encontrado'; return; }
+    document.getElementById('rua').value = data.logradouro || '';
+    document.getElementById('bairro').value = data.bairro || '';
+    document.getElementById('cidade').value = data.localidade || '';
+    document.getElementById('estado').value = data.uf || '';
+    document.getElementById('viaStatus').value='ViaCEP OK ✓';
   }catch(err){
-    $("#err").style.display="block"; $("#err").textContent="✗ Erro: "+err.message;
-  }finally{ $("#btnCriar").disabled=false; $("#btnCriar").textContent="CRIAR CONTA → PASTA MÃE + JSON"; }
+    document.getElementById('viaStatus').value='Falha ViaCEP';
+  }
+});
+
+document.getElementById('nome').addEventListener('input', e=>{
+  const pm = gerarPastaMae(e.target.value);
+  document.getElementById('pathPreview').textContent = pm ? 'login/contas/'+pm+'/'+pm+'.json' : '';
+});
+
+document.getElementById('btnCriar').addEventListener('click', async ()=>{
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const senha = document.getElementById('senha').value;
+  const conf = document.getElementById('confSenha').value;
+  const cpf = document.getElementById('cpf').value.trim();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+  const cep = document.getElementById('cep').value.trim();
+  const numero = document.getElementById('numero').value.trim();
+  const rua = document.getElementById('rua').value.trim();
+  const bairro = document.getElementById('bairro').value.trim();
+  const cidade = document.getElementById('cidade').value.trim();
+  const estado = document.getElementById('estado').value.trim().toUpperCase();
+  const log = document.getElementById('logBox');
+
+  if(!nome || !email || !senha){ log.textContent='Preencha nome, email e senha *'; return; }
+  if(senha!==conf){ log.textContent='Senhas não conferem'; return; }
+
+  const pastaMae = gerarPastaMae(nome);
+  const arquivo = pastaMae + '.json';
+  const senha_hash = await sha256(senha);
+  const id = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2));
+  const agora = new Date().toISOString();
+  const primeiro_nome = nome.split(/\s+/)[0];
+
+  const conta = {
+    id, arquivo, pasta_mae: pastaMae,
+    nome_completo: nome,
+    primeiro_nome,
+    email, senha_hash,
+    cpf, whatsapp, cep, rua, numero, bairro, cidade, estado,
+    foto_perfil: fotoBase64 || '',
+    criado_em: agora,
+    atualizado_em: agora
+  };
+
+  log.textContent = 'Criando '+pastaMae+'/'+arquivo+' com todos dados exatamente como preencher...';
+
+  // 1) Tenta Node API
+  try{
+    const res = await fetch('/api/criar-conta', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(conta)
+    });
+    const txt = await res.text();
+    let json;
+    try{ json = JSON.parse(txt); }catch{
+      throw new Error('Resposta API não é JSON (corrige Unexpected token <): '+txt.slice(0,200));
+    }
+    if(!res.ok) throw new Error(json.error || 'Erro API');
+    log.textContent = '✓ Pasta mãe criada via NODE: '+json.path;
+    localStorage.setItem('korvil_user', JSON.stringify(conta));
+    localStorage.setItem('korvil_primeiro_uso_feito','1');
+    setTimeout(()=> location.href='../index.html', 800);
+    return;
+  }catch(e){
+    console.warn('Node falhou, tentando Pages fallback', e);
+    log.textContent = 'Node indisponível, tentando GitHub Pages com token interno... '+e.message;
+  }
+
+  // 2) Pages fallback: GitHub API PUT usando token interno salvo pelo MASTER MUDE
+  try{
+    const internalToken = localStorage.getItem('korvil_master_token') || localStorage.getItem('korvil_gh_token_internal');
+    if(!internalToken){
+      throw new Error('Sem GH_TOKEN interno. Rode o KORVIL MASTER MUDE e ative token.');
+    }
+    const path = 'korvil/sections/korvil-loja/login/contas/'+pastaMae+'/'+arquivo;
+    const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(conta,null,2))));
+    // verifica sha se existe
+    let sha;
+    try{
+      const getRes = await fetch('https://api.github.com/repos/sistemak/korvil-app/contents/'+path+'?ref=main', {
+        headers:{'Authorization':'Bearer '+internalToken}
+      });
+      if(getRes.ok){
+        const j = await getRes.json();
+        sha = j.sha;
+      }
+    }catch{}
+
+    const putRes = await fetch('https://api.github.com/repos/sistemak/korvil-app/contents/'+path, {
+      method:'PUT',
+      headers:{
+        'Authorization':'Bearer '+internalToken,
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({
+        message: 'feat(contas): cria '+pastaMae+'/'+arquivo+' com todos dados exatos do Index login',
+        content: contentB64,
+        sha: sha,
+        branch:'main'
+      })
+    });
+    const putTxt = await putRes.text();
+    let putJson;
+    try{ putJson = JSON.parse(putTxt); }catch{ putJson = { raw: putTxt }; }
+    if(!putRes.ok) throw new Error('GitHub PUT falhou: '+(putJson.message||putTxt).slice(0,300));
+
+    log.textContent = '✓ Criado real em https://github.com/sistemak/korvil-app/tree/main/'+path;
+    localStorage.setItem('korvil_user', JSON.stringify(conta));
+    localStorage.setItem('korvil_primeiro_uso_feito','1');
+    setTimeout(()=> location.href='../index.html', 1000);
+  }catch(err){
+    log.textContent = '✗ Erro final: '+err.message;
+  }
 });
 </script>
 </body>
