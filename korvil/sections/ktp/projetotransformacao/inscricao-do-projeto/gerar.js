@@ -1,48 +1,62 @@
+// V25 FINAL REAL - NUNCA GENERICO 42-marcos42 - SEMPRE DINAMICO REAL
+// korvil/sections/ktp/projetotransformacao/inscricao-do-projeto/gerar.js
 import fs from 'fs';
 import path from 'path';
 
-const tipo = (process.env.TIPO || 'presencial').toLowerCase();
-const primeiroNome = (process.env.PRIMEIRO_NOME || 'aluno').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
-const dadosStr = process.env.DADOS_JSON;
+const TIPO_ENV = (process.env.TIPO || process.env.tipo || 'presencial').toLowerCase();
+const TIPO = TIPO_ENV.includes('pres') ? 'presencial' : 'online';
 
-if(!dadosStr){ console.error('DADOS_JSON vazio'); process.exit(1); }
+const PRIMEIRO_NOME_RAW = process.env.PRIMEIRO_NOME || process.env.primeiroNome || '';
+const NOME_COMPLETO = process.env.NOME_COMPLETO || process.env.nome || PRIMEIRO_NOME_RAW;
 
-const dados = JSON.parse(dadosStr);
-const rootAlunos = path.join(process.cwd(), 'korvil/sections/ktp/projetotransformacao/projetos/2026/alunos');
-
-// CRIA presencial e online +.gitkeep automatico
-['presencial','online'].forEach(t=>{
-  let p = path.join(rootAlunos, t);
-  if(!fs.existsSync(p)){
-    fs.mkdirSync(p, {recursive:true});
-    fs.writeFileSync(path.join(p,'.gitkeep'), '');
-    console.log(`Criado ${p}/.gitkeep`);
-  }
-});
-
-const base = path.join(rootAlunos, tipo);
-if(!fs.existsSync(base)) fs.mkdirSync(base, {recursive:true});
-
-let ultimo = 0;
-if(fs.existsSync(base)){
-  fs.readdirSync(base).forEach(f=>{
-    let m = f.match(/^(\d+)-/); if(m) ultimo = Math.max(ultimo, parseInt(m[1]));
-    let full = path.join(base, f);
-    if(/^\d+$/.test(f) && fs.existsSync(full) && fs.statSync(full).isDirectory()){
-      ultimo = Math.max(ultimo, parseInt(f));
-      fs.readdirSync(full).forEach(sf=>{ let mm=sf.match(/^(\d+)-/); if(mm) ultimo=Math.max(ultimo,parseInt(mm[1])); });
-    }
-  });
+function slugPrimeiroNome(nome) {
+  const primeiro = (nome || '').trim().split(/\s+/)[0] || '';
+  return primeiro.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
 }
 
-const prox = ultimo + 1;
-const nomeArq = `${prox}-${primeiroNome}${prox}.json`;
-const conteudo = JSON.stringify(dados, null, 2);
+const primeiroNome = slugPrimeiroNome(PRIMEIRO_NOME_RAW || NOME_COMPLETO);
+if (!primeiroNome) {
+  console.error('❌ PRIMEIRO_NOME vazio - use nome exato preenchido na inscrição');
+  process.exit(1);
+}
 
-fs.writeFileSync(path.join(base, nomeArq), conteudo);
-console.log(`✅ Criado ${base}/${nomeArq}`);
+const ROOT_ALUNOS = path.join(process.cwd(), 'korvil/sections/ktp/projetotransformacao/projetos/2026/alunos');
+const BASE = path.join(ROOT_ALUNOS, TIPO);
+if (!fs.existsSync(BASE)) fs.mkdirSync(BASE, {recursive:true});
 
-const pastaNum = path.join(base, `${prox}`);
-if(!fs.existsSync(pastaNum)) fs.mkdirSync(pastaNum, {recursive:true});
-fs.writeFileSync(path.join(pastaNum, nomeArq), conteudo);
-console.log(`✅ Criado ${pastaNum}/${nomeArq}`);
+// REGEX SÓ FORMATO MÃE VÁLIDO: número-nome+numero -> ex: 46-joao46 | ignora 42, 42-marcos42? 42-marcos42 tem formato mas é bug se duplicado, porém regex oficial é ^(\d+)-[a-z0-9]+\d+$
+const REGEX_MAE = /^(\d+)-[a-z0-9]+\d+$/;
+
+let ultimo = 0;
+const entries = fs.readdirSync(BASE, {withFileTypes:true});
+for (const e of entries) {
+  if (!e.isDirectory()) continue; // ignora json solto
+  const m = e.name.match(REGEX_MAE);
+  if (!m) continue; // ignora pasta só número 42, 43 e fora do padrão
+  const num = parseInt(m[1],10);
+  if (num > ultimo) ultimo = num;
+}
+
+const PROX = ultimo + 1;
+const PASTA_MAE = `${PROX}-${primeiroNome}${PROX}`;
+const NOME_ARQ = `${PASTA_MAE}.json`;
+const FULL_PATH = path.join(BASE, PASTA_MAE, NOME_ARQ);
+
+fs.mkdirSync(path.dirname(FULL_PATH), {recursive:true});
+
+const dados = {
+  id: PROX,
+  pastaMae: PASTA_MAE,
+  arquivo: NOME_ARQ,
+  caminho: `${TIPO}/${PASTA_MAE}/${NOME_ARQ}`,
+  fullPath: `korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/${TIPO}/${PASTA_MAE}/${NOME_ARQ}`,
+  primeiroNome,
+  nomeCompleto: NOME_COMPLETO,
+  tipo: TIPO,
+  criadoEm: new Date().toISOString(),
+  versao: 'V25 FINAL REAL'
+};
+
+// SÓ UM WRITE DENTRO DA MÃE, NUNCA FORA, NUNCA PASTA SÓ NUMERO
+fs.writeFileSync(FULL_PATH, JSON.stringify(dados, null, 2), 'utf8');
+console.log(`✅ Criado SÓ DENTRO DA MÃE: ${FULL_PATH}`);
