@@ -1,11 +1,13 @@
 {
-  "name": "korvil-loja",
+  "name": "korvil-app",
   "version": "1.0.0",
-  "description": "KORVIL LOJA - BLACK #0A0A0A + ORANGE #FF4D00 - Primeiro uso unico, contas login/contas/nome-s-t.json",
+  "description": "KORVIL MASTER SEM TOKEN - Node puro cria pasta mãe + json real",
   "main": "server.js",
-  "scripts": { "start": "node server.js", "dev": "node server.js" },
-  "keywords": ["korvil","loja","sistema-k"],
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["korvil","node","sem-token","pasta-mae"],
   "author": "KORVIL",
-  "license": "MIT",
-  "dependencies": {}
+  "license": "MIT"
 }
