@@ -1,93 +1,20 @@
 name: inscricao-do-projeto
-
 on:
   workflow_dispatch:
     inputs:
-      pasta:
-        description: 'Pasta mae ex: 42-marcos42 - {prox}-{slug}{prox}'
+      dados_json:
+        description: 'JSON exato TELA 1-2-3'
         required: true
-        type: string
-      arquivo:
-        description: 'Arquivo ex: 42-marcos42.json dentro da pasta'
+      primeiro_nome:
+        description: 'primeiro nome'
         required: true
-        type: string
-      conteudo_json:
-        description: 'JSON string com ordem exata TELA 1-2-3 dados reais, nunca exemplo Edna'
+      tipo:
+        description: 'presencial ou online'
         required: true
-        type: string
-      texto_formatado:
-        description: 'Texto formatado TELA 1-2-3 exata ordem - ja em ordem'
-        required: false
-        type: string
-      nome_real:
-        description: 'Nome real preenchido na inscricao'
-        required: false
-        type: string
-
 jobs:
-  criar-apenas-mae-json:
+  salvar:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Validar que e apenas mae + json dentro (nunca fora)
-        run: |
-          PASTA="${{ inputs.pasta }}"
-          ARQUIVO="${{ inputs.arquivo }}"
-          echo "Validando criacao apenas: ${PASTA}/${ARQUIVO}"
-          # garante apenas um nivel
-          PARTS=$(echo "${PASTA}/${ARQUIVO}" | awk -F'/' '{print NF}')
-          if [ "${PARTS}" -gt 2 ]; then
-            echo "::error::So e permitido criar pasta mae + json dentro, nunca fora"
-            exit 1
-          fi
-
-      - name: Exclui pastas e codigos antigos desde 42 ate ultimo (limpeza legada)
-        run: |
-          echo "Limpando legados 42-999... ja exclui antigos"
-          shopt -s nullglob
-          for d in 4[2-9]-* [5-9][0-9]-* [1-9][0-9][0-9]-* [1-9][0-9][0-9][0-9]-*; do
-            if [ -d "${d}" ]; then
-              echo "Removendo legado: ${d}"
-              rm -rf "${d}"
-            fi
-          done
-          echo "Garantido: apenas mae+json sera criado nesta job - assets/, gifs/, registros/ so no cronograma"
-
-      - name: Criar apenas mae + json com dados reais em ordem TELA 1-2-3 exata
-        run: |
-          PASTA="${{ inputs.pasta }}"
-          ARQUIVO="${{ inputs.arquivo }}"
-          JSON_CONTENT='${{ inputs.conteudo_json }}'
-          TEXTO='${{ inputs.texto_formatado }}'
-          echo "Criando pasta real com dados reais: ${PASTA}"
-          mkdir -p "${PASTA}"
-          printf "%s" "${JSON_CONTENT}" > "${PASTA}/${ARQUIVO}"
-          echo "=== CONTEUDO CRIADO - ordem TELA 1-2-3 exata (dados reais, nunca Edna) ==="
-          cat "${PASTA}/${ARQUIVO}"
-          echo ""
-          echo "=== TEXTO_FORMATADO (mesma ordem exata) ==="
-          echo "${TEXTO}"
-          echo ""
-          echo "Arquivos criados nesta execucao:"
-          ls -R "${PASTA}"
-          echo "OK - apenas ${PASTA}/${ARQUIVO} criado"
-
-      - name: Commit real direto no repo original sistemak/korvil-app
-        run: |
-          git config user.name "sistemak-bot"
-          git config user.email "bot@sistemak.com"
-          git add "${{ inputs.pasta }}/${{ inputs.arquivo }}"
-          git add -A
-          if [ -f "${{ inputs.pasta }}/${{ inputs.arquivo }}" ]; then
-            git commit -m "feat: ${{ inputs.pasta }} - inscricao com dados reais TELA 1-2-3 ordem exata [${{ inputs.nome_real }}]" || echo "sem mudancas para commitar"
-            git push origin main
-            echo "COMMIT REAL FEITO EM main - ${{ inputs.pasta }}/${{ inputs.arquivo }}"
-          else
-            echo "::error::Arquivo ${{ inputs.pasta }}/${{ inputs.arquivo }} nao foi criado"
-            exit 1
-          fi
+      - uses: actions/checkout@v4
+      - name: log
+        run: echo "Inscrição ${{ inputs.primeiro_nome }} tipo ${{ inputs.tipo }}"
