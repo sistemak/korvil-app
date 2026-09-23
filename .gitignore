@@ -2,3 +2,8 @@
 node_modules/
 *.zip
 *.mp3
+.env
+.env.*
+!.env.example
+.korvil_token
+npm-debug.log*
