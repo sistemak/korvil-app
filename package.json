@@ -1,20 +1,11 @@
 {
-  "name": "korvil-loja-primeiro-uso",
+  "name": "korvil-loja",
   "version": "1.0.0",
-  "description": "KORVIL LOJA ULTRA BLACK - primeiro uso único login + loja permanente",
-  "type": "module",
+  "description": "KORVIL LOJA - BLACK #0A0A0A + ORANGE #FF4D00 - Primeiro uso unico, contas login/contas/nome-s-t.json",
   "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "@octokit/rest": "^20.0.2"
-  },
-  "engines": {
-    "node": ">=18"
-  }
+  "scripts": { "start": "node server.js", "dev": "node server.js" },
+  "keywords": ["korvil","loja","sistema-k"],
+  "author": "KORVIL",
+  "license": "MIT",
+  "dependencies": {}
 }
