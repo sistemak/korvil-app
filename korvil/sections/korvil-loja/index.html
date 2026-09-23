@@ -1,162 +1,91 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KORVIL LOJA</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}body{background:#0A0A0A;color:#fff;font-family:Inter,system-ui}
-.header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #1a1a1a;position:sticky;top:0;background:#0A0A0A;z-index:10}
-.logo{color:#FF4D00;font-weight:900;letter-spacing:-1px;font-size:22px}
-.icons{display:flex;gap:12px}
-.icon{width:36px;height:36px;border-radius:50%;background:#151515;border:1px solid #222;display:grid;place-items:center;cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;padding:20px}
-.card-prod{background:#141414;border:1px solid #222;border-radius:14px;overflow:hidden;cursor:pointer}
-.card-prod img{width:100%;aspect-ratio:1;object-fit:cover}
-.perfil{position:fixed;inset:0;background:#0A0A0A;z-index:50;display:none;overflow:auto}
-.foto-wrap{width:96px;height:96px;border-radius:50%;overflow:hidden;border:2px solid #FF4D00;position:relative;background:#111}
-.foto-wrap img{width:100%;height:100%;object-fit:contain}
-.lapis{position:absolute;bottom:0;right:0;background:#FF4D00;color:#000;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;cursor:pointer;font-size:14px}
-input{background:#0A0A0A;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;color:#fff;width:100%;margin-top:8px}
-.btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
-.btn-orange{background:#FF4D00;color:#000}
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KORVIL | LOJA</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>*{font-family:'Space Grotesk',sans-serif}.mono{font-family:'JetBrains Mono',monospace}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#FF4D00;border-radius:10px}.prod-card{transition:all .2s}.prod-card:hover{transform:translateY(-3px)}</style>
+<script>
+(function(){ try{ var u=localStorage.getItem('korvil_user'); var p=localStorage.getItem('korvil_primeiro_uso_feito'); if(!u||!p){ window.location.href='./login/index.html'; } }catch(e){ window.location.href='./login/index.html'; } })();
+</script>
 </head>
-<body>
-<div class="header"><div class="logo">KORVIL</div><div class="icons"><div class="icon" id="cart">🛒</div><div class="icon" id="profileBtn">👤</div></div></div>
-<div id="loja" class="grid"></div>
+<body class="bg-[#0A0A0A] text-white min-h-screen">
+<header class="sticky top-0 z-40 bg-[#0A0A0A]/90 backdrop-blur border-b border-[#1E1E1E]">
+  <div class="max-w-[1320px] mx-auto px-4 h-[64px] flex items-center justify-between gap-3">
+    <div class="flex items-center gap-6"><div class="text-[26px] font-bold tracking-[-0.03em]">K<span class="text-[#FF4D00]">.</span>L</div>
+      <div class="hidden md:flex items-center gap-2"><input id="busca" placeholder="Buscar..." class="bg-[#121212] border border-[#1E1E1E] rounded-full px-4 py-2 text-[12px] w-[220px] outline-none focus:border-[#FF4D00]/40">
+        <div class="flex gap-1 ml-2"><button class="filtroBtn text-[10px] mono px-3 py-1.5 rounded-full bg-[#121212] border border-[#1E1E1E]" data-f="SISTEMA K">SISTEMA K</button><button class="filtroBtn text-[10px] mono px-3 py-1.5 rounded-full bg-[#121212] border border-[#1E1E1E]" data-f="K-TP">K-TP</button><button class="filtroBtn text-[10px] mono px-3 py-1.5 rounded-full bg-[#121212] border border-[#1E1E1E]" data-f="K-AFORTUNADO">K-AFORTUNADO</button><button class="filtroBtn text-[10px] mono px-3 py-1.5 rounded-full bg-[#121212] border border-[#1E1E1E]" data-f="K-ALMA">K-ALMA</button></div></div></div>
+    <div class="flex items-center gap-3"><div id="olaUser" class="hidden md:block text-[12px] mono text-white/60"></div><button id="cartBtn" class="w-[40px] h-[40px] rounded-full bg-[#121212] border border-[#1E1E1E] flex items-center justify-center">🛒<span id="cartCount" class="ml-1 text-[11px] text-[#FF4D00] mono">0</span></button><button id="profileIcon" class="w-[40px] h-[40px] rounded-full bg-[#121212] border border-[#1E1E1E] flex items-center justify-center relative"><span id="profileIconInner" class="text-[18px]">👤</span><span id="profileDot" class="hidden absolute -top-1 -right-1 w-[12px] h-[12px] bg-[#FF4D00] rounded-full border-2 border-[#0A0A0A]"></span></button></div>
+  </div>
+  <div class="md:hidden px-4 pb-3 flex gap-2"><input id="buscaM" placeholder="Buscar..." class="flex-1 bg-[#121212] border border-[#1E1E1E] rounded-full px-4 py-2 text-[12px] outline-none"><div class="flex gap-1 overflow-x-auto"><button class="filtroBtn text-[10px] mono px-3 py-1.5 rounded-full bg-[#121212] border border-[#1E1E1E]" data-f="SISTEMA K">SISTEMA K</button><button class="filtroBtn text-[10px] mono px-3 py-1.5 rounded-full bg-[#121212] border border-[#1E1E1E]" data-f="K-TP">K-TP</button></div></div>
+</header>
+<main class="max-w-[1320px] mx-auto px-4 py-6"><div class="flex items-center justify-between mb-6"><h2 class="text-[14px] mono tracking-widest text-white/40">DROP • 40 PRODUTOS • MESMO INDEX ANTERIOR</h2><div class="text-[11px] mono text-white/30">Loja conectada quando tem korvil_user</div></div><div id="grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div></main>
 
-<!-- Perfil -->
-<div id="perfilTela" class="perfil">
-<div style="padding:20px;max-width:560px;margin:auto">
-<div style="display:flex;justify-content:space-between;align-items:center"><h2>Meu Perfil</h2><button id="fecharPerfil" class="btn" style="background:#222;color:#fff">✕</button></div>
-<div style="display:flex;flex-direction:column;align-items:center;margin-top:18px;gap:12px">
-<div class="foto-wrap"><img id="fotoPreview" src=""/><div class="lapis" id="lapisBtn">✎</div></div>
-<input type="file" id="fotoInput" accept="image/*" style="display:none"/>
-<small id="fotoNome" style="color:#888"></small>
-</div>
-<input id="cpf" placeholder="CPF"/><input id="whats" placeholder="WhatsApp"/>
-<div style="display:flex;gap:8px"><input id="cep" placeholder="CEP"/><button class="btn btn-orange" id="buscarCep">ViaCEP</button></div>
-<input id="rua" placeholder="Rua"/><div style="display:flex;gap:8px"><input id="numero" placeholder="Número" style="border-color:#FF4D00"/><input id="bairro" placeholder="Bairro"/></div>
-<div style="display:flex;gap:8px"><input id="cidade" placeholder="Cidade"/><input id="estado" placeholder="UF" style="max-width:80px"/></div>
-<div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-orange" id="salvarPerfil">SALVAR</button><button class="btn" id="sairBtn" style="background:#111;color:#fff;margin-left:auto">SAIR ↘</button></div>
-<div id="perfilLog" style="margin-top:10px;font-size:12px;color:#aaa"></div>
-</div>
-</div>
+<div id="modalPerfil" class="fixed inset-0 z-[60] hidden bg-[#0A0A0A] overflow-y-auto"><div class="max-w-[760px] mx-auto min-h-screen flex flex-col"><div class="h-[64px] flex items-center justify-between px-6 border-b border-[#1E1E1E] sticky top-0 bg-[#0A0A0A] z-10"><div class="flex items-center gap-3"><button id="fecharPerfil" class="w-[36px] h-[36px] rounded-full bg-[#121212] border border-[#1E1E1E]">✕</button><span class="text-[14px] mono tracking-widest">PERFIL • EDITAR CONTA</span></div><span class="text-[10px] mono text-white/30">Atualiza mesmo .json joao-s-s.json</span></div>
+<div class="p-6 md:p-8 flex-1"><div class="flex gap-6 items-start"><div class="relative"><div class="w-[96px] h-[96px] rounded-full bg-[#121212] border border-[#2A2A2A] overflow-hidden flex items-center justify-center"><img id="perfilFoto" class="w-full h-full object-contain hidden" alt="foto"><span id="perfilFotoPh" class="text-[32px]">👤</span></div><button id="perfilFotoBtn" class="absolute -bottom-1 -right-1 w-[28px] h-[28px] bg-[#FF4D00] rounded-full flex items-center justify-center text-black text-[12px]">✎</button><input id="perfilFotoInput" type="file" accept="image/*" class="hidden"></div><div class="flex-1"><h3 class="text-[22px] font-bold leading-none" id="perfilNomeDisplay">—</h3><p class="text-[12px] mono text-white/40 mt-1" id="perfilArquivoDisplay">arquivo: —.json</p><p class="text-[11px] mono text-white/30 mt-2">Clique no círculo foto topo superior esquerdo com lápis para anexar foto tamanho completo sem cortar (contain)</p></div></div>
+<div class="mt-8 grid md:grid-cols-2 gap-4"><div><label class="text-[10px] mono tracking-widest text-white/50">NOME COMPLETO</label><input id="pNome" class="mt-2 w-full bg-[#121212] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">EMAIL</label><input id="pEmail" class="mt-2 w-full bg-[#121212] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">CPF</label><input id="pCpf" class="mt-2 w-full bg-[#121212] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">WHATSAPP</label><input id="pZap" class="mt-2 w-full bg-[#121212] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">CEP (ViaCEP auto)</label><input id="pCep" class="mt-2 w-full bg-[#121212] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">RUA</label><input id="pRua" class="mt-2 w-full bg-[#121212] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">NÚMERO</label><input id="pNumero" class="mt-2 w-full bg-[#121212] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">BAIRRO</label><input id="pBairro" class="mt-2 w-full bg-[#121212] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">CIDADE</label><input id="pCidade" class="mt-2 w-full bg-[#121212] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">ESTADO</label><input id="pEstado" class="mt-2 w-full bg-[#121212] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div></div>
+<div id="perfilMsg" class="hidden mt-6 text-[12px] mono p-3 rounded-[12px]"></div><button id="btnSalvarPerfil" class="mt-6 w-full bg-[#FF4D00] text-black font-bold tracking-widest text-[12px] py-[14px] rounded-[12px]">SALVAR • ATUALIZA JSON MESMO ARQUIVO</button><p class="mt-3 text-[10px] mono text-white/30 text-center">GET sha + PUT mesmo joao-s-s.json • message KORVIL: atualiza perfil joao-s-s.json</p></div>
+<div class="p-6 border-t border-[#1E1E1E] flex justify-end"><button id="btnSair" class="flex items-center gap-2 px-5 py-3 rounded-full bg-[#121212] border border-[#1E1E1E] hover:border-[#FF4D00]/50 text-[12px] mono"><span>↪</span> SAIR • canto inferior direito</button></div></div></div>
+
+<div id="modalProduto" class="fixed inset-0 z-[50] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur" id="fecharProdutoBg"></div><div class="relative max-w-[980px] mx-auto mt-10 md:mt-[5vh] bg-[#121212] border border-[#1E1E1E] rounded-[24px] overflow-hidden grid md:grid-cols-2"><div class="bg-[#0A0A0A] p-4 flex items-center justify-center"><img id="prodImg" class="w-full h-[420px] object-contain" alt=""></div><div class="p-6 md:p-8 flex flex-col"><button id="fecharProduto" class="self-end w-[32px] h-[32px] rounded-full bg-[#0A0A0A] border border-[#1E1E1E]">✕</button><div class="mt-2 text-[11px] mono px-2 py-1 rounded-full bg-[#FF4D00]/10 border border-[#FF4D00]/20 text-[#FF4D00] inline-flex w-fit" id="prodCat">SISTEMA K</div><h3 id="prodNome" class="mt-4 text-[26px] font-bold leading-[0.95] tracking-[-0.02em]">—</h3><p id="prodPreco" class="mt-3 text-[20px] font-bold text-[#FF4D00]">R$ —</p><p class="mt-4 text-[12px] mono text-white/50 leading-[1.6]">Produto KORVIL original. Checkout mostra mesmo endereço CEP número casa salvo perfil. Só finaliza se logado.</p><div class="mt-auto pt-8 flex gap-3"><button id="btnComprar" class="flex-1 bg-[#FF4D00] text-black font-bold tracking-widest text-[12px] py-[14px] rounded-[12px]">COMPRAR</button><button id="btnAddCart" class="px-5 bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] text-[12px] mono">+ CARRINHO</button></div></div></div></div>
+
+<div id="modalCheckout" class="fixed inset-0 z-[55] hidden bg-[#0A0A0A] overflow-y-auto"><div class="max-w-[720px] mx-auto min-h-screen"><div class="h-[64px] flex items-center justify-between px-6 border-b border-[#1E1E1E] sticky top-0 bg-[#0A0A0A]"><button id="fecharCheckout" class="w-[36px] h-[36px] rounded-full bg-[#121212] border border-[#1E1E1E]">✕</button><span class="text-[13px] mono tracking-widest">CHECKOUT • PIX</span><span class="text-[10px] mono text-white/30">Endereço do perfil</span></div>
+<div class="p-6 space-y-6"><div class="flex gap-4 bg-[#121212] border border-[#1E1E1E] rounded-[16px] p-4"><img id="ckImg" class="w-[84px] h-[84px] object-contain bg-[#0A0A0A] rounded-[12px]" alt=""><div class="flex-1"><div id="ckNome" class="text-[16px] font-bold"></div><div id="ckPreco" class="text-[#FF4D00] font-bold mt-1"></div><div class="text-[11px] mono text-white/40 mt-1">Qtd 1 • KORVIL</div></div></div>
+<div class="bg-[#121212] border border-[#1E1E1E] rounded-[16px] p-5"><div class="flex items-center justify-between"><h4 class="text-[12px] mono tracking-widest">ENDEREÇO ATUAL</h4><button id="btnTrocarEnd" class="text-[11px] mono px-3 py-1 rounded-full bg-[#0A0A0A] border border-[#1E1E1E]">TROCAR</button></div><div id="endAtual" class="mt-3 text-[13px] leading-[1.5] text-white/80 mono bg-[#0A0A0A] rounded-[12px] p-4 border border-[#1E1E1E]"></div><button id="btnAddEnd" class="mt-3 text-[11px] mono px-3 py-2 rounded-full bg-[#FF4D00]/10 border border-[#FF4D00]/20 text-[#FF4D00]">+ ADICIONAR OUTRO ENDEREÇO (popup CEP auto)</button></div>
+<div id="pixBox" class="hidden bg-[#121212] border border-[#1E1E1E] rounded-[16px] p-5"><h4 class="text-[12px] mono tracking-widest">PIX COPIA E COLA</h4><div id="pixCode" class="mt-3 text-[11px] mono break-all bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] p-4 text-white/70"></div><button id="btnCopiarPix" class="mt-3 w-full bg-white text-black font-bold tracking-widest text-[11px] py-3 rounded-[12px]">COPIAR CÓDIGO PIX</button><button id="btnPaguei" class="mt-2 w-full bg-[#FF4D00] text-black font-bold tracking-widest text-[11px] py-3 rounded-[12px]">JÁ PAGUEI • CONFIRMAR COMPRA</button></div>
+<button id="btnGerarPix" class="w-full bg-[#FF4D00] text-black font-bold tracking-widest text-[12px] py-[14px] rounded-[16px]">COMPRAR • GERAR PIX</button><p class="text-[10px] mono text-white/30 text-center">Quando pagar voltar mostra compra confirmada com todos dados produto</p></div></div></div>
+
+<div id="modalLoginReq" class="fixed inset-0 z-[70] hidden"><div class="absolute inset-0 bg-black/80 backdrop-blur" id="fecharLoginReqBg"></div><div class="relative max-w-[380px] mx-auto mt-[20vh] bg-[#121212] border border-[#1E1E1E] rounded-[24px] p-7 text-center"><div class="w-[48px] h-[48px] rounded-full bg-[#FF4D00]/10 border border-[#FF4D00]/20 flex items-center justify-center mx-auto text-[#FF4D00]">!</div><h3 class="mt-4 text-[18px] font-bold">Login obrigatório</h3><p class="mt-2 text-[12px] mono text-white/50 leading-[1.6]">Para finalizar compra é necessário logar. Clique em algum produto pra comprar só permite se logado, senão mostra popup login.</p><button id="irLogin" class="mt-6 w-full bg-[#FF4D00] text-black font-bold tracking-widest text-[12px] py-3 rounded-[12px]">IR PARA LOGIN</button><button id="fecharLoginReq" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] text-white/60 mono text-[11px] py-3 rounded-[12px]">FECHAR</button></div></div>
+
+<div id="modalEnd" class="fixed inset-0 z-[66] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur" id="fecharEndBg"></div><div class="relative max-w-[520px] mx-auto mt-[10vh] bg-[#121212] border border-[#1E1E1E] rounded-[24px] p-6"><div class="flex items-center justify-between"><h4 class="text-[13px] mono tracking-widest">NOVO ENDEREÇO • CEP AUTO ViaCEP</h4><button id="fecharEnd" class="w-[32px] h-[32px] rounded-full bg-[#0A0A0A] border border-[#1E1E1E]">✕</button></div><div class="mt-5 grid gap-3"><input id="eCep" placeholder="CEP 01310-100" class="bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px]"><div class="grid grid-cols-2 gap-3"><input id="eRua" placeholder="Rua" class="bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px]"><input id="eNum" placeholder="Número" class="bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px]"></div><div class="grid grid-cols-2 gap-3"><input id="eBairro" placeholder="Bairro" class="bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px]"><input id="eCidade" placeholder="Cidade" class="bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px]"></div><input id="eEstado" placeholder="Estado SP" class="bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px]"></div><button id="btnSalvarEnd" class="mt-5 w-full bg-white text-black font-bold text-[12px] tracking-widest py-3 rounded-[12px]">SALVAR ENDEREÇO</button></div></div>
+
+<div id="modalEndLista" class="fixed inset-0 z-[67] hidden"><div class="absolute inset-0 bg-black/70 backdrop-blur" id="fecharEndListaBg"></div><div class="relative max-w-[520px] mx-auto mt-[10vh] bg-[#121212] border border-[#1E1E1E] rounded-[24px] p-6"><div class="flex items-center justify-between"><h4 class="text-[13px] mono tracking-widest">ESCOLHER ENDEREÇO</h4><button id="fecharEndLista" class="w-[32px] h-[32px] rounded-full bg-[#0A0A0A] border border-[#1E1E1E]">✕</button></div><div id="listaEnd" class="mt-5 grid gap-2 max-h-[50vh] overflow-y-auto"></div><p class="mt-4 text-[10px] mono text-white/30">Endereços salvos desde primeiro perfil + outros adicionados. Clicar já volta checkout com endereço clicado como atual, sem sair checkout.</p></div></div>
+
+<div id="modalConfirmada" class="fixed inset-0 z-[80] hidden bg-[#0A0A0A] overflow-y-auto"><div class="max-w-[600px] mx-auto p-8 text-center"><div class="w-[64px] h-[64px] rounded-full bg-[#00FF88]/10 border border-[#00FF88]/20 flex items-center justify-center mx-auto text-[#00FF88] text-[28px]">✓</div><h2 class="mt-6 text-[28px] font-bold">Compra confirmada!</h2><p class="mt-2 mono text-[12px] text-white/50">Todos dados produto + endereço + Pix</p><div id="confirmDetalhe" class="mt-8 text-left bg-[#121212] border border-[#1E1E1E] rounded-[16px] p-5 mono text-[12px] leading-[1.7]"></div><button id="fecharConfirmada" class="mt-6 w-full bg-white text-black font-bold tracking-widest text-[12px] py-3 rounded-[12px]">VOLTAR À LOJA</button></div></div>
 
 <script>
-// check primeiro uso
-if(!localStorage.getItem('korvil_user') || !localStorage.getItem('korvil_primeiro_uso_feito')){
-  location.href='./login/index.html';
-}
-function utf8ToBase64(s){ return btoa(unescape(encodeURIComponent(s))); }
-function gerarNomeArquivo(nome){
-  const partes = nome.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().split(/\s+/).filter(Boolean);
-  let n = partes[0]; if(partes[1]?.[0]) n+='-'+partes[1][0]; if(partes[2]?.[0]) n+='-'+partes[2][0];
-  return n+'.json';
-}
-// loja mock
-const produtos = [{id:1,nome:'KORVIL TEE BLACK',preco:149,img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500'},{id:2,nome:'KORVIL HOODIE',preco:299,img:'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500'}];
-const lojaEl = document.getElementById('loja');
-function renderLoja(){
-  const user = JSON.parse(localStorage.getItem('korvil_user')||'{}');
-  lojaEl.innerHTML = produtos.map(p=>`<div class="card-prod" onclick="abrirProd(${p.id})"><img src="${p.img}"/><div style="padding:10px"><b>${p.nome}</b><div style="color:#FF4D00">R$ ${p.preco}</div></div></div>`).join('');
-}
-function abrirProd(id){
-  const user = localStorage.getItem('korvil_user');
-  if(!user){ alert('Para finalizar compra é necessário logar'); location.href='./login/index.html'; return; }
-  // checkout simulado - modal
-  const p = produtos.find(x=>x.id===id);
-  const end = JSON.parse(localStorage.getItem('korvil_enderecos')||'[]')[0] || {};
-  const html = `<div style="position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:60;display:grid;place-items:center"><div style="background:#141414;border:1px solid #222;border-radius:16px;padding:20px;max-width:420px;width:92%"><h3>${p.nome}</h3><p style="color:#FF4D00">R$ ${p.preco}</p><p style="margin-top:10px;font-size:13px">Endereço: ${end.rua||'Use perfil'} ${end.numero||''}</p><button onclick="gerarPix()" class="btn btn-orange" style="width:100%;margin-top:12px">COMPRAR GERAR PIX</button><div id="pixArea" style="margin-top:12px"></div><button onclick="this.parentElement.parentElement.remove()" class="btn" style="width:100%;margin-top:8px;background:#222;color:#fff">FECHAR</button><button onclick="adicionarEndereco()" class="btn" style="width:100%;margin-top:8px;background:#111;color:#FF4D00;border:1px solid #FF4D00">+ ADICIONAR OUTRO ENDEREÇO</button><button onclick="trocarEndereco()" class="btn" style="width:100%;margin-top:8px;background:#111;color:#fff">TROCAR ENDEREÇO</button></div></div>`;
-  document.body.insertAdjacentHTML('beforeend', html);
-}
-window.abrirProd = abrirProd;
-window.gerarPix = ()=>{
-  const codigo = '00020126580014BR.GOV.BCB.PIX0136'+Math.random().toString(36).slice(2,10)+'5204000053039865406'+(149).toFixed(2)+'5802BR5920KORVIL STORE6009SAO PAULO62070503***6304ABCD';
-  document.getElementById('pixArea').innerHTML = `<div style="background:#fff;color:#000;padding:10px;border-radius:10px;text-align:center"><div style="font-size:12px;word-break:break-all">${codigo}</div><button class="btn btn-orange" style="margin-top:8px" onclick="navigator.clipboard.writeText('${codigo}')">COPIAR</button><div style="margin-top:8px"><button class="btn" style="background:#111;color:#0f0;width:100%" onclick="alert('Compra confirmada!');this.parentElement.parentElement.parentElement.parentElement.remove()">Já paguei</button></div></div>`;
-};
-window.adicionarEndereco = ()=>{
-  const cep = prompt('Digite CEP');
-  if(!cep) return;
-  fetch(`https://viacep.com.br/ws/${cep.replace(/\D/g,'')}/json`).then(r=>r.json()).then(d=>{
-    const lista = JSON.parse(localStorage.getItem('korvil_enderecos')||'[]');
-    lista.push({cep, rua:d.logradouro, bairro:d.bairro, cidade:d.localidade, estado:d.uf, numero:''});
-    localStorage.setItem('korvil_enderecos', JSON.stringify(lista));
-    alert('Endereço salvo');
-  });
-};
-window.trocarEndereco = ()=>{
-  const lista = JSON.parse(localStorage.getItem('korvil_enderecos')||'[]');
-  if(!lista.length) return alert('Nenhum endereço');
-  const idx = prompt('Escolha índice 0-'+(lista.length-1)+': '+lista.map((e,i)=>i+': '+e.rua).join(' | '));
-  if(idx!==null){ localStorage.setItem('korvil_endereco_atual', idx); alert('Endereço trocado sem sair do checkout'); }
-};
-
-// perfil
-const perfilTela = document.getElementById('perfilTela');
-document.getElementById('profileBtn').onclick = ()=>{ perfilTela.style.display='block'; carregarPerfil(); };
-document.getElementById('fecharPerfil').onclick = ()=> perfilTela.style.display='none';
-function carregarPerfil(){
-  const u = JSON.parse(localStorage.getItem('korvil_user')||'{}');
-  document.getElementById('cpf').value = u.cpf||''; document.getElementById('whats').value = u.whatsapp||'';
-  document.getElementById('cep').value = u.cep||''; document.getElementById('rua').value = u.rua||'';
-  document.getElementById('numero').value = u.numero||''; document.getElementById('bairro').value = u.bairro||'';
-  document.getElementById('cidade').value = u.cidade||''; document.getElementById('estado').value = u.estado||'';
-  if(u.foto_perfil) document.getElementById('fotoPreview').src = u.foto_perfil;
-}
-document.getElementById('lapisBtn').onclick = ()=> document.getElementById('fotoInput').click();
-document.getElementById('fotoInput').onchange = (e)=>{
-  const file = e.target.files[0]; if(!file) return;
-  const reader = new FileReader(); reader.onload = ()=>{ document.getElementById('fotoPreview').src = reader.result; document.getElementById('fotoNome').textContent = file.name; document.getElementById('fotoPreview').dataset.base64 = reader.result; }; reader.readAsDataURL(file);
-};
-document.getElementById('buscarCep').onclick = async ()=>{
-  const cep = document.getElementById('cep').value.replace(/\D/g,'');
-  if(cep.length!==8) return alert('CEP inválido');
-  const r = await fetch(`https://viacep.com.br/ws/${cep}/json`); const d = await r.json();
-  if(d.erro) return alert('CEP não encontrado');
-  document.getElementById('rua').value = d.logradouro; document.getElementById('bairro').value = d.bairro;
-  document.getElementById('cidade').value = d.localidade; document.getElementById('estado').value = d.uf;
-  document.getElementById('numero').focus();
-};
-document.getElementById('salvarPerfil').onclick = async ()=>{
-  const log = document.getElementById('perfilLog');
-  try{
-    const u = JSON.parse(localStorage.getItem('korvil_user')||'{}');
-    const token = localStorage.getItem('loja_github_token');
-    if(!token) throw new Error('Token não configurado');
-    const novo = {
-      ...u,
-      cpf: document.getElementById('cpf').value,
-      whatsapp: document.getElementById('whats').value,
-      cep: document.getElementById('cep').value,
-      rua: document.getElementById('rua').value,
-      numero: document.getElementById('numero').value,
-      bairro: document.getElementById('bairro').value,
-      cidade: document.getElementById('cidade').value,
-      estado: document.getElementById('estado').value,
-      foto_perfil: document.getElementById('fotoPreview').dataset.base64 || u.foto_perfil || '',
-      atualizado_em: new Date().toISOString()
-    };
-    const nomeArq = gerarNomeArquivo(novo.nome_completo);
-    const path = `korvil/sections/korvil-loja/login/contas/${nomeArq}`;
-    const url = `https://api.github.com/repos/sistemak/korvil-app/contents/${path}`;
-    let sha;
-    const getRes = await fetch(`${url}?ref=main`, {headers:{Authorization: `token ${token}`, Accept:'application/vnd.github.v3+json'}});
-    if(getRes.ok){ const d = await getRes.json(); sha = d.sha; }
-    const putRes = await fetch(url, {method:'PUT', headers:{Authorization: `token ${token}`, Accept:'application/vnd.github.v3+json','Content-Type':'application/json'}, body: JSON.stringify({message: `KORVIL UPDATE: perfil ${nomeArq}`, content: utf8ToBase64(JSON.stringify(novo,null,2)), sha, branch:'main'})});
-    const result = await putRes.json();
-    if(!putRes.ok) throw new Error(result.message);
-    localStorage.setItem('korvil_user', JSON.stringify(novo));
-    log.textContent = '✓ perfil salvo e commitado: '+result.commit.sha.slice(0,7);
-  }catch(e){ log.textContent = '✗ '+e.message; }
-};
-document.getElementById('sairBtn').onclick = ()=>{
-  localStorage.removeItem('korvil_user');
-  perfilTela.style.display='none';
-  renderLoja();
-  alert('Deslogado - loja modo visitante');
-};
-renderLoja();
+var produtos=[]; var setores=['SISTEMA K','K-TP','K-AFORTUNADO','K-ALMA']; var carrinho=JSON.parse(localStorage.getItem('korvil_carrinho')||'[]'); var enderecos=JSON.parse(localStorage.getItem('korvil_enderecos')||'[]'); var enderecoAtual=null; var produtoAtual=null;
+function initLoja(){ var user=null; try{user=JSON.parse(localStorage.getItem('korvil_user')||'null')}catch(e){} var ola=document.getElementById('olaUser'); var dot=document.getElementById('profileDot'); var iconInner=document.getElementById('profileIconInner'); if(user){ ola.textContent='Olá, '+(user.primeiro_nome||user.nome_completo.split(' ')[0]); ola.classList.remove('hidden'); dot.classList.remove('hidden'); iconInner.textContent='◉'; iconInner.className='text-[18px] text-[#FF4D00]'; if(!enderecos.length&&user.cep){ enderecoAtual={cep:user.cep,rua:user.rua||'',numero:user.numero||'',bairro:user.bairro||'',cidade:user.cidade||'',estado:user.estado||'',origem:'perfil'}; enderecos.push(enderecoAtual); localStorage.setItem('korvil_enderecos',JSON.stringify(enderecos)); } else if(enderecos.length){ enderecoAtual=enderecos[0]; } } document.getElementById('cartCount').textContent=carrinho.length; gerarProdutos(); renderGrid(''); }
+function gerarProdutos(){ produtos=[]; for(var i=1;i<=40;i++){ var setor=setores[i%4]; produtos.push({id:i,nome:setor+' DROP '+(100+i)+' • TEE '+(i%2===0?'BLACK':'ORANGE'),preco:(89+i*7.5).toFixed(2),setor:setor,img:'https://picsum.photos/seed/korvil'+i+'/600/600'}); } }
+function renderGrid(filtro){ var grid=document.getElementById('grid'); var busca=(document.getElementById('busca')?.value||document.getElementById('buscaM')?.value||'').toLowerCase(); grid.innerHTML=''; produtos.filter(function(p){ var okSetor=!filtro||p.setor===filtro; var okBusca=!busca||p.nome.toLowerCase().includes(busca)||p.setor.toLowerCase().includes(busca); return okSetor&&okBusca; }).forEach(function(p){ var card=document.createElement('div'); card.className='prod-card bg-[#121212] border border-[#1E1E1E] rounded-[16px] overflow-hidden cursor-pointer'; card.innerHTML='<div class="aspect-square bg-[#0A0A0A] p-3 flex items-center justify-center"><img src="'+p.img+'" class="w-full h-full object-contain rounded-[10px]" loading="lazy"></div><div class="p-3"><div class="text-[10px] mono px-2 py-0.5 rounded-full bg-[#0A0A0A] border border-[#1E1E1E] text-white/40 inline-block">'+p.setor+'</div><div class="mt-2 text-[12px] font-semibold leading-[1.1] line-clamp-2">'+p.nome+'</div><div class="mt-2 text-[13px] font-bold text-[#FF4D00]">R$ '+p.preco+'</div></div>'; card.addEventListener('click',function(){abrirProduto(p)}); grid.appendChild(card); }); }
+function abrirProduto(p){ var user=null; try{user=JSON.parse(localStorage.getItem('korvil_user')||'null')}catch(e){} if(!user){ document.getElementById('modalLoginReq').classList.remove('hidden'); return; } produtoAtual=p; document.getElementById('prodImg').src=p.img; document.getElementById('prodNome').textContent=p.nome; document.getElementById('prodPreco').textContent='R$ '+p.preco; document.getElementById('prodCat').textContent=p.setor; document.getElementById('modalProduto').classList.remove('hidden'); }
+function abrirPerfil(){ var user=null; try{user=JSON.parse(localStorage.getItem('korvil_user')||'null')}catch(e){} if(!user){window.location.href='./login/index.html';return;} document.getElementById('pNome').value=user.nome_completo||''; document.getElementById('pEmail').value=user.email||''; document.getElementById('pCpf').value=user.cpf||''; document.getElementById('pZap').value=user.whatsapp||''; document.getElementById('pCep').value=user.cep||''; document.getElementById('pRua').value=user.rua||''; document.getElementById('pNumero').value=user.numero||''; document.getElementById('pBairro').value=user.bairro||''; document.getElementById('pCidade').value=user.cidade||''; document.getElementById('pEstado').value=user.estado||''; document.getElementById('perfilNomeDisplay').textContent=user.nome_completo||'—'; document.getElementById('perfilArquivoDisplay').textContent='arquivo: '+(user.arquivo||'—'); var img=document.getElementById('perfilFoto'); var ph=document.getElementById('perfilFotoPh'); if(user.foto_perfil){img.src=user.foto_perfil;img.classList.remove('hidden');ph.classList.add('hidden');} else {img.classList.add('hidden');ph.classList.remove('hidden');} document.getElementById('modalPerfil').classList.remove('hidden'); }
+document.getElementById('profileIcon').addEventListener('click',abrirPerfil);
+document.getElementById('fecharPerfil').addEventListener('click',function(){document.getElementById('modalPerfil').classList.add('hidden')});
+document.getElementById('busca')?.addEventListener('input',function(){renderGrid(window.filtroAtual||'')});
+document.getElementById('buscaM')?.addEventListener('input',function(){renderGrid(window.filtroAtual||'')});
+document.querySelectorAll('.filtroBtn').forEach(function(b){ b.addEventListener('click',function(){ window.filtroAtual=this.dataset.f===window.filtroAtual?'':this.dataset.f; document.querySelectorAll('.filtroBtn').forEach(function(x){x.classList.remove('!border-[#FF4D00]','!bg-[#FF4D00]/10')}); if(window.filtroAtual){this.classList.add('!border-[#FF4D00]','!bg-[#FF4D00]/10');} renderGrid(window.filtroAtual||''); }); });
+document.getElementById('fecharProduto').addEventListener('click',function(){document.getElementById('modalProduto').classList.add('hidden')});
+document.getElementById('fecharProdutoBg').addEventListener('click',function(){document.getElementById('modalProduto').classList.add('hidden')});
+document.getElementById('btnComprar').addEventListener('click',function(){document.getElementById('modalProduto').classList.add('hidden');abrirCheckout()});
+document.getElementById('btnAddCart').addEventListener('click',function(){ if(!produtoAtual) return; carrinho.push(produtoAtual); localStorage.setItem('korvil_carrinho',JSON.stringify(carrinho)); document.getElementById('cartCount').textContent=carrinho.length; document.getElementById('modalProduto').classList.add('hidden'); });
+document.getElementById('perfilFotoBtn').addEventListener('click',function(){document.getElementById('perfilFotoInput').click()});
+document.getElementById('perfilFotoInput').addEventListener('change',function(e){ var f=e.target.files[0]; if(!f) return; var r=new FileReader(); r.onload=function(ev){ var img=document.getElementById('perfilFoto'); var ph=document.getElementById('perfilFotoPh'); img.src=ev.target.result; img.classList.remove('hidden'); ph.classList.add('hidden'); img.dataset.newBase64=ev.target.result; }; r.readAsDataURL(f); });
+document.getElementById('pCep').addEventListener('blur',async function(){ var cep=this.value.replace(/\D/g,''); if(cep.length!==8) return; try{ var res=await fetch('https://viacep.com.br/ws/'+cep+'/json/'); var d=await res.json(); if(!d.erro){ document.getElementById('pRua').value=d.logradouro||''; document.getElementById('pBairro').value=d.bairro||''; document.getElementById('pCidade').value=d.localidade||''; document.getElementById('pEstado').value=d.uf||''; } }catch(e){} });
+document.getElementById('btnSalvarPerfil').addEventListener('click',async function(){ var user=null; try{user=JSON.parse(localStorage.getItem('korvil_user')||'null')}catch(e){} if(!user) return; var novo={ id:user.id, arquivo:user.arquivo, nome_completo:document.getElementById('pNome').value.trim(), primeiro_nome:document.getElementById('pNome').value.trim().split(/\s+/)[0]||'', email:document.getElementById('pEmail').value.trim(), senha_hash:user.senha_hash, cpf:document.getElementById('pCpf').value.trim(), whatsapp:document.getElementById('pZap').value.trim(), cep:document.getElementById('pCep').value.trim(), rua:document.getElementById('pRua').value.trim(), numero:document.getElementById('pNumero').value.trim(), bairro:document.getElementById('pBairro').value.trim(), cidade:document.getElementById('pCidade').value.trim(), estado:document.getElementById('pEstado').value.trim(), foto_perfil:document.getElementById('perfilFoto').dataset.newBase64||user.foto_perfil||'', criado_em:user.criado_em, atualizado_em:new Date().toISOString() }; var msg=document.getElementById('perfilMsg'); msg.classList.remove('hidden'); msg.textContent='Salvando...'; msg.className='mt-6 text-[12px] mono p-3 rounded-[12px] bg-[#FF4D00]/10 border border-[#FF4D00]/20 text-[#FF4D00]'; var token=localStorage.getItem('loja_github_token'); var owner=localStorage.getItem('korvil_github_owner'); var repo=localStorage.getItem('korvil_github_repo'); var branch=localStorage.getItem('korvil_github_branch')||'main'; var pathRepo='korvil/sections/korvil-loja/login/contas/'+novo.arquivo; if(token&&owner&&repo){ try{ var getRes=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+pathRepo+'?ref='+branch,{headers:{'Authorization':'token '+token}}); var sha=null; if(getRes.ok){var gj=await getRes.json(); sha=gj.sha;} var jsonStr=JSON.stringify(novo,null,2); var b64=btoa(unescape(encodeURIComponent(jsonStr))); var body={message:'KORVIL: atualiza perfil '+novo.arquivo,content:b64,branch:branch}; if(sha) body.sha=sha; var putRes=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+pathRepo,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify(body)}); if(!putRes.ok){var t=await putRes.text(); msg.textContent='Erro GitHub: '+t.slice(0,200); return;} msg.textContent='Perfil atualizado! JSON '+novo.arquivo+' atualizado no repo original (GET sha + PUT mesmo arquivo)'; msg.className='mt-6 text-[12px] mono p-3 rounded-[12px] bg-[#00FF88]/10 border border-[#00FF88]/20 text-[#00FF88]'; }catch(e){msg.textContent='Erro rede: '+e.message;return;} } else { msg.textContent='Salvo local (sem token GitHub). Configure token no Master para commit real.'; msg.className='mt-6 text-[12px] mono p-3 rounded-[12px] bg-[#00FF88]/10 border border-[#00FF88]/20 text-[#00FF88]'; } localStorage.setItem('korvil_user',JSON.stringify(novo)); var lista=JSON.parse(localStorage.getItem('loja_usuarios')||'[]'); var idx=lista.findIndex(function(u){return u.arquivo===novo.arquivo}); if(idx>=0) lista[idx]=novo; else lista.push(novo); localStorage.setItem('loja_usuarios',JSON.stringify(lista)); document.getElementById('perfilNomeDisplay').textContent=novo.nome_completo; if(novo.foto_perfil){ var img=document.getElementById('perfilFoto'); img.src=novo.foto_perfil; img.classList.remove('hidden'); document.getElementById('perfilFotoPh').classList.add('hidden'); var iconInner=document.getElementById('profileIconInner'); iconInner.innerHTML='<img src="'+novo.foto_perfil+'" class="w-full h-full object-contain rounded-full">'; document.getElementById('profileDot').classList.remove('hidden'); } var ola=document.getElementById('olaUser'); if(ola) ola.textContent='Olá, '+(novo.primeiro_nome||''); });
+document.getElementById('btnSair').addEventListener('click',function(){ localStorage.removeItem('korvil_user'); document.getElementById('modalPerfil').classList.add('hidden'); document.getElementById('olaUser').classList.add('hidden'); document.getElementById('profileDot').classList.add('hidden'); document.getElementById('profileIconInner').textContent='👤'; document.getElementById('profileIconInner').className='text-[18px]'; });
+function abrirCheckout(){ var user=null; try{user=JSON.parse(localStorage.getItem('korvil_user')||'null')}catch(e){} if(!user){document.getElementById('modalLoginReq').classList.remove('hidden');return;} if(!produtoAtual) return; document.getElementById('ckImg').src=produtoAtual.img; document.getElementById('ckNome').textContent=produtoAtual.nome; document.getElementById('ckPreco').textContent='R$ '+produtoAtual.preco; if(!enderecoAtual){ var ends=JSON.parse(localStorage.getItem('korvil_enderecos')||'[]'); if(ends.length) enderecoAtual=ends[0]; else enderecoAtual={cep:user.cep||'',rua:user.rua||'',numero:user.numero||'',bairro:user.bairro||'',cidade:user.cidade||'',estado:user.estado||'',origem:'perfil'}; } renderEnderecoAtual(); document.getElementById('pixBox').classList.add('hidden'); document.getElementById('btnGerarPix').classList.remove('hidden'); document.getElementById('modalCheckout').classList.remove('hidden'); }
+function renderEnderecoAtual(){ var el=document.getElementById('endAtual'); if(!enderecoAtual){el.textContent='Nenhum endereço salvo';return;} el.innerHTML=(enderecoAtual.rua||'')+' '+(enderecoAtual.numero||'')+'<br>'+(enderecoAtual.bairro||'')+'<br>'+(enderecoAtual.cidade||'')+' - '+(enderecoAtual.estado||'')+'<br>CEP '+(enderecoAtual.cep||''); }
+document.getElementById('fecharCheckout').addEventListener('click',function(){document.getElementById('modalCheckout').classList.add('hidden')});
+document.getElementById('btnAddEnd').addEventListener('click',function(){document.getElementById('modalEnd').classList.remove('hidden')});
+document.getElementById('fecharEnd').addEventListener('click',function(){document.getElementById('modalEnd').classList.add('hidden')});
+document.getElementById('fecharEndBg').addEventListener('click',function(){document.getElementById('modalEnd').classList.add('hidden')});
+document.getElementById('eCep').addEventListener('blur',async function(){ var cep=this.value.replace(/\D/g,''); if(cep.length!==8) return; try{ var res=await fetch('https://viacep.com.br/ws/'+cep+'/json/'); var d=await res.json(); if(!d.erro){ document.getElementById('eRua').value=d.logradouro||''; document.getElementById('eBairro').value=d.bairro||''; document.getElementById('eCidade').value=d.localidade||''; document.getElementById('eEstado').value=d.uf||''; } }catch(e){} });
+document.getElementById('btnSalvarEnd').addEventListener('click',function(){ var novo={cep:document.getElementById('eCep').value.trim(),rua:document.getElementById('eRua').value.trim(),numero:document.getElementById('eNum').value.trim(),bairro:document.getElementById('eBairro').value.trim(),cidade:document.getElementById('eCidade').value.trim(),estado:document.getElementById('eEstado').value.trim(),origem:'extra'}; enderecos.push(novo); localStorage.setItem('korvil_enderecos',JSON.stringify(enderecos)); enderecoAtual=novo; renderEnderecoAtual(); document.getElementById('modalEnd').classList.add('hidden'); });
+document.getElementById('btnTrocarEnd').addEventListener('click',function(){ var lista=document.getElementById('listaEnd'); lista.innerHTML=''; var ends=JSON.parse(localStorage.getItem('korvil_enderecos')||'[]'); ends.forEach(function(en){ var div=document.createElement('div'); div.className='p-3 rounded-[12px] bg-[#0A0A0A] border border-[#1E1E1E] cursor-pointer hover:border-[#FF4D00]/50 mono text-[12px]'; div.innerHTML='<div class="text-white/80">'+(en.rua||'')+' '+(en.numero||'')+'</div><div class="text-white/40 text-[11px]">'+(en.bairro||'')+' • '+(en.cidade||'')+' - '+(en.estado||'')+' • CEP '+(en.cep||'')+'</div>'; div.addEventListener('click',function(){enderecoAtual=en;renderEnderecoAtual();document.getElementById('modalEndLista').classList.add('hidden')}); lista.appendChild(div); }); document.getElementById('modalEndLista').classList.remove('hidden'); });
+document.getElementById('fecharEndLista').addEventListener('click',function(){document.getElementById('modalEndLista').classList.add('hidden')});
+document.getElementById('fecharEndListaBg').addEventListener('click',function(){document.getElementById('modalEndLista').classList.add('hidden')});
+document.getElementById('btnGerarPix').addEventListener('click',function(){ var pix='00020126580014BR.GOV.BCB.PIX0136korvil-'+(produtoAtual?produtoAtual.id:'1')+'-pix-'+Date.now()+'5204000053039865802BR5920KORVIL LOJA LTDA6008SAO PAULO62070503***6304ABCD'; document.getElementById('pixCode').textContent=pix; document.getElementById('pixBox').classList.remove('hidden'); document.getElementById('btnGerarPix').classList.add('hidden'); });
+document.getElementById('btnCopiarPix').addEventListener('click',function(){ var code=document.getElementById('pixCode').textContent; navigator.clipboard.writeText(code).then(function(){document.getElementById('btnCopiarPix').textContent='COPIADO!'; setTimeout(function(){document.getElementById('btnCopiarPix').textContent='COPIAR CÓDIGO PIX'},1500); }); });
+document.getElementById('btnPaguei').addEventListener('click',function(){ var user=null; try{user=JSON.parse(localStorage.getItem('korvil_user')||'null')}catch(e){} var detalhe=document.getElementById('confirmDetalhe'); detalhe.innerHTML='<div class="text-white/60">Produto: <span class="text-white">'+(produtoAtual?produtoAtual.nome:'')+'</span></div><div class="text-white/60">Preço: <span class="text-[#FF4D00]">R$ '+(produtoAtual?produtoAtual.preco:'')+'</span></div><div class="mt-3 text-white/60">Comprador: <span class="text-white">'+(user?user.nome_completo:'')+' • '+(user?user.email:'')+'</span></div><div class="mt-1 text-white/60">CPF: '+(user?user.cpf:'')+' • WhatsApp: '+(user?user.whatsapp:'')+'</div><div class="mt-3 text-white/60">Entrega:</div><div class="bg-[#0A0A0A] p-3 rounded-[10px] mt-1">'+(enderecoAtual?enderecoAtual.rua+' '+enderecoAtual.numero+'<br>'+enderecoAtual.bairro+'<br>'+enderecoAtual.cidade+' - '+enderecoAtual.estado+'<br>CEP '+enderecoAtual.cep:'')+'</div><div class="mt-3 text-white/60">PIX: <span class="text-white/40 break-all">'+document.getElementById('pixCode').textContent.slice(0,80)+'...</span></div>'; document.getElementById('modalCheckout').classList.add('hidden'); document.getElementById('modalConfirmada').classList.remove('hidden'); });
+document.getElementById('fecharConfirmada').addEventListener('click',function(){document.getElementById('modalConfirmada').classList.add('hidden')});
+document.getElementById('irLogin').addEventListener('click',function(){window.location.href='./login/index.html'});
+document.getElementById('fecharLoginReq').addEventListener('click',function(){document.getElementById('modalLoginReq').classList.add('hidden')});
+document.getElementById('fecharLoginReqBg').addEventListener('click',function(){document.getElementById('modalLoginReq').classList.add('hidden')});
+document.getElementById('cartBtn').addEventListener('click',function(){ if(carrinho.length&&produtoAtual) abrirCheckout(); else if(carrinho.length){produtoAtual=carrinho[carrinho.length-1];abrirCheckout();} });
+initLoja();
 </script>
 </body>
 </html>
