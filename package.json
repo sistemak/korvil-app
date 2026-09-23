@@ -1,19 +1,18 @@
 {
-  "name": "korvil-app",
-  "version": "1.0.0",
-  "description": "KORVIL MASTER DEFINITIVO FUNCIONA REAL",
+  "name": "korvil-loja",
+  "version": "2.0.0-mude",
+  "description": "KORVIL MASTER MUDE - cria pastas mãe e arquivo json com todos dados exatos do Index login",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
-    "ensure": "node korvil/sections/korvil-loja/scripts/ensure-contas-structure.js",
-    "gerar": "node gerar.js"
+    "ensure-contas": "node korvil/sections/korvil-loja/login/ensure-contas-structure.js",
+    "dev": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "express": "^4.18.2"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
+  "korvil": {
+    "contas_path": "korvil/sections/korvil-loja/login/contas/{pasta-mae}/{pasta-mae}.json",
+    "pasta_mae_rule": "normalize NFD remove acento lowercase split primeiro + '-' + inicial segundo + '-' + inicial terceiro"
   }
 }
