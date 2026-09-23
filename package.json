@@ -1,13 +1,16 @@
 {
   "name": "korvil-app",
   "version": "1.0.0",
-  "description": "KORVIL MASTER SEM TOKEN - Node puro cria pasta mãe + json real",
+  "private": true,
+  "description": "KORVIL FINAL - Só Node + GitHub - Sem erros",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "ensure": "node korvil/sections/korvil-loja/scripts/ensure-contas-structure.js",
     "dev": "node server.js"
   },
-  "keywords": ["korvil","node","sem-token","pasta-mae"],
-  "author": "KORVIL",
-  "license": "MIT"
+  "keywords": ["korvil","node","github-pages","dual-mode"],
+  "author": "Sistema K <sistemak.srv@gmail.com>",
+  "license": "MIT",
+  "engines": { "node": ">=16" }
 }
