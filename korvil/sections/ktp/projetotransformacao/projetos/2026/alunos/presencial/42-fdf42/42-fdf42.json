@@ -1,0 +1,23 @@
+{
+  "id": 42,
+  "pastaMae": "42-fdf42",
+  "arquivo": "42-fdf42.json",
+  "caminhoCompleto": "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/42-fdf42/42-fdf42.json",
+  "nome": "Fdf",
+  "primeiroNome": "fdf",
+  "whatsapp": "(13) 99769-0898",
+  "tela1": {
+    "nome": "Fdf",
+    "timestamp": "2026-09-23T06:35:05.127Z"
+  },
+  "tela2": {
+    "presenca": "presencial",
+    "ano": 2026
+  },
+  "tela3": {
+    "projeto": "transformacao",
+    "status": "inscrito"
+  },
+  "criadoEm": "2026-09-23T06:35:05.129Z",
+  "versao": "V22-FINAL"
+}
