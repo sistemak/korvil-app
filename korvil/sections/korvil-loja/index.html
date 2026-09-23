@@ -1,117 +1,153 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>KORVIL LOJA</title>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>KORVIL STORE — Black x Orange</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
-body{background:#0A0A0A;color:#fff}
-.header{position:sticky;top:0;z-index:10;background:#0A0A0A;border-bottom:1px solid #1a1a1a;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
-.card{background:#141414;border:1px solid #222;border-radius:14px;padding:16px}
-.btn{padding:10px 14px;border-radius:10px;border:none;font-weight:800;cursor:pointer}
-.btn-o{background:#FF4D00;color:#000}
-#tokenBoxHeader{display:none;background:#0A0A0A;border:1px dashed #FF4D00;border-radius:10px;padding:12px;margin:12px 20px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0A0A0A;color:#fff;font-family:'Space Grotesk',sans-serif}
+.nav{position:sticky;top:0;z-index:30;background:rgba(10,10,10,.9);backdrop-filter:blur(12px);border-bottom:1px solid #1A1A1A;display:flex;align-items:center;justify-content:space-between;padding:14px 22px}
+.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.02em}
+.brand span{color:#FF4D00}
+.actions{display:flex;gap:10px;align-items:center}
+.icon{width:40px;height:40px;border-radius:12px;background:#141414;border:1px solid #1F1F1F;display:grid;place-items:center;cursor:pointer}
+.icon:hover{border-color:#FF4D00}
+.badgeCart{background:#FF4D00;color:#000;font-weight:800;font-size:10px;min-width:18px;height:18px;border-radius:999px;display:grid;place-items:center;position:absolute;top:-6px;right:-6px}
+.hero{padding:42px 22px;display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center;max-width:1200px;margin:0 auto}
+.h1{font-family:'Syne',sans-serif;font-size:56px;line-height:.9;letter-spacing:-.04em;font-weight:800}
+.h1 em{font-style:normal;color:#FF4D00}
+.mut{color:#8A8A8A}
+.card{background:#141414;border:1px solid #1F1F1F;border-radius:16px;padding:16px}
+.btn{background:#FF4D00;color:#000;border:none;border-radius:12px;padding:12px 16px;font-family:'Syne',sans-serif;font-weight:800;cursor:pointer}
+.btn-ghost{background:#0A0A0A;border:1px solid #2A2A2A;color:#fff;border-radius:12px;padding:12px 16px;cursor:pointer}
+.grid{max-width:1200px;margin:0 auto;padding:0 22px 30px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.prod{background:#141414;border:1px solid #1F1F1F;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.prod img{width:100%;height:200px;object-fit:cover;background:#0F0F0F}
+.prod .p{padding:12px}
+.price{color:#FF4D00;font-weight:700}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.open{display:flex}
+.sheet{background:#141414;border:1px solid #242424;border-radius:18px;max-width:520px;width:100%;padding:18px}
+input{background:#0A0A0A;border:1px solid #262626;border-radius:12px;padding:11px 12px;color:#fff;width:100%;margin-top:6px}
+label{font-size:11px;color:#9A9A9A;text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.h1{font-size:38px}.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="header"><b>KORVIL <span style="color:#FF4D00">LOJA</span></b><button id="btnPerfil" class="btn btn-o" style="padding:8px 12px;font-size:12px">PERFIL</button></div>
-
-<div id="tokenBoxHeader">
-  <small style="color:#FF4D00;font-weight:800">GH_TOKEN necessário para atualizar perfil (commit real)</small>
-  <div style="display:flex;gap:8px;margin-top:8px"><input id="ghTokenLoja" type="password" placeholder="ghp_..." style="flex:1;padding:10px;border-radius:8px;background:#141414;border:1px solid #333;color:#fff"/><button id="btnSalvarTokenLoja" class="btn btn-o" style="font-size:12px">SALVAR</button><button id="btnValidarTokenLoja" class="btn" style="background:#222;color:#fff;font-size:12px">VALIDAR</button></div>
-  <div id="tokenStatusLoja" style="margin-top:6px;font-size:11px;color:#888"></div>
+<div class="nav">
+  <div class="brand">KORVIL <span>STORE</span></div>
+  <div class="actions">
+    <div style="position:relative"><div class="icon" id="cartBtn">🛒</div><div id="cartCount" class="badgeCart" style="display:none">0</div></div>
+    <div class="icon" id="perfilBtn">👤</div>
+  </div>
 </div>
-
-<div style="padding:20px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:16px">
-  <div><div class="card"><h2 style="font-size:16px">Produtos</h2><p style="color:#666;font-size:13px;margin-top:6px">Loja funcionando direto sem erros. Commit real de perfil corrigido.</p></div></div>
-  <div class="card" id="perfilBox"><h3 style="font-size:14px">Meu perfil</h3><div id="perfilInfo" style="margin-top:10px;color:#888;font-size:12px">Carregando...</div><div style="margin-top:12px;display:flex;flex-direction:column;gap:8px"><input id="editNome" placeholder="Nome" style="padding:10px;border-radius:8px;background:#0A0A0A;border:1px solid #333;color:#fff"/><input id="editWpp" placeholder="WhatsApp" style="padding:10px;border-radius:8px;background:#0A0A0A;border:1px solid #333;color:#fff"/><button id="btnSalvarPerfil" class="btn btn-o">SALVAR PERFIL (commit real)</button><div id="perfilStatus" style="font-size:11px;color:#888"></div></div></div>
+<div class="hero">
+  <div>
+    <div class="h1">DROP <em>BLACK</em> <br/>ORANGE #FF4D00</div>
+    <p class="mut" style="margin-top:14px;max-width:42ch">Loja com contas reais — cada usuário ganha pasta mãe <code>login/contas/nome-s-s/</code> + arquivo .json idêntico ao preenchido. SEM TOKEN para cliente final. Node cria no filesystem.</p>
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button class="btn" onclick="document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">VER DROP</button>
+      <button class="btn-ghost" id="btnSair">SAIR</button>
+    </div>
+    <div id="userChip" class="card" style="margin-top:16px;display:none"></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center"><b>Checkout</b><span class="mut" style="font-size:12px">SEM TOKEN</span></div>
+    <div id="cartList" class="mut" style="margin-top:10px">Carrinho vazio</div>
+    <div style="display:flex;justify-content:space-between;margin-top:12px"><span>Total</span><b id="cartTotal" class="price">R$ 0,00</b></div>
+    <button class="btn" style="width:100%;margin-top:12px" id="finalizarBtn">FINALIZAR • CRIA JSON REAL?</button>
+    <div class="mut" style="font-size:11px;margin-top:8px">Pastas mãe só criadas via <code>/api/criar-conta</code> no Node, não no front.</div>
+  </div>
 </div>
+<div id="produtos" class="grid"></div>
+
+<div id="modalPerfil" class="modal"><div class="sheet">
+  <div style="display:flex;justify-content:space-between;align-items:center"><b>Meu perfil — editar pasta mãe</b><button class="btn-ghost" onclick="closeModal('modalPerfil')">X</button></div>
+  <div style="display:grid;gap:10px;margin-top:12px">
+    <div><label>Nome completo</label><input id="p_nome"/></div>
+    <div><label>E-mail</label><input id="p_email"/></div>
+    <div><label>WhatsApp</label><input id="p_whats"/></div>
+    <div><label>CPF</label><input id="p_cpf"/></div>
+    <div><label>CEP</label><input id="p_cep"/></div>
+    <div><label>Rua</label><input id="p_rua"/></div>
+    <div><label>Número</label><input id="p_num"/></div>
+    <div><label>Bairro</label><input id="p_bairro"/></div>
+    <div><label>Cidade</label><input id="p_cidade"/></div>
+    <div><label>Estado</label><input id="p_estado"/></div>
+    <div style="display:flex;gap:8px;margin-top:6px"><button class="btn" id="btnSalvarPerfil" style="flex:1">SALVAR • ATUALIZA JSON</button><button class="btn-ghost" onclick="closeModal('modalPerfil')">Cancelar</button></div>
+    <div class="mut" id="perfilPath" style="font-size:11px"></div>
+  </div>
+</div></div>
 
 <script>
-const LS_TOKEN='loja_github_token';
-function utf8ToBase64(s){return btoa(unescape(encodeURIComponent(s)));}
-function mask(t){return t? t.slice(0,7)+'***'+t.slice(-4):'';}
-
-async function validar(t){
-  const r=await fetch('https://api.github.com/user',{headers:{Authorization:'token '+t}});
-  if(!r.ok) throw new Error('Token inválido '+r.status);
-  return r.json();
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+const prods=[
+  {id:1,nome:'Hoodie Korvil Black',preco:249.9,img:'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80'},
+  {id:2,nome:'Tee Orange Signal',preco:129.9,img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80'},
+  {id:3,nome:'Cargo Shadow',preco:299.9,img:'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&q=80'},
+  {id:4,nome:'Cap Korvil',preco:89.9,img:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&q=80'},
+  {id:5,nome:'Bag Utility',preco:199.9,img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80'},
+  {id:6,nome:'Sneaker Void',preco:449.9,img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80'},
+];
+let cart=[];
+function renderProds(){
+  const el=document.getElementById('produtos'); el.innerHTML='';
+  prods.forEach(p=>{
+    const d=document.createElement('div'); d.className='prod';
+    d.innerHTML='<img src="'+p.img+'" alt=""><div class="p"><b>'+p.nome+'</b><div class="price">R$ '+p.preco.toFixed(2)+'</div><button class="btn" style="width:100%;margin-top:10px">ADD • '+p.id+'</button></div>';
+    d.querySelector('button').onclick=()=>{ cart.push(p); updateCart(); };
+    el.appendChild(d);
+  });
 }
-
-function checkToken(){
-  const token=localStorage.getItem(LS_TOKEN);
-  const box=document.getElementById('tokenBoxHeader');
-  const input=document.getElementById('ghTokenLoja');
-  if(!token){ box.style.display='block'; }
-  else { box.style.display='none'; if(input) input.value=token; }
+function updateCart(){
+  const c=document.getElementById('cartCount'); c.style.display=cart.length?'grid':'none'; c.textContent=cart.length;
+  const list=document.getElementById('cartList');
+  if(!cart.length){ list.textContent='Carrinho vazio'; }
+  else { list.innerHTML=cart.map((p,i)=>'<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #222"><span>'+p.nome+'</span><span>R$ '+p.preco.toFixed(2)+'</span></div>').join(''); }
+  const total=cart.reduce((s,p)=>s+p.preco,0);
+  document.getElementById('cartTotal').textContent='R$ '+total.toFixed(2);
 }
+renderProds(); updateCart();
 
-async function salvarPerfil(){
-  const token=localStorage.getItem(LS_TOKEN)||document.getElementById('ghTokenLoja').value.trim();
-  if(!token){
-    document.getElementById('tokenBoxHeader').style.display='block';
-    document.getElementById('tokenStatusLoja').textContent='Cole seu GH_TOKEN e clique SALVAR antes de atualizar perfil';
-    document.getElementById('tokenStatusLoja').style.color='#FF4D00';
-    throw new Error('Configure GH_TOKEN no campo acima');
-  }
-  const userRaw=localStorage.getItem('korvil_user');
-  if(!userRaw) throw new Error('Nenhum usuário local');
-  const user=JSON.parse(userRaw);
-  user.nome_completo=document.getElementById('editNome').value||user.nome_completo;
-  user.whatsapp=document.getElementById('editWpp').value||user.whatsapp;
-  user.atualizado_em=new Date().toISOString();
-
-  const path = 'korvil/sections/korvil-loja/login/contas/'+user.pasta_mae+'/'+user.arquivo;
-  const content=utf8ToBase64(JSON.stringify(user,null,2));
-  const getUrl='https://api.github.com/repos/sistemak/korvil-app/contents/'+path+'?ref=main';
-  let sha;
-  const g=await fetch(getUrl,{headers:{Authorization:'token '+token}});
-  if(g.ok){ const j=await g.json(); sha=j.sha; }
-  else if(g.status!==404){ throw new Error('GET perfil '+g.status); }
-
-  const putUrl='https://api.github.com/repos/sistemak/korvil-app/contents/'+path;
-  const r=await fetch(putUrl,{method:'PUT',headers:{Authorization:'token '+token,'Content-Type':'application/json'},body:JSON.stringify({message:'KORVIL: update perfil '+user.arquivo, content, branch:'main', ...(sha?{sha}:{})})});
-  if(!r.ok){ const t=await r.text(); throw new Error('PUT perfil '+r.status+' '+t.slice(0,200)); }
-  localStorage.setItem('korvil_user',JSON.stringify(user));
-  return user;
+let user=null;
+try{ user=JSON.parse(localStorage.getItem('korvil_user')||'null'); }catch{}
+if(!user){ location.href='login/index.html'; }
+else{
+  const chip=document.getElementById('userChip'); chip.style.display='block';
+  chip.innerHTML='<div style="font-size:12px;color:#9A9A9A">LOGADO COMO</div><b>'+(user.nome_completo||user.email)+'</b><div class="mut" style="font-size:12px;margin-top:4px">Pasta mãe: '+(user.pasta_mae||'')+' • Arquivo: '+(user.arquivo||'')+'</div>';
+  document.getElementById('p_nome').value=user.nome_completo||''; document.getElementById('p_email').value=user.email||'';
+  document.getElementById('p_whats').value=user.whatsapp||''; document.getElementById('p_cpf').value=user.cpf||'';
+  document.getElementById('p_cep').value=user.cep||''; document.getElementById('p_rua').value=user.rua||'';
+  document.getElementById('p_num').value=user.numero||''; document.getElementById('p_bairro').value=user.bairro||'';
+  document.getElementById('p_cidade').value=user.cidade||''; document.getElementById('p_estado').value=user.estado||'';
+  document.getElementById('perfilPath').textContent='Path real: login/contas/'+(user.pasta_mae||'?')+'/'+(user.arquivo||'?');
 }
-
-document.addEventListener('DOMContentLoaded',()=>{
-  checkToken();
-  const token=localStorage.getItem(LS_TOKEN);
-  if(token) document.getElementById('ghTokenLoja').value=token;
-
-  document.getElementById('btnSalvarTokenLoja').onclick=()=>{
-    const t=document.getElementById('ghTokenLoja').value.trim();
-    if(!t) return;
-    localStorage.setItem(LS_TOKEN,t);
-    document.getElementById('tokenStatusLoja').textContent='Token salvo! '+mask(t);
-    document.getElementById('tokenStatusLoja').style.color='#2ecc71';
-    setTimeout(checkToken,600);
+document.getElementById('perfilBtn').onclick=()=>document.getElementById('modalPerfil').classList.add('open');
+document.getElementById('btnSair').onclick=()=>{ localStorage.removeItem('korvil_user'); localStorage.removeItem('korvil_primeiro_uso_feito'); location.href='login/index.html'; };
+document.getElementById('btnSalvarPerfil').onclick=async()=>{
+  const payload={
+    arquivo:user.arquivo, pasta_mae:user.pasta_mae,
+    nome_completo:document.getElementById('p_nome').value,
+    email:document.getElementById('p_email').value,
+    whatsapp:document.getElementById('p_whats').value,
+    cpf:document.getElementById('p_cpf').value,
+    cep:document.getElementById('p_cep').value,
+    rua:document.getElementById('p_rua').value,
+    numero:document.getElementById('p_num').value,
+    bairro:document.getElementById('p_bairro').value,
+    cidade:document.getElementById('p_cidade').value,
+    estado:document.getElementById('p_estado').value,
   };
-  document.getElementById('btnValidarTokenLoja').onclick=async()=>{
-    const t=document.getElementById('ghTokenLoja').value.trim()||localStorage.getItem(LS_TOKEN);
-    const el=document.getElementById('tokenStatusLoja');
-    try{ const u=await validar(t); el.textContent='Válido @'+u.login; el.style.color='#2ecc71'; }catch(e){ el.textContent=e.message; el.style.color='#ff4d00'; }
-  };
-
-  const userRaw=localStorage.getItem('korvil_user');
-  if(userRaw){
-    const u=JSON.parse(userRaw);
-    document.getElementById('perfilInfo').innerHTML='<div style="color:#fff">'+u.nome_completo+'</div><div>'+u.email+'</div><div style="margin-top:4px;color:#FF4D00">'+u.pasta_mae+'/'+u.arquivo+'</div>';
-    document.getElementById('editNome').value=u.nome_completo||'';
-    document.getElementById('editWpp').value=u.whatsapp||'';
-  } else {
-    document.getElementById('perfilInfo').textContent='Nenhum usuário. Crie conta em /login';
-  }
-
-  document.getElementById('btnSalvarPerfil').onclick=async()=>{
-    const st=document.getElementById('perfilStatus');
-    st.textContent='Salvando...'; st.style.color='#888';
-    try{ const u=await salvarPerfil(); st.textContent='Perfil atualizado! '+u.arquivo; st.style.color='#2ecc71'; document.getElementById('perfilInfo').innerHTML='<div style="color:#fff">'+u.nome_completo+'</div><div>'+u.email+'</div>'; }
-    catch(e){ st.textContent=e.message; st.style.color='#ff4d00'; }
-  };
-});
+  try{
+    const r=await fetch('/api/atualizar-conta',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const d=await r.json(); if(!r.ok||!d.ok) throw new Error(d.erro||'Erro');
+    localStorage.setItem('korvil_user', JSON.stringify(d.conta)); location.reload();
+  }catch(e){ alert(e.message); }
+};
+document.getElementById('finalizarBtn').onclick=()=>{ if(!cart.length){ alert('Carrinho vazio'); return; } alert('Pedido registrado! Usuário real com pasta mãe: '+(user.pasta_mae||'')+' • Total R$ '+cart.reduce((s,p)=>s+p.preco,0).toFixed(2)); cart=[]; updateCart(); };
+document.getElementById('cartBtn').onclick=()=>document.getElementById('produtos').scrollIntoView({behavior:'smooth'});
 </script>
 </body>
 </html>
