@@ -1,85 +1,196 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KORVIL | LOGIN</title>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>KORVIL | Criar Conta</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-<style>*{font-family:'Space Grotesk',sans-serif}.mono{font-family:'JetBrains Mono',monospace}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#FF4D00;border-radius:10px}</style>
-<script>
-(function(){
-  try{
-    var u=localStorage.getItem('korvil_user');
-    var p=localStorage.getItem('korvil_primeiro_uso_feito');
-    if(u && p){ var obj=JSON.parse(u); if(obj && obj.email){ window.location.href='../index.html'; } }
-  }catch(e){}
-})();
-</script>
+<style>
+  body{background:#0A0A0A;color:#fff;font-family:Inter,system-ui}
+  .korvil-input{background:#151515;border:1px solid #222;padding:12px 14px;border-radius:12px;width:100%;outline:none;color:#fff}
+  .korvil-input:focus{border-color:#FF4D00}
+  .foto-wrap{width:84px;height:84px;border-radius:999px;overflow:hidden;background:#151515;border:2px solid #222;position:relative}
+  .foto-wrap img{width:100%;height:100%;object-fit:contain;background:#0A0A0A}
+  .lapis{position:absolute;right:-2px;bottom:-2px;background:#FF4D00;width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;border:2px solid #0A0A0A}
+</style>
 </head>
-<body class="bg-[#0A0A0A] text-white min-h-screen flex items-center justify-center p-4 selection:bg-[#FF4D00]/30">
-<div class="w-full max-w-[440px]">
-  <div class="mb-8 text-center">
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF4D00]/10 border border-[#FF4D00]/20 text-[10px] tracking-[0.2em] text-[#FF4D00] mono">KORVIL • SISTEMA K</div>
-    <h1 class="mt-4 text-[42px] font-bold tracking-[-0.04em] leading-none">K<span class="text-[#FF4D00]">.</span>L</h1>
-    <p class="mt-2 text-[11px] text-white/40 mono tracking-widest uppercase">primeiro uso unico • login</p>
-  </div>
-  <div id="loginBox" class="bg-[#121212] border border-[#1E1E1E] rounded-[24px] p-7 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-    <h2 class="text-[18px] font-semibold">Acessar conta</h2>
-    <p class="text-[12px] text-white/40 mt-1 mono">E-mail e senha já criados antes</p>
-    <div class="mt-6 space-y-4">
-      <div><label class="text-[11px] tracking-widest mono text-white/50">EMAIL</label><input id="loginEmail" type="email" placeholder="voce@korvil.com" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[14px] outline-none focus:border-[#FF4D00]/50"></div>
-      <div><label class="text-[11px] tracking-widest mono text-white/50">SENHA</label><input id="loginSenha" type="password" placeholder="••••••••" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[14px] outline-none focus:border-[#FF4D00]/50"></div>
-      <button id="btnEntrar" class="w-full bg-[#FF4D00] hover:bg-[#ff5a16] text-black font-bold tracking-widest text-[12px] py-[14px] rounded-[12px]">ENTRAR → LOJA</button>
-      <div id="loginMsg" class="hidden text-[12px] p-3 rounded-[10px] mono"></div>
-    </div>
-    <div class="mt-6 text-center"><button id="showCriar" class="text-[12px] mono text-white/50 hover:text-white underline underline-offset-4">Criar conta grátis</button></div>
-  </div>
-  <div id="criarBox" class="hidden bg-[#121212] border border-[#1E1E1E] rounded-[24px] p-7">
-    <div class="flex items-start gap-4">
-      <div class="relative">
-        <div id="fotoPreviewWrap" class="w-[72px] h-[72px] rounded-full bg-[#0A0A0A] border border-[#2A2A2A] overflow-hidden flex items-center justify-center">
-          <span id="fotoPlaceholder" class="text-[24px]">👤</span>
-          <img id="fotoPreview" class="hidden w-full h-full object-contain" alt="foto">
-        </div>
-        <button id="btnFoto" class="absolute -bottom-1 -right-1 w-[26px] h-[26px] bg-[#FF4D00] rounded-full flex items-center justify-center text-black text-[12px]">✎</button>
-        <input id="inputFoto" type="file" accept="image/*" class="hidden">
+<body class="min-h-screen">
+<div id="app" class="max-w-[720px] mx-auto px-6 py-8">
+  <!-- TOPO -->
+  <div class="flex items-center justify-between mb-8">
+    <div class="flex items-center gap-4">
+      <div class="foto-wrap" id="fotoWrap">
+        <img id="previewFoto" src="https://i.pravatar.cc/200?img=1" alt="foto"/>
+        <div class="lapis" id="btnFoto">✎</div>
       </div>
-      <div><h2 class="text-[18px] font-semibold leading-tight">Criar conta real</h2><p class="text-[11px] mono text-white/40 mt-1 leading-[1.4]">Só cria arquivo em<br><span class="text-white/60">login/contas/nome-s-t.json</span> quando preencher tudo</p></div>
+      <div>
+        <h1 class="text-[22px] font-black tracking-tight">KORVIL LOJA</h1>
+        <p class="text-[11px] tracking-[0.2em] text-zinc-500 -mt-1">CRIAR CONTA • PRIMEIRO USO ÚNICO</p>
+      </div>
     </div>
-    <div class="mt-6 grid gap-4">
-      <div><label class="text-[10px] mono tracking-widest text-white/50">NOME COMPLETO *</label><input id="cNome" placeholder="João Silva Santos" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div>
-      <div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] mono tracking-widest text-white/50">EMAIL *</label><input id="cEmail" type="email" placeholder="joao@email.com" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">WHATSAPP</label><input id="cZap" placeholder="(11) 9..." class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div></div>
-      <div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] mono tracking-widest text-white/50">SENHA * min 6</label><input id="cSenha" type="password" placeholder="••••••" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">CONFIRMAR *</label><input id="cConfirma" type="password" placeholder="••••••" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div></div>
-      <div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] mono tracking-widest text-white/50">CPF</label><input id="cCpf" placeholder="000.000.000-00" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">CEP (ViaCEP auto)</label><input id="cCep" placeholder="01310-100" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div></div>
-      <div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] mono tracking-widest text-white/50">RUA</label><input id="cRua" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">NÚMERO</label><input id="cNumero" placeholder="123" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div></div>
-      <div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] mono tracking-widest text-white/50">BAIRRO</label><input id="cBairro" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div><div><label class="text-[10px] mono tracking-widest text-white/50">CIDADE</label><input id="cCidade" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div></div>
-      <div><label class="text-[10px] mono tracking-widest text-white/50">ESTADO</label><input id="cEstado" placeholder="SP" class="mt-2 w-full bg-[#0A0A0A] border border-[#1E1E1E] rounded-[12px] px-4 py-3 text-[13px] outline-none"></div>
-    </div>
-    <div id="criarMsg" class="hidden mt-4 text-[12px] p-3 rounded-[10px] mono"></div>
-    <button id="btnCriarReal" class="mt-6 w-full bg-white text-black font-bold tracking-widest text-[12px] py-[14px] rounded-[12px] hover:bg-[#FF4D00] transition">CRIAR CONTA REAL + COMMIT JSON</button>
-    <button id="voltarLogin" class="mt-3 w-full bg-transparent border border-[#1E1E1E] text-white/60 mono text-[11px] py-[12px] rounded-[12px]">VOLTAR AO LOGIN</button>
-    <p class="mt-4 text-[10px] mono text-white/30 text-center">João Silva Santos → <span class="text-white/60">joao-s-s.json</span> | Ana Maria → <span class="text-white/60">ana-m.json</span><br>Salvo em korvil/sections/korvil-loja/login/contas/</p>
+    <div class="text-[10px] px-2 py-1 rounded-full border border-zinc-800 text-zinc-500">LOGIN/INDEX</div>
   </div>
-  <p class="mt-6 text-center text-[10px] mono text-white/20">Primeiro uso único • korvil_primeiro_uso_feito • Só cria .json quando criar conta real</p>
+
+  <!-- FORM -->
+  <div class="bg-[#111111] border border-zinc-900 rounded-[20px] p-6 md:p-8">
+    <h2 class="font-bold text-[18px] mb-1">Crie sua conta KORVIL</h2>
+    <p class="text-zinc-500 text-[13px] mb-6">Preencha tudo. Ao criar, geramos pasta mãe + JSON no repo: <span class="text-white">contas/{pasta}/{arquivo}</span></p>
+    
+    <input type="file" id="inputFoto" accept="image/*" class="hidden"/>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="md:col-span-2"><label class="text-[11px] text-zinc-500">NOME COMPLETO *</label><input id="nome" class="korvil-input mt-1" placeholder="João Silva Santos"/></div>
+      <div><label class="text-[11px] text-zinc-500">EMAIL *</label><input id="email" class="korvil-input mt-1" placeholder="joao@email.com"/></div>
+      <div><label class="text-[11px] text-zinc-500">SENHA *</label><input id="senha" type="password" class="korvil-input mt-1" placeholder="••••••••"/></div>
+      <div><label class="text-[11px] text-zinc-500">CPF *</label><input id="cpf" class="korvil-input mt-1" placeholder="000.000.000-00"/></div>
+      <div><label class="text-[11px] text-zinc-500">WHATSAPP *</label><input id="zap" class="korvil-input mt-1" placeholder="(11) 99999-9999"/></div>
+      <div><label class="text-[11px] text-zinc-500">CEP *</label><input id="cep" class="korvil-input mt-1" placeholder="00000-000"/></div>
+      <div class="md:col-span-2"><label class="text-[11px] text-zinc-500">RUA</label><input id="rua" class="korvil-input mt-1"/></div>
+      <div><label class="text-[11px] text-zinc-500">NÚMERO *</label><input id="numero" class="korvil-input mt-1" placeholder="123"/></div>
+      <div><label class="text-[11px] text-zinc-500">BAIRRO</label><input id="bairro" class="korvil-input mt-1"/></div>
+      <div><label class="text-[11px] text-zinc-500">CIDADE</label><input id="cidade" class="korvil-input mt-1"/></div>
+      <div><label class="text-[11px] text-zinc-500">ESTADO</label><input id="estado" class="korvil-input mt-1"/></div>
+    </div>
+
+    <button id="btnCriar" class="mt-8 w-full bg-[#FF4D00] hover:bg-[#e64500] text-black font-black py-4 rounded-[14px] tracking-wide">CRIAR CONTA E ENTRAR NA LOJA →</button>
+    <div class="mt-4 text-center text-[12px] text-zinc-500">Já tem conta? <button id="btnIrLogin" class="text-white underline">Fazer login</button></div>
+    <div id="log" class="mt-4 text-[11px] text-zinc-500 whitespace-pre-wrap"></div>
+  </div>
+
+  <!-- LOGIN SIMPLES -->
+  <div id="boxLogin" class="hidden mt-6 bg-[#111111] border border-zinc-900 rounded-[20px] p-6">
+    <h3 class="font-bold">Entrar</h3>
+    <input id="loginEmail" class="korvil-input mt-3" placeholder="email"/>
+    <input id="loginSenha" type="password" class="korvil-input mt-3" placeholder="senha"/>
+    <button id="btnLogin" class="mt-3 w-full bg-white text-black font-bold py-3 rounded-[12px]">ENTRAR</button>
+  </div>
 </div>
+
 <script>
+// CONFIG - usar secrets via localStorage do lojista ou window.KORVIL_GITHUB
+const GH = {
+  owner: localStorage.getItem('korvil_github_owner')||'SEU_OWNER',
+  repo: localStorage.getItem('korvil_github_repo')||'SEU_REPO',
+  branch: localStorage.getItem('korvil_github_branch')||'main',
+  token: localStorage.getItem('loja_github_token')||''
+};
+
+// 1) PRIMEIRO USO ÚNICO
+(function checkPrimeiroUso(){
+  const user = localStorage.getItem('korvil_user');
+  const feito = localStorage.getItem('korvil_primeiro_uso_feito');
+  if(user && feito){ location.href='../index.html'; }
+})();
+
+let fotoBase64 = '';
+const $ = (id)=>document.getElementById(id);
+$('btnFoto').onclick=()=>$('inputFoto').click();
+$('inputFoto').onchange=(e)=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ fotoBase64=r.result; $('previewFoto').src=fotoBase64; };
+  r.readAsDataURL(f);
+};
+
+// ViaCEP
+$('cep').addEventListener('blur', async ()=>{
+  let cep=$('cep').value.replace(/\D/g,''); if(cep.length!==8) return;
+  try{
+    const j=await (await fetch('https://viacep.com.br/ws/'+cep+'/json/')).json();
+    if(!j.erro){ $('rua').value=j.logradouro; $('bairro').value=j.bairro; $('cidade').value=j.localidade; $('estado').value=j.uf; }
+  }catch{}
+});
+
 function gerarNomeArquivo(nomeCompleto){
-  var norm=nomeCompleto.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-  var partes=norm.split(/\s+/).filter(function(p){return p.length>0});
-  if(!partes.length) return '';
-  var primeiro=partes[0]; var seg=partes.length>1?partes[1][0]:''; var ter=partes.length>2?partes[2][0]:'';
-  var nome=primeiro; if(seg) nome+='-'+seg; if(ter) nome+='-'+ter; return nome+'.json';
+  const partes=nomeCompleto.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if(partes.length===0) return {arquivo:'user.json', pastaMae:'user'};
+  if(partes.length===1) return {arquivo: partes[0]+'.json', pastaMae: partes[0]};
+  if(partes.length===2){
+    const arq = `${partes[0]}-${partes[1][0]}.json`;
+    return {arquivo: arq, pastaMae: arq.replace('.json','')};
+  }
+  // 3+ => nome-inicial segundo-inicial terceiro ex: joao-s-s
+  const arq = `${partes[0]}-${partes[1][0]}-${partes[2][0]}.json`.replace(/[^a-z0-9-]/g,'');
+  return {arquivo: arq, pastaMae: arq.replace('.json','')};
 }
-async function sha256hex(str){ try{ var enc=new TextEncoder().encode(str); var buf=await crypto.subtle.digest('SHA-256',enc); return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join(''); }catch(e){ return btoa(str).slice(0,64); } }
-function showMsg(id,text,ok){ var el=document.getElementById(id); el.classList.remove('hidden'); el.textContent=text; el.className= ok ? 'mt-4 text-[12px] p-3 rounded-[10px] mono bg-[#00FF88]/10 border border-[#00FF88]/20 text-[#00FF88]' : 'mt-4 text-[12px] p-3 rounded-[10px] mono bg-[#FF4D00]/10 border border-[#FF4D00]/20 text-[#FF4D00]'; if(id==='loginMsg') el.className= ok ? 'text-[12px] p-3 rounded-[10px] bg-[#00FF88]/10 border border-[#00FF88]/20 text-[#00FF88] mono' : 'text-[12px] p-3 rounded-[10px] bg-[#FF4D00]/10 border border-[#FF4D00]/20 text-[#FF4D00] mono'; }
-var fotoBase64=''; document.getElementById('btnFoto').addEventListener('click',function(){document.getElementById('inputFoto').click()});
-document.getElementById('inputFoto').addEventListener('change',function(e){ var f=e.target.files[0]; if(!f) return; var r=new FileReader(); r.onload=function(ev){ fotoBase64=ev.target.result; var img=document.getElementById('fotoPreview'); var ph=document.getElementById('fotoPlaceholder'); img.src=fotoBase64; img.classList.remove('hidden'); ph.classList.add('hidden'); }; r.readAsDataURL(f); });
-document.getElementById('showCriar').addEventListener('click',function(){ document.getElementById('loginBox').classList.add('hidden'); document.getElementById('criarBox').classList.remove('hidden'); });
-document.getElementById('voltarLogin').addEventListener('click',function(){ document.getElementById('criarBox').classList.add('hidden'); document.getElementById('loginBox').classList.remove('hidden'); });
-document.getElementById('cCep').addEventListener('blur',async function(){ var cep=this.value.replace(/\D/g,''); if(cep.length!==8) return; try{ var res=await fetch('https://viacep.com.br/ws/'+cep+'/json/'); var data=await res.json(); if(!data.erro){ document.getElementById('cRua').value=data.logradouro||''; document.getElementById('cBairro').value=data.bairro||''; document.getElementById('cCidade').value=data.localidade||''; document.getElementById('cEstado').value=data.uf||''; } }catch(e){} });
-document.getElementById('btnEntrar').addEventListener('click',async function(){ var email=document.getElementById('loginEmail').value.trim().toLowerCase(); var senha=document.getElementById('loginSenha').value; var msg=document.getElementById('loginMsg'); msg.classList.add('hidden'); if(!email||!senha){showMsg('loginMsg','Preencha email e senha',false);return;} var lista=JSON.parse(localStorage.getItem('loja_usuarios')||'[]'); var hash=await sha256hex(senha); var achou=lista.find(function(u){return u.email.toLowerCase()===email && (u.senha_hash===hash||u.senha===senha)}); if(achou){ localStorage.setItem('korvil_user',JSON.stringify(achou)); localStorage.setItem('korvil_primeiro_uso_feito','true'); showMsg('loginMsg','Logado! Indo para loja...',true); setTimeout(function(){window.location.href='../index.html'},700); return; } var token=localStorage.getItem('loja_github_token'); var owner=localStorage.getItem('korvil_github_owner'); var repo=localStorage.getItem('korvil_github_repo'); if(token&&owner&&repo){ try{ var res=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/korvil/sections/korvil-loja/login/contas',{headers:{'Authorization':'token '+token}}); if(res.ok){ var files=await res.json(); for(var i=0;i<files.length;i++){ var f=files[i]; if(!f.name.endsWith('.json')) continue; var r2=await fetch(f.download_url); var j=await r2.json(); if(j.email&&j.email.toLowerCase()===email && (j.senha_hash===hash||j.senha===senha)){ localStorage.setItem('korvil_user',JSON.stringify(j)); localStorage.setItem('korvil_primeiro_uso_feito','true'); var lst=JSON.parse(localStorage.getItem('loja_usuarios')||'[]'); lst.push(j); localStorage.setItem('loja_usuarios',JSON.stringify(lst)); showMsg('loginMsg','Conta encontrada no repo! Indo loja...',true); setTimeout(function(){window.location.href='../index.html'},700); return; } } } }catch(e){} } showMsg('loginMsg','Conta não encontrada. Crie conta grátis.',false); });
-document.getElementById('btnCriarReal').addEventListener('click',async function(){ var nome=document.getElementById('cNome').value.trim(); var email=document.getElementById('cEmail').value.trim().toLowerCase(); var senha=document.getElementById('cSenha').value; var confirma=document.getElementById('cConfirma').value; var cpf=document.getElementById('cCpf').value.trim(); var zap=document.getElementById('cZap').value.trim(); var cep=document.getElementById('cCep').value.trim(); var rua=document.getElementById('cRua').value.trim(); var numero=document.getElementById('cNumero').value.trim(); var bairro=document.getElementById('cBairro').value.trim(); var cidade=document.getElementById('cCidade').value.trim(); var estado=document.getElementById('cEstado').value.trim(); if(nome.length<3){showMsg('criarMsg','Nome >=3',false);return;} if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showMsg('criarMsg','Email inválido',false);return;} if(senha.length<6){showMsg('criarMsg','Senha min 6',false);return;} if(senha!==confirma){showMsg('criarMsg','Senhas não batem',false);return;} var nomeArq=gerarNomeArquivo(nome); if(!nomeArq){showMsg('criarMsg','Erro gerar nome arquivo',false);return;} var hash=await sha256hex(senha); var agora=new Date().toISOString(); var primeiro=nome.split(/\s+/)[0]; var obj={ id:(crypto.randomUUID?crypto.randomUUID():'id-'+Date.now()), arquivo:nomeArq, nome_completo:nome, primeiro_nome:primeiro, email:email, senha_hash:hash, cpf:cpf, whatsapp:zap, cep:cep, rua:rua, numero:numero, bairro:bairro, cidade:cidade, estado:estado, foto_perfil:fotoBase64||'', criado_em:agora, atualizado_em:agora }; var lista=JSON.parse(localStorage.getItem('loja_usuarios')||'[]'); if(lista.find(function(u){return u.email.toLowerCase()===email})){showMsg('criarMsg','Email já existe local. Faça login.',false);return;} var token=localStorage.getItem('loja_github_token'); var owner=localStorage.getItem('korvil_github_owner'); var repo=localStorage.getItem('korvil_github_repo'); var branch=localStorage.getItem('korvil_github_branch')||'main'; var pathRepo='korvil/sections/korvil-loja/login/contas/'+nomeArq; var jsonStr=JSON.stringify(obj,null,2); var b64=btoa(unescape(encodeURIComponent(jsonStr))); if(token&&owner&&repo){ try{ var check=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+pathRepo+'?ref='+branch,{headers:{'Authorization':'token '+token}}); if(check.ok){showMsg('criarMsg','Arquivo '+nomeArq+' já existe no repo! Use outro nome ou faça login.',false);return;} var putRes=await fetch('https://api.github.com/repos/'+owner+'/'+repo+'/contents/'+pathRepo,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify({message:'KORVIL: cria conta '+nomeArq,content:b64,branch:branch})}); if(!putRes.ok){var err=await putRes.text(); showMsg('criarMsg','Erro GitHub: '+err.slice(0,200),false);return;} }catch(e){showMsg('criarMsg','Erro rede GitHub: '+e.message,false);return;} } lista.push(obj); localStorage.setItem('loja_usuarios',JSON.stringify(lista)); localStorage.setItem('korvil_user',JSON.stringify(obj)); localStorage.setItem('korvil_primeiro_uso_feito','true'); showMsg('criarMsg','Conta criada! '+nomeArq+' salvo. Indo loja conectada...',true); setTimeout(function(){window.location.href='../index.html'},900); });
+
+async function sha256(str){
+  const buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function githubPut(path, contentStr, msg){
+  const api='https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+path;
+  let sha=null;
+  const get=await fetch(api+'?ref='+GH.branch, {headers:{Authorization:'token '+GH.token}});
+  if(get.ok){ const j=await get.json(); sha=j.sha; }
+  const body={message:msg, content:btoa(unescape(encodeURIComponent(contentStr))), branch:GH.branch};
+  if(sha) body.sha=sha;
+  const put=await fetch(api,{method:'PUT',headers:{Authorization:'token '+GH.token,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!put.ok) throw new Error('PUT falhou '+await put.text());
+  return await put.json();
+}
+
+$('btnIrLogin').onclick=()=>{$('boxLogin').classList.toggle('hidden');};
+$('btnLogin').onclick=async ()=>{
+  // login busca JSON por email
+  const email=$('loginEmail').value.trim().toLowerCase();
+  const senha=$('loginSenha').value;
+  const hash=await sha256(senha);
+  // busca lista em contas/
+  const api='https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/korvil/sections/korvil-loja/login/contas?ref='+GH.branch;
+  const r=await fetch(api,{headers:{Authorization:'token '+GH.token}});
+  const files=await r.json();
+  for(const f of files){ if(f.type!=='file') continue;
+    const c=await (await fetch(f.download_url)).text(); try{ const j=JSON.parse(c); if(j.email.toLowerCase()===email && j.senha_hash===hash){
+      localStorage.setItem('korvil_user', JSON.stringify(j));
+      localStorage.setItem('korvil_primeiro_uso_feito','1');
+      location.href='../index.html'; return;
+    }}catch{}
+  }
+  alert('Email ou senha inválidos');
+};
+
+$('btnCriar').onclick=async ()=>{
+  const nome=$('nome').value.trim();
+  const email=$('email').value.trim().toLowerCase();
+  const senha=$('senha').value;
+  const cpf=$('cpf').value.trim();
+  const zap=$('zap').value.trim();
+  const cep=$('cep').value.trim();
+  const rua=$('rua').value.trim();
+  const numero=$('numero').value.trim();
+  const bairro=$('bairro').value.trim();
+  const cidade=$('cidade').value.trim();
+  const estado=$('estado').value.trim();
+  if(!nome||!email||!senha||!cpf||!zap||!cep||!numero){ alert('Preencha todos obrigatórios'); return; }
+  if(!GH.token){ alert('Configure GH token no localStorage loja_github_token'); return; }
+  $('log').textContent='Gerando hash e nomes...';
+  const {arquivo,pastaMae}=gerarNomeArquivo(nome);
+  const primeiro=nome.split(/\s+/)[0];
+  const id='korvil_'+Date.now();
+  const hash=await sha256(senha);
+  const agora=new Date().toISOString();
+  const conta={
+    id, arquivo, pasta_mae:pastaMae,
+    nome_completo:nome, primeiro_nome:primeiro,
+    email, senha_hash:hash, cpf, whatsapp:zap,
+    cep, rua, numero, bairro, cidade, estado,
+    foto_perfil:fotoBase64||'', criado_em:agora, atualizado_em:agora,
+    enderecos:[{cep,rua,numero,bairro,cidade,estado,tipo:'principal'}]
+  };
+  const conteudo=JSON.stringify(conta,null,2);
+  try{
+    $('log').textContent='Criando pasta mãe '+pastaMae+' e arquivo '+arquivo+'...';
+    // path 1: contas/{pastaMae}/{arquivo}
+    await githubPut('korvil/sections/korvil-loja/login/contas/'+pastaMae+'/'+arquivo, conteudo, 'KORVIL: cria conta '+arquivo);
+    // path 2: contas/{arquivo} (compat)
+    await githubPut('korvil/sections/korvil-loja/login/contas/'+arquivo, conteudo, 'KORVIL: mirror conta '+arquivo);
+    $('log').textContent='Conta criada! Salvando sessão...';
+    localStorage.setItem('korvil_user', JSON.stringify(conta));
+    localStorage.setItem('korvil_primeiro_uso_feito','1');
+    location.href='../index.html';
+  }catch(e){ $('log').textContent='Erro: '+e.message; alert(e.message); }
+};
 </script>
 </body>
 </html>
