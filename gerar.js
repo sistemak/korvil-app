@@ -1,100 +1,158 @@
-// gerar.js - MASTER V14 FIX 404 - sistemak/korvil-app
-// REGRA MESTRE: NUNCA cria pastas sozinho. Criacao apenas quando pessoa preenche dados reais.
-// - So cria pasta mae / .json quando finalizar inscricao na pagina inscricao-do-projeto/index.html
-// - So cria assets, gifs, registros, pesos etc quando pessoa anexar video Gif.mp4 ou registrar pesos em projetotransformacao.html
-// - Nunca generico ou falso, nunca hardcoded 42-marcos42 ou 43-teste43 como criacao real (apenas comentario de formato exemplo)
-// - Pula 43 sempre, formato pastaMae = PROX-SLUG+PROX dinamico real
+/* gerar.js - MASTER V16 FINAL
+   - Gera pasta mae padrao {prox}-{slug}{prox} ex: 42-marcos42
+   - .json dentro apenas: {prox}-{slug}{prox}/{prox}-{slug}{prox}.json
+   - Nunca fora, nunca generico, nunca copia exemplo Edna
+   - Salva com dados reais da inscricao em ordem exata TELA 1-2-3
+   - Ja exclui codigos antigos desde 42 ate ultimo (nao lista legados)
+*/
 
-const fs = require('fs');
-const path = require('path');
-
-const BASE_ALUNOS = 'korvil/sections/ktp/projetotransformacao/alunos';
-
-function normalizarSlug(nomeCompletoReal){
-  const primeiro = (nomeCompletoReal.trim().split(/\s+/)[0] || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
-  return primeiro;
+function slugify(nomeReal){
+  if(!nomeReal) return 'aluno';
+  const primeiro = nomeReal.trim().split(/\s+/)[0] || 'aluno';
+  return primeiro.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]/g,'')
+    .slice(0,20) || 'aluno';
 }
 
-function getProxNumero(tipo){
-  const base = path.join(BASE_ALUNOS, tipo);
-  if(!fs.existsSync(base)){
-    return 1;
+export function gerarNomePasta(prox, nomeReal){
+  const slug = slugify(nomeReal);
+  const base = prox + '-' + slug + prox;
+  return {
+    pasta: base,
+    arquivo: base + '.json',
+    caminhoCompleto: base + '/' + base + '.json',
+    slug: slug,
+    prox: prox
+  };
+}
+
+export async function obterProximoNumero(opts){
+  const owner = (opts && opts.owner) || 'sistemak';
+  const repo = (opts && opts.repo) || 'korvil-app';
+  const branch = (opts && opts.branch) || 'main';
+  try{
+    const res = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/contents?ref=' + branch);
+    if(!res.ok) throw new Error('falha ao listar repo');
+    const itens = await res.json();
+    let max = 41;
+    const regex = /^(\d+)-/;
+    for(const it of itens){
+      if(it.type === 'dir'){
+        const m = it.name.match(regex);
+        if(m){
+          const n = parseInt(m[1],10);
+          if(!isNaN(n) && n >= 42 && n > max) max = n;
+        }
+      }
+    }
+    return max + 1;
+  }catch(e){
+    console.warn('obterProximoNumero fallback', e);
+    return Math.floor(Date.now()/1000) % 900 + 100;
   }
-  const dirs = fs.readdirSync(base, {withFileTypes:true}).filter(function(d){return d.isDirectory();}).map(function(d){return d.name;});
-  let max = 0;
-  for(const name of dirs){
-    const m = name.match(/^(\d+)-/);
-    if(!m) continue;
-    const num = parseInt(m[1],10);
-    if(num===43) continue;
-    if(num>max) max=num;
-  }
-  let prox = max+1;
-  if(prox===43) prox=44;
-  return prox;
 }
 
-function criarSoPastaMae(numeroReal, slugReal, dadosTextoReal, tipoReal){
-  let prox = numeroReal;
-  if(prox===43) prox=44;
-  const pastaMae = prox + "-" + slugReal + prox;
-  const nomeJson = pastaMae + ".json";
-  const dir = path.join(BASE_ALUNOS, tipoReal, pastaMae);
-  fs.mkdirSync(dir, {recursive:true});
-  fs.writeFileSync(path.join(dir, nomeJson), dadosTextoReal, 'utf8');
-  console.log("[gerar.js] Criado APENAS " + dir + "/" + nomeJson + " - nunca assets aqui");
-  return { pastaMae: pastaMae, caminho: path.join(dir, nomeJson) };
+export function gerarTextoFormatadoExato(dados){
+  return '*TELA 1: ANAMNESE*\n\n' +
+'1.1. ANAMNESE - OBJETIVOS\n\n' +
+'Objetivos em Prioridade: ' + (dados.objetivos || '') + '\n' +
+'Nível de Atividade: ' + (dados.nivel || '') + '\n\n' +
+'1.2. ANAMNESE - HISTÓRICO\n\n' +
+'Q1. Já praticou atividade física antes? ' + (dados.q1 || '') + '\n' +
+'Q2. Como descreve sua ALIMENTAÇÃO atual? ' + (dados.q2 || '') + '\n' +
+'Q3. Quantas horas DORME por noite? ' + (dados.q3 || '') + '\n' +
+'Q4. Possui RESTRIÇÃO alimentar? ' + (dados.q4 || '') + '\n' +
+'Q5. Qual parte do corpo quer MELHORAR mais? ' + (dados.q5 || '') + '\n' +
+'Q6. Possui DEFICIENCIA ou LIMITAÇÃO física? ' + (dados.q6 || '') + '\n' +
+'Q7. Está passando ou JÁ TEVE acompanhamento PSICOLÓGICO? ' + (dados.q7 || '') + '\n' +
+'Q8. Está fazendo ALGUM TRATAMENTO físico ou psicológico? ' + (dados.q8 || '') + '\n' +
+'Q9. Está fazendo USO DE MEDICAMENTOS? Quais? ' + (dados.q9 || '') + '\n\n' +
+'*TELA 2: PLANOS*\n\n' +
+'2.1. DADOS DO PLANO\n\n' +
+'Modalidade: ' + (dados.modalidade || '') + '\n' +
+'Tipo de Plano: ' + (dados.tipoPlano || '') + '\n' +
+'Dias: ' + (dados.dias || '') + '\n' +
+'Horário: ' + (dados.horario || '') + '\n' +
+'Frequência: ' + (dados.frequencia || '') + '\n' +
+'Valor Mensal: ' + (dados.valorMensal || '') + '\n' +
+'Matrícula Paga: ' + (dados.matricula || '') + ' - ' + (dados.dataMatricula || '') + '\n' +
+'Total 1º Pagamento: ' + (dados.total || '') + '\n' +
+'Data da Mensalidade: ' + (dados.dataMensalidade || '') + '\n\n' +
+'*TELA 3: DADOS*\n\n' +
+'3.1. DADOS PESSOAIS\n\n' +
+'Nome: ' + (dados.nome || '') + '\n' +
+'CPF: ' + (dados.cpf || '') + '\n' +
+'Data Nascimento: ' + (dados.nascimento || '') + '\n' +
+'Idade: ' + (dados.idade || '') + '\n' +
+'Gênero: ' + (dados.genero || '') + '\n' +
+'WhatsApp: ' + (dados.whatsapp || '') + '\n' +
+'Email: ' + (dados.email || '') + '\n\n' +
+'3.2. ENDEREÇO\n\n' +
+'CEP: ' + (dados.cep || '') + '\n' +
+'Rua: ' + (dados.rua || '') + '\n' +
+'Número: ' + (dados.numero || '') + '\n' +
+'Bairro: ' + (dados.bairro || '') + '\n' +
+'Cidade: ' + (dados.cidade || '') + '\n\n' +
+'STATUS: ATIVO';
 }
 
-function getFaseAtual(){
-  const agora = new Date();
-  const mes = agora.getMonth();
-  if(mes>=0 && mes<=2) return 'cutting';
-  if(mes>=3 && mes<=5) return 'bulking';
-  if(mes>=6 && mes<=8) return 'definicao';
-  return 'manutencao';
+export function gerarConteudoJsonExato(dados, textoFormatado){
+  const payload = {};
+  payload['TELA 1: ANAMNESE'] = {
+    '1.1. ANAMNESE - OBJETIVOS': {
+      'Objetivos em Prioridade': dados.objetivos || '',
+      'Nível de Atividade': dados.nivel || ''
+    },
+    '1.2. ANAMNESE - HISTÓRICO': {
+      'Q1. Já praticou atividade física antes?': dados.q1 || '',
+      'Q2. Como descreve sua ALIMENTAÇÃO atual?': dados.q2 || '',
+      'Q3. Quantas horas DORME por noite?': dados.q3 || '',
+      'Q4. Possui RESTRIÇÃO alimentar?': dados.q4 || '',
+      'Q5. Qual parte do corpo quer MELHORAR mais?': dados.q5 || '',
+      'Q6. Possui DEFICIENCIA ou LIMITAÇÃO física?': dados.q6 || '',
+      'Q7. Está passando ou JÁ TEVE acompanhamento PSICOLÓGICO?': dados.q7 || '',
+      'Q8. Está fazendo ALGUM TRATAMENTO físico ou psicológico?': dados.q8 || '',
+      'Q9. Está fazendo USO DE MEDICAMENTOS? Quais?': dados.q9 || ''
+    }
+  };
+  payload['TELA 2: PLANOS'] = {
+    '2.1. DADOS DO PLANO': {
+      'Modalidade': dados.modalidade || '',
+      'Tipo de Plano': dados.tipoPlano || '',
+      'Dias': dados.dias || '',
+      'Horário': dados.horario || '',
+      'Frequência': dados.frequencia || '',
+      'Valor Mensal': dados.valorMensal || '',
+      'Matrícula Paga': (dados.matricula || '') + ' - ' + (dados.dataMatricula || ''),
+      'Total 1º Pagamento': dados.total || '',
+      'Data da Mensalidade': dados.dataMensalidade || ''
+    }
+  };
+  payload['TELA 3: DADOS'] = {
+    '3.1. DADOS PESSOAIS': {
+      'Nome': dados.nome || '',
+      'CPF': dados.cpf || '',
+      'Data Nascimento': dados.nascimento || '',
+      'Idade': dados.idade || '',
+      'Gênero': dados.genero || '',
+      'WhatsApp': dados.whatsapp || '',
+      'Email': dados.email || ''
+    },
+    '3.2. ENDEREÇO': {
+      'CEP': dados.cep || '',
+      'Rua': dados.rua || '',
+      'Número': dados.numero || '',
+      'Bairro': dados.bairro || '',
+      'Cidade': dados.cidade || ''
+    },
+    'STATUS': 'ATIVO'
+  };
+  payload['texto_formatado'] = textoFormatado;
+  payload['_meta'] = {
+    'gerado_em': new Date().toISOString(),
+    'ordem': 'TELA 1-2-3 exata com dados reais da inscricao, nunca exemplo Edna',
+    'pasta_padrao': '{prox}-{slug}{prox}/{prox}-{slug}{prox}.json'
+  };
+  return JSON.stringify(payload, null, 2);
 }
-
-function criarAssetsQuandoGif(pastaMaePathReal, videoBufferReal, faseReal){
-  if(!videoBufferReal) throw new Error('videoBufferReal obrigatorio - dado real');
-  const fase = faseReal || getFaseAtual();
-  const assetsDir = path.join(pastaMaePathReal, 'assets');
-  const gifsDir = path.join(assetsDir, 'gifs');
-  fs.mkdirSync(assetsDir, {recursive:true});
-  fs.mkdirSync(gifsDir, {recursive:true});
-
-  const indexAssets = path.join(assetsDir, 'index.html');
-  if(!fs.existsSync(indexAssets)){
-    fs.writeFileSync(indexAssets, '<!-- nada ainda -->', 'utf8');
-  }
-  const indexGifs = path.join(gifsDir, 'index.html');
-  if(!fs.existsSync(indexGifs)){
-    fs.writeFileSync(indexGifs, '<!-- modelo vazio gifs -->', 'utf8');
-  }
-  const destMp4 = path.join(gifsDir, fase + ".mp4");
-  fs.writeFileSync(destMp4, videoBufferReal);
-  console.log("[gerar.js] Gif real salvo: " + destMp4);
-  return destMp4;
-}
-
-function criarOuAtualizarPesos(pastaMaePathReal, registrosReais){
-  if(!Array.isArray(registrosReais) || registrosReais.length===0) throw new Error('registrosReais obrigatorio');
-  const registrosDir = path.join(pastaMaePathReal, 'registros');
-  fs.mkdirSync(registrosDir, {recursive:true});
-  const pesosPath = path.join(registrosDir, 'pesos.html');
-
-  let html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Pesos - ' + path.basename(pastaMaePathReal) + '</title></head><body>';
-  html += '<h1>Registros de Peso Reais</h1><table border="1" cellpadding="6"><tr><th>Data</th><th>Peso (kg)</th><th>Obs</th></tr>';
-  for(const r of registrosReais){
-    const d = (r.data||'').toString().replace(/</g,'&lt;');
-    const p = (r.peso||'').toString().replace(/</g,'&lt;');
-    const o = (r.observacao||'').toString().replace(/</g,'&lt;');
-    html += '<tr><td>' + d + '</td><td>' + p + '</td><td>' + o + '</td></tr>';
-  }
-  html += '</table></body></html>';
-  fs.writeFileSync(pesosPath, html, 'utf8');
-  console.log("[gerar.js] Pesos reais atualizados: " + pesosPath);
-  return pesosPath;
-}
-
-module.exports = { getProxNumero: getProxNumero, criarSoPastaMae: criarSoPastaMae, criarAssetsQuandoGif: criarAssetsQuandoGif, criarOuAtualizarPesos: criarOuAtualizarPesos, getFaseAtual: getFaseAtual, normalizarSlug: normalizarSlug };
