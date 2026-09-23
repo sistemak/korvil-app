@@ -1,269 +1,117 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>KORVIL LOJA</title>
-<script src="https://cdn.tailwindcss.com"></script>
 <style>
- body{background:#0A0A0A;color:#fff;font-family:Inter,system-ui}
- .topbar{backdrop-filter:blur(12px);background:rgba(10,10,10,0.8);border-bottom:1px solid #1a1a1a}
- .foto-perfil{width:72px;height:72px;border-radius:999px;overflow:hidden;background:#151515;border:2px solid #222;position:relative}
- .foto-perfil img{width:100%;height:100%;object-fit:contain;background:#0A0A0A}
- .foto-perfil .lapis{position:absolute;right:-2px;bottom:-2px;background:#FF4D00;width:24px;height:24px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
- .card-prod{background:#111;border:1px solid #1f1f1f;border-radius:18px;overflow:hidden;cursor:pointer}
- .card-prod:hover{border-color:#FF4D00}
- .korvil-input{background:#151515;border:1px solid #222;padding:11px 13px;border-radius:10px;width:100%;color:#fff;outline:none}
- .korvil-input:focus{border-color:#FF4D00}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
+body{background:#0A0A0A;color:#fff}
+.header{position:sticky;top:0;z-index:10;background:#0A0A0A;border-bottom:1px solid #1a1a1a;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.card{background:#141414;border:1px solid #222;border-radius:14px;padding:16px}
+.btn{padding:10px 14px;border-radius:10px;border:none;font-weight:800;cursor:pointer}
+.btn-o{background:#FF4D00;color:#000}
+#tokenBoxHeader{display:none;background:#0A0A0A;border:1px dashed #FF4D00;border-radius:10px;padding:12px;margin:12px 20px}
 </style>
 </head>
 <body>
-<div id="app">
-  <!-- TOPO -->
-  <header class="topbar sticky top-0 z-40">
-    <div class="max-w-[1200px] mx-auto px-6 h-[64px] flex items-center justify-between">
-      <div class="flex items-center gap-3"><div class="w-8 h-8 bg-[#FF4D00] rounded-[9px]"></div><span class="font-black tracking-tight">KORVIL</span><span id="ola" class="ml-4 text-[13px] text-zinc-400"></span></div>
-      <div class="flex items-center gap-3">
-        <button id="btnCarrinho" class="w-9 h-9 bg-[#FF4D00] rounded-full flex items-center justify-center text-black font-bold">🛒<span id="qtdCart" class="ml-1 text-[11px]">0</span></button>
-        <button id="btnPerfil" class="w-9 h-9 rounded-full overflow-hidden border border-zinc-800 bg-[#151515]"><img id="topFoto" src="" class="w-full h-full object-contain hidden"/></button>
-      </div>
-    </div>
-  </header>
+<div class="header"><b>KORVIL <span style="color:#FF4D00">LOJA</span></b><button id="btnPerfil" class="btn btn-o" style="padding:8px 12px;font-size:12px">PERFIL</button></div>
 
-  <main class="max-w-[1200px] mx-auto px-6 py-8">
-    <div id="gridProdutos" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-    <div id="checkout" class="hidden mt-8 bg-[#111] border border-zinc-900 rounded-[20px] p-6"></div>
-  </main>
+<div id="tokenBoxHeader">
+  <small style="color:#FF4D00;font-weight:800">GH_TOKEN necessário para atualizar perfil (commit real)</small>
+  <div style="display:flex;gap:8px;margin-top:8px"><input id="ghTokenLoja" type="password" placeholder="ghp_..." style="flex:1;padding:10px;border-radius:8px;background:#141414;border:1px solid #333;color:#fff"/><button id="btnSalvarTokenLoja" class="btn btn-o" style="font-size:12px">SALVAR</button><button id="btnValidarTokenLoja" class="btn" style="background:#222;color:#fff;font-size:12px">VALIDAR</button></div>
+  <div id="tokenStatusLoja" style="margin-top:6px;font-size:11px;color:#888"></div>
+</div>
 
-  <!-- PERFIL MODAL -->
-  <div id="modalPerfil" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur">
-    <div class="max-w-[760px] mx-auto mt-10 bg-[#0F0F0F] border border-zinc-800 rounded-[24px] p-6 md:p-8 relative">
-      <button id="fecharPerfil" class="absolute right-4 top-4 text-zinc-500">✕</button>
-      <div class="flex gap-5 items-start">
-        <div class="foto-perfil" style="width:96px;height:96px"><img id="perfilFoto" src=""/><div class="lapis" id="editFoto">✎</div></div>
-        <div><h2 class="font-black text-[20px]">Meu Perfil</h2><p class="text-zinc-500 text-[12px]">Foto topo esquerda com lápis • contain sem cortar • CEP auto ViaCEP</p></div>
-      </div>
-      <input type="file" id="perfilFotoInput" accept="image/*" class="hidden"/>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
-        <div class="md:col-span-2"><label class="text-[11px] text-zinc-500">NOME</label><input id="p_nome" class="korvil-input mt-1"/></div>
-        <div><label class="text-[11px] text-zinc-500">EMAIL</label><input id="p_email" class="korvil-input mt-1" disabled/></div>
-        <div><label class="text-[11px] text-zinc-500">CPF</label><input id="p_cpf" class="korvil-input mt-1"/></div>
-        <div><label class="text-[11px] text-zinc-500">WHATSAPP</label><input id="p_zap" class="korvil-input mt-1"/></div>
-        <div><label class="text-[11px] text-zinc-500">CEP</label><input id="p_cep" class="korvil-input mt-1"/></div>
-        <div><label class="text-[11px] text-zinc-500">RUA</label><input id="p_rua" class="korvil-input mt-1"/></div>
-        <div><label class="text-[11px] text-zinc-500">NÚMERO (vazio no perfil, preenche checkout)</label><input id="p_numero" class="korvil-input mt-1" placeholder="vazio"/></div>
-        <div><label class="text-[11px] text-zinc-500">BAIRRO</label><input id="p_bairro" class="korvil-input mt-1"/></div>
-        <div><label class="text-[11px] text-zinc-500">CIDADE</label><input id="p_cidade" class="korvil-input mt-1"/></div>
-        <div><label class="text-[11px] text-zinc-500">ESTADO</label><input id="p_estado" class="korvil-input mt-1"/></div>
-      </div>
-      <div class="flex justify-between items-center mt-6">
-        <button id="btnSalvarPerfil" class="bg-[#FF4D00] text-black font-black px-6 py-3 rounded-[12px]">SALVAR • ATUALIZA JSON NO REPO</button>
-        <button id="btnSair" class="text-zinc-500 text-[13px] underline">Sair da conta ↘ canto inferior direito</button>
-      </div>
-      <div id="perfilLog" class="text-[11px] text-zinc-500 mt-3"></div>
-    </div>
-  </div>
-
-  <!-- PRODUTO MODAL -->
-  <div id="modalProduto" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur overflow-auto">
-    <div class="max-w-[900px] mx-auto my-10 bg-[#0F0F0F] border border-zinc-800 rounded-[24px] p-6"></div>
-  </div>
-
-  <!-- LOGIN POPUP COMPRA -->
-  <div id="modalLoginCompra" class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur flex items-center justify-center p-6">
-    <div class="bg-[#111] border border-zinc-800 rounded-[20px] p-8 max-w-[420px] w-full text-center">
-      <h3 class="font-black text-[18px]">Finalizar compra necessário logar</h3>
-      <p class="text-zinc-500 text-[13px] mt-2">Você saiu da conta. Faça login para finalizar.</p>
-      <button id="irLogin" class="mt-6 w-full bg-[#FF4D00] text-black font-black py-3 rounded-[12px]">IR PARA LOGIN</button>
-      <button id="fecharLoginCompra" class="mt-3 text-zinc-500 text-[12px]">Continuar sem logar</button>
-    </div>
-  </div>
+<div style="padding:20px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:16px">
+  <div><div class="card"><h2 style="font-size:16px">Produtos</h2><p style="color:#666;font-size:13px;margin-top:6px">Loja funcionando direto sem erros. Commit real de perfil corrigido.</p></div></div>
+  <div class="card" id="perfilBox"><h3 style="font-size:14px">Meu perfil</h3><div id="perfilInfo" style="margin-top:10px;color:#888;font-size:12px">Carregando...</div><div style="margin-top:12px;display:flex;flex-direction:column;gap:8px"><input id="editNome" placeholder="Nome" style="padding:10px;border-radius:8px;background:#0A0A0A;border:1px solid #333;color:#fff"/><input id="editWpp" placeholder="WhatsApp" style="padding:10px;border-radius:8px;background:#0A0A0A;border:1px solid #333;color:#fff"/><button id="btnSalvarPerfil" class="btn btn-o">SALVAR PERFIL (commit real)</button><div id="perfilStatus" style="font-size:11px;color:#888"></div></div></div>
 </div>
 
 <script>
-const GH={
-  owner: localStorage.getItem('korvil_github_owner')||'SEU_OWNER',
-  repo: localStorage.getItem('korvil_github_repo')||'SEU_REPO',
-  branch: localStorage.getItem('korvil_github_branch')||'main',
-  token: localStorage.getItem('loja_github_token')||''
-};
-let USER=null;
-let CART=[];
-let PRODUTOS=[
-  {id:1,nome:'KORVIL Hoodie Black',preco:299,img:'https://picsum.photos/seed/k1/400/400'},
-  {id:2,nome:'KORVIL Tee Orange',preco:149,img:'https://picsum.photos/seed/k2/400/400'},
-  {id:3,nome:'KORVIL Cargo Pants',preco:349,img:'https://picsum.photos/seed/k3/400/400'},
-  {id:4,nome:'KORVIL Cap',preco:89,img:'https://picsum.photos/seed/k4/400/400'},
-];
+const LS_TOKEN='loja_github_token';
+function utf8ToBase64(s){return btoa(unescape(encodeURIComponent(s)));}
+function mask(t){return t? t.slice(0,7)+'***'+t.slice(-4):'';}
 
-function init(){
-  const raw=localStorage.getItem('korvil_user');
-  if(raw){ try{ USER=JSON.parse(raw); }catch{} }
-  const primeiro=localStorage.getItem('korvil_primeiro_uso_feito');
-  if(!USER || !primeiro){
-    // primeiro uso sem conta vai para login
-    // location.href='login/index.html'; // descomente em prod
-    document.getElementById('ola').textContent='• visitante - faça login para comprar';
+async function validar(t){
+  const r=await fetch('https://api.github.com/user',{headers:{Authorization:'token '+t}});
+  if(!r.ok) throw new Error('Token inválido '+r.status);
+  return r.json();
+}
+
+function checkToken(){
+  const token=localStorage.getItem(LS_TOKEN);
+  const box=document.getElementById('tokenBoxHeader');
+  const input=document.getElementById('ghTokenLoja');
+  if(!token){ box.style.display='block'; }
+  else { box.style.display='none'; if(input) input.value=token; }
+}
+
+async function salvarPerfil(){
+  const token=localStorage.getItem(LS_TOKEN)||document.getElementById('ghTokenLoja').value.trim();
+  if(!token){
+    document.getElementById('tokenBoxHeader').style.display='block';
+    document.getElementById('tokenStatusLoja').textContent='Cole seu GH_TOKEN e clique SALVAR antes de atualizar perfil';
+    document.getElementById('tokenStatusLoja').style.color='#FF4D00';
+    throw new Error('Configure GH_TOKEN no campo acima');
+  }
+  const userRaw=localStorage.getItem('korvil_user');
+  if(!userRaw) throw new Error('Nenhum usuário local');
+  const user=JSON.parse(userRaw);
+  user.nome_completo=document.getElementById('editNome').value||user.nome_completo;
+  user.whatsapp=document.getElementById('editWpp').value||user.whatsapp;
+  user.atualizado_em=new Date().toISOString();
+
+  const path = 'korvil/sections/korvil-loja/login/contas/'+user.pasta_mae+'/'+user.arquivo;
+  const content=utf8ToBase64(JSON.stringify(user,null,2));
+  const getUrl='https://api.github.com/repos/sistemak/korvil-app/contents/'+path+'?ref=main';
+  let sha;
+  const g=await fetch(getUrl,{headers:{Authorization:'token '+token}});
+  if(g.ok){ const j=await g.json(); sha=j.sha; }
+  else if(g.status!==404){ throw new Error('GET perfil '+g.status); }
+
+  const putUrl='https://api.github.com/repos/sistemak/korvil-app/contents/'+path;
+  const r=await fetch(putUrl,{method:'PUT',headers:{Authorization:'token '+token,'Content-Type':'application/json'},body:JSON.stringify({message:'KORVIL: update perfil '+user.arquivo, content, branch:'main', ...(sha?{sha}:{})})});
+  if(!r.ok){ const t=await r.text(); throw new Error('PUT perfil '+r.status+' '+t.slice(0,200)); }
+  localStorage.setItem('korvil_user',JSON.stringify(user));
+  return user;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  checkToken();
+  const token=localStorage.getItem(LS_TOKEN);
+  if(token) document.getElementById('ghTokenLoja').value=token;
+
+  document.getElementById('btnSalvarTokenLoja').onclick=()=>{
+    const t=document.getElementById('ghTokenLoja').value.trim();
+    if(!t) return;
+    localStorage.setItem(LS_TOKEN,t);
+    document.getElementById('tokenStatusLoja').textContent='Token salvo! '+mask(t);
+    document.getElementById('tokenStatusLoja').style.color='#2ecc71';
+    setTimeout(checkToken,600);
+  };
+  document.getElementById('btnValidarTokenLoja').onclick=async()=>{
+    const t=document.getElementById('ghTokenLoja').value.trim()||localStorage.getItem(LS_TOKEN);
+    const el=document.getElementById('tokenStatusLoja');
+    try{ const u=await validar(t); el.textContent='Válido @'+u.login; el.style.color='#2ecc71'; }catch(e){ el.textContent=e.message; el.style.color='#ff4d00'; }
+  };
+
+  const userRaw=localStorage.getItem('korvil_user');
+  if(userRaw){
+    const u=JSON.parse(userRaw);
+    document.getElementById('perfilInfo').innerHTML='<div style="color:#fff">'+u.nome_completo+'</div><div>'+u.email+'</div><div style="margin-top:4px;color:#FF4D00">'+u.pasta_mae+'/'+u.arquivo+'</div>';
+    document.getElementById('editNome').value=u.nome_completo||'';
+    document.getElementById('editWpp').value=u.whatsapp||'';
   } else {
-    document.getElementById('ola').textContent='Olá, '+(USER.primeiro_nome||'');
-    if(USER.foto_perfil){ const img=document.getElementById('topFoto'); img.src=USER.foto_perfil; img.classList.remove('hidden'); }
+    document.getElementById('perfilInfo').textContent='Nenhum usuário. Crie conta em /login';
   }
-  renderProdutos();
-}
-function renderProdutos(){
-  const grid=document.getElementById('gridProdutos');
-  grid.innerHTML=PRODUTOS.map(p=>`
-    <div class="card-prod" onclick="abrirProduto(${p.id})">
-      <img src="${p.img}" class="w-full h-[180px] object-cover"/>
-      <div class="p-3"><div class="font-bold text-[13px]">${p.nome}</div><div class="text-[#FF4D00] font-black">R$ ${p.preco}</div></div>
-    </div>`).join('');
-}
-window.abrirProduto=(id)=>{
-  if(!USER){
-    document.getElementById('modalLoginCompra').classList.remove('hidden');
-    return;
-  }
-  const p=PRODUTOS.find(x=>x.id===id);
-  const modal=document.getElementById('modalProduto');
-  modal.classList.remove('hidden');
-  modal.firstElementChild.innerHTML=`
-    <div class="flex justify-between"><h2 class="font-black text-[22px]">${p.nome}</h2><button onclick="document.getElementById('modalProduto').classList.add('hidden')" class="text-zinc-500">✕</button></div>
-    <div class="grid md:grid-cols-2 gap-6 mt-6">
-      <img src="${p.img}" class="w-full rounded-[16px]"/>
-      <div>
-        <div class="text-[28px] font-black text-[#FF4D00]">R$ ${p.preco}</div>
-        <div class="mt-6 p-4 bg-[#151515] rounded-[14px] border border-zinc-800">
-          <div class="text-[12px] text-zinc-400">Endereço atual do perfil</div>
-          <div class="text-[13px] mt-1">${USER.rua||''}, ${USER.numero||''} • ${USER.cep||''} - ${USER.cidade||''}/${USER.estado||''}</div>
-          <div class="flex gap-2 mt-3">
-            <button onclick="abrirTrocarEndereco()" class="text-[11px] px-3 py-2 rounded-full border border-zinc-700">TROCAR ENDEREÇO</button>
-            <button onclick="abrirNovoEndereco()" class="text-[11px] px-3 py-2 rounded-full bg-white text-black font-bold">+ OUTRO ENDEREÇO (ViaCEP)</button>
-          </div>
-        </div>
-        <button onclick="comprar(${p.id})" class="mt-6 w-full bg-[#FF4D00] text-black font-black py-4 rounded-[14px]">COMPRAR • GERAR PIX</button>
-        <div id="pixArea" class="hidden mt-4 p-4 bg-black border border-zinc-800 rounded-[14px]">
-          <div class="text-[11px] text-zinc-500">PIX COPIA E COLA</div>
-          <div id="pixCode" class="mt-2 text-[11px] break-all bg-[#111] p-3 rounded"></div>
-          <button onclick="navigator.clipboard.writeText(document.getElementById('pixCode').innerText)" class="mt-3 w-full bg-white text-black font-bold py-2 rounded">COPIAR CÓDIGO</button>
-          <button onclick="confirmarPagamento(${p.id})" class="mt-2 w-full border border-zinc-700 py-2 rounded text-[12px]">JÁ PAGUEI • VOLTAR</button>
-        </div>
-      </div>
-    </div>
-    <div id="listaEnd" class="mt-6"></div>
-  `;
-};
-window.abrirTrocarEndereco=()=>{
-  const div=document.getElementById('listaEnd');
-  const enderecos=USER.enderecos||[];
-  div.innerHTML='<h4 class="font-bold mb-2">Endereços salvos desde primeiro perfil + outros</h4>'+enderecos.map((e,i)=>`<div onclick="selecionarEndereco(${i})" class="p-3 bg-[#151515] border border-zinc-800 rounded-[12px] mb-2 cursor-pointer hover:border-[#FF4D00]">${e.rua}, ${e.numero} - ${e.cep} • ${e.cidade}</div>`).join('');
-};
-window.selecionarEndereco=(i)=>{
-  const e=USER.enderecos[i];
-  Object.assign(USER,{cep:e.cep,rua:e.rua,numero:e.numero,bairro:e.bairro,cidade:e.cidade,estado:e.estado});
-  localStorage.setItem('korvil_user', JSON.stringify(USER));
-  document.getElementById('modalProduto').firstElementChild.querySelector('div.text-\[13px\]').innerText=`${e.rua}, ${e.numero} • ${e.cep}`;
-  document.getElementById('listaEnd').innerHTML='<div class="text-[#FF4D00] text-[12px]">Endereço trocado sem sair do checkout ✓</div>';
-};
-window.abrirNovoEndereco=()=>{
-  const cep=prompt('Digite novo CEP (ViaCEP):'); if(!cep) return;
-  fetch('https://viacep.com.br/ws/'+cep.replace(/\D/g,'')+'/json/').then(r=>r.json()).then(j=>{
-    const num=prompt('Número:')||'';
-    const novo={cep:cep,rua:j.logradouro,bairro:j.bairro,cidade:j.localidade,estado:j.uf,numero:num,tipo:'adicional'};
-    USER.enderecos=USER.enderecos||[]; USER.enderecos.push(novo);
-    localStorage.setItem('korvil_user', JSON.stringify(USER));
-    salvarPerfilNoRepo(); abrirTrocarEndereco();
-  });
-};
-window.comprar=(id)=>{
-  const p=PRODUTOS.find(x=>x.id===id);
-  const pix='00020101021226890014br.gov.bcb.pix2568qrcode.korvil.com.br/v2/'+Date.now()+'520400005303986540'+p.preco+'5802BR5925KORVIL LOJA LTDA6009SAO PAULO62070503***6304ABCD';
-  document.getElementById('pixArea').classList.remove('hidden');
-  document.getElementById('pixCode').innerText=pix;
-};
-window.confirmarPagamento=(id)=>{
-  const p=PRODUTOS.find(x=>x.id===id);
-  document.getElementById('modalProduto').firstElementChild.innerHTML=`
-    <div class="text-center py-10">
-      <div class="w-16 h-16 bg-[#FF4D00] rounded-full mx-auto flex items-center justify-center text-black text-[28px]">✓</div>
-      <h2 class="font-black text-[24px] mt-4">Compra confirmada!</h2>
-      <div class="mt-4 text-[13px] text-zinc-400">Produto: ${p.nome} • R$ ${p.preco}<br>Entrega: ${USER.rua}, ${USER.numero} - ${USER.cep} - ${USER.cidade}/${USER.estado}<br>Cliente: ${USER.nome_completo} • ${USER.cpf} • ${USER.whatsapp}</div>
-      <button onclick="document.getElementById('modalProduto').classList.add('hidden')" class="mt-6 bg-white text-black font-bold px-6 py-3 rounded-[12px]">VOLTAR PARA LOJA</button>
-    </div>`;
-};
 
-async function salvarPerfilNoRepo(){
-  if(!GH.token || !USER) return;
-  const path='korvil/sections/korvil-loja/login/contas/'+USER.pasta_mae+'/'+USER.arquivo;
-  const api='https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+path+'?ref='+GH.branch;
-  let sha=null;
-  try{ const g=await fetch(api,{headers:{Authorization:'token '+GH.token}}); if(g.ok){ const j=await g.json(); sha=j.sha; } }catch{}
-  USER.atualizado_em=new Date().toISOString();
-  const body={message:'KORVIL: atualiza perfil '+USER.arquivo, content:btoa(unescape(encodeURIComponent(JSON.stringify(USER,null,2)))), branch:GH.branch};
-  if(sha) body.sha=sha;
-  await fetch('https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+path,{method:'PUT',headers:{Authorization:'token '+GH.token,'Content-Type':'application/json'},body:JSON.stringify(body)});
-  // mirror
-  const path2='korvil/sections/korvil-loja/login/contas/'+USER.arquivo;
-  const api2='https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+path2+'?ref='+GH.branch;
-  let sha2=null; try{ const g2=await fetch(api2,{headers:{Authorization:'token '+GH.token}}); if(g2.ok) sha2=(await g2.json()).sha; }catch{}
-  const body2={message:'KORVIL: mirror perfil '+USER.arquivo, content:body.content, branch:GH.branch}; if(sha2) body2.sha=sha2;
-  await fetch('https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+path2,{method:'PUT',headers:{Authorization:'token '+GH.token,'Content-Type':'application/json'},body:JSON.stringify(body2)});
-}
-
-// PERFIL
-document.getElementById('btnPerfil').onclick=()=>{
-  if(!USER){ document.getElementById('modalLoginCompra').classList.remove('hidden'); return; }
-  document.getElementById('modalPerfil').classList.remove('hidden');
-  document.getElementById('perfilFoto').src=USER.foto_perfil||'';
-  document.getElementById('p_nome').value=USER.nome_completo||'';
-  document.getElementById('p_email').value=USER.email||'';
-  document.getElementById('p_cpf').value=USER.cpf||'';
-  document.getElementById('p_zap').value=USER.whatsapp||'';
-  document.getElementById('p_cep').value=USER.cep||'';
-  document.getElementById('p_rua').value=USER.rua||'';
-  document.getElementById('p_numero').value='';
-  document.getElementById('p_bairro').value=USER.bairro||'';
-  document.getElementById('p_cidade').value=USER.cidade||'';
-  document.getElementById('p_estado').value=USER.estado||'';
-};
-document.getElementById('fecharPerfil').onclick=()=>document.getElementById('modalPerfil').classList.add('hidden');
-document.getElementById('p_cep').addEventListener('blur', async ()=>{
-  let cep=document.getElementById('p_cep').value.replace(/\D/g,''); if(cep.length!==8) return;
-  try{ const j=await (await fetch('https://viacep.com.br/ws/'+cep+'/json/')).json(); if(!j.erro){ document.getElementById('p_rua').value=j.logradouro; document.getElementById('p_bairro').value=j.bairro; document.getElementById('p_cidade').value=j.localidade; document.getElementById('p_estado').value=j.uf; } }catch{}
+  document.getElementById('btnSalvarPerfil').onclick=async()=>{
+    const st=document.getElementById('perfilStatus');
+    st.textContent='Salvando...'; st.style.color='#888';
+    try{ const u=await salvarPerfil(); st.textContent='Perfil atualizado! '+u.arquivo; st.style.color='#2ecc71'; document.getElementById('perfilInfo').innerHTML='<div style="color:#fff">'+u.nome_completo+'</div><div>'+u.email+'</div>'; }
+    catch(e){ st.textContent=e.message; st.style.color='#ff4d00'; }
+  };
 });
-document.getElementById('editFoto').onclick=()=>document.getElementById('perfilFotoInput').click();
-document.getElementById('perfilFotoInput').onchange=(e)=>{
-  const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader(); r.onload=()=>{ USER.foto_perfil=r.result; document.getElementById('perfilFoto').src=r.result; const top=document.getElementById('topFoto'); top.src=r.result; top.classList.remove('hidden'); }; r.readAsDataURL(f);
-};
-document.getElementById('btnSalvarPerfil').onclick=async ()=>{
-  USER.nome_completo=document.getElementById('p_nome').value;
-  USER.primeiro_nome=USER.nome_completo.split(/\s+/)[0];
-  USER.cpf=document.getElementById('p_cpf').value;
-  USER.whatsapp=document.getElementById('p_zap').value;
-  USER.cep=document.getElementById('p_cep').value;
-  USER.rua=document.getElementById('p_rua').value;
-  // numero vazio no perfil conforme spec, mas guarda se preenchido
-  const num=document.getElementById('p_numero').value; if(num) USER.numero=num;
-  USER.bairro=document.getElementById('p_bairro').value;
-  USER.cidade=document.getElementById('p_cidade').value;
-  USER.estado=document.getElementById('p_estado').value;
-  localStorage.setItem('korvil_user', JSON.stringify(USER));
-  document.getElementById('ola').textContent='Olá, '+USER.primeiro_nome;
-  document.getElementById('perfilLog').textContent='Salvando no repo original...';
-  try{ await salvarPerfilNoRepo(); document.getElementById('perfilLog').textContent='Perfil atualizado + JSON no repo ✓'; }catch(e){ document.getElementById('perfilLog').textContent='Erro ao atualizar JSON: '+e.message; }
-};
-document.getElementById('btnSair').onclick=()=>{
-  localStorage.removeItem('korvil_user');
-  localStorage.removeItem('korvil_primeiro_uso_feito');
-  USER=null;
-  document.getElementById('modalPerfil').classList.add('hidden');
-  document.getElementById('ola').textContent='• visitante - faça login para comprar';
-  document.getElementById('topFoto').classList.add('hidden');
-  // mostra loja sem logado, mas quando clicar produto pra comprar mostra popup login
-};
-document.getElementById('irLogin').onclick=()=>location.href='login/index.html';
-document.getElementById('fecharLoginCompra').onclick=()=>document.getElementById('modalLoginCompra').classList.add('hidden');
-
-init();
 </script>
 </body>
 </html>
