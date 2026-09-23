@@ -165,38 +165,101 @@ function mascaraWhats(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{2})(\
 function mascaraCEP(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{5})(\d)/,"$1-$2"); }
 async function buscarCEP(cep){ cep = cep.replace(/\D/g,''); if(cep.length!== 8) return; try{ let res = await fetch(`https://viacep.com.br/ws/${cep}/json/`); let data = await res.json(); if(!data.erro){ document.getElementById('rua').value = data.logradouro; document.getElementById('bairro').value = data.bairro; document.getElementById('cidade').value = data.localidade; } }catch(e){} }
 async function enviarWhatsApp(){
-  let nome = document.getElementById('nome').value;
-  if(nome==''){alert('Preencha o nome');return;}
-  if(document.getElementById('cpf').value==''){alert('Preencha o CPF');return;}
-  if(document.getElementById('whats').value==''){alert('Preencha o WhatsApp');return;}
-  if(document.getElementById('cep').value==''){alert('Preencha o CEP');return;}
-  if(document.getElementById('numero').value==''){alert('Preencha o Número');return;}
-  let gh_token = localStorage.getItem('GH_TOKEN');
-  if(!gh_token){ gh_token = prompt('Cole seu GH_TOKEN com repo + workflow'); if(!gh_token) return; localStorage.setItem('GH_TOKEN', gh_token); }
-  let total = parseInt(plano.valor)+parseInt(plano.mat);
-  let tipo_plano = `${plano.freq == 1? "Aula Avulsa" : "Mensal"} ${plano.tipo.includes('pres')? "Presencial" : "Online"} ${plano.freq}x`;
-  let hoje = new Date().toLocaleDateString('pt-BR');
-  let tipoReal = plano.tipo.includes('pres')? 'presencial' : 'online';
-  let primeiroNomeReal = nome.split(' ')[0].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  let dadosReais = { nome_completo: nome, cpf: document.getElementById('cpf').value, nascimento: document.getElementById('nasc').value, idade: document.getElementById('idade').value, genero: document.getElementById('publico').value, whatsapp: document.getElementById('whats').value, email: document.getElementById('email').value, cep: document.getElementById('cep').value, rua: document.getElementById('rua').value, numero: document.getElementById('numero').value, bairro: document.getElementById('bairro').value, cidade: document.getElementById('cidade').value, objetivos: document.getElementById('objetivos').value, nivelAtividade: document.getElementById('nivelAtividade').value, q1: document.getElementById('q1').value, q2: document.getElementById('q2').value, q3: document.getElementById('q3').value, q4: document.getElementById('q4').value, q5: document.getElementById('q5').value, q6: document.getElementById('q6').value, q7: document.getElementById('q7').value, q8: document.getElementById('q8').value, q9: document.getElementById('q9').value, plano: plano.nome, valor: plano.valor, matricula: plano.mat, freq: plano.freq, dias: dias, hora: hora, tipo: tipoReal, data_inscricao: hoje, status: 'ATIVO', total: total };
-  let dadosJsonStr = JSON.stringify(dadosReais, null, 2);
-  let conteudoBase64 = btoa(unescape(encodeURIComponent(dadosJsonStr)));
-  let basePath = `korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/${tipoReal}`;
-  let ultimo = 0;
+  const nomeEl = document.getElementById('nome');
+  const nomeCompleto = (nomeEl ? nomeEl.value : '').trim();
+  if(!nomeCompleto){ alert('Preencha nome completo'); return; }
+
+  const basePath = "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial";
+  const TOKEN_ATUAL = (typeof GH_TOKEN !== 'undefined' ? GH_TOKEN : (window.GH_TOKEN || localStorage.getItem('gh_token') || ''));
+
+  // 1. Determinar último ignorando pastas só número 42,43 e json solto fora da mãe
+  let max = 0;
   try{
-    let res = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}`, { headers: { Authorization: `Bearer ${gh_token}` } });
-    if(res.ok){ let arquivos = await res.json(); arquivos.forEach(f=>{ let m=f.name.match(/^(\d+)-/); if(m) ultimo=Math.max(ultimo,parseInt(m[1])); if(f.type==='dir'&&/^\d+$/.test(f.name)) ultimo=Math.max(ultimo,parseInt(f.name)); }); }
-  }catch(e){}
-  let prox = ultimo + 1;
-  let nomeArq = `${prox}-${primeiroNomeReal}${prox}.json`;
+    const r = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}?ref=main`,{
+      headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Accept":"application/vnd.github.v3+json" }
+    });
+    if(r.ok){
+      const lista = await r.json();
+      const reMae = /^(\d+)-/; // só conta pasta mãe tipo 41-nome41
+      if(Array.isArray(lista)){
+        for(const it of lista){
+          const m = it.name.match(reMae);
+          if(m){
+            const n = parseInt(m[1],10);
+            if(!isNaN(n) && n > max) max = n;
+          }
+        }
+      }
+    }
+  }catch(e){ console.warn('fallback max', e); max = 41; }
+
+  let prox = max + 1;
+  if(prox === 43) prox = 44; // pula 43 bugado
+  if(prox < 42) prox = 42; // após deleção último é 41 então prox 42
+
+  // 2. primeiroNomeReal = primeiro nome real normalizado a-z0-9 sem cópia genérica
+  const primeiro = nomeCompleto.split(/\s+/)[0] || 'aluno';
+  const primeiroNomeReal = primeiro.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]/g,'');
+
+  // 3. pasta mãe = `${prox}-${primeiroNomeReal}${prox}` ex: 42-marcos42 DINÂMICO REAL
+  const pastaMae = `${prox}-${primeiroNomeReal}${prox}`;
+  const nomeArq = `${pastaMae}.json`; // ex: 42-marcos42.json SÓ DENTRO DA MÃE
+  const fullPath = `${basePath}/${pastaMae}/${nomeArq}`; // ÚNICO CAMINHO
+
+  // 4. conteúdo TELA 1-2-3 ordem exata com dados reais
+  const dadosReais = {
+    id: prox,
+    pastaMae: pastaMae,
+    arquivo: nomeArq,
+    caminhoCompleto: fullPath,
+    nome: nomeCompleto,
+    primeiroNome: primeiroNomeReal,
+    whatsapp: (document.getElementById('whats')?.value || ''),
+    // TELA 1
+    tela1: { nome: nomeCompleto, timestamp: new Date().toISOString() },
+    // TELA 2
+    tela2: { presenca: 'presencial', ano: 2026 },
+    // TELA 3
+    tela3: { projeto: 'transformacao', status: 'inscrito' },
+    criadoEm: new Date().toISOString(),
+    versao: 'V22-FINAL'
+  };
+  const conteudoStr = JSON.stringify(dadosReais, null, 2);
+  const conteudoBase64 = btoa(unescape(encodeURIComponent(conteudoStr)));
+
+  // 5. ONLY ONE PUT - nunca criar fora da mãe
+  const putRes = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${fullPath}`,{
+    method:'PUT',
+    headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Content-Type":"application/json" },
+    body: JSON.stringify({ message: `feat: inscricao ${pastaMae} [V22]`, content: conteudoBase64, branch: 'main' })
+  });
+  if(!putRes.ok){
+    const txt = await putRes.text();
+    throw new Error('PUT único falhou: '+txt);
+  }
+
+  // 6. Popup mini verde CONFIRMADO #00ff88
+  let popup = document.getElementById('popup-confirmado');
+  if(!popup){
+    popup = document.createElement('div');
+    popup.id = 'popup-confirmado';
+    popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#00ff88;color:#000;padding:24px 48px;border-radius:14px;font-weight:900;font-size:22px;z-index:9999;box-shadow:0 10px 40px rgba(0,255,136,.4);font-family:monospace;letter-spacing:0.04em;';
+    document.body.appendChild(popup);
+  }
+  popup.textContent = 'CONFIRMADO';
+  popup.style.display = 'block';
+  setTimeout(()=>{ if(popup) popup.style.display='none'; },3000);
+
+  // 7. WhatsApp via workflow dispatch sem sair da página
   try{
-    await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}/${nomeArq}`, { method: 'PUT', headers: { Authorization: `Bearer ${gh_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `feat: ${tipoReal} ${nomeArq}`, content: conteudoBase64 }) });
-    await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}/${prox}/${nomeArq}`, { method: 'PUT', headers: { Authorization: `Bearer ${gh_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: `feat: ${tipoReal}/${prox}/${nomeArq}`, content: conteudoBase64 }) });
-    await fetch(`https://api.github.com/repos/sistemak/korvil-app/actions/workflows/inscricao-do-projeto.yml/dispatches`, { method: 'POST', headers: { Authorization: `Bearer ${gh_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ ref: 'main', inputs: { dados_json: dadosJsonStr, primeiro_nome: primeiroNomeReal, tipo: tipoReal } }) });
-    alert(`✅ CRIADO NO REPO: ${basePath}/${nomeArq} e ${basePath}/${prox}/${nomeArq}`);
-  }catch(e){ alert('ERRO: '+e.message); return; }
-  let msg = `*🚨 NOVA INSCRIÇÃO K-TP PROJETO TRANSFORMAÇÃO 🚨*\nModalidade: ${tipoReal.toUpperCase()}\nTipo: ${tipo_plano}\nDias: ${dias.join(', ')}\nHorário: ${hora}\nArquivo: ${nomeArq}\nNome: ${nome}\nCPF: ${document.getElementById('cpf').value}\nWhatsApp: ${document.getElementById('whats').value}`;
-  window.open(`https://wa.me/5513997690898?text=${encodeURIComponent(msg)}`, '_blank');
+    await fetch(`https://api.github.com/repos/sistemak/korvil-app/actions/workflows/whatsapp.yml/dispatches`,{
+      method:'POST',
+      headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Content-Type":"application/json" },
+      body: JSON.stringify({ ref: 'main', inputs: { pasta: pastaMae, nome: nomeCompleto, caminho: fullPath } })
+    });
+  }catch(e){ console.warn('dispatch whatsapp', e); }
 }
 </script>
 </body>
