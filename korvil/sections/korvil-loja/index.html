@@ -1,79 +1,186 @@
-// korvil/sections/korvil-loja/index.html - Lógica integrada de criação + commit automático
-// COLE NO SEU App.tsx / index.html da loja
-
-const REPO = "sistemak/korvil-app";
-const BRANCH = "main";
-
-function removerAcentos(s){ return s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
-function gerarNomePasta(nome){
-  const partes = removerAcentos(nome.trim()).toLowerCase().split(/\s+/).filter(Boolean);
-  if(partes.length<=1) return partes[0]||'';
-  return `${partes[0]}_${partes.slice(1).map(p=>p[0]).join('')}`.replace(/[^a-z0-9_]/g,'').slice(0,40);
-}
-function validarDadosCompleto({nome,email,senha,confirmar}){
-  if(!nome || !email || !senha || !confirmar) return {ok:false, erro:'Preencha todos os dados'};
-  if(nome.trim().length<3) return {ok:false, erro:'Nome >=3 caracteres'};
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return {ok:false, erro:'Email inválido'};
-  if(senha.length<6) return {ok:false, erro:'Senha >=6'};
-  if(senha!==confirmar) return {ok:false, erro:'Senhas não conferem'};
-  return {ok:true};
-}
-
-async function criarContaReal({nome,email,senha,confirmar}){
-  const valid = validarDadosCompleto({nome,email,senha,confirmar});
-  if(!valid.ok){ alert(valid.erro); return {ok:false, erro: valid.erro}; }
-
-  const token = localStorage.getItem('loja_github_token') || localStorage.getItem('gh_token');
-  if(!token){ alert('Configure GH_TOKEN no admin primeiro'); return {ok:false}; }
-
-  const pastaMae = gerarNomePasta(nome);
-  const path = `korvil/sections/korvil-loja/login/contas/${pastaMae}/${pastaMae}.json`;
-
-  // 1. Verifica se já existe - nunca duplicar
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KORVIL LOJA ULTRA BLACK - OFICIAL</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>
+// === KORVIL PRIMEIRO USO ÚNICO CHECK ===
+(function(){
   try{
-    const check = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`,{
-      headers:{ Authorization: `Bearer ${token}`, Accept:'application/vnd.github.v3+json' }
-    });
-    if(check.ok){ alert('Conta já existe: '+pastaMae); return {ok:false, erro:'já existe'}; }
-  }catch(_){}
+    const userSalvo = localStorage.getItem('korvil_user');
+    const primeiroUso = localStorage.getItem('korvil_primeiro_uso_feito');
+    if(!userSalvo || !primeiroUso){
+      // primeiro uso - nunca logou -> mostra login único
+      location.replace('./login/index.html');
+    }
+  }catch(e){
+    location.replace('./login/index.html');
+  }
+})();
+</script>
+<style>
+  :root{--orange:#FF4D00;--black:#0A0A0A;}
+  body{font-family:'Syne',sans-serif;background:#0A0A0A;color:#fff}
+  .mono{font-family:'JetBrains Mono',monospace}
+  ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:#FF4D00;border-radius:10px}
+  .product-card:hover img{transform:scale(1.06)}
+</style>
+</head>
+<body class="bg-[#0A0A0A] min-h-screen selection:bg-[#FF4D00] selection:text-black">
+<header class="sticky top-0 z-50 bg-[#0A0A0A]/90 backdrop-blur-xl border-b border-white/10">
+  <div class="max-w-[1440px] mx-auto px-4 lg:px-6 h-[72px] flex items-center justify-between gap-4">
+    <div class="flex items-center gap-5">
+      <div class="w-10 h-10 bg-[#FF4D00] text-black flex items-center justify-center font-black rounded-[10px]">K.L</div>
+      <div class="leading-none">
+        <div class="font-black text-[16px] tracking-[-0.02em]">KORVIL LOJA <span class="text-[#FF4D00]">ULTRA BLACK</span></div>
+        <div class="mono text-[9px] tracking-[0.2em] text-white/30">SISTEMA K • PRIMEIRO USO SALVO PRA SEMPRE</div>
+      </div>
+      <div class="hidden lg:flex items-center gap-2 ml-6">
+        <button data-setor="TODOS" onclick="filtrarSetor('TODOS')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-[#FF4D00] text-black font-bold">TODOS</button>
+        <button data-setor="SISTEMA K" onclick="filtrarSetor('SISTEMA K')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 hover:bg-white/20">SISTEMA K</button>
+        <button data-setor="K-TP" onclick="filtrarSetor('K-TP')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10">K-TP</button>
+        <button data-setor="K-AFORTUNADO" onclick="filtrarSetor('K-AFORTUNADO')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10">K-AFORTUNADO</button>
+        <button data-setor="K-ALMA" onclick="filtrarSetor('K-ALMA')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10">K-ALMA</button>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="hidden md:flex items-center gap-2 bg-[#121212] border border-white/10 rounded-full px-4 h-10 w-[260px]">
+        <span class="text-white/30">⌕</span>
+        <input id="busca" oninput="buscar()" placeholder="Buscar drop, tecido..." class="bg-transparent outline-none mono text-[12px] w-full placeholder:text-white/20"/>
+      </div>
+      <button class="w-10 h-10 bg-white/10 border border-white/10 rounded-full flex items-center justify-center hover:bg-white/20">🛒<span id="cartCount" class="ml-1 mono text-[10px]">0</span></button>
+      <div class="hidden lg:flex items-center gap-3 pl-3 border-l border-white/10">
+        <div class="text-right leading-none">
+          <div class="mono text-[10px] text-white/40">OLÁ</div>
+          <div id="userNome" class="font-bold text-[13px] tracking-[-0.01em]">KORVIL</div>
+        </div>
+        <button onclick="sairTotal()" class="mono text-[10px] px-3 py-2 rounded-full bg-white text-black font-bold hover:bg-[#FF4D00] transition">SAIR</button>
+      </div>
+    </div>
+  </div>
+  <!-- mobile setores -->
+  <div class="lg:hidden flex gap-2 px-4 pb-3 overflow-x-auto">
+    <button onclick="filtrarSetor('TODOS')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-[#FF4D00] text-black font-bold whitespace-nowrap">TODOS</button>
+    <button onclick="filtrarSetor('SISTEMA K')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 whitespace-nowrap">SISTEMA K</button>
+    <button onclick="filtrarSetor('K-TP')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 whitespace-nowrap">K-TP</button>
+    <button onclick="filtrarSetor('K-AFORTUNADO')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 whitespace-nowrap">K-AFORTUNADO</button>
+    <button onclick="filtrarSetor('K-ALMA')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 whitespace-nowrap">K-ALMA</button>
+  </div>
+</header>
 
-  // 2. Cria JSON com mesmo nome da pasta mãe
-  const conta = {
-    id: (crypto.randomUUID ? crypto.randomUUID() : Date.now()+'_'+Math.random()),
-    pasta: pastaMae,
-    nome: nome.trim(),
-    email: email.trim().toLowerCase(),
-    senha_hash: await sha256(senha),
-    criado_em: new Date().toISOString()
-  };
+<main class="max-w-[1440px] mx-auto px-4 lg:px-6 py-8">
+  <div class="grid lg:grid-cols-[1fr_300px] gap-8">
+    <div>
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-[32px] font-[800] tracking-[-0.03em] leading-none">DROPS <span class="text-[#FF4D00]">ULTRA</span> <span class="mono text-[11px] font-normal text-white/30 ml-2" id="countInfo">40 produtos</span></h2>
+        <div class="mono text-[10px] text-white/30 hidden md:block">LOGADO PERMANENTE • korvil_user + primeiro_uso_feito</div>
+      </div>
+      <div id="grid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5"></div>
+    </div>
+    <aside class="space-y-4">
+      <div class="bg-[#121212] border border-white/10 rounded-[20px] p-5">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-full bg-[#FF4D00] text-black flex items-center justify-center font-black" id="avatar">K</div>
+          <div>
+            <div class="mono text-[10px] text-white/40">CONTA PERMANENTE</div>
+            <div id="userNome2" class="font-bold text-[14px]">Carregando...</div>
+            <div id="userEmail" class="mono text-[10px] text-white/40">-</div>
+          </div>
+        </div>
+        <div class="mono text-[10px] leading-[1.6] text-white/50 bg-[#0A0A0A] border border-white/5 rounded-[12px] p-3">
+          ✓ Logado pra sempre<br>✓ Sem precisar logar de novo<br>✓ korvil_primeiro_uso_feito = true<br>✓ korvil_sessao_permanente ativa
+        </div>
+        <button onclick="sairTotal()" class="w-full mt-4 mono text-[11px] py-3 rounded-full bg-white/10 border border-white/10 hover:bg-white hover:text-black transition">SAIR E VOLTAR PRO LOGIN</button>
+      </div>
+      <div class="bg-[#FF4D00] rounded-[20px] p-5 text-black">
+        <div class="font-black text-[18px] leading-[0.9]">KORVIL<br>ULTRA BLACK</div>
+        <div class="mono text-[11px] mt-3 leading-[1.5]">Primeiro uso mostra login único. Depois salva pra sempre e abre loja direto logado. Lógica localStorage korvil_user + korvil_primeiro_uso_feito.</div>
+      </div>
+    </aside>
+  </div>
+</main>
 
-  // 3. Commit automático via GitHub API - cria pasta mãe/.json
-  const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,{
-    method:'PUT',
-    headers:{ Authorization: `Bearer ${token}`, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' },
-    body: JSON.stringify({
-      message: `KORVIL LOJA: cria conta ${pastaMae}`,
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(conta,null,2)))),
-      branch: BRANCH
-    })
+<script>
+let setorAtual='TODOS';
+let termoBusca='';
+let carrinho=0;
+const produtos=[];
+const setores=['SISTEMA K','K-TP','K-AFORTUNADO','K-ALMA'];
+const nomes=['COLETE TÁTICO ULTRA','JAQUETA K-TP BLACK','CALÇA CARGO AFORTUNADO','CAMISA SISTEMA K','MOLETOM K-ALMA HEAVY','BONÉ K.L ULTRA','BERMUDA TÁTICA','CAMISETA OVERSIZED K','PARKA SISTEMA K','KIT K-TP DROP'];
+
+for(let i=0;i<40;i++){
+  const setor=setores[i%setores.length];
+  const nome=nomes[i%nomes.length]+' '+(i+1);
+  produtos.push({id:i+1, nome, setor, preco: (199 + i*13).toFixed(2), img:'https://picsum.photos/seed/korvil'+i+'/600/800'});
+}
+
+function render(){
+  const grid=document.getElementById('grid');
+  const filtered=produtos.filter(p=>{
+    const s=setorAtual==='TODOS' || p.setor===setorAtual;
+    const b=!termoBusca || p.nome.toLowerCase().includes(termoBusca.toLowerCase());
+    return s&&b;
   });
-  if(!putRes.ok){ const t=await putRes.text(); throw new Error('Falha commit: '+t); }
-  alert('Conta criada: '+pastaMae);
-  return {ok:true, pastaMae};
+  document.getElementById('countInfo').textContent=filtered.length+' produtos • '+setorAtual;
+  grid.innerHTML=filtered.map(p=>`
+    <div class="product-card group bg-[#121212] border border-white/10 rounded-[20px] overflow-hidden hover:border-[#FF4D00]/50 transition">
+      <div class="aspect-[3/4] overflow-hidden bg-[#0A0A0A] relative">
+        <img src="${p.img}" alt="${p.nome}" class="w-full h-full object-cover transition duration-700"/>
+        <div class="absolute top-3 left-3 mono text-[9px] px-2 py-1 rounded-full bg-black/70 border border-white/10 backdrop-blur">${p.setor}</div>
+        <div class="absolute top-3 right-3 mono text-[9px] px-2 py-1 rounded-full bg-[#FF4D00] text-black font-bold">#${p.id}</div>
+      </div>
+      <div class="p-4">
+        <div class="mono text-[10px] text-white/30 tracking-[0.14em]">KORVIL ULTRA</div>
+        <div class="font-bold text-[13px] leading-[1.2] mt-1 tracking-[-0.01em]">${p.nome}</div>
+        <div class="flex items-center justify-between mt-3">
+          <div class="font-black text-[14px]">R$ ${p.preco}</div>
+          <button onclick="addCart()" class="mono text-[10px] px-3 py-2 rounded-full bg-white text-black font-bold hover:bg-[#FF4D00] transition">+ CARRINHO</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
-
-async function sha256(str){
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+function filtrarSetor(s){
+  setorAtual=s;
+  document.querySelectorAll('.setor-btn').forEach(b=>{
+    const isActive=b.getAttribute('data-setor')===s || b.textContent.trim()===s;
+    b.className = isActive ? 'setor-btn mono text-[10px] px-3 py-2 rounded-full bg-[#FF4D00] text-black font-bold whitespace-nowrap' : 'setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 hover:bg-white/20 whitespace-nowrap';
+    if(!b.getAttribute('data-setor')) b.setAttribute('data-setor', b.textContent.trim());
+  });
+  // fix active for buttons without data-setor attr on mobile clones
+  document.querySelectorAll('.setor-btn').forEach(b=>{ if(b.textContent.trim()===s){ b.className='setor-btn mono text-[10px] px-3 py-2 rounded-full bg-[#FF4D00] text-black font-bold whitespace-nowrap'; }});
+  render();
 }
-
-// Uso no botão da tela criação:
-// document.getElementById('btnCriar').onclick = async ()=>{
-//   const dados = {
-//     nome: document.getElementById('nome').value,
-//     email: document.getElementById('email').value,
-//     senha: document.getElementById('senha').value,
-//     confirmar: document.getElementById('confirmar').value
-//   };
-//   await criarContaReal(dados);
-// };
+function buscar(){
+  termoBusca=document.getElementById('busca').value;
+  render();
+}
+function addCart(){ carrinho++; document.getElementById('cartCount').textContent=carrinho; }
+function sairTotal(){
+  // Sair total limpa tudo e na próxima volta pro login único
+  localStorage.removeItem('korvil_user');
+  // mantém primeiro_uso? Para Sair total limpa também pra forçar login na próxima vez
+  localStorage.removeItem('korvil_primeiro_uso_feito');
+  localStorage.removeItem('korvil_sessao_permanente');
+  location.href='./login/index.html';
+}
+(function initUser(){
+  try{
+    const raw=localStorage.getItem('korvil_user');
+    if(!raw) return;
+    const u=JSON.parse(raw);
+    const nome=u.nome||u.email||'KORVIL';
+    const firstLetter=nome.trim()[0]?.toUpperCase()||'K';
+    document.getElementById('userNome').textContent=nome.split(' ')[0];
+    document.getElementById('userNome2').textContent=nome;
+    document.getElementById('userEmail').textContent=u.email||'-';
+    document.getElementById('avatar').textContent=firstLetter;
+  }catch{}
+  render();
+})();
+</script>
+</body>
+</html>
