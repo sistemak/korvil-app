@@ -1,1 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KORVIL LOJA - LOGIN ULTRA | K.L</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+// === KORVIL PRIMEIRO USO ÚNICO ===
+(function(){
+  try{
+    const user = localStorage.getItem('korvil_user');
+    const primeiro = localStorage.getItem('korvil_primeiro_uso_feito');
+    if(user && primeiro){
+      // já tem conta salva pra sempre -> vai direto pra loja logado
+      location.replace('../index.html');
+    }
+  }catch(e){}
+})();
+</script>
+<style>
+  :root{--orange:#FF4D00;--black:#0A0A0A;}
+  body{font-family:'Syne',sans-serif;background:var(--black);}
+  .mono{font-family:'JetBrains Mono',monospace}
+  ::-webkit-scrollbar{width:6px;height:6px}
+  ::-webkit-scrollbar-thumb{background:#FF4D00;border-radius:10px}
+</style>
+</head>
+<body class="bg-[#0A0A0A] text-white min-h-screen flex items-center justify-center p-4 selection:bg-[#FF4D00] selection:text-black">
+<div class="w-full max-w-[1120px] grid lg:grid-cols-[460px_1fr] gap-0 border border-white/10 rounded-[24px] overflow-hidden bg-[#111]">
+  <!-- LEFT BRAND -->
+  <div class="bg-[#0A0A0A] p-8 lg:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/10 relative overflow-hidden">
+    <div class="absolute -top-24 -left-24 w-[400px] h-[400px] bg-[#FF4D00]/20 blur-[100px] rounded-full"></div>
+    <div class="relative z-10">
+      <div class="flex items-center gap-3 mb-10">
+        <div class="w-12 h-12 bg-[#FF4D00] text-black flex items-center justify-center font-black text-[20px] rounded-[12px]">K.L</div>
+        <div><div class="font-black tracking-[-0.02em] leading-none text-[18px]">KORVIL LOJA</div><div class="mono text-[10px] tracking-[0.2em] text-white/40">ULTRA BLACK SYSTEM</div></div>
+      </div>
+      <h1 class="text-[44px] font-[800] leading-[0.9] tracking-[-0.03em]">PRIMEIRO<br>USO<br><span class="text-[#FF4D00]">ÚNICO.</span></h1>
+      <p class="mono text-[12px] leading-[1.6] text-white/50 mt-6 max-w-[300px]">Esta tela aparece SÓ na primeira vez. Depois salvamos pra sempre em korvil_user + korvil_primeiro_uso_feito e você entra direto logado na loja.</p>
+      <div class="mt-8 flex flex-col gap-3">
+        <div class="flex items-center gap-2 mono text-[10px] text-white/30"><div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div> localStorage permanente ativo</div>
+        <div class="flex items-center gap-2 mono text-[10px] text-white/30"><div class="w-2 h-2 bg-[#FF4D00] rounded-full"></div> commit real auto GitHub</div>
+      </div>
+    </div>
+    <div class="relative z-10 mono text-[9px] text-white/20 tracking-[0.2em] mt-12">© KORVIL 2025 — BLACK #0A0A0A / ORANGE #FF4D00</div>
+  </div>
 
+  <!-- RIGHT FORM -->
+  <div class="bg-[#121212] p-8 lg:p-10">
+    <div id="loginBox">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-[28px] font-[800] tracking-[-0.02em]">ENTRAR</h2>
+        <span class="mono text-[10px] px-2 py-1 rounded bg-white/10 border border-white/10">v2 PRIMEIRO USO</span>
+      </div>
+
+      <div id="toast" class="hidden mb-6 p-3 rounded-[12px] text-[12px] mono font-bold"></div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="mono text-[10px] tracking-[0.2em] text-white/40 mb-2 block">EMAIL</label>
+          <input id="email" type="email" placeholder="seu@email.com" class="w-full bg-[#0A0A0A] border border-white/10 rounded-[14px] px-4 py-4 mono text-[13px] outline-none focus:border-[#FF4D00] transition"/>
+        </div>
+        <div>
+          <label class="mono text-[10px] tracking-[0.2em] text-white/40 mb-2 block">SENHA</label>
+          <div class="relative">
+            <input id="senha" type="password" placeholder="••••••••" class="w-full bg-[#0A0A0A] border border-white/10 rounded-[14px] px-4 py-4 mono text-[13px] outline-none focus:border-[#FF4D00] transition pr-12"/>
+            <button onclick="toggleSenha()" class="absolute right-2 top-2 bottom-2 w-10 bg-white/5 rounded-[10px] flex items-center justify-center">👁</button>
+          </div>
+        </div>
+        <button onclick="logar()" class="w-full bg-[#FF4D00] text-black font-black text-[13px] tracking-[0.14em] py-4 rounded-[14px] hover:bg-[#ff6a2e] transition">ENTRAR → LOJA</button>
+        <div class="flex items-center justify-between pt-2">
+          <button onclick="mostrarCriar()" class="mono text-[11px] text-white/60 hover:text-[#FF4D00] underline">Criar conta grátis →</button>
+          <button onclick="esqueceu()" class="mono text-[11px] text-white/30 hover:text-white">Esqueceu senha?</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRIAR CONTA -->
+    <div id="criarBox" class="hidden">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-[28px] font-[800] tracking-[-0.02em] leading-none">CRIAR CONTA<br><span class="text-[#FF4D00]">GRÁTIS</span></h2>
+        <button onclick="mostrarLogin()" class="mono text-[10px] px-3 py-2 rounded-full bg-white text-black font-bold">← VOLTAR LOGIN</button>
+      </div>
+      <div id="toast2" class="hidden mb-6 p-3 rounded-[12px] text-[12px] mono font-bold"></div>
+      <div class="space-y-4">
+        <div>
+          <label class="mono text-[10px] tracking-[0.2em] text-white/40 mb-2 block">NOME COMPLETO *</label>
+          <input id="nome" type="text" placeholder="João Silva Santos" class="w-full bg-[#0A0A0A] border border-white/10 rounded-[14px] px-4 py-4 mono text-[13px] outline-none focus:border-[#FF4D00]"/>
+          <div class="mono text-[9px] text-white/30 mt-2">Pasta gerada: <span id="pastaPreview" class="text-[#FF4D00]">-</span> ex joao_s_s</div>
+        </div>
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <label class="mono text-[10px] tracking-[0.2em] text-white/40 mb-2 block">EMAIL *</label>
+            <input id="c_email" type="email" placeholder="joao@email.com" class="w-full bg-[#0A0A0A] border border-white/10 rounded-[14px] px-4 py-4 mono text-[13px] outline-none focus:border-[#FF4D00]"/>
+          </div>
+          <div>
+            <label class="mono text-[10px] tracking-[0.2em] text-white/40 mb-2 block">SENHA * min 6</label>
+            <input id="c_senha" type="password" placeholder="••••••••" class="w-full bg-[#0A0A0A] border border-white/10 rounded-[14px] px-4 py-4 mono text-[13px] outline-none focus:border-[#FF4D00]"/>
+          </div>
+          <div>
+            <label class="mono text-[10px] tracking-[0.2em] text-white/40 mb-2 block">CONFIRMAR SENHA *</label>
+            <input id="c_senha2" type="password" placeholder="••••••••" class="w-full bg-[#0A0A0A] border border-white/10 rounded-[14px] px-4 py-4 mono text-[13px] outline-none focus:border-[#FF4D00]"/>
+          </div>
+        </div>
+        <button onclick="criarContaReal()" class="w-full bg-white text-black font-black text-[13px] tracking-[0.14em] py-4 rounded-[14px] hover:bg-[#FF4D00] hover:text-black transition">CRIAR CONTA GRÁTIS → LOJA</button>
+        <p class="mono text-[9px] text-white/30 text-center leading-[1.5]">Ao criar, salvamos pra sempre korvil_user + primeiro_uso_feito + commit real em korvil/sections/korvil-loja/login/contas/{pasta}/{pasta}.json</p>
+      </div>
+    </div>
+
+    <div class="mt-10 pt-6 border-t border-white/10 flex gap-2 mono text-[9px] text-white/20">
+      <span>STORAGE:</span><span id="storageInfo" class="text-white/50">checando...</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = (id)=>document.getElementById(id);
+function showToast(id, msg, type){
+  const el=$(id); el.className='mb-6 p-3 rounded-[12px] text-[12px] mono font-bold '+(type==='err'?'bg-red-500/20 text-red-300 border border-red-500/30':'bg-[#FF4D00]/20 text-[#FF4D00] border border-[#FF4D00]/30'); el.textContent=msg; el.classList.remove('hidden'); setTimeout(()=>el.classList.add('hidden'),4000);
+}
+function toggleSenha(){
+  const i=$('senha'); i.type=i.type==='password'?'text':'password';
+}
+function mostrarCriar(){ $('loginBox').classList.add('hidden'); $('criarBox').classList.remove('hidden'); }
+function mostrarLogin(){ $('criarBox').classList.add('hidden'); $('loginBox').classList.remove('hidden'); }
+function esqueceu(){ showToast('toast','Recuperação: crie nova conta com mesmo email (sobrescreve).','ok'); }
+
+function gerarNomePasta(nomeCompleto){
+  try{
+    const n = nomeCompleto.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+    const partes = n.split(/\s+/).filter(Boolean);
+    if(partes.length===0) return '';
+    if(partes.length===1) return partes[0].replace(/[^a-z0-9]/g,'');
+    const primeiro = partes[0].replace(/[^a-z0-9]/g,'');
+    const iniciais = partes.slice(1).map(p=> (p[0]||'').replace(/[^a-z0-9]/g,'')).filter(Boolean).join('_');
+    return primeiro + (iniciais? '_' + iniciais : '');
+  }catch(e){ return ''; }
+}
+$('nome')?.addEventListener('input', (e)=>{
+  const v=e.target.value; const pasta=gerarNomePasta(v);
+  const el=$('pastaPreview'); if(el) el.textContent = pasta || '-';
+});
+
+function validarEmail(email){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+
+function logar(){
+  const email=$('email').value.trim().toLowerCase();
+  const senha=$('senha').value;
+  if(!email || !senha){ showToast('toast','Preencha email e senha','err'); return; }
+  try{
+    const usuarios = JSON.parse(localStorage.getItem('loja_usuarios')||'[]');
+    const hash = btoa(senha);
+    const achado = usuarios.find(u=> u.email.toLowerCase()===email && (u.senha_hash===hash || u.senha_hash===btoa(unescape(encodeURIComponent(senha))) || u.senha===senha));
+    const korvilUserRaw = localStorage.getItem('korvil_user');
+    let user=null;
+    if(achado){ user={nome:achado.nome,email:achado.email,pasta:achado.pasta,id:achado.id,logado_em:new Date().toISOString()}; }
+    else if(korvilUserRaw){
+      try{ const k=JSON.parse(korvilUserRaw); if(k.email.toLowerCase()===email){ user=k; }}catch{}
+    }
+    if(!user){ showToast('toast','Conta não encontrada. Clique em Criar conta grátis.','err'); return; }
+    localStorage.setItem('korvil_user', JSON.stringify(user));
+    localStorage.setItem('korvil_primeiro_uso_feito','true');
+    localStorage.setItem('korvil_sessao_permanente', JSON.stringify({email:user.email,at:new Date().toISOString()}));
+    showToast('toast','Login OK! Redirecionando para loja já logado...','ok');
+    setTimeout(()=> location.href='../index.html', 800);
+  }catch(e){ showToast('toast','Erro: '+e.message,'err'); }
+}
+
+async function criarContaReal(){
+  const nome=$('nome').value.trim();
+  const email=$('c_email').value.trim().toLowerCase();
+  const senha=$('c_senha').value;
+  const senha2=$('c_senha2').value;
+
+  if(!nome || nome.length<3){ showToast('toast2','Nome completo obrigatório min 3 letras','err'); return; }
+  if(!email || !validarEmail(email)){ showToast('toast2','Email inválido','err'); return; }
+  if(!senha || senha.length<6){ showToast('toast2','Senha min 6 caracteres','err'); return; }
+  if(senha!==senha2){ showToast('toast2','Confirmar senha diferente','err'); return; }
+
+  const pastaMae = gerarNomePasta(nome);
+  if(!pastaMae){ showToast('toast2','Não foi possível gerar pasta do nome','err'); return; }
+
+  const id = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2));
+  const criado_em = new Date().toISOString();
+  const senha_hash = btoa(senha);
+
+  const jsonData = { id, pasta: pastaMae, nome, email, senha_hash, criado_em, primeiro_uso:true, origem:'korvil-loja-login' };
+
+  try{
+    // salva localStorage pra sempre
+    const usuarios = JSON.parse(localStorage.getItem('loja_usuarios')||'[]');
+    const existenteIdx = usuarios.findIndex(u=> u.email.toLowerCase()===email);
+    if(existenteIdx>=0) usuarios[existenteIdx]=jsonData; else usuarios.push(jsonData);
+    localStorage.setItem('loja_usuarios', JSON.stringify(usuarios));
+    localStorage.setItem('korvil_user', JSON.stringify({id, nome, email, pasta:pastaMae, logado_em:criado_em}));
+    localStorage.setItem('korvil_primeiro_uso_feito','true');
+    localStorage.setItem('korvil_sessao_permanente', JSON.stringify({email, pasta:pastaMae, at:criado_em}));
+
+    showToast('toast2','Conta criada! Salvando pra sempre e comitando no GitHub...','ok');
+
+    // Commit automático real via GitHub API se token salvo
+    const token = localStorage.getItem('loja_github_token');
+    if(token){
+      const path = `korvil/sections/korvil-loja/login/contas/${pastaMae}/${pastaMae}.json`;
+      const apiUrl = `https://api.github.com/repos/sistemak/korvil-app/contents/${path}`;
+      const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(jsonData,null,2))));
+      let sha=null;
+      try{
+        const getRes = await fetch(apiUrl,{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+        if(getRes.ok){ const j=await getRes.json(); sha=j.sha; }
+      }catch{}
+      const putRes = await fetch(apiUrl,{
+        method:'PUT',
+        headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+        body: JSON.stringify({message:`KORVIL AUTO: nova conta ${pastaMae} - ${email}`, content:contentB64, sha:sha||undefined, branch:'main'})
+      });
+      if(!putRes.ok){ console.warn('commit falhou', await putRes.text()); }
+    }
+
+    setTimeout(()=>{ location.href='../index.html'; }, 1200);
+  }catch(e){
+    showToast('toast2','Erro ao criar conta: '+e.message,'err');
+  }
+}
+
+(function initInfo(){
+  try{
+    const u = localStorage.getItem('korvil_user');
+    const p = localStorage.getItem('korvil_primeiro_uso_feito');
+    const el=$('storageInfo');
+    if(el) el.textContent = (u && p) ? 'logado permanente' : 'primeiro uso - precisa login';
+  }catch{}
+})();
+</script>
+</body>
+</html>
