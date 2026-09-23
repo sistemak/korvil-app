@@ -1,196 +1,196 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>KORVIL | Criar Conta</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>KORVIL - Criar Conta</title>
 <style>
-  body{background:#0A0A0A;color:#fff;font-family:Inter,system-ui}
-  .korvil-input{background:#151515;border:1px solid #222;padding:12px 14px;border-radius:12px;width:100%;outline:none;color:#fff}
-  .korvil-input:focus{border-color:#FF4D00}
-  .foto-wrap{width:84px;height:84px;border-radius:999px;overflow:hidden;background:#151515;border:2px solid #222;position:relative}
-  .foto-wrap img{width:100%;height:100%;object-fit:contain;background:#0A0A0A}
-  .lapis{position:absolute;right:-2px;bottom:-2px;background:#FF4D00;width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;border:2px solid #0A0A0A}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,sans-serif}
+body{background:#0A0A0A;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#141414;border:1px solid #222;border-radius:16px;padding:24px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+h1{font-size:22px;font-weight:900;letter-spacing:-0.02em}
+h1 span{color:#FF4D00}
+input,button{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #2a2a2a;background:#0A0A0A;color:#fff;font-size:14px;outline:none}
+input:focus{border-color:#FF4D00}
+button{cursor:pointer;font-weight:800;transition:.2s}
+.btn-main{background:#FF4D00;color:#000;border:none}
+.btn-main:hover{background:#ff5e1a}
+.btn-ghost{background:#222;color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+small.mut{color:#888;font-size:11px}
+#tokenBox{background:#0A0A0A;border:1px dashed #FF4D00;border-radius:10px;padding:12px;margin-bottom:14px}
 </style>
 </head>
-<body class="min-h-screen">
-<div id="app" class="max-w-[720px] mx-auto px-6 py-8">
-  <!-- TOPO -->
-  <div class="flex items-center justify-between mb-8">
-    <div class="flex items-center gap-4">
-      <div class="foto-wrap" id="fotoWrap">
-        <img id="previewFoto" src="https://i.pravatar.cc/200?img=1" alt="foto"/>
-        <div class="lapis" id="btnFoto">✎</div>
-      </div>
-      <div>
-        <h1 class="text-[22px] font-black tracking-tight">KORVIL LOJA</h1>
-        <p class="text-[11px] tracking-[0.2em] text-zinc-500 -mt-1">CRIAR CONTA • PRIMEIRO USO ÚNICO</p>
-      </div>
+<body>
+<div class="card">
+  <!-- TOKEN BOX CORRIGIDO - NÃO BLOQUEIA COM ALERT -->
+  <div id="tokenBox">
+    <small style="color:#FF4D00;font-weight:800;letter-spacing:0.08em">GH_TOKEN necessário para commit real direto no repo</small>
+    <input id="ghToken" type="password" placeholder="Cole ghp_... aqui" style="margin-top:8px" />
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button id="btnSalvarToken" style="flex:1;background:#FF4D00;color:#000;padding:8px;border-radius:8px;font-size:12px;font-weight:800">SALVAR TOKEN</button>
+      <button id="btnValidarToken" style="flex:1;background:#222;color:#fff;padding:8px;border-radius:8px;font-size:12px">VALIDAR</button>
     </div>
-    <div class="text-[10px] px-2 py-1 rounded-full border border-zinc-800 text-zinc-500">LOGIN/INDEX</div>
+    <div id="tokenStatus" style="margin-top:8px;font-size:11px;color:#888">Token não configurado. Crie em github.com/settings/tokens/new (scope repo)</div>
   </div>
 
-  <!-- FORM -->
-  <div class="bg-[#111111] border border-zinc-900 rounded-[20px] p-6 md:p-8">
-    <h2 class="font-bold text-[18px] mb-1">Crie sua conta KORVIL</h2>
-    <p class="text-zinc-500 text-[13px] mb-6">Preencha tudo. Ao criar, geramos pasta mãe + JSON no repo: <span class="text-white">contas/{pasta}/{arquivo}</span></p>
-    
-    <input type="file" id="inputFoto" accept="image/*" class="hidden"/>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="md:col-span-2"><label class="text-[11px] text-zinc-500">NOME COMPLETO *</label><input id="nome" class="korvil-input mt-1" placeholder="João Silva Santos"/></div>
-      <div><label class="text-[11px] text-zinc-500">EMAIL *</label><input id="email" class="korvil-input mt-1" placeholder="joao@email.com"/></div>
-      <div><label class="text-[11px] text-zinc-500">SENHA *</label><input id="senha" type="password" class="korvil-input mt-1" placeholder="••••••••"/></div>
-      <div><label class="text-[11px] text-zinc-500">CPF *</label><input id="cpf" class="korvil-input mt-1" placeholder="000.000.000-00"/></div>
-      <div><label class="text-[11px] text-zinc-500">WHATSAPP *</label><input id="zap" class="korvil-input mt-1" placeholder="(11) 99999-9999"/></div>
-      <div><label class="text-[11px] text-zinc-500">CEP *</label><input id="cep" class="korvil-input mt-1" placeholder="00000-000"/></div>
-      <div class="md:col-span-2"><label class="text-[11px] text-zinc-500">RUA</label><input id="rua" class="korvil-input mt-1"/></div>
-      <div><label class="text-[11px] text-zinc-500">NÚMERO *</label><input id="numero" class="korvil-input mt-1" placeholder="123"/></div>
-      <div><label class="text-[11px] text-zinc-500">BAIRRO</label><input id="bairro" class="korvil-input mt-1"/></div>
-      <div><label class="text-[11px] text-zinc-500">CIDADE</label><input id="cidade" class="korvil-input mt-1"/></div>
-      <div><label class="text-[11px] text-zinc-500">ESTADO</label><input id="estado" class="korvil-input mt-1"/></div>
-    </div>
+  <h1>KORVIL <span>LOJA</span></h1>
+  <p style="color:#666;font-size:13px;margin:6px 0 18px">Criar conta com commit real + pasta mãe</p>
 
-    <button id="btnCriar" class="mt-8 w-full bg-[#FF4D00] hover:bg-[#e64500] text-black font-black py-4 rounded-[14px] tracking-wide">CRIAR CONTA E ENTRAR NA LOJA →</button>
-    <div class="mt-4 text-center text-[12px] text-zinc-500">Já tem conta? <button id="btnIrLogin" class="text-white underline">Fazer login</button></div>
-    <div id="log" class="mt-4 text-[11px] text-zinc-500 whitespace-pre-wrap"></div>
-  </div>
-
-  <!-- LOGIN SIMPLES -->
-  <div id="boxLogin" class="hidden mt-6 bg-[#111111] border border-zinc-900 rounded-[20px] p-6">
-    <h3 class="font-bold">Entrar</h3>
-    <input id="loginEmail" class="korvil-input mt-3" placeholder="email"/>
-    <input id="loginSenha" type="password" class="korvil-input mt-3" placeholder="senha"/>
-    <button id="btnLogin" class="mt-3 w-full bg-white text-black font-bold py-3 rounded-[12px]">ENTRAR</button>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <input id="nome_completo" placeholder="Nome completo" />
+    <div class="grid2"><input id="primeiro_nome" placeholder="Primeiro nome" /><input id="cpf" placeholder="CPF" /></div>
+    <input id="email" type="email" placeholder="E-mail" />
+    <input id="senha" type="password" placeholder="Senha" />
+    <div class="grid2"><input id="whatsapp" placeholder="WhatsApp" /><input id="cep" placeholder="CEP" /></div>
+    <div class="grid2"><input id="rua" placeholder="Rua" /><input id="numero" placeholder="Número" /></div>
+    <div class="grid2"><input id="bairro" placeholder="Bairro" /><input id="cidade" placeholder="Cidade" /></div>
+    <div class="grid2"><input id="estado" placeholder="UF" /><input id="foto_perfil" placeholder="Foto URL (opcional)" /></div>
+    <button id="btnCriar" class="btn-main" style="margin-top:6px">CRIAR CONTA AGORA</button>
+    <div id="formStatus" style="font-size:12px;color:#888;min-height:18px"></div>
   </div>
 </div>
 
 <script>
-// CONFIG - usar secrets via localStorage do lojista ou window.KORVIL_GITHUB
-const GH = {
-  owner: localStorage.getItem('korvil_github_owner')||'SEU_OWNER',
-  repo: localStorage.getItem('korvil_github_repo')||'SEU_REPO',
-  branch: localStorage.getItem('korvil_github_branch')||'main',
-  token: localStorage.getItem('loja_github_token')||''
-};
+const LS_TOKEN = 'loja_github_token';
+const REPO_OWNER = 'sistemak';
+const REPO_NAME = 'korvil-app';
+const BRANCH = 'main';
 
-// 1) PRIMEIRO USO ÚNICO
-(function checkPrimeiroUso(){
-  const user = localStorage.getItem('korvil_user');
-  const feito = localStorage.getItem('korvil_primeiro_uso_feito');
-  if(user && feito){ location.href='../index.html'; }
-})();
+function utf8ToBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
+function gerarNomeArquivo(nome,email){
+  const base = (nome||'user').toLowerCase().normalize('NFD').replace(/[\W_]+/g,'-').replace(/^-|-$/g,'').slice(0,24);
+  const mail = (email||'').split('@')[0].toLowerCase().replace(/\W/g,'').slice(0,12);
+  return base + '-' + mail + '-' + Date.now().toString(36) + '.json';
+}
+function gerarPastaMae(nomeArq){ return nomeArq.replace('.json',''); }
 
-let fotoBase64 = '';
-const $ = (id)=>document.getElementById(id);
-$('btnFoto').onclick=()=>$('inputFoto').click();
-$('inputFoto').onchange=(e)=>{
-  const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader();
-  r.onload=()=>{ fotoBase64=r.result; $('previewFoto').src=fotoBase64; };
-  r.readAsDataURL(f);
-};
+function maskToken(t){ if(!t) return ''; if(t.length<=8) return t.slice(0,3)+'***'; return t.slice(0,7)+'***'+t.slice(-4); }
 
-// ViaCEP
-$('cep').addEventListener('blur', async ()=>{
-  let cep=$('cep').value.replace(/\D/g,''); if(cep.length!==8) return;
-  try{
-    const j=await (await fetch('https://viacep.com.br/ws/'+cep+'/json/')).json();
-    if(!j.erro){ $('rua').value=j.logradouro; $('bairro').value=j.bairro; $('cidade').value=j.localidade; $('estado').value=j.uf; }
-  }catch{}
-});
+async function validarToken(token){
+  const r = await fetch('https://api.github.com/user',{ headers:{ Authorization:'token '+token, Accept:'application/vnd.github.v3+json' } });
+  if(r.status===401) throw new Error('Token inválido. Crie em github.com/settings/tokens/new com scope repo');
+  if(r.status===403) throw new Error('Rate limit / token sem permissão repo');
+  if(!r.ok){ const txt=await r.text(); throw new Error('Erro validação: '+r.status+' '+txt.slice(0,120)); }
+  return await r.json();
+}
 
-function gerarNomeArquivo(nomeCompleto){
-  const partes=nomeCompleto.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  if(partes.length===0) return {arquivo:'user.json', pastaMae:'user'};
-  if(partes.length===1) return {arquivo: partes[0]+'.json', pastaMae: partes[0]};
-  if(partes.length===2){
-    const arq = `${partes[0]}-${partes[1][0]}.json`;
-    return {arquivo: arq, pastaMae: arq.replace('.json','')};
+async function commitRealConta(dados){
+  let token = localStorage.getItem(LS_TOKEN) || document.getElementById('ghToken').value.trim();
+  if(!token){
+    document.getElementById('tokenBox').style.display='block';
+    document.getElementById('tokenBox').scrollIntoView({behavior:'smooth'});
+    throw new Error('Cole seu GH_TOKEN no campo acima e clique SALVAR TOKEN antes de criar conta');
   }
-  // 3+ => nome-inicial segundo-inicial terceiro ex: joao-s-s
-  const arq = `${partes[0]}-${partes[1][0]}-${partes[2][0]}.json`.replace(/[^a-z0-9-]/g,'');
-  return {arquivo: arq, pastaMae: arq.replace('.json','')};
-}
+  const nomeArq = gerarNomeArquivo(dados.nome_completo, dados.email);
+  const pastaMae = gerarPastaMae(nomeArq);
+  const pathMae = `korvil/sections/korvil-loja/login/contas/${pastaMae}/${nomeArq}`;
+  const pathCompat = `korvil/sections/korvil-loja/login/contas/${nomeArq}`;
 
-async function sha256(str){
-  const buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-
-async function githubPut(path, contentStr, msg){
-  const api='https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+path;
-  let sha=null;
-  const get=await fetch(api+'?ref='+GH.branch, {headers:{Authorization:'token '+GH.token}});
-  if(get.ok){ const j=await get.json(); sha=j.sha; }
-  const body={message:msg, content:btoa(unescape(encodeURIComponent(contentStr))), branch:GH.branch};
-  if(sha) body.sha=sha;
-  const put=await fetch(api,{method:'PUT',headers:{Authorization:'token '+GH.token,'Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(!put.ok) throw new Error('PUT falhou '+await put.text());
-  return await put.json();
-}
-
-$('btnIrLogin').onclick=()=>{$('boxLogin').classList.toggle('hidden');};
-$('btnLogin').onclick=async ()=>{
-  // login busca JSON por email
-  const email=$('loginEmail').value.trim().toLowerCase();
-  const senha=$('loginSenha').value;
-  const hash=await sha256(senha);
-  // busca lista em contas/
-  const api='https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/korvil/sections/korvil-loja/login/contas?ref='+GH.branch;
-  const r=await fetch(api,{headers:{Authorization:'token '+GH.token}});
-  const files=await r.json();
-  for(const f of files){ if(f.type!=='file') continue;
-    const c=await (await fetch(f.download_url)).text(); try{ const j=JSON.parse(c); if(j.email.toLowerCase()===email && j.senha_hash===hash){
-      localStorage.setItem('korvil_user', JSON.stringify(j));
-      localStorage.setItem('korvil_primeiro_uso_feito','1');
-      location.href='../index.html'; return;
-    }}catch{}
-  }
-  alert('Email ou senha inválidos');
-};
-
-$('btnCriar').onclick=async ()=>{
-  const nome=$('nome').value.trim();
-  const email=$('email').value.trim().toLowerCase();
-  const senha=$('senha').value;
-  const cpf=$('cpf').value.trim();
-  const zap=$('zap').value.trim();
-  const cep=$('cep').value.trim();
-  const rua=$('rua').value.trim();
-  const numero=$('numero').value.trim();
-  const bairro=$('bairro').value.trim();
-  const cidade=$('cidade').value.trim();
-  const estado=$('estado').value.trim();
-  if(!nome||!email||!senha||!cpf||!zap||!cep||!numero){ alert('Preencha todos obrigatórios'); return; }
-  if(!GH.token){ alert('Configure GH token no localStorage loja_github_token'); return; }
-  $('log').textContent='Gerando hash e nomes...';
-  const {arquivo,pastaMae}=gerarNomeArquivo(nome);
-  const primeiro=nome.split(/\s+/)[0];
-  const id='korvil_'+Date.now();
-  const hash=await sha256(senha);
-  const agora=new Date().toISOString();
-  const conta={
-    id, arquivo, pasta_mae:pastaMae,
-    nome_completo:nome, primeiro_nome:primeiro,
-    email, senha_hash:hash, cpf, whatsapp:zap,
-    cep, rua, numero, bairro, cidade, estado,
-    foto_perfil:fotoBase64||'', criado_em:agora, atualizado_em:agora,
-    enderecos:[{cep,rua,numero,bairro,cidade,estado,tipo:'principal'}]
+  const payloadObj = {
+    id: Date.now().toString(36)+Math.random().toString(36).slice(2,8),
+    arquivo: nomeArq,
+    pasta_mae: pastaMae,
+    nome_completo: dados.nome_completo,
+    primeiro_nome: dados.primeiro_nome || dados.nome_completo.split(' ')[0],
+    email: dados.email,
+    senha_hash: btoa(dados.senha||''),
+    cpf: dados.cpf,
+    whatsapp: dados.whatsapp,
+    cep: dados.cep,
+    rua: dados.rua,
+    numero: dados.numero,
+    bairro: dados.bairro,
+    cidade: dados.cidade,
+    estado: dados.estado,
+    foto_perfil: dados.foto_perfil||'',
+    criado_em: new Date().toISOString(),
+    atualizado_em: new Date().toISOString()
   };
-  const conteudo=JSON.stringify(conta,null,2);
-  try{
-    $('log').textContent='Criando pasta mãe '+pastaMae+' e arquivo '+arquivo+'...';
-    // path 1: contas/{pastaMae}/{arquivo}
-    await githubPut('korvil/sections/korvil-loja/login/contas/'+pastaMae+'/'+arquivo, conteudo, 'KORVIL: cria conta '+arquivo);
-    // path 2: contas/{arquivo} (compat)
-    await githubPut('korvil/sections/korvil-loja/login/contas/'+arquivo, conteudo, 'KORVIL: mirror conta '+arquivo);
-    $('log').textContent='Conta criada! Salvando sessão...';
-    localStorage.setItem('korvil_user', JSON.stringify(conta));
-    localStorage.setItem('korvil_primeiro_uso_feito','1');
-    location.href='../index.html';
-  }catch(e){ $('log').textContent='Erro: '+e.message; alert(e.message); }
-};
+  const conteudo = utf8ToBase64(JSON.stringify(payloadObj,null,2));
+
+  async function putFile(path){
+    const urlGet = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}?ref=${BRANCH}`;
+    let sha;
+    try{
+      const g = await fetch(urlGet,{ headers:{ Authorization:'token '+token, Accept:'application/vnd.github.v3+json' } });
+      if(g.ok){ const j=await g.json(); sha=j.sha; }
+      else if(g.status!==404){ const t=await g.text(); throw new Error('GET '+path+' '+g.status+' '+t.slice(0,200)); }
+    }catch(e){ if(!(' + "'404'" + '.includes(e.message))) throw e; }
+
+    const urlPut = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
+    const body={ message: `KORVIL AUTO: nova conta ${nomeArq}`, content: conteudo, branch: BRANCH, ...(sha?{sha}:{}) };
+    const r = await fetch(urlPut,{ method:'PUT', headers:{ Authorization:'token '+token, 'Content-Type':'application/json', Accept:'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
+    if(!r.ok){
+      const txt=await r.text();
+      if(r.status===401) throw new Error('Token inválido (401). Gere novo com scope repo');
+      if(r.status===403) throw new Error('403 sem permissão/rate limit: '+txt.slice(0,200));
+      throw new Error('PUT '+path+' falhou '+r.status+' '+txt.slice(0,300));
+    }
+    return await r.json();
+  }
+
+  const resMae = await putFile(pathMae);
+  try{ await putFile(pathCompat); }catch(e){ console.warn('Compat opcional falhou',e); }
+  return { nomeArq, pastaMae, pathMae, resMae, payloadObj };
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const $token = document.getElementById('ghToken');
+  const $status = document.getElementById('tokenStatus');
+  const saved = localStorage.getItem(LS_TOKEN);
+  if(saved){ $token.value=saved; $status.textContent='Token carregado: '+maskToken(saved)+' (salvo)'; $status.style.color='#2ecc71'; }
+
+  document.getElementById('btnSalvarToken').onclick=()=>{
+    const t=$token.value.trim(); if(!t){ $status.textContent='Cole um token válido ghp_...'; $status.style.color='#ff4d00'; return; }
+    localStorage.setItem(LS_TOKEN,t); $status.textContent='Token salvo! '+maskToken(t); $status.style.color='#2ecc71';
+  };
+  document.getElementById('btnValidarToken').onclick=async()=>{
+    const t=($token.value.trim()||localStorage.getItem(LS_TOKEN)||''); if(!t){ $status.textContent='Nenhum token para validar'; return; }
+    $status.textContent='Validando...'; $status.style.color='#888';
+    try{ const u=await validarToken(t); $status.textContent='Válido @'+u.login+' ✓ commit real liberado'; $status.style.color='#2ecc71'; }
+    catch(e){ $status.textContent=e.message; $status.style.color='#ff4d00'; }
+  };
+
+  // primeiro uso único
+  const user = localStorage.getItem('korvil_user');
+  const primeiro = localStorage.getItem('korvil_primeiro_uso_feito');
+  if(user && primeiro){
+    const tb = document.getElementById('tokenBox');
+    if(!tb || getComputedStyle(tb).display==='none'){ location.href='../index.html'; }
+  }
+
+  document.getElementById('btnCriar').onclick=async()=>{
+    const $formStatus=document.getElementById('formStatus');
+    const dados={
+      nome_completo: document.getElementById('nome_completo').value.trim(),
+      primeiro_nome: document.getElementById('primeiro_nome').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      senha: document.getElementById('senha').value,
+      cpf: document.getElementById('cpf').value.trim(),
+      whatsapp: document.getElementById('whatsapp').value.trim(),
+      cep: document.getElementById('cep').value.trim(),
+      rua: document.getElementById('rua').value.trim(),
+      numero: document.getElementById('numero').value.trim(),
+      bairro: document.getElementById('bairro').value.trim(),
+      cidade: document.getElementById('cidade').value.trim(),
+      estado: document.getElementById('estado').value.trim(),
+      foto_perfil: document.getElementById('foto_perfil').value.trim()
+    };
+    if(!dados.nome_completo || !dados.email || !dados.senha){ $formStatus.textContent='Preencha nome, email e senha'; $formStatus.style.color='#ff4d00'; return; }
+    $formStatus.textContent='Criando conta + pasta mãe...'; $formStatus.style.color='#888';
+    try{
+      const r=await commitRealConta(dados);
+      localStorage.setItem('korvil_user', JSON.stringify(r.payloadObj));
+      localStorage.setItem('korvil_primeiro_uso_feito','1');
+      $formStatus.textContent='Conta criada! '+r.pastaMae+'/'+r.nomeArq+' → indo para loja...'; $formStatus.style.color='#2ecc71';
+      setTimeout(()=>location.href='../index.html',900);
+    }catch(e){
+      $formStatus.textContent=e.message; $formStatus.style.color='#ff4d00';
+      console.error(e);
+    }
+  };
+});
 </script>
 </body>
 </html>
