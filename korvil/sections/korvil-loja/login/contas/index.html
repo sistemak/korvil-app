@@ -1,1 +1,40 @@
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K.L • Contas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui}
+body{background:#0A0A0A;color:#fff}
+.header{background:#FF4D00;padding:10px 20px;display:flex;gap:20px;align-items:center}
+.search{flex:1;max-width:600px;background:#fff;border-radius:4px;display:flex;align-items:center;padding:0 12px}
+.search input{flex:1;border:none;outline:none;padding:12px;color:#000}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;padding:20px;max-width:1300px;margin:0 auto}
+.card{background:#141414;border:1px solid #232323;border-radius:12px;padding:14px}
+.card h4{font-size:14px;margin-bottom:4px}
+.card p{font-size:12px;color:#888}
+</style>
+</head>
+<body>
+<div class="header"><strong>K.L</strong><div class="search"><input id="q" placeholder="Buscar contas, pastas mãe..."> 🔍</div></div>
+<div style="padding:12px 20px;color:#777;font-size:13px">Index Mercado Livre style • lista pastas mãe reais criadas via Node + GitHub API • sistema-k/sistema-k.json exemplo</div>
+<div class="grid" id="grid"></div>
+<script>
+async function load(){
+  const grid=document.getElementById('grid');
+  // Tenta listar via API Node se disponível, senão mostra exemplo + localStorage
+  try{
+    const res=await fetch('/api/listar-contas');
+    const text=await res.text(); let data; try{data=JSON.parse(text);}catch{ if(text.trim().startsWith('<')) throw new Error('PAGES_MODE'); throw new Error('inv'); }
+    if(Array.isArray(data.contas) && data.contas.length){ grid.innerHTML=data.contas.map(c=>'<div class=card><h4>'+c.pastaMae+'</h4><p>'+c.email+'</p><p style=color:#FF4D00>'+c.arquivo+'</p></div>').join(''); return; }
+  }catch(e){ /* fallback */ }
+  let contas=[];
+  try{ const u=localStorage.getItem('korvil_user'); if(u){ const j=JSON.parse(u); contas=[j]; } }catch{}
+  if(contas.length===0){ contas=[{pastaMae:'sistema-k',arquivo:'sistema-k.json',email:'sistemak.srv@gmail.com',nome:'Sistema K'}]; }
+  grid.innerHTML=contas.map(c=>'<div class=card><h4>'+(c.pastaMae||'sistema-k')+'</h4><p>'+(c.email||'')+'</p><p style=color:#FF4D00>'+(c.arquivo||'')+'</p></div>').join('');
+  document.getElementById('q').addEventListener('input',e=>{ const q=e.target.value.toLowerCase(); document.querySelectorAll('.card').forEach(card=>{ card.style.display=card.textContent.toLowerCase().includes(q)?'block':'none'; }); });
+}
+load();
+</script>
+</body>
+</html>
