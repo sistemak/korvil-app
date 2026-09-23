@@ -1,16 +1,19 @@
 {
   "name": "korvil-app",
   "version": "1.0.0",
-  "private": true,
-  "description": "KORVIL FINAL - Só Node + GitHub - Sem erros",
+  "description": "KORVIL MASTER DEFINITIVO FUNCIONA REAL",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "dev": "nodemon server.js",
     "ensure": "node korvil/sections/korvil-loja/scripts/ensure-contas-structure.js",
-    "dev": "node server.js"
+    "gerar": "node gerar.js"
   },
-  "keywords": ["korvil","node","github-pages","dual-mode"],
-  "author": "Sistema K <sistemak.srv@gmail.com>",
-  "license": "MIT",
-  "engines": { "node": ">=16" }
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
