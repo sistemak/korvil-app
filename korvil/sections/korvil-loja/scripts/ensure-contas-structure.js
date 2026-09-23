@@ -1,62 +1,56 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+// scripts/ensure-contas-structure.js - ATUALIZADO
+// Garante estrutura login/contas + remove joao_s_s se existir + .gitkeep
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs = require('fs');
+const path = require('path');
 
-const ROOT = path.resolve(__dirname, '..');
-const CONTAS_DIR = path.join(ROOT, 'login', 'contas');
-const GITKEEP = path.join(CONTAS_DIR, '.gitkeep');
-const README = path.join(CONTAS_DIR, 'README.md');
+const CONTAS_DIR = path.join(__dirname, '..', 'login', 'contas');
+const JOAO_PATH = path.join(CONTAS_DIR, 'joao_s_s');
+const JOAO_JSON = path.join(JOAO_PATH, 'joao_s_s.json');
 
-function ensure() {
-  console.log('KORVIL SETUP - garantindo estrutura, nunca duplicando...');
-
-  if (!fs.existsSync(CONTAS_DIR)) {
+function ensureContasStructure(){
+  // 1. Garante pasta login/contas
+  if(!fs.existsSync(CONTAS_DIR)){
     fs.mkdirSync(CONTAS_DIR, { recursive: true });
-    console.log('✓ Criado: korvil/sections/korvil-loja/login/contas');
-  } else {
-    console.log('✓ Pasta já existe - pulando: login/contas');
+    console.log('✓ Criado: login/contas');
   }
 
-  if (!fs.existsSync(GITKEEP)) {
-    fs.writeFileSync(GITKEEP, '', 'utf8');
-    console.log('✓ Criado: .gitkeep');
-  } else {
-    console.log('✓ Arquivo já existe - pulando: .gitkeep');
+  // 2. Garante .gitkeep
+  const gitkeep = path.join(CONTAS_DIR, '.gitkeep');
+  if(!fs.existsSync(gitkeep)){
+    fs.writeFileSync(gitkeep, '');
+    console.log('✓ Criado: .gitkeep em login/contas');
   }
 
-  if (!fs.existsSync(README)) {
-    const md = `# KORVIL CONTAS
-
-Estrutura automática:
-
-```
-login/contas/{pastaMae}/{pastaMae}.json
-```
-
-Exemplo: 
-- João Silva Santos -> `joao_s_s/joao_s_s.json`
-- Ana Maria Oliveira Costa -> `ana_m_o_c/ana_m_o_c.json`
-
-Cada JSON: { id, pasta, nome, email, senha_hash sha256, criado_em }
-
-Nunca duplicar, só adiciona ou ajusta.
-Gerado por scripts/ensure-contas-structure.js - NODE PURO, SEM VERCEL
-`;
-    fs.writeFileSync(README, md, 'utf8');
-    console.log('✓ Criado: README.md explicativo');
-  } else {
-    console.log('✓ Arquivo já existe - combinando se preciso: README.md');
-    const atual = fs.readFileSync(README, 'utf8');
-    if (!atual.includes('joao_s_s')) {
-      fs.appendFileSync(README, '\n\n> Auto-update: exemplo joao_s_s mantido\n');
-      console.log('✓ README ajustado - combinado');
-    }
+  // 3. Verifica e exclui joao_s_s se existir (local)
+  if(fs.existsSync(JOAO_JSON)){
+    try{
+      fs.unlinkSync(JOAO_JSON);
+      console.log('✓ Excluído local: joao_s_s/joao_s_s.json');
+    }catch(e){ console.error('Erro ao excluir joao_s_s.json', e); }
+  }
+  if(fs.existsSync(JOAO_PATH)){
+    try{
+      const files = fs.readdirSync(JOAO_PATH);
+      if(files.length===0){
+        fs.rmdirSync(JOAO_PATH);
+        console.log('✓ Pasta joao_s_s removida (vazia)');
+      } else {
+        console.log('! Pasta joao_s_s contém arquivos, mantida para revisão:', files);
+      }
+    }catch(e){ console.error('Erro ao remover pasta joao_s_s', e); }
   }
 
-  console.log('✔ Todas pastas e arquivos prontos! SEM DUPLICAR PORRA');
+  // 4. Lista contas existentes
+  try{
+    const entries = fs.readdirSync(CONTAS_DIR, { withFileTypes: true });
+    const contas = entries.filter(d=>d.isDirectory()).map(d=>d.name).filter(n=>n!=='.git');
+    console.log('Contas existentes:', contas.length ? contas.join(', ') : '(nenhuma, só .gitkeep)');
+  }catch(_){}
 }
 
-ensure();
+if(require.main===module){
+  ensureContasStructure();
+}
+
+module.exports = { ensureContasStructure };
