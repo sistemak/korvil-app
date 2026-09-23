@@ -1,15 +1,13 @@
 {
   "name": "korvil-loja",
   "version": "1.0.0",
-  "private": true,
-  "description": "KORVIL LOJA - Só Node + GitHub sem erros",
+  "description": "KORVIL LOJA - Black Orange",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "ensure": "node scripts/ensure-contas-structure.js",
-    "dev": "node server.js"
+    "start": "node server.js"
   },
-  "keywords": ["korvil","node","github"],
-  "author": "Sistema K",
-  "license": "MIT"
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
 }
