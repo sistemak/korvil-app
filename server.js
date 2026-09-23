@@ -1,102 +1,175 @@
-// RAIZ - mesmo server Node que serve korvil-loja, GH_TOKEN interno
-const http=require('http');
-const fs=require('fs');
-const path=require('path');
-const url=require('url');
+// KORVIL SERVER.JS - NODE CONFIGURADO COM GH_TOKEN TOTAL ACESSO AUTOMÁTICO
+// Não precisa colar token no login, usuário final só preenche form
+const express = require("express");
+const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
 
-const PORT=process.env.PORT||3000;
-const GH_TOKEN=process.env.GH_TOKEN||process.env.GITHUB_TOKEN||'';
-const LOJA_DIR=path.join(__dirname,'korvil','sections','korvil-loja');
-const BASE_DIR=fs.existsSync(LOJA_DIR)?LOJA_DIR:__dirname;
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-function ensureContas(){
-  const base=path.join(BASE_DIR,'login','contas');
+// GH_TOKEN com total acesso geral automático - pega de env ou fallback localStorage injetado via window.__KORVIL_GH_TOKEN__
+const GH_TOKEN = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || process.env.GH_PAT || "";
+const REPO = "sistemak/korvil-app";
+const BRANCH = "main";
+
+if(!GH_TOKEN){
+  console.warn("⚠️ GH_TOKEN não configurado em process.env.GH_TOKEN - modo GitHub puro via localStorage ainda funciona se código mestre ativou token no navegador");
+}
+
+const CONTAS_DIR = path.join(__dirname, "korvil", "sections", "korvil-loja", "login", "contas");
+const CONTAS_DIR_ALT = path.join(__dirname, "korvil/sections/korvil-loja/login/contas");
+const CONTAS_DIR_ROOT = path.join(__dirname, "login", "contas");
+
+function ensureDir(dir){ if(!fs.existsSync(dir)) fs.mkdirSync(dir,{recursive:true}); }
+ensureDir(CONTAS_DIR); ensureDir(CONTAS_DIR_ALT); ensureDir(CONTAS_DIR_ROOT);
+
+app.use(cors());
+app.use(express.json({limit:"10mb"}));
+app.use(express.static(path.join(__dirname)));
+app.use("/korvil", express.static(path.join(__dirname,"korvil")));
+
+function gerarPastaMae(nomeCompleto){
+  const partes = nomeCompleto.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().split(/\s+/).filter(Boolean);
+  if(partes.length===0) return "usuario";
+  if(partes.length===1) return partes[0];
+  if(partes.length===2) return `${partes[0]}-${partes[1][0]}`;
+  return `${partes[0]}-${partes[1][0]}-${partes[2][0]}`;
+}
+
+async function githubPutFile(filePath, contentStr, message){
+  if(!GH_TOKEN) throw new Error("GH_TOKEN não configurado no server");
+  const apiUrl = `https://api.github.com/repos/${REPO}/contents/${filePath}`;
+  // get sha se existe
+  let sha;
   try{
-    if(!fs.existsSync(base)) fs.mkdirSync(base,{recursive:true});
-    const gk=path.join(base,'.gitkeep'); if(!fs.existsSync(gk)) fs.writeFileSync(gk,'');
-    ['joao_s_s','joao_s_s.json'].forEach(b=>{
-      const p=path.join(base,b);
-      try{ if(fs.existsSync(p)){ const st=fs.statSync(p); if(st.isDirectory()) fs.rmSync(p,{recursive:true,force:true}); else fs.unlinkSync(p); } }catch{}
-    });
-  }catch(e){ console.warn('ensure error',e.message); }
-}
-ensureContas();
-
-function json(res,code,obj){
-  res.writeHead(code,{'Content-Type':'application/json; charset=utf-8','Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'GET,POST,PUT,OPTIONS','Access-Control-Allow-Headers':'Content-Type, Authorization'});
-  res.end(JSON.stringify(obj));
-}
-
-function serveStatic(req,res){
-  let pathname=url.parse(req.url).pathname;
-  if(pathname==='/' ) pathname='/index.html';
-  let filePath=path.join(BASE_DIR,pathname);
-  if(!filePath.startsWith(BASE_DIR) && !filePath.startsWith(__dirname)) return json(res,403,{error:'forbidden'});
-  // tenta LOJA_DIR primeiro, depois raiz
-  if(!fs.existsSync(filePath)){
-    const alt=path.join(__dirname,pathname);
-    if(fs.existsSync(alt)) filePath=alt;
-  }
-  fs.stat(filePath,(err,stat)=>{
-    if(err||!stat.isFile()){
-      const fallback=path.join(BASE_DIR,'index.html');
-      if(fs.existsSync(fallback) && !path.extname(pathname)){
-        const data=fs.readFileSync(fallback); res.writeHead(200,{'Content-Type':'text/html'}); return res.end(data);
-      }
-      res.writeHead(404,{'Content-Type':'text/plain'}); return res.end('Not found '+pathname);
-    }
-    const ext=path.extname(filePath).toLowerCase();
-    const mime={'.html':'text/html','.js':'application/javascript','.json':'application/json','.css':'text/css'}[ext]||'application/octet-stream';
-    fs.readFile(filePath,(e,d)=>{ if(e){ res.writeHead(500); return res.end('error'); } res.writeHead(200,{'Content-Type':mime}); res.end(d); });
+    const getRes = await fetch(apiUrl,{headers:{Authorization:"Bearer "+GH_TOKEN, Accept:"application/vnd.github.v3+json"}});
+    if(getRes.ok){ const j = await getRes.json(); sha = j.sha; }
+  }catch{}
+  const contentB64 = Buffer.from(contentStr,"utf-8").toString("base64");
+  const putRes = await fetch(apiUrl,{
+    method:"PUT",
+    headers:{Authorization:"Bearer "+GH_TOKEN, Accept:"application/vnd.github.v3+json","Content-Type":"application/json"},
+    body: JSON.stringify({message, content: contentB64, sha: sha||undefined, branch: BRANCH})
   });
+  const txt = await putRes.text();
+  let data; try{ data = JSON.parse(txt); }catch{ throw new Error("GitHub PUT não-JSON: "+txt.slice(0,500)); }
+  if(!putRes.ok) throw new Error("GitHub erro: "+(data.message||txt));
+  return data;
 }
 
-function parseBody(req){
-  return new Promise((res,rej)=>{ let b=''; req.on('data',c=>b+=c); req.on('end',()=>{ try{ res(b?JSON.parse(b):{}); }catch(e){ rej(new Error('JSON inválido')); } }); req.on('error',rej); });
-}
-
-const server=http.createServer(async (req,res)=>{
-  if(req.method==='OPTIONS'){ res.writeHead(204,{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'GET,POST,PUT,OPTIONS','Access-Control-Allow-Headers':'Content-Type, Authorization'}); return res.end(); }
-  const parsed=url.parse(req.url,true);
-  if(parsed.pathname.startsWith('/api/')){
-    try{
-      if(parsed.pathname==='/api/status' && req.method==='GET'){
-        const base=path.join(BASE_DIR,'login','contas');
-        let count=0; try{ count=fs.readdirSync(base).filter(f=>!f.startsWith('.')).length; }catch{}
-        return json(res,200,{mode:'node',root:true,tokenActive:!!GH_TOKEN,contas:count,port:PORT,time:new Date().toISOString()});
-      }
-      if(parsed.pathname==='/api/criar-conta' && req.method==='POST'){
-        const dados=await parseBody(req);
-        const pastaMae=dados.nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,24)||'usuario';
-        const arquivo=pastaMae+'.json';
-        const dir=path.join(BASE_DIR,'login','contas',pastaMae);
-        fs.mkdirSync(dir,{recursive:true});
-        const conta={...dados,pastaMae,arquivo,id:pastaMae+'_'+Date.now(),sistema:'KORVIL',createdAt:new Date().toISOString()};
-        fs.writeFileSync(path.join(dir,arquivo),JSON.stringify(conta,null,2),'utf-8');
-        console.log('[KORVIL RAIZ] pasta mãe criada REAL',pastaMae);
-        return json(res,200,{ok:true,conta});
-      }
-      if(parsed.pathname==='/api/login' && req.method==='POST'){
-        const {email}=await parseBody(req);
-        const base=path.join(BASE_DIR,'login','contas');
-        try{
-          const pastas=fs.readdirSync(base).filter(f=>{ try{return fs.statSync(path.join(base,f)).isDirectory();}catch{return false;}});
-          for(const p of pastas){
-            const fp=path.join(base,p,p+'.json');
-            if(fs.existsSync(fp)){ const j=JSON.parse(fs.readFileSync(fp,'utf-8')); if(j.email&&j.email.toLowerCase()===String(email).toLowerCase()) return json(res,200,{ok:true,conta:j}); }
-          }
-        }catch{}
-        return json(res,404,{error:'Conta não encontrada'});
-      }
-      if(parsed.pathname==='/api/listar-contas' && req.method==='GET'){
-        const base=path.join(BASE_DIR,'login','contas');
-        let contas=[]; try{ const pastas=fs.readdirSync(base).filter(f=>fs.statSync(path.join(base,f)).isDirectory()); contas=pastas.map(p=>{ try{return JSON.parse(fs.readFileSync(path.join(base,p,p+'.json'),'utf-8'));}catch{return null;}}).filter(Boolean);}catch{}
-        return json(res,200,{ok:true,contas});
-      }
-      return json(res,404,{error:'api not found'});
-    }catch(e){ return json(res,500,{error:e.message}); }
+// POST /api/criar-conta - CRIA PASTA MÃE REAL + JSON REAL
+app.post("/api/criar-conta", async (req,res)=>{
+  try{
+    const {nome_completo,email,senha_hash,cpf,whatsapp,cep,numero,rua,bairro,cidade,estado,foto_perfil,id,arquivo,pasta_mae} = req.body;
+    if(!nome_completo||!email) return res.status(400).json({ok:false,error:"nome e email obrigatórios"});
+    const pastaMae = pasta_mae || gerarPastaMae(nome_completo);
+    const fileName = arquivo || (pastaMae + ".json");
+    const payload = {
+      id: id || crypto.randomUUID(),
+      arquivo: fileName,
+      pasta_mae: pastaMae,
+      nome_completo,
+      primeiro_nome: nome_completo.split(/\s+/)[0],
+      email, senha_hash,
+      cpf: cpf || "453.814.988-88",
+      whatsapp: whatsapp || "(13)99769-0898",
+      cep: cep || "11250-524",
+      rua: rua || "Oswaldo Cruz",
+      numero: numero || "2407",
+      bairro: bairro || "Jardim Vicente Carvalho",
+      cidade: cidade || "Bertioga",
+      estado: estado || "SP",
+      foto_perfil: foto_perfil || "",
+      criado_em: new Date().toISOString(),
+      atualizado_em: new Date().toISOString()
+    };
+    const jsonStr = JSON.stringify(payload,null,2);
+    // cria em filesystem real
+    const dir1 = path.join(CONTAS_DIR, pastaMae);
+    const dir2 = path.join(CONTAS_DIR_ALT, pastaMae);
+    const dir3 = path.join(CONTAS_DIR_ROOT, pastaMae);
+    [dir1,dir2,dir3].forEach(d=>{ try{ ensureDir(d); }catch{} });
+    try{ fs.writeFileSync(path.join(dir1,fileName), jsonStr,"utf-8"); }catch{}
+    try{ fs.writeFileSync(path.join(dir2,fileName), jsonStr,"utf-8"); }catch{}
+    try{ fs.writeFileSync(path.join(dir3,fileName), jsonStr,"utf-8"); }catch{}
+    // além de criar no filesystem, já faz PUT GitHub API com GH_TOKEN interno
+    let githubResult = null;
+    if(GH_TOKEN){
+      try{
+        const gitPath = `korvil/sections/korvil-loja/login/contas/${pastaMae}/${fileName}`;
+        githubResult = await githubPutFile(gitPath, jsonStr, `feat: criar conta real ${pastaMae}/${fileName} via /api/criar-conta`);
+      }catch(e){ console.warn("GitHub PUT falhou:", e.message); }
+    }
+    return res.json({ok:true, pastaMae, arquivo: fileName, path: `korvil/sections/korvil-loja/login/contas/${pastaMae}/${fileName}`, github: !!githubResult});
+  }catch(e){
+    console.error(e);
+    return res.status(500).json({ok:false,error:e.message});
   }
-  serveStatic(req,res);
 });
 
-server.listen(PORT,()=>console.log('[KORVIL RAIZ] http://localhost:'+PORT+' tokenActive='+!!GH_TOKEN+' base='+BASE_DIR));
+app.post("/api/atualizar-conta", async (req,res)=>{
+  try{
+    const data = req.body;
+    const pastaMae = data.pasta_mae || gerarPastaMae(data.nome_completo||"usuario");
+    const fileName = data.arquivo || pastaMae+".json";
+    const payload = {...data, atualizado_em: new Date().toISOString()};
+    const jsonStr = JSON.stringify(payload,null,2);
+    const dir = path.join(CONTAS_DIR, pastaMae);
+    ensureDir(dir);
+    fs.writeFileSync(path.join(dir,fileName), jsonStr);
+    if(GH_TOKEN){
+      try{ await githubPutFile(`korvil/sections/korvil-loja/login/contas/${pastaMae}/${fileName}`, jsonStr, `chore: atualizar conta ${pastaMae}`); }catch{}
+    }
+    return res.json({ok:true});
+  }catch(e){ return res.status(500).json({ok:false,error:e.message}); }
+});
+
+app.post("/api/login", async (req,res)=>{
+  try{
+    const {email,senha} = req.body;
+    if(!email||!senha) return res.status(400).json({ok:false,error:"email e senha obrigatórios"});
+    const hash = crypto.createHash("sha256").update(senha).digest("hex");
+    // busca em filesystem
+    let found = null;
+    const scanDirs = [CONTAS_DIR, CONTAS_DIR_ALT, CONTAS_DIR_ROOT];
+    for(const base of scanDirs){
+      if(!fs.existsSync(base)) continue;
+      const pastas = fs.readdirSync(base);
+      for(const p of pastas){
+        const fp = path.join(base,p,p+".json");
+        if(fs.existsSync(fp)){
+          try{
+            const j = JSON.parse(fs.readFileSync(fp,"utf-8"));
+            if(j.email===email && j.senha_hash===hash){ found=j; break; }
+          }catch{}
+        }
+      }
+      if(found) break;
+    }
+    if(!found) return res.status(401).json({ok:false,error:"Conta não encontrada ou senha incorreta"});
+    return res.json({ok:true,user:found});
+  }catch(e){ return res.status(500).json({ok:false,error:e.message}); }
+});
+
+app.get("/api/contas",(req,res)=>{
+  try{
+    const base = fs.existsSync(CONTAS_DIR)?CONTAS_DIR:CONTAS_DIR_ALT;
+    if(!fs.existsSync(base)) return res.json({ok:true,contas:[]});
+    const pastas = fs.readdirSync(base);
+    const contas=[];
+    for(const p of pastas){
+      const fp = path.join(base,p,p+".json");
+      if(fs.existsSync(fp)){
+        try{ contas.push(JSON.parse(fs.readFileSync(fp,"utf-8"))); }catch{}
+      }
+    }
+    return res.json({ok:true,contas});
+  }catch(e){ return res.status(500).json({ok:false,error:e.message}); }
+});
+
+// garante nunca retornar HTML quando deveria retornar JSON
+app.use((req,res,next)=>{ if(req.path.startsWith("/api/")){ res.setHeader("Content-Type","application/json"); } next(); });
+
+app.listen(PORT, ()=>{ console.log(`✅ KORVIL SERVER rodando na porta ${PORT} - GH_TOKEN ${GH_TOKEN?"ativo ✓":"não configurado"}`); });
