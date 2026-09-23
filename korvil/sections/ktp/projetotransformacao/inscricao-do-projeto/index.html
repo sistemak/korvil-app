@@ -144,24 +144,71 @@ async function enviarWhatsApp(){
 
     const idade = nasc ? (new Date().getFullYear() - new Date(nasc).getFullYear()) : '';
 
-    const dadosReais = {
-      id: prox,
-      pastaMae,
-      arquivo: nomeArq,
-      caminho: fullPath,
-      nome: nomeCompleto,
-      primeiroNomeReal,
-      cpf, nasc, idade,
-      publico: 'geral',
-      whats, email,
-      cep, rua, numero, bairro, cidade,
-      objetivos,
-      nivelAtividade: 'iniciante',
-      q1:'',q2:'',q3:'',q4:'',q5:'',q6:'',q7:'',q8:'',q9:'',
-      plano: {nome: planoSel.nome, valor: planoSel.valor, mat: planoSel.mat, tipo: planoSel.tipo, freq: planoSel.tipoFreq, dias: planoSel.dias, hora: planoSel.hora},
-      criadoEm: new Date().toISOString(),
-      versao: 'V25'
-    };
+    // >>> PATCH V28 ORIGINAL INTACTO - INICIO - ordem real TELA 1-2-3 - NAO usa dado fake Edna, só formato
+const dataAtual = new Date().toLocaleDateString('pt-BR');
+const __nomeRef = (typeof nome !== 'undefined' ? nome : (typeof nomeCompleto !== 'undefined' ? nomeCompleto : '')) || '';
+const primeiroNomeReal = __nomeRef.split(' ')[0].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+const pastaMae = typeof pastaMae !== 'undefined' && pastaMae ? pastaMae : `${typeof prox !== 'undefined' ? prox : ''}-${primeiroNomeReal}${typeof prox !== 'undefined' ? prox : ''}`;
+const nomeArq = typeof nomeArq !== 'undefined' && nomeArq ? nomeArq : `${typeof prox !== 'undefined' ? prox : ''}-${primeiroNomeReal}${typeof prox !== 'undefined' ? prox : ''}.json`;
+const caminhoCompleto = typeof caminhoCompleto !== 'undefined' && caminhoCompleto ? caminhoCompleto : `${typeof basePath !== 'undefined' ? basePath : ''}/${pastaMae}/${nomeArq}`;
+const dadosReais = {
+  "TELA 1 - ANAMNESE": {
+    "1.1 OBJETIVOS": {
+      "Objetivos em Prioridade": typeof objetivos !== 'undefined' ? objetivos : (typeof objetivo !== 'undefined' ? objetivo : ''),
+      "Nivel": typeof nivelAtividade !== 'undefined' ? nivelAtividade : (typeof nivel !== 'undefined' ? nivel : '')
+    },
+    "1.2 HISTORICO Q1-Q9": {
+      "Q1": typeof q1 !== 'undefined' ? q1 : '',
+      "Q2": typeof q2 !== 'undefined' ? q2 : '',
+      "Q3": typeof q3 !== 'undefined' ? q3 : '',
+      "Q4": typeof q4 !== 'undefined' ? q4 : '',
+      "Q5": typeof q5 !== 'undefined' ? q5 : '',
+      "Q6": typeof q6 !== 'undefined' ? q6 : '',
+      "Q7": typeof q7 !== 'undefined' ? q7 : '',
+      "Q8": typeof q8 !== 'undefined' ? q8 : '',
+      "Q9": typeof q9 !== 'undefined' ? q9 : ''
+    }
+  },
+  "TELA 2 - PLANOS": {
+    "2.1 DADOS DO PLANO": {
+      "Modalidade": typeof tipoReal !== 'undefined' && tipoReal ? String(tipoReal).toUpperCase() : (typeof modalidade !== 'undefined' ? String(modalidade).toUpperCase() : ''),
+      "Tipo de Plano": (typeof plano !== 'undefined' ? (plano?.nome || plano) : '') || '',
+      "Dias": typeof dias !== 'undefined' ? dias : '',
+      "Horario": typeof hora !== 'undefined' ? hora : (typeof horario !== 'undefined' ? horario : ''),
+      "Frequencia": typeof freq !== 'undefined' ? freq : (typeof frequencia !== 'undefined' ? frequencia : ''),
+      "Valor Mensal": `R$ ${typeof valorMensal !== 'undefined' ? valorMensal : (typeof plano !== 'undefined' ? (plano?.valor || '') : '')}`,
+      "Matricula Paga": `R$ ${typeof matricula !== 'undefined' ? matricula : (typeof valorMatricula !== 'undefined' ? valorMatricula : '')} - ${dataAtual}`,
+      "Total 1o Pagamento": typeof total !== 'undefined' ? `R$ ${total}` : (typeof totalPrimeiro !== 'undefined' ? `R$ ${totalPrimeiro}` : ''),
+      "Data Mensalidade": dataAtual
+    }
+  },
+  "TELA 3 - DADOS": {
+    "3.1 PESSOAIS": {
+      "Nome": typeof nome !== 'undefined' ? nome : '',
+      "CPF": typeof cpf !== 'undefined' ? cpf : '',
+      "Data Nasc": typeof nasc !== 'undefined' ? nasc : (typeof dataNasc !== 'undefined' ? dataNasc : ''),
+      "Idade": typeof idade !== 'undefined' ? idade : '',
+      "Genero": typeof genero !== 'undefined' ? genero : '',
+      "WhatsApp": typeof whats !== 'undefined' ? whats : (typeof whatsapp !== 'undefined' ? whatsapp : ''),
+      "Email": typeof email !== 'undefined' ? email : ''
+    },
+    "3.2 ENDERECO": {
+      "CEP": typeof cep !== 'undefined' ? cep : '',
+      "Rua": typeof rua !== 'undefined' ? rua : '',
+      "Numero": typeof numero !== 'undefined' ? numero : '',
+      "Bairro": typeof bairro !== 'undefined' ? bairro : '',
+      "Cidade": typeof cidade !== 'undefined' ? cidade : ''
+    }
+  },
+  "STATUS": "ATIVO",
+  "id": pastaMae,
+  "pastaMae": pastaMae,
+  "arquivo": nomeArq,
+  "caminhoCompleto": caminhoCompleto,
+  "criadoEm": new Date().toISOString()
+};
+const dadosStr = JSON.stringify(dadosReais, null, 2);
+// <<< PATCH V28 ORIGINAL INTACTO - FIM
 
     const conteudoBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(dadosReais,null,2))));
 
