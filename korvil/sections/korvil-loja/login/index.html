@@ -1,154 +1,127 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>KORVIL — Criar Conta | SEM TOKEN</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KORVIL - Criar Conta</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0A0A0A;color:#fff;font-family:'Space Grotesk',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{background:#141414;border:1px solid #1F1F1F;border-radius:18px;width:100%;max-width:560px;padding:28px 26px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-.logo{width:44px;height:44px;background:#FF4D00;border-radius:12px;display:grid;place-items:center;font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#000}
-.h1{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:22px}
-.h1 span{color:#FF4D00}
-.sub{color:#7A7A7A;font-size:12px;margin-top:2px}
-.badge{display:inline-flex;align-items:center;gap:6px;background:#FF4D00;color:#000;font-weight:700;font-size:10px;letter-spacing:.08em;padding:5px 10px;border-radius:999px;margin-bottom:14px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.full{grid-column:1/-1}
-label{font-size:11px;color:#9A9A9A;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:block}
-input,select{background:#0A0A0A;border:1px solid #262626;border-radius:12px;padding:13px 14px;color:#fff;width:100%;outline:none;font-size:14px;transition:.15s}
-input:focus,select:focus{border-color:#FF4D00;box-shadow:0 0 0 3px rgba(255,77,0,.15)}
-.row{display:flex;gap:10px}
-.btn{background:#FF4D00;color:#000;border:none;border-radius:12px;padding:14px 16px;font-family:'Syne',sans-serif;font-weight:800;letter-spacing:.04em;width:100%;cursor:pointer;font-size:14px;transition:.15s}
-.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.foto{display:flex;align-items:center;gap:12px;background:#0A0A0A;border:1px dashed #2A2A2A;border-radius:12px;padding:12px}
-.foto img{width:48px;height:48px;border-radius:50%;object-fit:cover;background:#1A1A1A}
-.mut{color:#666;font-size:12px}
-.err{background:#2A1111;border:1px solid #5A2020;color:#FF8A8A;padding:10px 12px;border-radius:10px;font-size:13px;display:none;margin-bottom:12px}
-.ok{background:#102A14;border:1px solid #1F5A26;color:#7CFF8E;padding:10px 12px;border-radius:10px;font-size:13px;display:none;margin-bottom:12px}
-.link{color:#FF4D00;text-decoration:none;font-size:12px}
-.link:hover{text-decoration:underline}
-@media(max-width:560px){.grid{grid-template-columns:1fr}}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui}
+body{background:#0A0A0A;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{width:100%;max-width:480px;background:#141414;border:1px solid #232323;border-radius:20px;padding:28px}
+h1{font-size:22px;letter-spacing:-0.02em;margin-bottom:4px}
+.sub{color:#888;font-size:13px;margin-bottom:20px}
+input{width:100%;background:#0A0A0A;border:1px solid #2a2a2a;border-radius:12px;padding:12px 14px;color:#fff;outline:none;margin-bottom:12px}
+input:focus{border-color:#FF4D00}
+.row{display:flex;gap:12px}
+.row input{flex:1}
+.btn{width:100%;background:#FF4D00;color:#fff;border:none;border-radius:12px;padding:14px;font-weight:800;letter-spacing:0.02em;cursor:pointer;margin-top:8px}
+.btn:disabled{opacity:.5}
+.foto-wrap{border:1px dashed #333;border-radius:12px;padding:12px;text-align:center;margin-bottom:12px;cursor:pointer}
+.foto-wrap img{max-width:100%;max-height:160px;object-fit:contain;border-radius:8px}
+.err{background:#2a1212;border:1px solid #5a2222;color:#ff8a8a;padding:10px 12px;border-radius:10px;font-size:13px;margin-bottom:12px;display:none}
+.ok{background:#112a12;border:1px solid #234a23;color:#8aff8a;padding:10px 12px;border-radius:10px;font-size:13px;margin-bottom:12px;display:none}
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="badge">● SEM TOKEN • NODE FILESYSTEM PURO</div>
-  <div class="top">
-    <div class="logo">K</div>
-    <div>
-      <div class="h1">KORVIL <span>STORE</span></div>
-      <div class="sub">Criação de conta 100% via Node — cria pasta mãe + .json real</div>
-    </div>
-  </div>
-  <div id="msgErr" class="err"></div>
-  <div id="msgOk" class="ok"></div>
-  <form id="formCriar" autocomplete="on">
-    <div class="grid">
-      <div class="full"><label>Foto de perfil</label><div class="foto"><img id="preview" src="" alt=""><input type="file" id="fotoInput" accept="image/*" style="border:none;padding:0"><span class="mut">opcional</span></div></div>
-      <div class="full"><label>Nome completo *</label><input id="nome" required placeholder="João Silva Santos" /></div>
-      <div class="full"><label>E-mail *</label><input id="email" type="email" required placeholder="joao@email.com" /></div>
-      <div><label>Senha *</label><input id="senha" type="password" required placeholder="mín. 6" /></div>
-      <div><label>Confirmar senha *</label><input id="confirma" type="password" required placeholder="repita" /></div>
-      <div><label>CPF</label><input id="cpf" placeholder="000.000.000-00" /></div>
-      <div><label>WhatsApp</label><input id="whats" placeholder="(11) 99999-9999" /></div>
-      <div><label>CEP</label><input id="cep" placeholder="00000-000" /></div>
-      <div><label>Número</label><input id="numero" placeholder="123" /></div>
-      <div class="full"><label>Rua</label><input id="rua" placeholder="Rua das Flores" /></div>
-      <div><label>Bairro</label><input id="bairro" placeholder="Centro" /></div>
-      <div><label>Cidade</label><input id="cidade" placeholder="São Paulo" /></div>
-      <div><label>Estado</label><select id="estado"><option value="">UF</option><option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option></select></div>
-      <div><label>&nbsp;</label><div class="mut" id="viacepStatus">ViaCEP automático no CEP</div></div>
-      <div class="full" style="margin-top:6px"><button class="btn" id="btnCriar" type="submit">CRIAR CONTA → PASTA MÃE + JSON</button></div>
-      <div class="full" style="text-align:center;margin-top:10px"><span class="mut">Já tem conta? </span><a class="link" href="#" id="btnIrLogin">Fazer login</a></div>
-    </div>
-  </form>
-  <form id="formLogin" style="display:none">
-    <div class="grid">
-      <div class="full"><label>E-mail</label><input id="loginEmail" type="email" required /></div>
-      <div class="full"><label>Senha</label><input id="loginSenha" type="password" required /></div>
-      <div class="full"><button class="btn" type="submit">ENTRAR NA LOJA</button></div>
-      <div class="full" style="text-align:center;margin-top:10px"><a class="link" href="#" id="btnIrCriar">Criar nova conta</a></div>
-    </div>
-  </form>
+<h1>Criar Conta</h1><p class="sub">Sistema K • dados reais • ViaCEP automático</p>
+<div id="errBox" class="err"></div>
+<div id="okBox" class="ok"></div>
+<div class="foto-wrap" onclick="document.getElementById('foto').click()">
+<input type="file" id="foto" accept="image/*" hidden>
+<div id="fotoPh">📷 Clique para foto (contain, base64)</div>
+<img id="fotoPrev" style="display:none">
+</div>
+<input id="nome" placeholder="Nome Completo (ex: Sistema K)" value="Sistema K">
+<input id="email" placeholder="E-mail" type="email" value="sistemak.srv@gmail.com">
+<div class="row"><input id="cpf" placeholder="CPF 453.814.988-88" value="453.814.988-88"><input id="tel" placeholder="(13)99769-0898" value="(13)99769-0898"></div>
+<div class="row"><input id="cep" placeholder="CEP 11250-524" value="11250-524"><input id="num" placeholder="Nº 2407" value="2407"></div>
+<input id="rua" placeholder="Rua (ViaCEP)">
+<input id="bairro" placeholder="Bairro (ViaCEP)">
+<div class="row"><input id="cidade" placeholder="Cidade"><input id="uf" placeholder="UF" maxlength="2"></div>
+<input id="senha" type="password" placeholder="Senha (min 6)">
+<button id="btnCriar" class="btn">CRIAR CONTA • PASTA MÃE REAL</button>
+<p style="color:#555;font-size:11px;margin-top:12px;text-align:center">Node cria pasta física • Pages usa fallback sem quebrar</p>
 </div>
 <script>
-const API = ''; // mesmo host
-const fotoInput = document.getElementById('fotoInput');
-const preview = document.getElementById('preview');
+// DUAL DETECTION SEM ERROS
+const isGithubPages = location.hostname.includes('github.io');
+const isNode = (!isGithubPages && (location.port === '3000' || location.hostname === 'localhost' || location.hostname === '127.0.0.1'));
 let fotoBase64 = '';
-fotoInput?.addEventListener('change', e=>{
+const GH_INTERNAL = window.__KORVIL_GH_TOKEN__ || localStorage.getItem('loja_github_token') || '';
+
+document.getElementById('foto').addEventListener('change', e=>{
   const f=e.target.files[0]; if(!f) return;
-  const r=new FileReader(); r.onload=()=>{ fotoBase64=r.result; preview.src=r.result; }; r.readAsDataURL(f);
+  const r=new FileReader(); r.onload=()=>{ fotoBase64=r.result; document.getElementById('fotoPrev').src=fotoBase64; document.getElementById('fotoPrev').style.display='block'; document.getElementById('fotoPh').style.display='none'; }; r.readAsDataURL(f);
 });
-const cepEl=document.getElementById('cep');
-const ruaEl=document.getElementById('rua');
-const bairroEl=document.getElementById('bairro');
-const cidadeEl=document.getElementById('cidade');
-const estadoEl=document.getElementById('estado');
-const viacepStatus=document.getElementById('viacepStatus');
-cepEl.addEventListener('blur', async()=>{
-  const cep=cepEl.value.replace(/\D/g,''); if(cep.length!==8) return;
-  viacepStatus.textContent='Buscando ViaCEP...';
-  try{ const r=await fetch('https://viacep.com.br/ws/'+cep+'/json/'); const d=await r.json(); if(d.erro){ viacepStatus.textContent='CEP não encontrado'; return; }
-  ruaEl.value=d.logradouro||''; bairroEl.value=d.bairro||''; cidadeEl.value=d.localidade||''; estadoEl.value=d.uf||''; viacepStatus.textContent='ViaCEP OK ✓';
-  }catch{ viacepStatus.textContent='Falha ViaCEP'; }
+document.getElementById('cep').addEventListener('blur', async e=>{
+  const cep=e.target.value.replace(/\D/g,''); if(cep.length!==8) return;
+  try{ const r=await fetch('https://viacep.com.br/ws/'+cep+'/json/'); const j=await r.json(); if(!j.erro){ rua.value=j.logradouro||''; bairro.value=j.bairro||''; cidade.value=j.localidade||''; uf.value=j.uf||''; } }catch{}
 });
+function pastaMaeFromNome(nome){ return nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,24)||'usuario'; }
+function showErr(m){ const b=document.getElementById('errBox'); b.textContent=m; b.style.display='block'; okBox.style.display='none'; }
+function showOk(m){ const b=document.getElementById('okBox'); b.textContent=m; b.style.display='block'; errBox.style.display='none'; }
 
-function showErr(t){ const e=document.getElementById('msgErr'); e.textContent=t; e.style.display='block'; setTimeout(()=>e.style.display='none',4000); }
-function showOk(t){ const e=document.getElementById('msgOk'); e.textContent=t; e.style.display='block'; }
+document.getElementById('btnCriar').addEventListener('click', async ()=>{
+  const btn=document.getElementById('btnCriar'); btn.disabled=true; btn.textContent='CRIANDO...';
+  const dados={
+    nome:nome.value.trim(), email:email.value.trim().toLowerCase(), cpf:cpf.value.trim(),
+    tel:tel.value.trim(), cep:cep.value.trim(), numero:num.value.trim(),
+    rua:rua.value.trim(), bairro:bairro.value.trim(), cidade:cidade.value.trim(), uf:uf.value.trim().toUpperCase(),
+    senha:senha.value, foto:fotoBase64, createdAt:new Date().toISOString()
+  };
+  if(!dados.nome||!dados.email||dados.senha.length<6){ showErr('Preencha nome, email e senha min 6'); btn.disabled=false; btn.textContent='CRIAR CONTA • PASTA MÃE REAL'; return; }
+  const pastaMae=pastaMaeFromNome(dados.nome); const arquivo=pastaMae+'.json';
+  const contaCompleta={ ...dados, pastaMae, arquivo, id:pastaMae+'_'+Date.now(), sistema:'KORVIL' };
 
-if(localStorage.getItem('korvil_user') && localStorage.getItem('korvil_primeiro_uso_feito')){
-  showOk('Conta já criada — indo para loja...'); setTimeout(()=>location.href='../index.html',800);
-}
-
-document.getElementById('btnIrLogin').onclick=(e)=>{ e.preventDefault(); document.getElementById('formCriar').style.display='none'; document.getElementById('formLogin').style.display='block'; };
-document.getElementById('btnIrCriar').onclick=(e)=>{ e.preventDefault(); document.getElementById('formLogin').style.display='none'; document.getElementById('formCriar').style.display='block'; };
-
-document.getElementById('formCriar').addEventListener('submit', async(e)=>{
-  e.preventDefault();
-  const nome_completo=document.getElementById('nome').value.trim();
-  const email=document.getElementById('email').value.trim();
-  const senha=document.getElementById('senha').value;
-  const confirma=document.getElementById('confirma').value;
-  const cpf=document.getElementById('cpf').value.trim();
-  const whatsapp=document.getElementById('whats').value.trim();
-  const cep=document.getElementById('cep').value.trim();
-  const rua=document.getElementById('rua').value.trim();
-  const numero=document.getElementById('numero').value.trim();
-  const bairro=document.getElementById('bairro').value.trim();
-  const cidade=document.getElementById('cidade').value.trim();
-  const estado=document.getElementById('estado').value.trim();
-  if(nome_completo.length<3){ showErr('Nome mínimo 3 letras'); return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showErr('E-mail inválido'); return; }
-  if(senha.length<6){ showErr('Senha mínimo 6'); return; }
-  if(senha!==confirma){ showErr('Senhas não conferem'); return; }
-  const btn=document.getElementById('btnCriar'); btn.disabled=true; btn.textContent='CRIANDO PASTA MÃE...';
+  // TRY NODE PRIMEIRO COM TRATAMENTO SEGURO - NUNCA res.json() DIRETO
   try{
-    const res=await fetch('/api/criar-conta',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome_completo,email,senha,cpf,whatsapp,cep,rua,numero,bairro,cidade,estado,foto_perfil:fotoBase64})});
-    const data=await res.json();
-    if(!res.ok || !data.ok){ throw new Error(data.erro||'Erro ao criar'); }
-    const user={...data.conta, senha:undefined};
-    localStorage.setItem('korvil_user', JSON.stringify(user));
+    const res=await fetch('/api/criar-conta',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(dados)});
+    const text=await res.text();
+    let data;
+    try{ data=JSON.parse(text); }catch(e){
+      if(text.trim().startsWith('<') || text.includes('<!DOCTYPE') || text.includes('<html')){
+        throw new Error('PAGES_MODE');
+      } else {
+        throw new Error('Resposta inválida do servidor');
+      }
+    }
+    if(!res.ok) throw new Error(data.error||'Erro Node');
+    // MODO NODE OK
+    localStorage.setItem('korvil_user', JSON.stringify(data.conta||contaCompleta));
     localStorage.setItem('korvil_primeiro_uso_feito','1');
-    showOk('Conta criada! Pasta mãe: '+data.pastaMae+' → indo para loja');
-    setTimeout(()=>location.href='../index.html',1100);
-  }catch(err){ showErr(err.message); btn.disabled=false; btn.textContent='CRIAR CONTA → PASTA MÃE + JSON'; }
-});
-
-document.getElementById('formLogin').addEventListener('submit', async(e)=>{
-  e.preventDefault();
-  const email=document.getElementById('loginEmail').value.trim();
-  const senha=document.getElementById('loginSenha').value;
-  try{
-    const res=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,senha})});
-    const data=await res.json(); if(!res.ok||!data.ok) throw new Error(data.erro||'Login falhou');
-    localStorage.setItem('korvil_user', JSON.stringify(data.conta)); localStorage.setItem('korvil_primeiro_uso_feito','1');
-    location.href='../index.html';
-  }catch(err){ showErr(err.message); }
+    showOk('✓ Pasta mãe criada REAL no filesystem Node: login/contas/'+pastaMae+'/'+arquivo);
+    setTimeout(()=>{ if(window.parent!==window){ window.parent.postMessage({type:'KORVIL_LOGIN_OK', conta:data.conta||contaCompleta},'*'); } else { location.href='../index.html'; } },800);
+    return;
+  }catch(err){
+    if(err.message==='PAGES_MODE' || isGithubPages){
+      // MODO GITHUB PURO - SEM NODE, SEM ERROS
+      try{
+        if(GH_INTERNAL){
+          const contentBase64=btoa(unescape(encodeURIComponent(JSON.stringify(contaCompleta,null,2))));
+          const filePath='korvil/sections/korvil-loja/login/contas/'+pastaMae+'/'+arquivo;
+          const apiUrl='https://api.github.com/repos/sistemak/korvil-app/contents/'+filePath;
+          let sha;
+          try{ const getRes=await fetch(apiUrl,{headers:{Authorization:'token '+GH_INTERNAL}}); if(getRes.ok){ const j=await getRes.json(); sha=j.sha; } }catch{}
+          const putRes=await fetch(apiUrl,{method:'PUT', headers:{Authorization:'token '+GH_INTERNAL,'Content-Type':'application/json'}, body:JSON.stringify({message:'KORVIL: conta '+pastaMae+' criada '+dados.email, content:contentBase64, branch:'main', ...(sha?{sha}:{})})});
+          if(!putRes.ok){ const t=await putRes.text(); throw new Error('GitHub API '+putRes.status+' '+t.slice(0,200)); }
+          showOk('✓ Modo GitHub Pages: pasta mãe criada REAL via API: '+pastaMae+'/'+arquivo);
+        }else{
+          showOk('✓ Modo GitHub Pages (sem token): conta salva local. Rode npm start local para criar pasta mãe física depois.');
+        }
+        localStorage.setItem('korvil_user', JSON.stringify(contaCompleta));
+        localStorage.setItem('korvil_primeiro_uso_feito','1');
+        setTimeout(()=>{ if(window.parent!==window){ window.parent.postMessage({type:'KORVIL_LOGIN_OK', conta:contaCompleta},'*'); } else { location.href='../index.html'; } },800);
+      }catch(e2){
+        showErr('Fallback GitHub falhou: '+e2.message+' | Mas conta salva local sem quebrar');
+        localStorage.setItem('korvil_user', JSON.stringify(contaCompleta));
+        localStorage.setItem('korvil_primeiro_uso_feito','1');
+      }
+    }else{
+      showErr(err.message||'Erro inesperado');
+    }
+  }finally{
+    btn.disabled=false; btn.textContent='CRIAR CONTA • PASTA MÃE REAL';
+  }
 });
 </script>
 </body>
