@@ -1,186 +1,162 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>KORVIL LOJA ULTRA BLACK - OFICIAL</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<script>
-// === KORVIL PRIMEIRO USO ÚNICO CHECK ===
-(function(){
-  try{
-    const userSalvo = localStorage.getItem('korvil_user');
-    const primeiroUso = localStorage.getItem('korvil_primeiro_uso_feito');
-    if(!userSalvo || !primeiroUso){
-      // primeiro uso - nunca logou -> mostra login único
-      location.replace('./login/index.html');
-    }
-  }catch(e){
-    location.replace('./login/index.html');
-  }
-})();
-</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KORVIL LOJA</title>
 <style>
-  :root{--orange:#FF4D00;--black:#0A0A0A;}
-  body{font-family:'Syne',sans-serif;background:#0A0A0A;color:#fff}
-  .mono{font-family:'JetBrains Mono',monospace}
-  ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:#FF4D00;border-radius:10px}
-  .product-card:hover img{transform:scale(1.06)}
+*{box-sizing:border-box;margin:0;padding:0}body{background:#0A0A0A;color:#fff;font-family:Inter,system-ui}
+.header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #1a1a1a;position:sticky;top:0;background:#0A0A0A;z-index:10}
+.logo{color:#FF4D00;font-weight:900;letter-spacing:-1px;font-size:22px}
+.icons{display:flex;gap:12px}
+.icon{width:36px;height:36px;border-radius:50%;background:#151515;border:1px solid #222;display:grid;place-items:center;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;padding:20px}
+.card-prod{background:#141414;border:1px solid #222;border-radius:14px;overflow:hidden;cursor:pointer}
+.card-prod img{width:100%;aspect-ratio:1;object-fit:cover}
+.perfil{position:fixed;inset:0;background:#0A0A0A;z-index:50;display:none;overflow:auto}
+.foto-wrap{width:96px;height:96px;border-radius:50%;overflow:hidden;border:2px solid #FF4D00;position:relative;background:#111}
+.foto-wrap img{width:100%;height:100%;object-fit:contain}
+.lapis{position:absolute;bottom:0;right:0;background:#FF4D00;color:#000;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;cursor:pointer;font-size:14px}
+input{background:#0A0A0A;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;color:#fff;width:100%;margin-top:8px}
+.btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+.btn-orange{background:#FF4D00;color:#000}
 </style>
 </head>
-<body class="bg-[#0A0A0A] min-h-screen selection:bg-[#FF4D00] selection:text-black">
-<header class="sticky top-0 z-50 bg-[#0A0A0A]/90 backdrop-blur-xl border-b border-white/10">
-  <div class="max-w-[1440px] mx-auto px-4 lg:px-6 h-[72px] flex items-center justify-between gap-4">
-    <div class="flex items-center gap-5">
-      <div class="w-10 h-10 bg-[#FF4D00] text-black flex items-center justify-center font-black rounded-[10px]">K.L</div>
-      <div class="leading-none">
-        <div class="font-black text-[16px] tracking-[-0.02em]">KORVIL LOJA <span class="text-[#FF4D00]">ULTRA BLACK</span></div>
-        <div class="mono text-[9px] tracking-[0.2em] text-white/30">SISTEMA K • PRIMEIRO USO SALVO PRA SEMPRE</div>
-      </div>
-      <div class="hidden lg:flex items-center gap-2 ml-6">
-        <button data-setor="TODOS" onclick="filtrarSetor('TODOS')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-[#FF4D00] text-black font-bold">TODOS</button>
-        <button data-setor="SISTEMA K" onclick="filtrarSetor('SISTEMA K')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 hover:bg-white/20">SISTEMA K</button>
-        <button data-setor="K-TP" onclick="filtrarSetor('K-TP')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10">K-TP</button>
-        <button data-setor="K-AFORTUNADO" onclick="filtrarSetor('K-AFORTUNADO')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10">K-AFORTUNADO</button>
-        <button data-setor="K-ALMA" onclick="filtrarSetor('K-ALMA')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10">K-ALMA</button>
-      </div>
-    </div>
-    <div class="flex items-center gap-3">
-      <div class="hidden md:flex items-center gap-2 bg-[#121212] border border-white/10 rounded-full px-4 h-10 w-[260px]">
-        <span class="text-white/30">⌕</span>
-        <input id="busca" oninput="buscar()" placeholder="Buscar drop, tecido..." class="bg-transparent outline-none mono text-[12px] w-full placeholder:text-white/20"/>
-      </div>
-      <button class="w-10 h-10 bg-white/10 border border-white/10 rounded-full flex items-center justify-center hover:bg-white/20">🛒<span id="cartCount" class="ml-1 mono text-[10px]">0</span></button>
-      <div class="hidden lg:flex items-center gap-3 pl-3 border-l border-white/10">
-        <div class="text-right leading-none">
-          <div class="mono text-[10px] text-white/40">OLÁ</div>
-          <div id="userNome" class="font-bold text-[13px] tracking-[-0.01em]">KORVIL</div>
-        </div>
-        <button onclick="sairTotal()" class="mono text-[10px] px-3 py-2 rounded-full bg-white text-black font-bold hover:bg-[#FF4D00] transition">SAIR</button>
-      </div>
-    </div>
-  </div>
-  <!-- mobile setores -->
-  <div class="lg:hidden flex gap-2 px-4 pb-3 overflow-x-auto">
-    <button onclick="filtrarSetor('TODOS')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-[#FF4D00] text-black font-bold whitespace-nowrap">TODOS</button>
-    <button onclick="filtrarSetor('SISTEMA K')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 whitespace-nowrap">SISTEMA K</button>
-    <button onclick="filtrarSetor('K-TP')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 whitespace-nowrap">K-TP</button>
-    <button onclick="filtrarSetor('K-AFORTUNADO')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 whitespace-nowrap">K-AFORTUNADO</button>
-    <button onclick="filtrarSetor('K-ALMA')" class="setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 whitespace-nowrap">K-ALMA</button>
-  </div>
-</header>
+<body>
+<div class="header"><div class="logo">KORVIL</div><div class="icons"><div class="icon" id="cart">🛒</div><div class="icon" id="profileBtn">👤</div></div></div>
+<div id="loja" class="grid"></div>
 
-<main class="max-w-[1440px] mx-auto px-4 lg:px-6 py-8">
-  <div class="grid lg:grid-cols-[1fr_300px] gap-8">
-    <div>
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-[32px] font-[800] tracking-[-0.03em] leading-none">DROPS <span class="text-[#FF4D00]">ULTRA</span> <span class="mono text-[11px] font-normal text-white/30 ml-2" id="countInfo">40 produtos</span></h2>
-        <div class="mono text-[10px] text-white/30 hidden md:block">LOGADO PERMANENTE • korvil_user + primeiro_uso_feito</div>
-      </div>
-      <div id="grid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5"></div>
-    </div>
-    <aside class="space-y-4">
-      <div class="bg-[#121212] border border-white/10 rounded-[20px] p-5">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-10 h-10 rounded-full bg-[#FF4D00] text-black flex items-center justify-center font-black" id="avatar">K</div>
-          <div>
-            <div class="mono text-[10px] text-white/40">CONTA PERMANENTE</div>
-            <div id="userNome2" class="font-bold text-[14px]">Carregando...</div>
-            <div id="userEmail" class="mono text-[10px] text-white/40">-</div>
-          </div>
-        </div>
-        <div class="mono text-[10px] leading-[1.6] text-white/50 bg-[#0A0A0A] border border-white/5 rounded-[12px] p-3">
-          ✓ Logado pra sempre<br>✓ Sem precisar logar de novo<br>✓ korvil_primeiro_uso_feito = true<br>✓ korvil_sessao_permanente ativa
-        </div>
-        <button onclick="sairTotal()" class="w-full mt-4 mono text-[11px] py-3 rounded-full bg-white/10 border border-white/10 hover:bg-white hover:text-black transition">SAIR E VOLTAR PRO LOGIN</button>
-      </div>
-      <div class="bg-[#FF4D00] rounded-[20px] p-5 text-black">
-        <div class="font-black text-[18px] leading-[0.9]">KORVIL<br>ULTRA BLACK</div>
-        <div class="mono text-[11px] mt-3 leading-[1.5]">Primeiro uso mostra login único. Depois salva pra sempre e abre loja direto logado. Lógica localStorage korvil_user + korvil_primeiro_uso_feito.</div>
-      </div>
-    </aside>
-  </div>
-</main>
+<!-- Perfil -->
+<div id="perfilTela" class="perfil">
+<div style="padding:20px;max-width:560px;margin:auto">
+<div style="display:flex;justify-content:space-between;align-items:center"><h2>Meu Perfil</h2><button id="fecharPerfil" class="btn" style="background:#222;color:#fff">✕</button></div>
+<div style="display:flex;flex-direction:column;align-items:center;margin-top:18px;gap:12px">
+<div class="foto-wrap"><img id="fotoPreview" src=""/><div class="lapis" id="lapisBtn">✎</div></div>
+<input type="file" id="fotoInput" accept="image/*" style="display:none"/>
+<small id="fotoNome" style="color:#888"></small>
+</div>
+<input id="cpf" placeholder="CPF"/><input id="whats" placeholder="WhatsApp"/>
+<div style="display:flex;gap:8px"><input id="cep" placeholder="CEP"/><button class="btn btn-orange" id="buscarCep">ViaCEP</button></div>
+<input id="rua" placeholder="Rua"/><div style="display:flex;gap:8px"><input id="numero" placeholder="Número" style="border-color:#FF4D00"/><input id="bairro" placeholder="Bairro"/></div>
+<div style="display:flex;gap:8px"><input id="cidade" placeholder="Cidade"/><input id="estado" placeholder="UF" style="max-width:80px"/></div>
+<div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-orange" id="salvarPerfil">SALVAR</button><button class="btn" id="sairBtn" style="background:#111;color:#fff;margin-left:auto">SAIR ↘</button></div>
+<div id="perfilLog" style="margin-top:10px;font-size:12px;color:#aaa"></div>
+</div>
+</div>
 
 <script>
-let setorAtual='TODOS';
-let termoBusca='';
-let carrinho=0;
-const produtos=[];
-const setores=['SISTEMA K','K-TP','K-AFORTUNADO','K-ALMA'];
-const nomes=['COLETE TÁTICO ULTRA','JAQUETA K-TP BLACK','CALÇA CARGO AFORTUNADO','CAMISA SISTEMA K','MOLETOM K-ALMA HEAVY','BONÉ K.L ULTRA','BERMUDA TÁTICA','CAMISETA OVERSIZED K','PARKA SISTEMA K','KIT K-TP DROP'];
-
-for(let i=0;i<40;i++){
-  const setor=setores[i%setores.length];
-  const nome=nomes[i%nomes.length]+' '+(i+1);
-  produtos.push({id:i+1, nome, setor, preco: (199 + i*13).toFixed(2), img:'https://picsum.photos/seed/korvil'+i+'/600/800'});
-}
-
-function render(){
-  const grid=document.getElementById('grid');
-  const filtered=produtos.filter(p=>{
-    const s=setorAtual==='TODOS' || p.setor===setorAtual;
-    const b=!termoBusca || p.nome.toLowerCase().includes(termoBusca.toLowerCase());
-    return s&&b;
-  });
-  document.getElementById('countInfo').textContent=filtered.length+' produtos • '+setorAtual;
-  grid.innerHTML=filtered.map(p=>`
-    <div class="product-card group bg-[#121212] border border-white/10 rounded-[20px] overflow-hidden hover:border-[#FF4D00]/50 transition">
-      <div class="aspect-[3/4] overflow-hidden bg-[#0A0A0A] relative">
-        <img src="${p.img}" alt="${p.nome}" class="w-full h-full object-cover transition duration-700"/>
-        <div class="absolute top-3 left-3 mono text-[9px] px-2 py-1 rounded-full bg-black/70 border border-white/10 backdrop-blur">${p.setor}</div>
-        <div class="absolute top-3 right-3 mono text-[9px] px-2 py-1 rounded-full bg-[#FF4D00] text-black font-bold">#${p.id}</div>
-      </div>
-      <div class="p-4">
-        <div class="mono text-[10px] text-white/30 tracking-[0.14em]">KORVIL ULTRA</div>
-        <div class="font-bold text-[13px] leading-[1.2] mt-1 tracking-[-0.01em]">${p.nome}</div>
-        <div class="flex items-center justify-between mt-3">
-          <div class="font-black text-[14px]">R$ ${p.preco}</div>
-          <button onclick="addCart()" class="mono text-[10px] px-3 py-2 rounded-full bg-white text-black font-bold hover:bg-[#FF4D00] transition">+ CARRINHO</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-function filtrarSetor(s){
-  setorAtual=s;
-  document.querySelectorAll('.setor-btn').forEach(b=>{
-    const isActive=b.getAttribute('data-setor')===s || b.textContent.trim()===s;
-    b.className = isActive ? 'setor-btn mono text-[10px] px-3 py-2 rounded-full bg-[#FF4D00] text-black font-bold whitespace-nowrap' : 'setor-btn mono text-[10px] px-3 py-2 rounded-full bg-white/10 border border-white/10 hover:bg-white/20 whitespace-nowrap';
-    if(!b.getAttribute('data-setor')) b.setAttribute('data-setor', b.textContent.trim());
-  });
-  // fix active for buttons without data-setor attr on mobile clones
-  document.querySelectorAll('.setor-btn').forEach(b=>{ if(b.textContent.trim()===s){ b.className='setor-btn mono text-[10px] px-3 py-2 rounded-full bg-[#FF4D00] text-black font-bold whitespace-nowrap'; }});
-  render();
-}
-function buscar(){
-  termoBusca=document.getElementById('busca').value;
-  render();
-}
-function addCart(){ carrinho++; document.getElementById('cartCount').textContent=carrinho; }
-function sairTotal(){
-  // Sair total limpa tudo e na próxima volta pro login único
-  localStorage.removeItem('korvil_user');
-  // mantém primeiro_uso? Para Sair total limpa também pra forçar login na próxima vez
-  localStorage.removeItem('korvil_primeiro_uso_feito');
-  localStorage.removeItem('korvil_sessao_permanente');
+// check primeiro uso
+if(!localStorage.getItem('korvil_user') || !localStorage.getItem('korvil_primeiro_uso_feito')){
   location.href='./login/index.html';
 }
-(function initUser(){
+function utf8ToBase64(s){ return btoa(unescape(encodeURIComponent(s))); }
+function gerarNomeArquivo(nome){
+  const partes = nome.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().split(/\s+/).filter(Boolean);
+  let n = partes[0]; if(partes[1]?.[0]) n+='-'+partes[1][0]; if(partes[2]?.[0]) n+='-'+partes[2][0];
+  return n+'.json';
+}
+// loja mock
+const produtos = [{id:1,nome:'KORVIL TEE BLACK',preco:149,img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500'},{id:2,nome:'KORVIL HOODIE',preco:299,img:'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500'}];
+const lojaEl = document.getElementById('loja');
+function renderLoja(){
+  const user = JSON.parse(localStorage.getItem('korvil_user')||'{}');
+  lojaEl.innerHTML = produtos.map(p=>`<div class="card-prod" onclick="abrirProd(${p.id})"><img src="${p.img}"/><div style="padding:10px"><b>${p.nome}</b><div style="color:#FF4D00">R$ ${p.preco}</div></div></div>`).join('');
+}
+function abrirProd(id){
+  const user = localStorage.getItem('korvil_user');
+  if(!user){ alert('Para finalizar compra é necessário logar'); location.href='./login/index.html'; return; }
+  // checkout simulado - modal
+  const p = produtos.find(x=>x.id===id);
+  const end = JSON.parse(localStorage.getItem('korvil_enderecos')||'[]')[0] || {};
+  const html = `<div style="position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:60;display:grid;place-items:center"><div style="background:#141414;border:1px solid #222;border-radius:16px;padding:20px;max-width:420px;width:92%"><h3>${p.nome}</h3><p style="color:#FF4D00">R$ ${p.preco}</p><p style="margin-top:10px;font-size:13px">Endereço: ${end.rua||'Use perfil'} ${end.numero||''}</p><button onclick="gerarPix()" class="btn btn-orange" style="width:100%;margin-top:12px">COMPRAR GERAR PIX</button><div id="pixArea" style="margin-top:12px"></div><button onclick="this.parentElement.parentElement.remove()" class="btn" style="width:100%;margin-top:8px;background:#222;color:#fff">FECHAR</button><button onclick="adicionarEndereco()" class="btn" style="width:100%;margin-top:8px;background:#111;color:#FF4D00;border:1px solid #FF4D00">+ ADICIONAR OUTRO ENDEREÇO</button><button onclick="trocarEndereco()" class="btn" style="width:100%;margin-top:8px;background:#111;color:#fff">TROCAR ENDEREÇO</button></div></div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+window.abrirProd = abrirProd;
+window.gerarPix = ()=>{
+  const codigo = '00020126580014BR.GOV.BCB.PIX0136'+Math.random().toString(36).slice(2,10)+'5204000053039865406'+(149).toFixed(2)+'5802BR5920KORVIL STORE6009SAO PAULO62070503***6304ABCD';
+  document.getElementById('pixArea').innerHTML = `<div style="background:#fff;color:#000;padding:10px;border-radius:10px;text-align:center"><div style="font-size:12px;word-break:break-all">${codigo}</div><button class="btn btn-orange" style="margin-top:8px" onclick="navigator.clipboard.writeText('${codigo}')">COPIAR</button><div style="margin-top:8px"><button class="btn" style="background:#111;color:#0f0;width:100%" onclick="alert('Compra confirmada!');this.parentElement.parentElement.parentElement.parentElement.remove()">Já paguei</button></div></div>`;
+};
+window.adicionarEndereco = ()=>{
+  const cep = prompt('Digite CEP');
+  if(!cep) return;
+  fetch(`https://viacep.com.br/ws/${cep.replace(/\D/g,'')}/json`).then(r=>r.json()).then(d=>{
+    const lista = JSON.parse(localStorage.getItem('korvil_enderecos')||'[]');
+    lista.push({cep, rua:d.logradouro, bairro:d.bairro, cidade:d.localidade, estado:d.uf, numero:''});
+    localStorage.setItem('korvil_enderecos', JSON.stringify(lista));
+    alert('Endereço salvo');
+  });
+};
+window.trocarEndereco = ()=>{
+  const lista = JSON.parse(localStorage.getItem('korvil_enderecos')||'[]');
+  if(!lista.length) return alert('Nenhum endereço');
+  const idx = prompt('Escolha índice 0-'+(lista.length-1)+': '+lista.map((e,i)=>i+': '+e.rua).join(' | '));
+  if(idx!==null){ localStorage.setItem('korvil_endereco_atual', idx); alert('Endereço trocado sem sair do checkout'); }
+};
+
+// perfil
+const perfilTela = document.getElementById('perfilTela');
+document.getElementById('profileBtn').onclick = ()=>{ perfilTela.style.display='block'; carregarPerfil(); };
+document.getElementById('fecharPerfil').onclick = ()=> perfilTela.style.display='none';
+function carregarPerfil(){
+  const u = JSON.parse(localStorage.getItem('korvil_user')||'{}');
+  document.getElementById('cpf').value = u.cpf||''; document.getElementById('whats').value = u.whatsapp||'';
+  document.getElementById('cep').value = u.cep||''; document.getElementById('rua').value = u.rua||'';
+  document.getElementById('numero').value = u.numero||''; document.getElementById('bairro').value = u.bairro||'';
+  document.getElementById('cidade').value = u.cidade||''; document.getElementById('estado').value = u.estado||'';
+  if(u.foto_perfil) document.getElementById('fotoPreview').src = u.foto_perfil;
+}
+document.getElementById('lapisBtn').onclick = ()=> document.getElementById('fotoInput').click();
+document.getElementById('fotoInput').onchange = (e)=>{
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader(); reader.onload = ()=>{ document.getElementById('fotoPreview').src = reader.result; document.getElementById('fotoNome').textContent = file.name; document.getElementById('fotoPreview').dataset.base64 = reader.result; }; reader.readAsDataURL(file);
+};
+document.getElementById('buscarCep').onclick = async ()=>{
+  const cep = document.getElementById('cep').value.replace(/\D/g,'');
+  if(cep.length!==8) return alert('CEP inválido');
+  const r = await fetch(`https://viacep.com.br/ws/${cep}/json`); const d = await r.json();
+  if(d.erro) return alert('CEP não encontrado');
+  document.getElementById('rua').value = d.logradouro; document.getElementById('bairro').value = d.bairro;
+  document.getElementById('cidade').value = d.localidade; document.getElementById('estado').value = d.uf;
+  document.getElementById('numero').focus();
+};
+document.getElementById('salvarPerfil').onclick = async ()=>{
+  const log = document.getElementById('perfilLog');
   try{
-    const raw=localStorage.getItem('korvil_user');
-    if(!raw) return;
-    const u=JSON.parse(raw);
-    const nome=u.nome||u.email||'KORVIL';
-    const firstLetter=nome.trim()[0]?.toUpperCase()||'K';
-    document.getElementById('userNome').textContent=nome.split(' ')[0];
-    document.getElementById('userNome2').textContent=nome;
-    document.getElementById('userEmail').textContent=u.email||'-';
-    document.getElementById('avatar').textContent=firstLetter;
-  }catch{}
-  render();
-})();
+    const u = JSON.parse(localStorage.getItem('korvil_user')||'{}');
+    const token = localStorage.getItem('loja_github_token');
+    if(!token) throw new Error('Token não configurado');
+    const novo = {
+      ...u,
+      cpf: document.getElementById('cpf').value,
+      whatsapp: document.getElementById('whats').value,
+      cep: document.getElementById('cep').value,
+      rua: document.getElementById('rua').value,
+      numero: document.getElementById('numero').value,
+      bairro: document.getElementById('bairro').value,
+      cidade: document.getElementById('cidade').value,
+      estado: document.getElementById('estado').value,
+      foto_perfil: document.getElementById('fotoPreview').dataset.base64 || u.foto_perfil || '',
+      atualizado_em: new Date().toISOString()
+    };
+    const nomeArq = gerarNomeArquivo(novo.nome_completo);
+    const path = `korvil/sections/korvil-loja/login/contas/${nomeArq}`;
+    const url = `https://api.github.com/repos/sistemak/korvil-app/contents/${path}`;
+    let sha;
+    const getRes = await fetch(`${url}?ref=main`, {headers:{Authorization: `token ${token}`, Accept:'application/vnd.github.v3+json'}});
+    if(getRes.ok){ const d = await getRes.json(); sha = d.sha; }
+    const putRes = await fetch(url, {method:'PUT', headers:{Authorization: `token ${token}`, Accept:'application/vnd.github.v3+json','Content-Type':'application/json'}, body: JSON.stringify({message: `KORVIL UPDATE: perfil ${nomeArq}`, content: utf8ToBase64(JSON.stringify(novo,null,2)), sha, branch:'main'})});
+    const result = await putRes.json();
+    if(!putRes.ok) throw new Error(result.message);
+    localStorage.setItem('korvil_user', JSON.stringify(novo));
+    log.textContent = '✓ perfil salvo e commitado: '+result.commit.sha.slice(0,7);
+  }catch(e){ log.textContent = '✗ '+e.message; }
+};
+document.getElementById('sairBtn').onclick = ()=>{
+  localStorage.removeItem('korvil_user');
+  perfilTela.style.display='none';
+  renderLoja();
+  alert('Deslogado - loja modo visitante');
+};
+renderLoja();
 </script>
 </body>
 </html>
