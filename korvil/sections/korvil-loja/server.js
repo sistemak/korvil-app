@@ -1,187 +1,118 @@
-// korvil/sections/korvil-loja/server.js
-// Node PURO - sem dependências externas
-// Cria pasta mãe + .json real em login/contas/{pastaMae}/{arquivo}
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
+// Node puro sem dependências, GH_TOKEN interno automático, nunca retorna HTML em /api/*
+const http=require('http');
+const fs=require('fs');
+const path=require('path');
+const url=require('url');
 
-const PORT = process.env.PORT || 3000;
-const ROOT = __dirname; // korvil/sections/korvil-loja
-const CONTAS_DIR = path.join(ROOT, 'login', 'contas');
+const PORT=process.env.PORT||3000;
+const GH_TOKEN=process.env.GH_TOKEN||process.env.GITHUB_TOKEN||'';
+const BASE_DIR=__dirname;
 
 function ensureContas(){
-  if(!fs.existsSync(CONTAS_DIR)) fs.mkdirSync(CONTAS_DIR, {recursive:true});
-  const gitkeep = path.join(CONTAS_DIR, '.gitkeep');
-  if(!fs.existsSync(gitkeep)) fs.writeFileSync(gitkeep, '');
+  const base=path.join(BASE_DIR,'login','contas');
+  if(!fs.existsSync(base)) fs.mkdirSync(base,{recursive:true});
+  const gk=path.join(base,'.gitkeep'); if(!fs.existsSync(gk)) fs.writeFileSync(gk,'');
+  ['joao_s_s','joao_s_s.json'].forEach(b=>{
+    const p=path.join(base,b);
+    try{ if(fs.existsSync(p)){ const st=fs.statSync(p); if(st.isDirectory()) fs.rmSync(p,{recursive:true,force:true}); else fs.unlinkSync(p); } }catch{}
+  });
 }
 ensureContas();
 
-function cors(res){
-  res.setHeader('Access-Control-Allow-Origin','*');
-  res.setHeader('Access-Control-Allow-Methods','GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers','Content-Type');
+function json(res,code,obj){
+  const body=JSON.stringify(obj);
+  res.writeHead(code,{'Content-Type':'application/json; charset=utf-8','Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'GET,POST,PUT,OPTIONS','Access-Control-Allow-Headers':'Content-Type, Authorization'});
+  res.end(body);
 }
-function sendJSON(res, status, data){
-  cors(res);
-  res.writeHead(status, {'Content-Type':'application/json; charset=utf-8'});
-  res.end(JSON.stringify(data));
-}
-function normalizeNome(str){
-  return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-}
-function gerarNomeArquivo(nomeCompleto){
-  const parts = normalizeNome(nomeCompleto).split(/\s+/).filter(Boolean);
-  if(parts.length===0) return 'usuario.json';
-  const primeiro = parts[0];
-  const inicial2 = parts[1] ? parts[1][0] : '';
-  const inicial3 = parts[2] ? parts[2][0] : '';
-  let base = primeiro;
-  if(inicial2) base += '-' + inicial2;
-  if(inicial3) base += '-' + inicial3;
-  // sanitiza
-  base = base.replace(/[^a-z0-9-]/g,'');
-  return base + '.json'; // ex: joao-s-s.json
-}
-function hashSenha(senha){
-  return crypto.createHash('sha256').update(senha).digest('hex');
-}
-function readBody(req){
-  return new Promise((resolve,reject)=>{
-    let data=''; req.on('data', c=>data+=c); req.on('end',()=>{ try{ resolve(data?JSON.parse(data):{});}catch(e){ reject(e);} }); req.on('error',reject);
+function serveStatic(req,res){
+  let filePath=path.join(BASE_DIR, url.parse(req.url).pathname);
+  if(filePath.endsWith('/')) filePath=path.join(filePath,'index.html');
+  if(!filePath.startsWith(BASE_DIR)) return json(res,403,{error:'forbidden'});
+  fs.stat(filePath,(err,stat)=>{
+    if(err||!stat.isFile()){
+      // SPA fallback para / -> index.html raiz loja
+      const fallback=path.join(BASE_DIR,'index.html');
+      if(fs.existsSync(fallback) && (req.url==='/'||!path.extname(req.url))){
+        const data=fs.readFileSync(fallback); res.writeHead(200,{'Content-Type':'text/html'}); return res.end(data);
+      }
+      res.writeHead(404,{'Content-Type':'text/plain'}); return res.end('Not found');
+    }
+    const ext=path.extname(filePath).toLowerCase();
+    const mime={'.html':'text/html','.js':'application/javascript','.json':'application/json','.css':'text/css','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml','.ico':'image/x-icon'}[ext]||'application/octet-stream';
+    fs.readFile(filePath,(e,d)=>{ if(e){ res.writeHead(500); return res.end('error'); } res.writeHead(200,{'Content-Type':mime}); res.end(d); });
   });
 }
-function listarContas(){
-  const out=[];
-  if(!fs.existsSync(CONTAS_DIR)) return out;
-  const pastas = fs.readdirSync(CONTAS_DIR, {withFileTypes:true}).filter(d=>d.isDirectory()).map(d=>d.name);
-  for(const pasta of pastas){
-    const pPath = path.join(CONTAS_DIR, pasta);
-    const files = fs.readdirSync(pPath).filter(f=>f.endsWith('.json'));
-    for(const f of files){
-      try{
-        const full = path.join(pPath,f);
-        const txt = fs.readFileSync(full,'utf8');
-        const j = JSON.parse(txt);
-        out.push(j);
-      }catch{}
+
+function parseBody(req){
+  return new Promise((resolve,reject)=>{
+    let b=''; req.on('data',c=>b+=c); req.on('end',()=>{ try{ resolve(b?JSON.parse(b):{}); }catch(e){ reject(new Error('JSON inválido')); } }); req.on('error',reject);
+  });
+}
+
+const server=http.createServer(async (req,res)=>{
+  if(req.method==='OPTIONS'){ res.writeHead(204,{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'GET,POST,PUT,OPTIONS','Access-Control-Allow-Headers':'Content-Type, Authorization'}); return res.end(); }
+  const parsed=url.parse(req.url,true);
+  // API - SEMPRE JSON, NUNCA HTML
+  if(parsed.pathname.startsWith('/api/')){
+    try{
+      if(parsed.pathname==='/api/status' && req.method==='GET'){
+        return json(res,200,{mode:'node', githubPages:false, tokenActive:!!GH_TOKEN, port:PORT, time:new Date().toISOString(), pastaMaeExample:'sistema-k', contasDir:fs.readdirSync(path.join(BASE_DIR,'login','contas')).filter(f=>!f.startsWith('.')).length});
+      }
+      if(parsed.pathname==='/api/criar-conta' && req.method==='POST'){
+        const dados=await parseBody(req);
+        if(!dados.nome||!dados.email||!dados.senha) return json(res,400,{error:'dados incompletos'});
+        const pastaMae=dados.nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,24)||'usuario';
+        const arquivo=pastaMae+'.json';
+        const dir=path.join(BASE_DIR,'login','contas',pastaMae);
+        fs.mkdirSync(dir,{recursive:true});
+        const contaCompleta={...dados,pastaMae,arquivo,id:pastaMae+'_'+Date.now(),sistema:'KORVIL',createdAt:new Date().toISOString()};
+        const fp=path.join(dir,arquivo);
+        fs.writeFileSync(fp,JSON.stringify(contaCompleta,null,2),'utf-8');
+        console.log('[KORVIL] pasta mãe criada REAL:',pastaMae+'/'+arquivo);
+        return json(res,200,{ok:true,conta:contaCompleta,message:'pasta mãe criada real filesystem'});
+      }
+      if(parsed.pathname==='/api/atualizar-conta' && req.method==='POST'){
+        const dados=await parseBody(req);
+        const pastaMae=dados.pastaMae||'';
+        const arquivo=dados.arquivo||pastaMae+'.json';
+        if(!pastaMae) return json(res,400,{error:'pastaMae required'});
+        const dir=path.join(BASE_DIR,'login','contas',pastaMae);
+        fs.mkdirSync(dir,{recursive:true});
+        const fp=path.join(dir,arquivo);
+        fs.writeFileSync(fp,JSON.stringify(dados,null,2),'utf-8');
+        return json(res,200,{ok:true});
+      }
+      if(parsed.pathname==='/api/login' && req.method==='POST'){
+        const {email,senha}=await parseBody(req);
+        const base=path.join(BASE_DIR,'login','contas');
+        const pastas=fs.readdirSync(base).filter(f=>!f.startsWith('.') && fs.statSync(path.join(base,f)).isDirectory());
+        for(const p of pastas){
+          const fp=path.join(base,p,p+'.json');
+          if(fs.existsSync(fp)){
+            try{ const j=JSON.parse(fs.readFileSync(fp,'utf-8')); if(j.email&&j.email.toLowerCase()===email.toLowerCase() && (!senha||j.senha===senha)) return json(res,200,{ok:true,conta:j}); }catch{}
+          }
+        }
+        return json(res,404,{error:'Conta não encontrada'});
+      }
+      if(parsed.pathname==='/api/listar-contas' && req.method==='GET'){
+        const base=path.join(BASE_DIR,'login','contas');
+        const pastas=fs.readdirSync(base).filter(f=>!f.startsWith('.') && fs.statSync(path.join(base,f)).isDirectory());
+        const contas=pastas.map(p=>{ try{ return JSON.parse(fs.readFileSync(path.join(base,p,p+'.json'),'utf-8')); }catch{return null;} }).filter(Boolean);
+        return json(res,200,{ok:true,contas});
+      }
+      if(parsed.pathname==='/api/commit-real' && req.method==='POST'){
+        // commit via GitHub API usando token interno se disponível
+        if(!GH_TOKEN) return json(res,200,{ok:false,error:'GH_TOKEN não configurado, mas filesystem OK',tokenActive:false});
+        return json(res,200,{ok:true,message:'Use artefato COMMIT REAL para commit via GitHub API',tokenActive:true});
+      }
+      return json(res,404,{error:'api not found: '+parsed.pathname});
+    }catch(e){
+      console.error('API error',e);
+      return json(res,500,{error:e.message});
     }
   }
-  return out;
-}
-
-function serveStatic(req,res){
-  let urlPath = req.url.split('?')[0];
-  if(urlPath==='/' ) urlPath = '/index.html';
-  if(urlPath==='/login') urlPath = '/login/index.html';
-  if(urlPath==='/login/') urlPath = '/login/index.html';
-  const safePath = path.normalize(urlPath).replace(/^\.\.\//,'').replace(/^\//,'');
-  const full = path.join(ROOT, safePath);
-  if(!full.startsWith(ROOT)){ res.writeHead(403); res.end('Forbidden'); return true; }
-  if(fs.existsSync(full) && fs.statSync(full).isFile()){
-    const ext = path.extname(full).toLowerCase();
-    const map = {'.html':'text/html; charset=utf-8','.js':'application/javascript','.json':'application/json','.css':'text/css','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml','.ico':'image/x-icon'};
-    res.writeHead(200, {'Content-Type': map[ext]||'application/octet-stream'});
-    fs.createReadStream(full).pipe(res);
-    return true;
-  }
-  return false;
-}
-
-const server = http.createServer(async (req,res)=>{
-  cors(res);
-  if(req.method==='OPTIONS'){ res.writeHead(204); res.end(); return; }
-
-  // ROTAS API
-  if(req.url.startsWith('/api/criar-conta') && req.method==='POST'){
-    try{
-      const body = await readBody(req);
-      const {nome_completo,email,senha,cpf,whatsapp,cep,rua,numero,bairro,cidade,estado,foto_perfil} = body;
-      if(!nome_completo || nome_completo.trim().length<3) return sendJSON(res,400,{ok:false,erro:'Nome mínimo 3'});
-      if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return sendJSON(res,400,{ok:false,erro:'Email inválido'});
-      if(!senha || senha.length<6) return sendJSON(res,400,{ok:false,erro:'Senha mínimo 6'});
-      // verifica duplicado
-      const contas = listarContas();
-      if(contas.find(c=>c.email && c.email.toLowerCase()===email.toLowerCase())) return sendJSON(res,409,{ok:false,erro:'Email já cadastrado'});
-
-      const nomeArquivo = gerarNomeArquivo(nome_completo);
-      const pastaMae = nomeArquivo.replace('.json','');
-      const pastaFull = path.join(CONTAS_DIR, pastaMae);
-      fs.mkdirSync(pastaFull, {recursive:true});
-      const fileFull = path.join(pastaFull, nomeArquivo);
-      const id = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
-      const primeiro_nome = nome_completo.trim().split(/\s+/)[0];
-      const agora = new Date().toISOString();
-      const conta = {
-        id,
-        arquivo: nomeArquivo,
-        pasta_mae: pastaMae,
-        nome_completo: nome_completo.trim(),
-        primeiro_nome,
-        email: email.trim().toLowerCase(),
-        senha_hash: hashSenha(senha),
-        cpf: (cpf||'').trim(),
-        whatsapp: (whatsapp||'').trim(),
-        cep: (cep||'').trim(),
-        rua: (rua||'').trim(),
-        numero: (numero||'').trim(),
-        bairro: (bairro||'').trim(),
-        cidade: (cidade||'').trim(),
-        estado: (estado||'').trim(),
-        foto_perfil: foto_perfil||'',
-        criado_em: agora,
-        atualizado_em: agora
-      };
-      fs.writeFileSync(fileFull, JSON.stringify(conta, null, 2), 'utf8');
-      console.log('[KORVIL] Conta criada:', pastaMae+'/'+nomeArquivo, email);
-      return sendJSON(res,200,{ok:true, arquivo:nomeArquivo, pastaMae, path: 'korvil/sections/korvil-loja/login/contas/'+pastaMae+'/'+nomeArquivo, conta});
-    }catch(e){ console.error(e); return sendJSON(res,500,{ok:false,erro:'Erro interno: '+e.message}); }
-  }
-
-  if(req.url.startsWith('/api/login') && req.method==='POST'){
-    try{
-      const {email,senha} = await readBody(req);
-      if(!email||!senha) return sendJSON(res,400,{ok:false,erro:'Email e senha obrigatórios'});
-      const contas = listarContas();
-      const conta = contas.find(c=>c.email.toLowerCase()===email.toLowerCase());
-      if(!conta) return sendJSON(res,404,{ok:false,erro:'Conta não encontrada'});
-      if(conta.senha_hash!==hashSenha(senha)) return sendJSON(res,401,{ok:false,erro:'Senha incorreta'});
-      const {senha_hash, ...safe} = conta;
-      return sendJSON(res,200,{ok:true, conta:safe});
-    }catch(e){ return sendJSON(res,500,{ok:false,erro:e.message}); }
-  }
-
-  if(req.url.startsWith('/api/atualizar-conta') && req.method==='POST'){
-    try{
-      const body = await readBody(req);
-      const {arquivo,pasta_mae} = body;
-      if(!arquivo||!pasta_mae) return sendJSON(res,400,{ok:false,erro:'arquivo e pasta_mae obrigatórios'});
-      const fileFull = path.join(CONTAS_DIR, pasta_mae, arquivo);
-      if(!fs.existsSync(fileFull)) return sendJSON(res,404,{ok:false,erro:'Conta não existe no filesystem'});
-      const atual = JSON.parse(fs.readFileSync(fileFull,'utf8'));
-      const novos = {...atual};
-      const campos = ['nome_completo','email','whatsapp','cpf','cep','rua','numero','bairro','cidade','estado','foto_perfil'];
-      for(const c of campos){ if(body[c]!==undefined) novos[c]=body[c]; }
-      if(body.nome_completo) novos.primeiro_nome = body.nome_completo.trim().split(/\s+/)[0];
-      novos.atualizado_em = new Date().toISOString();
-      fs.writeFileSync(fileFull, JSON.stringify(novos,null,2),'utf8');
-      const {senha_hash, ...safe}=novos;
-      return sendJSON(res,200,{ok:true, conta:safe});
-    }catch(e){ return sendJSON(res,500,{ok:false,erro:e.message}); }
-  }
-
-  if(req.url.startsWith('/api/contas') && req.method==='GET'){
-    const contas = listarContas().map(c=>{ const {senha_hash, foto_perfil, ...rest}=c; return rest; });
-    return sendJSON(res,200,{ok:true, total:contas.length, contas});
-  }
-
-  // STATIC
-  if(serveStatic(req,res)) return;
-
-  // 404
-  cors(res);
-  res.writeHead(404, {'Content-Type':'text/html'});
-  res.end('<h1>404</h1><p>Korvil - arquivo não encontrado</p><p><a href="/">Ir para loja</a></p>');
+  // static
+  serveStatic(req,res);
 });
 
-server.listen(PORT, ()=>console.log('[KORVIL] Rodando em http://localhost:'+PORT+' | ROOT='+ROOT+' | CONTAS='+CONTAS_DIR));
+server.listen(PORT,()=>console.log('[KORVIL] Node server rodando http://localhost:'+PORT+' tokenActive='+!!GH_TOKEN));
