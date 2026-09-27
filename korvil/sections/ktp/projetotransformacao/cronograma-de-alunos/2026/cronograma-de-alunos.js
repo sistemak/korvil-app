@@ -17,7 +17,7 @@ window.KTP_CRONOGRAMA.ALUNOS_DB = {
     "tipo": "ALUNO"
   },
   "hvitoria3": {
-    "nome": "Hellem VitÃ³ria Carvalho dos Santos",
+    "nome": "Hellem VitÃÂ³ria Carvalho dos Santos",
     "tipo": "ALUNO"
   },
   "alexandra4": {
@@ -49,7 +49,7 @@ window.KTP_CRONOGRAMA.ALUNOS_DB = {
     "tipo": "ALUNO"
   },
   "angel11": {
-    "nome": "AngÃ©lica",
+    "nome": "AngÃÂ©lica",
     "tipo": "ALUNO"
   },
   "anapaula12": {
@@ -81,7 +81,7 @@ window.KTP_CRONOGRAMA.ALUNOS_DB = {
     "tipo": "ALUNO"
   },
   "lau19": {
-    "nome": "Laura Jesus AragÃ£o",
+    "nome": "Laura Jesus AragÃÂ£o",
     "tipo": "ALUNO"
   },
   "cass20": {
@@ -89,7 +89,7 @@ window.KTP_CRONOGRAMA.ALUNOS_DB = {
     "tipo": "ALUNO"
   },
   "katia21": {
-    "nome": "KÃ¡tia Paoli",
+    "nome": "KÃÂ¡tia Paoli",
     "tipo": "ALUNO"
   },
   "mara22": {
@@ -117,11 +117,11 @@ window.KTP_CRONOGRAMA.ALUNOS_DB = {
     "tipo": "ALUNO"
   },
   "joce28": {
-    "nome": "JocÃ©lia",
+    "nome": "JocÃÂ©lia",
     "tipo": "ALUNO"
   },
   "marcos29": {
-    "nome": "Marcos FranÃ§a",
+    "nome": "Marcos FranÃÂ§a",
     "tipo": "ALUNO"
   },
   "lucas30": {
@@ -145,7 +145,7 @@ window.KTP_CRONOGRAMA.ALUNOS_DB = {
     "tipo": "ALUNO"
   },
   "pati35": {
-    "nome": "PatrÃ­cia",
+    "nome": "PatrÃÂ­cia",
     "tipo": "ALUNO"
   },
   "mel36": {
@@ -153,11 +153,11 @@ window.KTP_CRONOGRAMA.ALUNOS_DB = {
     "tipo": "ALUNO"
   },
   "naty37": {
-    "nome": "NatÃ¡lia Melo",
+    "nome": "NatÃÂ¡lia Melo",
     "tipo": "ALUNO"
   },
   "gon38": {
-    "nome": "JosÃ© Gonzaga",
+    "nome": "JosÃÂ© Gonzaga",
     "tipo": "ALUNO"
   },
   "nicol39": {
@@ -165,11 +165,11 @@ window.KTP_CRONOGRAMA.ALUNOS_DB = {
     "tipo": "ALUNO"
   },
   "madel40": {
-    "nome": "Maria Adelaide Santos AraÃºjo",
+    "nome": "Maria Adelaide Santos AraÃÂºjo",
     "tipo": "ALUNO"
   },
   "ednaS41": {
-    "nome": "Edna dos Santos da ConceiÃ§Ã£o",
+    "nome": "Edna dos Santos da ConceiÃÂ§ÃÂ£o",
     "tipo": "ALUNO"
   },
   "tchuco1": {
@@ -185,6 +185,12 @@ window.KTP_CRONOGRAMA.ALUNOS_DB = {
     "tipo": "ALUNO",
     "id": 42,
     "pasta": "42-yyyy42"
+  },
+  "ffff44": {
+    "nome": "Ffff",
+    "tipo": "ALUNO",
+    "id": 44,
+    "pasta": "44-ffff44"
   }
 };
 
@@ -202,19 +208,23 @@ window.KTP_CRONOGRAMA.ALUNOS_PRESENCIAL = {
     "tipo": "ALUNO"
   },
   "hvitoria3": {
-    "nome": "Hellem VitÃ³ria Carvalho dos Santos",
+    "nome": "Hellem VitÃÂ³ria Carvalho dos Santos",
     "tipo": "ALUNO"
   },
   "madel40": {
-    "nome": "Maria Adelaide Santos AraÃºjo",
+    "nome": "Maria Adelaide Santos AraÃÂºjo",
     "tipo": "ALUNO"
   },
   "ednaS41": {
-    "nome": "Edna dos Santos da ConceiÃ§Ã£o",
+    "nome": "Edna dos Santos da ConceiÃÂ§ÃÂ£o",
     "tipo": "ALUNO"
   },
   "yyyy42": {
     "nome": "Yyyy",
+    "tipo": "ALUNO"
+  },
+  "ffff44": {
+    "nome": "Ffff",
     "tipo": "ALUNO"
   }
 };
@@ -233,7 +243,7 @@ window.KTP_CRONOGRAMA.ALUNOS_ONLINE = {
 window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
   "PRESENCIAL": [
     {
-      "hora": "06h00 ð¦",
+      "hora": "06h00 Ã°ÂÂÂ¦",
       "status": "DESATIVADOS",
       "alunos": [
         {
@@ -272,7 +282,7 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "aluno": "Jossiane Alves",
           "dias": "Seg a Sex",
           "freq": "5x",
-          "objetivo": "DefiniÃ§Ã£o",
+          "objetivo": "DefiniÃÂ§ÃÂ£o",
           "valor": "R$150,00",
           "matricula": "R$0,00",
           "total": "R$150,00",
@@ -302,7 +312,7 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "aluno": "amigaadrum",
           "dias": "--",
           "freq": "--",
-          "objetivo": "SaÃºde",
+          "objetivo": "SaÃÂºde",
           "valor": "--",
           "matricula": "--",
           "total": "--",
@@ -332,7 +342,7 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "aluno": "amigaadrdois",
           "dias": "--",
           "freq": "--",
-          "objetivo": "SaÃºde",
+          "objetivo": "SaÃÂºde",
           "valor": "--",
           "matricula": "--",
           "total": "--",
@@ -359,16 +369,16 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
       ]
     },
     {
-      "hora": "08h00 ð¢",
+      "hora": "08h00 Ã°ÂÂÂ¢",
       "status": "ATIVOS",
       "alunos": [
         {
           "n": 0,
           "id": "mag1",
           "aluno": "Magda Gomes dos Santos",
-          "dias": "Segunda, TerÃ§a, Quarta, Quinta, Sexta",
+          "dias": "Segunda, TerÃÂ§a, Quarta, Quinta, Sexta",
           "freq": "5x",
-          "objetivo": "DefiniÃ§Ã£o Muscular",
+          "objetivo": "DefiniÃÂ§ÃÂ£o Muscular",
           "valor": "R$150,00",
           "matricula": "R$50,00",
           "total": "R$200,00",
@@ -380,13 +390,13 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "genero": "Feminino",
           "whats": "(13) 99636-4009",
           "email": "magdagomes998@gmail.com",
-          "nivel_atividade": "IntermediÃ¡rio",
+          "nivel_atividade": "IntermediÃÂ¡rio",
           "q1": "Sim",
           "q2": "Irregular",
           "q3": "9 horas",
-          "q4": "NÃ£o",
-          "q5": "AbdÃ´men",
-          "q6": "NÃ£o",
+          "q4": "NÃÂ£o",
+          "q5": "AbdÃÂ´men",
+          "q6": "NÃÂ£o",
           "q7": "Sim",
           "q8": "Sim",
           "q9": "Anti depressivo",
@@ -398,7 +408,7 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "aluno": "Maria Carla Carvalho Santos",
           "dias": "Segunda, Quinta, Sexta",
           "freq": "3x",
-          "objetivo": "Emagrecimento | SaÃºde | Hipertrofia | DefiniÃ§Ã£o Muscular | Condicionamento FÃ­sico | ReabilitaÃ§Ã£o FÃ­sica",
+          "objetivo": "Emagrecimento | SaÃÂºde | Hipertrofia | DefiniÃÂ§ÃÂ£o Muscular | Condicionamento FÃÂ­sico | ReabilitaÃÂ§ÃÂ£o FÃÂ­sica",
           "valor": "R$100,00",
           "matricula": "R$50,00",
           "total": "R$150,00",
@@ -414,9 +424,9 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "q1": "Sim",
           "q2": "Mais ou menos, preciso melhorar",
           "q3": "6 a 7 horas",
-          "q4": "NÃ£o",
-          "q5": "Barriga, braÃ§os e pernas",
-          "q6": "NÃ£o",
+          "q4": "NÃÂ£o",
+          "q5": "Barriga, braÃÂ§os e pernas",
+          "q6": "NÃÂ£o",
           "q7": "Sim",
           "q8": "Sim",
           "q9": "Vitaminas e ferro norimpurum",
@@ -425,10 +435,10 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
         {
           "n": 2,
           "id": "hvitoria3",
-          "aluno": "Hellem VitÃ³ria Carvalho dos Santos",
+          "aluno": "Hellem VitÃÂ³ria Carvalho dos Santos",
           "dias": "Segunda, Quinta, Sexta",
           "freq": "3x",
-          "objetivo": "DefiniÃ§Ã£o Muscular | SaÃºde | Hipertrofia | Condicionamento FÃ­sico | ReabilitaÃ§Ã£o FÃ­sica | Emagrecimento",
+          "objetivo": "DefiniÃÂ§ÃÂ£o Muscular | SaÃÂºde | Hipertrofia | Condicionamento FÃÂ­sico | ReabilitaÃÂ§ÃÂ£o FÃÂ­sica | Emagrecimento",
           "valor": "R$100,00",
           "matricula": "R$50,00",
           "total": "R$150,00",
@@ -442,23 +452,23 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "email": "vitoria2018201@gmail.com",
           "nivel_atividade": "Iniciante",
           "q1": "Sim",
-          "q2": "Normal,preciso aumentar a proteÃ­na",
+          "q2": "Normal,preciso aumentar a proteÃÂ­na",
           "q3": "7 horas",
-          "q4": "NÃ£o",
-          "q5": "BraÃ§os,barriga, culote e pernas.",
-          "q6": "NÃ£o",
+          "q4": "NÃÂ£o",
+          "q5": "BraÃÂ§os,barriga, culote e pernas.",
+          "q6": "NÃÂ£o",
           "q7": "Sim",
           "q8": "Sim",
-          "q9": "SÃ³ noripurum",
+          "q9": "SÃÂ³ noripurum",
           "plano": "Presencial 3x"
         },
         {
           "n": 3,
           "id": "madel40",
-          "aluno": "Maria Adelaide Santos AraÃºjo",
+          "aluno": "Maria Adelaide Santos AraÃÂºjo",
           "dias": "Segunda, Quinta",
           "freq": "2x",
-          "objetivo": "Emagrecimento | DefiniÃ§Ã£o Muscular | SaÃºde | Hipertrofia | Condicionamento FÃ­sico | ReabilitaÃ§Ã£o FÃ­sica",
+          "objetivo": "Emagrecimento | DefiniÃÂ§ÃÂ£o Muscular | SaÃÂºde | Hipertrofia | Condicionamento FÃÂ­sico | ReabilitaÃÂ§ÃÂ£o FÃÂ­sica",
           "valor": "R$80,00",
           "matricula": "R$50,00",
           "total": "R$130,00",
@@ -470,19 +480,19 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "genero": "Feminino",
           "whats": "(13) 99653-6319",
           "email": "mariaadelaidesantos2014@gmail.com",
-          "nivel_atividade": "IntermediÃ¡rio",
+          "nivel_atividade": "IntermediÃÂ¡rio",
           "q1": "Sim",
           "q2": "Boa",
           "q3": "Quatro",
-          "q4": "NÃ£o",
+          "q4": "NÃÂ£o",
           "q5": "Tudo",
           "q6": "Sim",
-          "q7": "NÃ£o",
-          "q8": "NÃ£o",
-          "q9": "NÃ£o",
+          "q7": "NÃÂ£o",
+          "q8": "NÃÂ£o",
+          "q9": "NÃÂ£o",
           "plano": "Mensal Presencial 2x",
           "cep": "11250-600",
-          "rua": "CondomÃ­nio Portal dos Dourados",
+          "rua": "CondomÃÂ­nio Portal dos Dourados",
           "numero": "2407",
           "bairro": "Jardim Vicente de Carvalho",
           "cidade": "Bertioga"
@@ -490,10 +500,10 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
         {
           "n": 4,
           "id": "ednaS41",
-          "aluno": "Edna dos Santos da ConceiÃ§Ã£o",
+          "aluno": "Edna dos Santos da ConceiÃÂ§ÃÂ£o",
           "dias": "Segunda, Quinta, Sexta",
           "freq": "3x",
-          "objetivo": "DefiniÃ§Ã£o Muscular",
+          "objetivo": "DefiniÃÂ§ÃÂ£o Muscular",
           "valor": "R$100,00",
           "matricula": "R$50,00",
           "total": "R$150,00",
@@ -507,11 +517,11 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "email": "santosedna2808@gmail.com",
           "nivel_atividade": "Iniciante",
           "q1": "Sim",
-          "q2": "NÃ£o tÃ£o saudÃ¡vel",
+          "q2": "NÃÂ£o tÃÂ£o saudÃÂ¡vel",
           "q3": "Poucas",
           "q4": "Leite",
           "q5": "Barriga e perna",
-          "q6": "NÃ£o",
+          "q6": "NÃÂ£o",
           "q7": "Sim",
           "q8": "Sim",
           "q9": "Sim. Cloridrato de Sertralina",
@@ -525,13 +535,13 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
       ]
     },
     {
-      "hora": "19h00 â­",
+      "hora": "19h00 Ã¢Â­Â",
       "status": "ATIVOS",
       "alunos": [
         {
           "n": 0,
           "id": "gon38",
-          "aluno": "JosÃ© Gonzaga",
+          "aluno": "JosÃÂ© Gonzaga",
           "dias": "Seg Qua Sex",
           "freq": "3x",
           "objetivo": "Hipertrofia",
@@ -564,7 +574,7 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "aluno": "Nicoli da Silga Guedes",
           "dias": "Segunda, Quarta, Sexta",
           "freq": "3x",
-          "objetivo": "DefiniÃ§Ã£o Muscular | Condicionamento FÃ­sico | ReabilitaÃ§Ã£o FÃ­sica | SaÃºde",
+          "objetivo": "DefiniÃÂ§ÃÂ£o Muscular | Condicionamento FÃÂ­sico | ReabilitaÃÂ§ÃÂ£o FÃÂ­sica | SaÃÂºde",
           "valor": "R$100,00",
           "matricula": "R$50,00",
           "total": "R$150,00",
@@ -592,7 +602,7 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "n": 42,
           "id": "yyyy42",
           "aluno": "Yyyy",
-          "dias": "Segunda, Terça, Quarta, Quinta, Sexta",
+          "dias": "Segunda, TerÃ§a, Quarta, Quinta, Sexta",
           "freq": "5x",
           "objetivo": "Ganho de Peso",
           "valor": "R$150,00",
@@ -606,6 +616,47 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "genero": "Feminino",
           "whats": "(13) 99769-0898",
           "email": "sistemak.srv@gmail.com",
+          "nivel_atividade": "IntermediÃ¡rio",
+          "q1": "",
+          "q2": "",
+          "q3": "",
+          "q4": "",
+          "q5": "",
+          "q6": "",
+          "q7": "",
+          "q8": "",
+          "q9": "",
+          "plano": "Presencial 5x",
+          "cep": "11250-524",
+          "rua": "Rua Oswaldo Cruz",
+          "numero": "2407",
+          "bairro": "Jardim Vicente de Carvalho",
+          "cidade": "Bertioga"
+        }
+      ]
+    },
+    {
+      "hora": "00:00 ⭐",
+      "status": "ATIVOS",
+      "alunos": [
+        {
+          "n": 44,
+          "id": "ffff44",
+          "aluno": "Ffff",
+          "dias": "Segunda, Terça, Quarta, Quinta, Sexta",
+          "freq": "5x",
+          "objetivo": "Ganho de Peso",
+          "valor": "R$150,00",
+          "matricula": "R$50,00",
+          "total": "R$200,00",
+          "venc": "27/10/2026",
+          "status": "Ativo",
+          "cpf": "453.814.988-88",
+          "nasc": "2026-09-27",
+          "idade": "0 anos",
+          "genero": "Feminino",
+          "whats": "(13) 99769-0898",
+          "email": "korvil.p@gmail.com",
           "nivel_atividade": "Intermediário",
           "q1": "",
           "q2": "",
@@ -637,7 +688,7 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "aluno": "Tchuco Silva",
           "dias": "Segunda a Sexta",
           "freq": "5x",
-          "objetivo": "Condicionamento FÃ­sico | SaÃºde",
+          "objetivo": "Condicionamento FÃÂ­sico | SaÃÂºde",
           "valor": "R$60,00",
           "matricula": "R$0,00",
           "total": "R$60,00",
@@ -667,7 +718,7 @@ window.KTP_CRONOGRAMA.CRONOGRAMA_DB = {
           "aluno": "Daniele Vieira Leite",
           "dias": "Seg a Sex",
           "freq": "5x",
-          "objetivo": "DefiniÃ§Ã£o",
+          "objetivo": "DefiniÃÂ§ÃÂ£o",
           "valor": "R$60,00",
           "matricula": "R$0,00",
           "total": "R$60,00",
