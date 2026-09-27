@@ -1,17 +1,19 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Contas</title>
-<style>body{background:#000;color:#fff;font-family:monospace;padding:24px} a{color:#ff6a00}</style></head>
-<body><h2 style="color:#ff6a00">KORVIL CONTAS - Pasta Mãe</h2>
-<p>Path final: <code>korvil/sections/korvil-loja/login/contas/{pasta-mae}/{pasta-mae}.json</code></p>
-<p>Ex: <code>sistema-k/sistema-k.json</code> contém todos dados exatamente como preencher no Index login.</p>
-<div id="lista">Carregando...</div>
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KORVIL CONTAS - PASTA MAE</title>
+<style>body{background:#0a0a0a;color:#fff;font-family:Inter,system-ui;padding:24px} a{color:#ff6a00} .card{background:#141414;border:1px solid #2a2a2a;border-radius:12px;padding:16px;margin:12px 0}</style></head>
+<body>
+<h1 style="color:#ff6a00">KORVIL LOJA - CONTAS / PASTA MAE</h1>
+<p>Estrutura: login/contas/{pasta-mae}/{pasta-mae}.json - criado automaticamente sem token no login via GH_TOKEN interno</p>
+<div id="lista"></div>
 <script>
 async function load(){
-  try{
-    const res = await fetch('_index.json');
-    const txt = await res.text();
-    let data; try{ data = JSON.parse(txt); }catch{ document.getElementById('lista').textContent='Sem _index.json'; return; }
-    document.getElementById('lista').innerHTML = data.map(c=>'<div style="border:1px solid #222;padding:12px;margin:8px 0;border-radius:10px"><b>'+c.pasta_mae+'</b> - '+c.nome_completo+' - '+c.email+'<br/><small>'+c.arquivo+'</small> - <a href="'+c.pasta_mae+'/'+c.arquivo+'" target="_blank">ver JSON</a></div>').join('');
-  }catch(e){ document.getElementById('lista').textContent='Erro: '+e.message; }
+  const div=document.getElementById('lista');
+  // lista localStorage para demo Pages
+  const contas=[];
+  for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k.startsWith('korvil_contas_')||k==='korvil_user'){ try{ contas.push(JSON.parse(localStorage.getItem(k))); }catch{} } }
+  if(!contas.length){ div.innerHTML='<div class=card>Nenhuma conta local. Crie via login/index.html - pasta mae sera criada automaticamente.</div>'; return; }
+  div.innerHTML=contas.map(c=>`<div class=card><b>${c.nomeCompleto||c.nome||c.pastaMae}</b><br> Pasta: ${c.pastaMae}<br> Arquivo: ${c.fileName||c.pastaMae+'.json'}<br> Email: ${c.email||''}<br><small>${c.criadoEm||''} - ${c.origem||''}</small></div>`).join('');
 }
 load();
 </script>
