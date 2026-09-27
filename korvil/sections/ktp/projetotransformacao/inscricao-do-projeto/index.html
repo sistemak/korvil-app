@@ -169,10 +169,13 @@ async function enviarWhatsApp(){
   const nomeCompleto = (nomeEl ? nomeEl.value : '').trim();
   if(!nomeCompleto){ alert('Preencha nome completo'); return; }
 
-  const basePath = "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial";
-  const TOKEN_ATUAL = (typeof GH_TOKEN !== 'undefined' ? GH_TOKEN : (window.GH_TOKEN || localStorage.getItem('gh_token') || ''));
+  const TOKEN_ATUAL = (typeof GH_TOKEN !== 'undefined' ? GH_TOKEN : (window.GH_TOKEN || window.GH_TOKEN_REAL || localStorage.getItem('ktpRealToken') || localStorage.getItem('gh_token') || ''));
+  if(!TOKEN_ATUAL){ alert('GH_TOKEN não encontrado. Cole no campo de token do master.'); return; }
 
-  // 1. Determinar último ignorando pastas só número 42,43 e json solto fora da mãe
+  const basePath = "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial";
+  const centralPath = "korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.js";
+
+  // 1. Determinar último número pasta mãe
   let max = 0;
   try{
     const r = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}?ref=main`,{
@@ -180,7 +183,7 @@ async function enviarWhatsApp(){
     });
     if(r.ok){
       const lista = await r.json();
-      const reMae = /^(\d+)-/; // só conta pasta mãe tipo 41-nome41
+      const reMae = /^(\d+)-/;
       if(Array.isArray(lista)){
         for(const it of lista){
           const m = it.name.match(reMae);
@@ -194,53 +197,174 @@ async function enviarWhatsApp(){
   }catch(e){ console.warn('fallback max', e); max = 41; }
 
   let prox = max + 1;
-  if(prox === 43) prox = 44; // pula 43 bugado
-  if(prox < 42) prox = 42; // após deleção último é 41 então prox 42
+  if(prox === 43) prox = 44;
+  if(prox < 42) prox = 42;
 
-  // 2. primeiroNomeReal = primeiro nome real normalizado a-z0-9 sem cópia genérica
   const primeiro = nomeCompleto.split(/\s+/)[0] || 'aluno';
-  const primeiroNomeReal = primeiro.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-    .replace(/[^a-z0-9]/g,'');
-
-  // 3. pasta mãe = `${prox}-${primeiroNomeReal}${prox}` ex: 42-marcos42 DINÂMICO REAL
+  const primeiroNomeReal = primeiro.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
   const pastaMae = `${prox}-${primeiroNomeReal}${prox}`;
-  const nomeArq = `${pastaMae}.json`; // ex: 42-marcos42.json SÓ DENTRO DA MÃE
-  const fullPath = `${basePath}/${pastaMae}/${nomeArq}`; // ÚNICO CAMINHO
+  const nomeArq = `${pastaMae}.json`;
+  const fullPath = `${basePath}/${pastaMae}/${nomeArq}`;
 
-  // 4. conteúdo TELA 1-2-3 ordem exata com dados reais
-  const dadosReais = {
+  // Coleta TODOS dados reais das 3 telas
+  const objetivos = document.getElementById('objetivos')?.value || objetivosSelecionados.join(' | ');
+  const nivelAtividade = document.getElementById('nivelAtividade')?.value || '';
+  const q1 = document.getElementById('q1')?.value || '';
+  const q2 = document.getElementById('q2')?.value || '';
+  const q3 = document.getElementById('q3')?.value || '';
+  const q4 = document.getElementById('q4')?.value || '';
+  const q5 = document.getElementById('q5')?.value || '';
+  const q6 = document.getElementById('q6')?.value || '';
+  const q7 = document.getElementById('q7')?.value || '';
+  const q8 = document.getElementById('q8')?.value || '';
+  const q9 = document.getElementById('q9')?.value || '';
+  const cpf = document.getElementById('cpf')?.value || '';
+  const nasc = document.getElementById('nasc')?.value || '';
+  const idade = document.getElementById('idade')?.value || '';
+  const genero = document.getElementById('publico')?.value || '';
+  const whats = document.getElementById('whats')?.value || '';
+  const email = document.getElementById('email')?.value || '';
+  const cep = document.getElementById('cep')?.value || '';
+  const rua = document.getElementById('rua')?.value || '';
+  const numero = document.getElementById('numero')?.value || '';
+  const bairro = document.getElementById('bairro')?.value || '';
+  const cidade = document.getElementById('cidade')?.value || '';
+
+  const vencData = new Date();
+  vencData.setDate(vencData.getDate()+30);
+  const vencStr = vencData.toLocaleDateString('pt-BR');
+
+  const dadosCompletos = {
     id: prox,
     pastaMae: pastaMae,
     arquivo: nomeArq,
     caminhoCompleto: fullPath,
     nome: nomeCompleto,
     primeiroNome: primeiroNomeReal,
-    whatsapp: (document.getElementById('whats')?.value || ''),
+    idSlug: `${primeiroNomeReal}${prox}`,
     // TELA 1
-    tela1: { nome: nomeCompleto, timestamp: new Date().toISOString() },
+    objetivos: objetivos,
+    objetivosArray: objetivosSelecionados,
+    nivelAtividade: nivelAtividade,
+    q1: q1, q2: q2, q3: q3, q4: q4, q5: q5, q6: q6, q7: q7, q8: q8, q9: q9,
     // TELA 2
-    tela2: { presenca: 'presencial', ano: 2026 },
+    plano: plano,
+    dias: dias,
+    hora: hora,
     // TELA 3
-    tela3: { projeto: 'transformacao', status: 'inscrito' },
+    cpf: cpf, nasc: nasc, idade: idade, genero: genero, whats: whats, email: email,
+    cep: cep, rua: rua, numero: numero, bairro: bairro, cidade: cidade,
     criadoEm: new Date().toISOString(),
-    versao: 'V22-FINAL'
+    versao: 'V23-3ACOES'
   };
-  const conteudoStr = JSON.stringify(dadosReais, null, 2);
+
+  const conteudoStr = JSON.stringify(dadosCompletos, null, 2);
   const conteudoBase64 = btoa(unescape(encodeURIComponent(conteudoStr)));
 
-  // 5. ONLY ONE PUT - nunca criar fora da mãe
+  // AÇÃO 1: PUT pasta mãe individual
   const putRes = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${fullPath}`,{
     method:'PUT',
     headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Content-Type":"application/json" },
-    body: JSON.stringify({ message: `feat: inscricao ${pastaMae} [V22]`, content: conteudoBase64, branch: 'main' })
+    body: JSON.stringify({ message: `feat: inscricao ${pastaMae} [V23-3ACOES]`, content: conteudoBase64, branch: 'main' })
   });
   if(!putRes.ok){
     const txt = await putRes.text();
-    throw new Error('PUT único falhou: '+txt);
+    throw new Error('PUT individual falhou: '+txt);
   }
 
-  // 6. Popup mini verde CONFIRMADO #00ff88
+  // AÇÃO 2: ATUALIZAR BANCO CENTRAL cronograma-de-alunos.js com todos os dados por numeração
+  try{
+    let shaCentral = null;
+    let centralStr = null;
+    const getCentral = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${centralPath}?ref=main`,{
+      headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Accept":"application/vnd.github.v3+json" }
+    });
+    if(getCentral.ok){
+      const centralJson = await getCentral.json();
+      shaCentral = centralJson.sha;
+      centralStr = atob(centralJson.content.replace(/\n/g,''));
+    }
+
+    let centralData = {ALUNOS_DB:{}, ALUNOS_PRESENCIAL:{}, ALUNOS_ONLINE:{}, CRONOGRAMA_DB:{PRESENCIAL:[], ONLINE:[]}};
+    if(centralStr){
+      try{
+        const tempWindow = {};
+        const func = new Function('window', centralStr + '\n; return window.KTP_CRONOGRAMA || {};');
+        centralData = func(tempWindow) || centralData;
+        if(!centralData.ALUNOS_DB) centralData.ALUNOS_DB = {};
+        if(!centralData.ALUNOS_PRESENCIAL) centralData.ALUNOS_PRESENCIAL = {};
+        if(!centralData.CRONOGRAMA_DB) centralData.CRONOGRAMA_DB = {PRESENCIAL:[], ONLINE:[]};
+        if(!centralData.CRONOGRAMA_DB.PRESENCIAL) centralData.CRONOGRAMA_DB.PRESENCIAL = [];
+      }catch(e){ console.warn('parse central falhou, criando novo', e); }
+    }
+
+    // Adiciona no ALUNOS_DB
+    centralData.ALUNOS_DB[`${primeiroNomeReal}${prox}`] = {"nome": nomeCompleto, "tipo":"ALUNO", "id": prox, "pasta": pastaMae};
+
+    // Adiciona no ALUNOS_PRESENCIAL
+    centralData.ALUNOS_PRESENCIAL[`${primeiroNomeReal}${prox}`] = {"nome": nomeCompleto, "tipo":"ALUNO"};
+
+    // Adiciona no CRONOGRAMA_DB.PRESENCIAL no slot da hora
+    const horaKey = `${hora} ⭐`;
+    let slot = centralData.CRONOGRAMA_DB.PRESENCIAL.find(s => s.hora && s.hora.startsWith(hora.split(':')[0]));
+    if(!slot){
+      slot = {"hora": horaKey, "status":"ATIVOS", "alunos":[]};
+      centralData.CRONOGRAMA_DB.PRESENCIAL.push(slot);
+    }
+    const novoAlunoCronograma = {
+      "n": prox,
+      "id": `${primeiroNomeReal}${prox}`,
+      "aluno": nomeCompleto,
+      "dias": dias.join(', '),
+      "freq": `${plano.freq}x`,
+      "objetivo": objetivos,
+      "valor": `R$${plano.valor},00`,
+      "matricula": `R$${plano.mat},00`,
+      "total": `R$${parseInt(plano.valor||0)+parseInt(plano.mat||0)},00`,
+      "venc": vencStr,
+      "status": "Ativo",
+      "cpf": cpf, "nasc": nasc, "idade": idade, "genero": genero, "whats": whats, "email": email,
+      "nivel_atividade": nivelAtividade,
+      "q1": q1, "q2": q2, "q3": q3, "q4": q4, "q5": q5, "q6": q6, "q7": q7, "q8": q8, "q9": q9,
+      "plano": plano.nome || '',
+      "cep": cep, "rua": rua, "numero": numero, "bairro": bairro, "cidade": cidade
+    };
+    slot.alunos.push(novoAlunoCronograma);
+
+    // Reconstrói arquivo JS completo
+    const novoCentralStr = `// korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.js
+// ARQUIVO EXTERNO - CRONOGRAMA COMPLETO - PUXADO POR ÂNCORA
+// Caminho GitHub: https://github.com/sistemak/korvil-app/edit/main/korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.json
+window.KTP_CRONOGRAMA = window.KTP_CRONOGRAMA || {};
+
+window.KTP_CRONOGRAMA.ALUNOS_DB = ${JSON.stringify(centralData.ALUNOS_DB, null, 2)};
+
+window.KTP_CRONOGRAMA.ALUNOS_PRESENCIAL = ${JSON.stringify(centralData.ALUNOS_PRESENCIAL, null, 2)};
+
+window.KTP_CRONOGRAMA.ALUNOS_ONLINE = ${JSON.stringify(centralData.ALUNOS_ONLINE || {}, null, 2)};
+
+window.KTP_CRONOGRAMA.CRONOGRAMA_DB = ${JSON.stringify(centralData.CRONOGRAMA_DB, null, 2)};
+
+// Compatibilidade - variáveis originais por âncora
+var Sr = window.KTP_CRONOGRAMA.ALUNOS_DB;
+var pf = window.KTP_CRONOGRAMA.CRONOGRAMA_DB;
+var ALUNOS_PRESENCIAL = window.KTP_CRONOGRAMA.ALUNOS_PRESENCIAL;
+var ALUNOS_ONLINE = window.KTP_CRONOGRAMA.ALUNOS_ONLINE;
+var CRONOGRAMA = window.KTP_CRONOGRAMA.CRONOGRAMA_DB;
+
+// TOKEN FALSO SÓ PRA LEMBRAR FORMATO (não usar): hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG
+`;
+
+    const novoCentralBase64 = btoa(unescape(encodeURIComponent(novoCentralStr)));
+    const putCentral = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${centralPath}`,{
+      method:'PUT',
+      headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Content-Type":"application/json" },
+      body: JSON.stringify({ message: `feat: atualiza banco central ${pastaMae} [V23]`, content: novoCentralBase64, branch: 'main', ...(shaCentral?{sha: shaCentral}:{}) })
+    });
+    if(!putCentral.ok){ console.warn('PUT central falhou', await putCentral.text()); }
+  }catch(e){ console.warn('Erro ao atualizar banco central', e); }
+
+  // AÇÃO 2.5: Popup mini verde CONFIRMADO #00ff88
   let popup = document.getElementById('popup-confirmado');
   if(!popup){
     popup = document.createElement('div');
@@ -252,12 +376,13 @@ async function enviarWhatsApp(){
   popup.style.display = 'block';
   setTimeout(()=>{ if(popup) popup.style.display='none'; },3000);
 
-  // 7. WhatsApp via workflow dispatch sem sair da página
+  // AÇÃO 3: WhatsApp via workflow dispatch sem sair da página com TODOS dados
   try{
+    const msgWhats = `NOVA INSCRIÇÃO K-TP%0A%0ANome: ${encodeURIComponent(nomeCompleto)}%0AID: ${prox} - ${pastaMae}%0APlano: ${encodeURIComponent(plano.nome||'')}%0ADias: ${encodeURIComponent(dias.join(','))}%0AHora: ${encodeURIComponent(hora)}%0AWhats: ${encodeURIComponent(whats)}%0AObjetivo: ${encodeURIComponent(objetivos)}%0ACPF: ${encodeURIComponent(cpf)}`;
     await fetch(`https://api.github.com/repos/sistemak/korvil-app/actions/workflows/whatsapp.yml/dispatches`,{
       method:'POST',
       headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Content-Type":"application/json" },
-      body: JSON.stringify({ ref: 'main', inputs: { pasta: pastaMae, nome: nomeCompleto, caminho: fullPath } })
+      body: JSON.stringify({ ref: 'main', inputs: { pasta: pastaMae, nome: nomeCompleto, caminho: fullPath, mensagem: msgWhats } })
     });
   }catch(e){ console.warn('dispatch whatsapp', e); }
 }
