@@ -1,18 +1,18 @@
 {
-  "name": "korvil-loja",
-  "version": "2.0.0-mude",
-  "description": "KORVIL MASTER MUDE - cria pastas mãe e arquivo json com todos dados exatos do Index login",
+  "name": "korvil-app",
+  "version": "2.0.0",
+  "private": true,
+  "description": "KORVIL MASTER FINAL AUTOMATICO SEM TOKEN NO LOGIN - GH_TOKEN interno",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "ensure-contas": "node korvil/sections/korvil-loja/login/ensure-contas-structure.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "ensure": "node korvil/sections/korvil-loja/scripts/ensure-contas-structure.js"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5"
   },
-  "korvil": {
-    "contas_path": "korvil/sections/korvil-loja/login/contas/{pasta-mae}/{pasta-mae}.json",
-    "pasta_mae_rule": "normalize NFD remove acento lowercase split primeiro + '-' + inicial segundo + '-' + inicial terceiro"
-  }
+  "engines": { "node": ">=18" }
 }
