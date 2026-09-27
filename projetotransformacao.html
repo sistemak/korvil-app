@@ -1,1 +1,184 @@
-undefined
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KTP - Projeto Transformação 2026</title>
+<style>
+  :root { --bg:#080a08; --panel:#121412; --border:#1f2a1f; --green:#00ff88; --green-dim:#00cc6a; --yellow:#ffcc00; --cyan:#00e5ff; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:#d8ffe9;font-family:ui-monospace,Menlo,Consolas,monospace;display:flex;min-height:100vh}
+  #ktp-menu-lateral{width:300px;background:var(--panel);border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:100vh;overflow:auto}
+  #calendario-anchor{flex:1;padding:20px;overflow:auto}
+  #ktp-cronograma-lateral{width:320px;background:var(--panel);border-left:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:100vh;overflow:auto}
+  .btn{border:1px solid var(--green);background:transparent;color:var(--green);padding:10px 14px;cursor:pointer;font-weight:700;letter-spacing:0.05em}
+  .btn:hover{background:var(--green);color:#000}
+  .btn-cyan{border-color:var(--cyan);color:var(--cyan)} .btn-cyan:hover{background:var(--cyan);color:#000}
+  .card{border:1px solid var(--border);background:#0e110e;padding:12px}
+  .muted{color:#7a8a7a;font-size:12px}
+  .mono{font-family:ui-monospace,monospace}
+  .tag{display:inline-block;border:1px solid var(--border);padding:2px 6px;font-size:11px;margin-right:6px}
+  .semana{border:1px solid var(--border);padding:10px;margin-bottom:8px;background:#0d0f0d}
+  .semana.ativa{border-color:var(--green);box-shadow:0 0 0 1px var(--green) inset}
+  input{background:#000;border:1px solid var(--border);color:var(--green);padding:10px;width:100%;font-family:inherit}
+  input:focus{outline:none;border-color:var(--green)}
+  h2{font-size:14px;letter-spacing:0.12em;color:var(--green)}
+  @media(max-width:1100px){body{flex-direction:column} #ktp-menu-lateral,#ktp-cronograma-lateral{width:100%;position:relative;height:auto}}
+</style>
+</head>
+<body>
+
+<!-- MENU LATERAL ESQUERDA -->
+<nav id="ktp-menu-lateral">
+  <button class="btn" onclick="document.getElementById('calendario-anchor').scrollIntoView({behavior:'smooth'})">☰ MENU</button>
+  <div class="card">
+    <h2>KORVIL • KTP</h2>
+    <div class="muted mono" style="margin-top:8px">PROJETO TRANSFORMAÇÃO 2026<br>52 semanas • Jan 05 → Dez 28</div>
+  </div>
+
+  <div class="card">
+    <div class="muted">DATAS PRINCIPAIS</div>
+    <div class="mono" style="margin-top:6px;font-size:13px;line-height:1.6">
+      • Início: 2026-01-05 (Seg)<br>
+      • Semana 13: 2026-03-30 - Check<br>
+      • Semana 26: 2026-06-29 - Mid Year<br>
+      • Semana 39: 2026-09-28 - Pré Peak<br>
+      • Fim: 2026-12-28
+    </div>
+  </div>
+
+  <div class="card" id="mensagem-box">
+    <div class="muted">MENSAGEM DO DIA</div>
+    <div id="ktp-mensagem" class="mono" style="margin-top:8px;font-size:13px;color:var(--yellow)">Carregando calendário...</div>
+  </div>
+
+  <div class="card">
+    <div class="muted">TOKEN BOX (LOCAL)</div>
+    <input id="ktp-token" type="password" placeholder="ghp_xxx (só local, não envia)" style="margin-top:8px" />
+    <div class="muted" style="margin-top:6px">Guardado em localStorage para dev</div>
+  </div>
+
+  <div class="card">
+    <div class="muted">ATALHOS</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+      <a class="btn" href="#calendario-anchor" style="text-decoration:none;text-align:center">→ CALENDÁRIO</a>
+      <a class="btn btn-cyan" href="#ktp-cronograma-lateral" style="text-decoration:none;text-align:center">CRONOGRAMA →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- CENTRO - CALENDARIO -->
+<main id="calendario-anchor">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <h1 style="font-size:18px;letter-spacing:0.15em;color:var(--green)">#CALENDÁRIO 2026 • 52 SEMANAS</h1>
+    <div class="muted mono" id="stats"></div>
+  </div>
+  <div id="lista-semanas"></div>
+</main>
+
+<!-- CRONOGRAMA LATERAL DIREITA -->
+<aside id="ktp-cronograma-lateral">
+  <button class="btn btn-cyan" onclick="document.getElementById('ktp-cronograma-lateral').scrollIntoView({behavior:'smooth'})">CRONOGRAMA →</button>
+  
+  <div class="card">
+    <div class="muted">BUSCA ALUNO</div>
+    <input id="busca-aluno" placeholder="ID aluno ex: KTP-001" style="margin-top:8px" />
+    <div id="dados-aluno" class="mono" style="margin-top:10px;font-size:13px;line-height:1.6;color:#aaffcc">
+      Digite ID para ver dados<br><br>
+      <span class="tag">KTP-001</span> <span class="tag">KTP-042</span> <span class="tag">KTP-108</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="muted">CRONOGRAMA RÁPIDO</div>
+    <div id="cronograma-lista" class="mono" style="margin-top:8px;font-size:12px;line-height:1.7"></div>
+  </div>
+
+  <div class="card">
+    <div class="muted">STATUS</div>
+    <div class="mono" style="margin-top:6px;font-size:12px">
+      <div>OWNER: sistemak</div>
+      <div>REPO: korvil-app</div>
+      <div>BRANCH: main</div>
+      <div id="status-cal" style="color:var(--yellow);margin-top:6px">calendario.js: verificando...</div>
+    </div>
+  </div>
+</aside>
+
+<!-- CARREGA CALENDARIO EXTERNO -->
+<script src="./calendario.js"></script>
+<script>
+(function(){
+  const $ = (s) => document.querySelector(s);
+  const lista = $("#lista-semanas");
+  const stats = $("#stats");
+  const msg = $("#ktp-mensagem");
+  const cronograma = $("#cronograma-lista");
+  const statusCal = $("#status-cal");
+
+  function render(){
+    const cal = window.KTP_CALENDARIO_2026;
+    if(!cal){ statusCal.textContent = "calendario.js: NÃO CARREGADO"; statusCal.style.color="#ff5555"; return; }
+    statusCal.textContent = "calendario.js: OK • " + cal.total_semanas + " semanas";
+    statusCal.style.color="#00ff88";
+    
+    const hoje = new Date().toISOString().slice(0,10);
+    const atual = cal.semanas.find(s => hoje >= s.inicio && hoje <= s.fim) || cal.semanas[0];
+    
+    if(stats) stats.textContent = atual ? ("HOJE: S"+atual.semana+" "+atual.inicio+"→"+atual.fim+" • "+atual.fase) : "";
+    if(msg) msg.textContent = atual ? (atual.meta + " | Foco: " + atual.foco + " | Intensidade: " + atual.intensidade) : "Semana não encontrada";
+
+    if(!lista) return;
+    lista.innerHTML = cal.semanas.map(s => {
+      const isAtiva = atual && s.semana === atual.semana;
+      return '<div class="semana '+(isAtiva?'ativa':'')+'">'+
+        '<div style="display:flex;justify-content:space-between;gap:8px"><strong>S'+String(s.semana).padStart(2,'0')+' • '+s.mes.toUpperCase()+'</strong><span class="tag">'+s.fase+'</span></div>'+
+        '<div class="muted mono" style="margin-top:4px">'+s.inicio+' → '+s.fim+' • '+s.intensidade+'</div>'+
+        '<div class="mono" style="margin-top:6px;font-size:12px">'+s.treinos.join(' | ')+'</div>'+
+        '<div class="mono" style="margin-top:4px;font-size:11px;color:#7affb0">'+s.meta+'</div>'+
+      '</div>';
+    }).join('');
+
+    if(cronograma){
+      cronograma.innerHTML = cal.semanas.slice(0,12).map(s => 'S'+String(s.semana).padStart(2,'0')+' '+s.inicio.slice(5)+' - '+s.fase+' ('+s.foco+')').join('<br>') + '<br><span class="muted">... +40 semanas</span>';
+    }
+  }
+
+  // busca aluno fake local
+  const alunos = {
+    "KTP-001": { nome:"João Korvil", semana: 12, peso:"84→78kg", foco:"BASE 2" },
+    "KTP-042": { nome:"Ana Silva", semana: 28, peso:"68→62kg", foco:"POTÊNCIA" },
+    "KTP-108": { nome:"Marcos L.", semana: 5, peso:"92→89kg", foco:"ADAPTAÇÃO" },
+  };
+  const busca = $("#busca-aluno");
+  const dados = $("#dados-aluno");
+  if(busca){
+    busca.addEventListener("input", ()=>{
+      const id = busca.value.trim().toUpperCase();
+      if(alunos[id]){
+        const a = alunos[id];
+        if(dados) dados.innerHTML = '<div style="color:var(--yellow)">'+id+' - '+a.nome+'</div>Semana: S'+a.semana+'<br>Peso: '+a.peso+'<br>Foco: '+a.foco+'<br><br><span class="tag">ATIVO</span>';
+      } else if(!id){
+        if(dados) dados.innerHTML = 'Digite ID para ver dados<br><br><span class="tag">KTP-001</span> <span class="tag">KTP-042</span> <span class="tag">KTP-108</span>';
+      } else {
+        if(dados) dados.innerHTML = '<span style="color:#ff7777">ID não encontrado (mock local)</span><br>Tente KTP-001, KTP-042, KTP-108';
+      }
+    });
+  }
+
+  // token box local
+  const tokenBox = $("#ktp-token");
+  if(tokenBox){
+    const saved = localStorage.getItem("ktp_token_dev");
+    if(saved) tokenBox.value = saved;
+    tokenBox.addEventListener("input", ()=> localStorage.setItem("ktp_token_dev", tokenBox.value));
+  }
+
+  document.addEventListener("DOMContentLoaded", render);
+  // tenta render mesmo se script carregou antes
+  if(window.KTP_CALENDARIO_2026) render();
+  else setTimeout(render, 300);
+})();
+</script>
+</body>
+</html>
