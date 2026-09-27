@@ -8,7 +8,7 @@
   "inicio_ano": "2026-01-05",
   "fim_ano": "2026-12-28",
   "total_semanas": 52,
-  "gerado_em": "2026-09-27T00:51:08.115Z",
+  "gerado_em": "2026-09-27T00:57:41.804Z",
   "semanas": [
     {
       "semana": 1,
