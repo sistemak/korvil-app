@@ -1,123 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>KORVIL LOJA - Index Sempre</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KORVIL LOJA - INICIAL</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Inter,system-ui}
-.header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:#000;border-bottom:2px solid #ff6a00}
-.logo{color:#ff6a00;font-weight:900;letter-spacing:3px}
-.actions{display:flex;gap:12px;align-items:center}
-.btn{padding:10px 16px;border-radius:10px;border:1px solid #222;background:#111;color:#fff;cursor:pointer}
-.btn-orange{background:#ff6a00;color:#000;font-weight:800;border:0}
-.hero{max-width:1100px;margin:0 auto;padding:48px 24px}
-.card{border:1px solid #1e1e1e;background:#0a0a0a;border-radius:18px;padding:24px}
-.login-anchor{border:1px dashed #ff6a00;background:#120a00;padding:20px;border-radius:14px;margin:24px 0}
-.hidden{display:none}
-.perfil{display:flex;align-items:center;gap:12px}
-.perfil img{width:40px;height:40px;border-radius:50%;border:2px solid #ff6a00;object-fit:cover}
+  body{margin:0;background:#080808;color:#fff;font-family:Inter,system-ui}
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 20px}
+  .top{display:flex;justify-content:space-between;align-items:center}
+  .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#ff6a00,#ff2a00);display:grid;place-items:center;font-weight:800}
+  .card{background:#141414;border:1px solid #242424;border-radius:20px;padding:24px;margin-top:20px}
+  .btn{background:#ff6a00;color:#000;font-weight:800;border:none;border-radius:12px;padding:12px 18px;cursor:pointer}
+  .badge{font-family:monospace;font-size:11px;color:#ff8c33;border:1px solid #3a2410;background:#1e140a;padding:6px 10px;border-radius:999px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:18px}
+  .prod{background:#101010;border:1px solid #222;border-radius:16px;padding:14px}
 </style>
 </head>
 <body>
-<div class="header">
-<div class="logo">KORVIL</div>
-<div class="actions">
-<div id="perfilBox" class="perfil hidden"><img id="perfilImg"/><span id="perfilNome"></span></div>
-<button class="btn" id="carrinhoBtn">Carrinho (0)</button>
-<button class="btn" id="authBtn">Entrar</button>
-</div>
-</div>
+<div class="wrap">
+  <div class="top">
+    <div style="display:flex;gap:12px;align-items:center"><div class="logo">K</div><div><div style="font-weight:800">KORVIL LOJA</div><div style="font-size:11px;color:#888;font-family:monospace">SEM TOKEN LOGIN • GH_TOKEN INTERNO</div></div></div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span id="userBadge" class="badge">deslogado</span>
+      <button id="btnLogin" class="btn">LOGIN / CRIAR CONTA</button>
+      <button id="btnSair" class="btn" style="display:none;background:#222;color:#fff">SAIR</button>
+    </div>
+  </div>
 
-<div class="hero">
-<div id="primeiroAcesso" class="login-anchor">
-<h2 style="margin:0;color:#ff6a00">BEM-VINDO - PRIMEIRO ACESSO ÚNICO</h2>
-<p style="color:#999">Tela inicial sempre é esta loja. No primeiro acesso mostra login como âncora, mas criação real só em <a href="login/index.html" style="color:#ff6a00">login/index.html</a> que gera pasta mãe + JSON com todos dados exatos.</p>
-<div style="display:flex;gap:12px;margin-top:16px">
-<a href="login/index.html" style="padding:12px 18px;background:#ff6a00;color:#000;border-radius:10px;text-decoration:none;font-weight:900">CRIAR CONTA → PASTA MÃE</a>
-<button class="btn" id="btnLoginEmail">Já tenho conta - Fazer login</button>
-</div>
-<div id="loginBox" class="hidden" style="margin-top:18px">
-<input id="loginEmail" placeholder="Email" style="width:100%;padding:12px;border-radius:8px;background:#111;border:1px solid #333;color:#fff;margin-bottom:8px"/>
-<input id="loginSenha" type="password" placeholder="Senha" style="width:100%;padding:12px;border-radius:8px;background:#111;border:1px solid #333;color:#fff"/>
-<button class="btn-orange" id="btnEntrar" style="width:100%;margin-top:10px;padding:12px;border-radius:10px;font-weight:900;cursor:pointer">ENTRAR</button>
-</div>
-</div>
+  <div id="primeiroAcesso" class="card" style="display:none">
+    <h2 style="margin:0 0 8px">Bem-vindo à KORVIL LOJA — Primeiro acesso único</h2>
+    <p style="color:#9a9a9a;line-height:1.5">Esta tela inicial sempre aparece. No primeiro acesso mostramos o login como âncora para criar conta automaticamente sem token manual. Pasta-mãe + JSON em login/contas/{pasta-mae}/{pasta-mae}.json via GH_TOKEN interno.</p>
+    <div style="margin-top:12px"><a href="./login/index.html" class="btn" style="text-decoration:none;display:inline-block">IR PARA LOGIN AUTOMÁTICO SEM TOKEN</a></div>
+  </div>
 
-<div id="lojaConteudo" class="card">
-<h1 style="margin:0 0 8px">LOJA KORVIL <span style="color:#ff6a00">OFICIAL</span></h1>
-<p style="color:#777">Logado mostra loja com perfil lado carrinho, Sair mostra login email/senha. Contas reais em <code>login/contas/{pasta-mae}/{pasta-mae}.json</code></p>
-<div style="margin-top:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px">
-<div style="border:1px solid #222;border-radius:12px;padding:16px;background:#111"><b>Produto 1</b><br/><small style="color:#666">Exemplo</small></div>
-<div style="border:1px solid #222;border-radius:12px;padding:16px;background:#111"><b>Produto 2</b><br/><small style="color:#666">Exemplo</small></div>
-<div style="border:1px solid #222;border-radius:12px;padding:16px;background:#111"><b>Produto 3</b><br/><small style="color:#666">Exemplo</small></div>
+  <div id="loja" class="card">
+    <h2 style="margin:0">Loja KORVIL</h2>
+    <p style="color:#8a8a8a">Logado mostra loja. GH_TOKEN interno cria contas automaticamente pra qualquer pessoa, sem ativar token manual.</p>
+    <div class="grid">
+      <div class="prod"><div style="height:120px;background:linear-gradient(135deg,#1a1a1a,#2a1a0a);border-radius:12px"></div><div style="margin-top:10px;font-weight:700">KORVIL Drop 01</div><div style="color:#ff6a00;font-weight:800">R$ 199</div></div>
+      <div class="prod"><div style="height:120px;background:linear-gradient(135deg,#1a1a1a,#1a2a2a);border-radius:12px"></div><div style="margin-top:10px;font-weight:700">KORVIL Drop 02</div><div style="color:#ff6a00;font-weight:800">R$ 249</div></div>
+      <div class="prod"><div style="height:120px;background:linear-gradient(135deg,#1a1a1a,#2a0a1a);border-radius:12px"></div><div style="margin-top:10px;font-weight:700">KORVIL Drop 03</div><div style="color:#ff6a00;font-weight:800">R$ 299</div></div>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-
 <script>
-function carregarUsuario(){
-  try{ return JSON.parse(localStorage.getItem('korvil_user')||'null'); }catch{ return null; }
-}
-function atualizarHeader(){
-  const user = carregarUsuario();
-  const perfilBox = document.getElementById('perfilBox');
-  const authBtn = document.getElementById('authBtn');
-  const primeiro = document.getElementById('primeiroAcesso');
-  const loja = document.getElementById('lojaConteudo');
-  if(user){
-    perfilBox.classList.remove('hidden');
-    document.getElementById('perfilNome').textContent = user.primeiro_nome || user.nome_completo.split(' ')[0];
-    document.getElementById('perfilImg').src = user.foto_perfil || 'https://i.pravatar.cc/100';
-    authBtn.textContent = 'Sair';
-    primeiro.classList.add('hidden');
-    loja.style.opacity='1';
-  } else {
-    perfilBox.classList.add('hidden');
-    authBtn.textContent='Entrar';
-    const feito = localStorage.getItem('korvil_primeiro_uso_feito');
-    if(!feito){
-      primeiro.classList.remove('hidden');
-    } else {
-      primeiro.classList.remove('hidden');
-      primeiro.querySelector('h2').textContent='FAÇA LOGIN';
-    }
+const badge=document.getElementById('userBadge'), btnLogin=document.getElementById('btnLogin'), btnSair=document.getElementById('btnSair'), primeiro=document.getElementById('primeiroAcesso');
+function check(){
+  let user=null; try{ user=JSON.parse(localStorage.getItem('korvil_user')||'null'); }catch{}
+  const primeiroFeito=localStorage.getItem('korvil_primeiro_uso_feito');
+  if(!primeiroFeito){ primeiro.style.display='block'; }
+  if(user && user.email){
+    badge.textContent=(user.pastaMae||user.nomeCompleto||'logado')+' • '+(user.email);
+    btnLogin.style.display='none'; btnSair.style.display='inline-block';
+  }else{
+    badge.textContent='deslogado • sem token manual';
+    btnLogin.style.display='inline-block'; btnSair.style.display='none';
   }
 }
-document.getElementById('authBtn').addEventListener('click', ()=>{
-  const user = carregarUsuario();
-  if(user){
-    localStorage.removeItem('korvil_user');
-    atualizarHeader();
-    location.reload();
-  } else {
-    document.getElementById('primeiroAcesso').scrollIntoView({behavior:'smooth'});
-    document.getElementById('loginBox').classList.remove('hidden');
-  }
-});
-document.getElementById('btnLoginEmail').addEventListener('click', ()=>{
-  document.getElementById('loginBox').classList.toggle('hidden');
-});
-document.getElementById('btnEntrar').addEventListener('click', async ()=>{
-  const email = document.getElementById('loginEmail').value.trim();
-  const senha = document.getElementById('loginSenha').value;
-  if(!email || !senha){ alert('Preencha email e senha'); return; }
-  try{
-    const res = await fetch('/api/login', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, senha})});
-    const txt = await res.text();
-    let data; try{ data = JSON.parse(txt); }catch{ data = { error: 'Resposta não JSON: '+txt.slice(0,200)} }
-    if(!res.ok) throw new Error(data.error||'Login falhou');
-    localStorage.setItem('korvil_user', JSON.stringify(data.user));
-    atualizarHeader();
-    alert('Logado com sucesso como '+data.user.nome_completo);
-  }catch(e){
-    // Fallback local
-    const users = JSON.parse(localStorage.getItem('korvil_contas_local')||'[]');
-    const u = users.find((x)=> x.email===email);
-    if(u){ localStorage.setItem('korvil_user', JSON.stringify(u)); atualizarHeader(); }
-    else alert('Login falhou: '+e.message+' (tente criar conta em login/index.html)');
-  }
-});
-atualizarHeader();
+btnLogin.onclick=()=> location.href='./login/index.html';
+btnSair.onclick=()=>{ localStorage.removeItem('korvil_user'); location.reload(); };
+check();
 </script>
 </body>
 </html>
