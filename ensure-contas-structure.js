@@ -1,0 +1,1 @@
+const fs=require('fs');const path=require('path');const dir=path.join(__dirname,'korvil/sections/korvil-loja/login/contas');fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'.gitkeep'),'');console.log('✓ estrutura contas ok');
