@@ -1,0 +1,51 @@
+{
+  "id": 42,
+  "pastaMae": "42-yyyy42",
+  "arquivo": "42-yyyy42.json",
+  "caminhoCompleto": "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/42-yyyy42/42-yyyy42.json",
+  "nome": "Yyyy",
+  "primeiroNome": "yyyy",
+  "idSlug": "yyyy42",
+  "objetivos": "Ganho de Peso",
+  "objetivosArray": [
+    "Ganho de Peso"
+  ],
+  "nivelAtividade": "Intermediário",
+  "q1": "",
+  "q2": "",
+  "q3": "",
+  "q4": "",
+  "q5": "",
+  "q6": "",
+  "q7": "",
+  "q8": "",
+  "q9": "",
+  "plano": {
+    "nome": "Presencial 5x",
+    "valor": "150",
+    "mat": "50",
+    "tipo": "mensal_pres",
+    "freq": 5
+  },
+  "dias": [
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta"
+  ],
+  "hora": "19:00",
+  "cpf": "107.101.304-14",
+  "nasc": "2026-09-27",
+  "idade": "0 anos",
+  "genero": "Feminino",
+  "whats": "(13) 99769-0898",
+  "email": "sistemak.srv@gmail.com",
+  "cep": "11250-524",
+  "rua": "Rua Oswaldo Cruz",
+  "numero": "2407",
+  "bairro": "Jardim Vicente de Carvalho",
+  "cidade": "Bertioga",
+  "criadoEm": "2026-09-27T13:53:18.767Z",
+  "versao": "V23-PRESERVA-ADICIONA-3ACOES"
+}
