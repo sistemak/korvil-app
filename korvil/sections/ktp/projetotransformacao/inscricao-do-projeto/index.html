@@ -2,211 +2,229 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#000">
-<title>INSCRIÇÃO K-TP Projeto TRANSFORMAÇÃO</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>K-TP PROJETO TRANSFORMAÇÃO - INSCRIÇÃO</title>
 <style>
-:root{--c:#00f5ff; --bg:#000; --card:#0a0a0a; --text:#fff; --text2:#aaa; --borda:#1f1f1f; --ok:#00ff88; --erro:#ff4444;}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
-body{background:var(--bg);color:var(--text);padding:16px;max-width:700px;margin:auto;}
-h1{text-align:center;font-size:18px;font-weight:900;color:var(--c);margin:0 0 16px;}
-.card{background:var(--card);border:1.5px solid var(--borda);border-radius:12px;padding:16px;margin-bottom:12px;}
-.titulo{font-size:14px;font-weight:800;color:var(--c);margin-bottom:10px;border-left:3px solid var(--c);padding-left:8px;}
-.titulo-secao{font-size:14px;font-weight:800;color:var(--c);margin-bottom:10px;border-left:3px solid var(--c);padding-left:8px;}
-.plano{padding:14px;background:#111;border:1.5px solid var(--borda);border-radius:10px;margin-bottom:10px;cursor:pointer;}
-.plano:hover{border-color:var(--c);}
-.plano.sel{border-color:var(--c);background:rgba(0,245,255,.15);box-shadow:0 0 15px var(--c)40;}
-.topo{display:flex;justify-content:space-between;align-items:center;}
-.nome{font-weight:800;color:var(--c);font-size:14px;}
-.valor{font-weight:900;color:var(--ok);font-size:15px;}
-.info{font-size:11px;color:var(--text2);margin-top:4px;}
-.grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px;}
-.grid-4{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.grid-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;}
-.dia,.hora{padding:10px;background:#0a0a0a;border:1.5px solid var(--borda);border-radius:8px;text-align:center;font-size:12px;font-weight:700;cursor:not-allowed;opacity:0.4;}
-.dia.lib,.hora.lib{cursor:pointer;opacity:1;}
-.dia.lib:hover,.hora.lib:hover{border-color:var(--c);}
-.dia.sel,.hora.sel{border-color:var(--c);background:rgba(0,245,255,.15);opacity:1;}
-.dia.bloq{opacity:0.2;cursor:not-allowed;background:#050505;}
-.vagas{font-size:9px;color:var(--ok);}
-.btn{width:100%;padding:14px;background:var(--c);color:#000;text-align:center;border-radius:10px;font-weight:800;font-size:14px;border:0;cursor:pointer;margin-top:10px;}
-.btn.voltar{background:#222;color:var(--text);}
-.input-group{margin-bottom:10px;}
-.input-group label{font-size:12px;color:var(--text2);font-weight:700;margin-bottom:4px;display:block;}
-.input-group input,.input-group select,.input-group textarea{width:100%;padding:12px;background:#111;border:1.5px solid var(--borda);border-radius:8px;color:#fff;font-size:14px;}
-.input-group input[readonly]{background:#0a0a0a;color:var(--ok);font-weight:800;}
-.oculto{display:none;}
-.aviso{font-size:11px;color:var(--erro);margin-top:6px;font-weight:700;text-align:center;}
-.passos{display:flex;justify-content:space-between;margin-bottom:16px;padding:10px;background:#111;border-radius:8px;border:1px solid var(--borda);}
-.etapa{font-size:10px;color:var(--text2);text-align:center;flex:1;}
-.etapa.num{font-weight:900;font-size:12px;display:block;}
-.ativo{color:var(--c);}
-.sub{font-size:11px;color:var(--c);font-weight:700;margin:8px 0 6px;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#e0ffe8;font-family:'Courier New',monospace;min-height:100vh;padding:12px}
+.container{max-width:880px;margin:0 auto;border:1.5px solid #00f5ff;border-radius:14px;padding:18px;background:#111;box-shadow:0 0 30px rgba(0,245,255,.15)}
+h1{text-align:center;color:#00ff88;font-size:22px;letter-spacing:2px;margin-bottom:8px;text-shadow:0 0 10px #00ff88}
+.sub{text-align:center;color:#00f5ff;font-size:11px;margin-bottom:18px;opacity:.8}
+.tela{display:none;border:1px dashed #00ff88;border-radius:10px;padding:16px;margin-top:12px;background:#000}
+.tela.ativa{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+label{display:block;margin:10px 0 4px;color:#00f5ff;font-size:12px;text-transform:uppercase}
+input,select,textarea{width:100%;padding:10px;background:#000;color:#00ff88;border:1px solid #00f5ff;border-radius:6px;font-family:monospace;font-size:13px;outline:none}
+input:focus,select:focus{box-shadow:0 0 12px rgba(0,255,136,.4);border-color:#00ff88}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+.obj-grid{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.obj-btn{padding:8px 12px;border:1px solid #00f5ff;background:#000;color:#00ff88;border-radius:20px;cursor:pointer;font-size:11px;transition:.2s}
+.obj-btn.selecionado{background:#00ff88;color:#000;font-weight:900;box-shadow:0 0 15px #00ff88}
+.lista-selecionados{min-height:36px;border:1px solid #333;padding:8px;border-radius:6px;font-size:11px;color:#00ff88;margin:8px 0;background:#0a0a0a}
+.plano-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.plano-card{border:1px solid #00f5ff;padding:10px;border-radius:8px;cursor:pointer;background:#000;transition:.2s}
+.plano-card:hover{border-color:#00ff88;box-shadow:0 0 12px rgba(0,255,136,.3)}
+.plano-card.ativo{background:#00ff88;color:#000;font-weight:800}
+.dias-grid{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.dia-btn{padding:6px 10px;border:1px solid #00f5ff;background:#000;color:#00ff88;border-radius:6px;cursor:pointer;font-size:11px}
+.dia-btn.ativo{background:#00f5ff;color:#000;font-weight:900}
+.btn{width:100%;padding:14px;background:#00ff88;color:#000;border:none;border-radius:8px;font-weight:900;cursor:pointer;font-family:monospace;font-size:14px;margin-top:12px;letter-spacing:1px;transition:.2s}
+.btn:hover{box-shadow:0 0 20px #00ff88;transform:translateY(-1px)}
+.btn-sec{background:#000;color:#00f5ff;border:1px solid #00f5ff}
+#popup-confirmado{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#00ff88;color:#000;padding:24px 48px;border-radius:14px;font-weight:900;font-size:22px;z-index:9999;box-shadow:0 10px 40px rgba(0,255,136,.4);display:none}
 </style>
 </head>
 <body>
-<div id="tela1">
-  <h1>K-TP Treinamento Personalizado | Projeto TRANSFORMAÇÃO</h1>
-  <div class="passos"><div class="etapa ativo"><span class="num">1</span>ANAMNESE</div><div class="etapa"><span class="num">2</span>PLANOS</div><div class="etapa"><span class="num">3</span>DADOS</div></div>
-  <div class="card">
-    <div style="text-align:center;font-size:15px;font-weight:900;color:var(--c);margin-bottom:12px;">K-TP PROJETO TRANSFORMAÇÃO</div>
-    <div style="font-size:12px;color:var(--c);background:rgba(0,245,255,.1);border:1.5px solid var(--c);padding:10px;border-radius:8px;margin-bottom:12px;font-weight:700;text-align:center;">Preencha todos os dados. Assim o profissional consegue planejar os protocolos para seu projeto.</div>
-    <div class="titulo-secao">OBJETIVOS: Clique e escolha seus objetivos na ordem de prioridade. De 1 até no máximo 7</div>
-    <div id="listaObjetivosSelecionados" style="font-size:11px;color:var(--ok);margin-bottom:8px;font-weight:700;min-height:18px;"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Ganho de Peso">Ganho de Peso</div>
-      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Emagrecimento">Emagrecimento</div>
-      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Definição Muscular">Definição Muscular</div>
-      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Saúde">Saúde</div>
-      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Condicionamento Físico">Condicionamento Físico</div>
-      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Hipertrofia">Hipertrofia</div>
-      <div class="plano obj" onclick="toggleObjetivo(this)" data-obj="Reabilitação Física">Reabilitação Física</div>
-    </div>
-    <input type="hidden" id="objetivos" value="">
-  </div>
-  <div class="card">
-    <div class="titulo-secao">ANAMNESE - HISTÓRICO</div>
-    <div class="input-group"><label>Nível de Atividade Física *</label><select id="nivelAtividade"><option value="">Selecione</option><option value="Iniciante">Iniciante</option><option value="Intermediário">Intermediário</option><option value="Avançado">Avançado</option></select></div>
-    <div class="input-group"><label>1. Já praticou atividade física antes? *</label><textarea id="q1" rows="2"></textarea></div>
-    <div class="input-group"><label>2. Como você descreve sua ALIMENTAÇÃO atual? *</label><textarea id="q2" rows="2"></textarea></div>
-    <div class="input-group"><label>3. Quantas horas você DORME por noite? *</label><textarea id="q3" rows="2"></textarea></div>
-    <div class="input-group"><label>4. Possui alguma RESTRIÇÃO alimentar? *</label><textarea id="q4" rows="2"></textarea></div>
-    <div class="input-group"><label>5. Qual parte do corpo quer MELHORAR mais? *</label><textarea id="q5" rows="2"></textarea></div>
-    <div class="input-group"><label>6. Possui alguma DEFICIENCIA ou LIMITAÇÃO fisica? *</label><textarea id="q6" rows="2"></textarea></div>
-    <div class="input-group"><label>7. Está passando ou JÁ TEVE acompanhamento profissional PSICOLÓGICO? *</label><textarea id="q7" rows="2"></textarea></div>
-    <div class="input-group"><label>8. Está fazendo ALGUM TRATAMENTO fisico ou psicológico? *</label><textarea id="q8" rows="2"></textarea></div>
-    <div class="input-group"><label>9. Está fazendo USO DE MEDICAMENTOS? Quais? *</label><textarea id="q9" rows="2"></textarea></div>
-    <button class="btn" onclick="irParaPlanos()">CONTINUAR</button>
-  </div>
+<div class="container">
+<h1>K-TP PROJETO TRANSFORMAÇÃO</h1>
+<div class="sub">INSCRIÇÃO OFICIAL • 3 TELAS EM ORDEM EXATA • V24-DUAL-ANAMNESE</div>
+
+<!-- TELA 1 -->
+<div id="tela1" class="tela ativa">
+<h2 style="color:#00ff88;font-size:14px;margin-bottom:10px">TELA 1 - OBJETIVOS + ANAMNESE</h2>
+<label>OBJETIVOS: Clique e escolha seus objetivos na ordem de prioridade. De 1 até no máximo 7</label>
+<div class="obj-grid" id="objetivosGrid">
+<button class="obj-btn" onclick="toggleObjetivo(this,'Ganho de Peso')">Ganho de Peso</button>
+<button class="obj-btn" onclick="toggleObjetivo(this,'Emagrecimento')">Emagrecimento</button>
+<button class="obj-btn" onclick="toggleObjetivo(this,'Definição Muscular')">Definição Muscular</button>
+<button class="obj-btn" onclick="toggleObjetivo(this,'Saúde')">Saúde</button>
+<button class="obj-btn" onclick="toggleObjetivo(this,'Condicionamento Físico')">Condicionamento Físico</button>
+<button class="obj-btn" onclick="toggleObjetivo(this,'Hipertrofia')">Hipertrofia</button>
+<button class="obj-btn" onclick="toggleObjetivo(this,'Reabilitação Física')">Reabilitação Física</button>
 </div>
-<div id="tela2" class="oculto">
-  <h1>K-TP | PROJETO TRANSFORMAÇÃO</h1>
-  <div class="passos"><div class="etapa"><span class="num">1</span>ANAMNESE</div><div class="etapa ativo"><span class="num">2</span>PLANOS</div><div class="etapa"><span class="num">3</span>DADOS</div></div>
-  <div class="card">
-    <div class="titulo">1. ESCOLHA 1 PLANO</div>
-    <div class="plano" onclick="selPlano(this)" data-nome="Avulsa Online" data-valor="20" data-mat="0" data-tipo="avulso_online" data-freq="5"><div class="topo"><div class="nome">AULA AVULSA ONLINE</div><div class="valor">R$20,00/aula</div></div><div class="info">1x a 5x Dias | WhatsApp | Matrícula: GRÁTIS</div></div>
-    <div class="plano" onclick="selPlano(this)" data-nome="Avulsa Presencial" data-valor="20" data-mat="0" data-tipo="avulso_pres" data-freq="1"><div class="topo"><div class="nome">AULA AVULSA PRESENCIAL</div><div class="valor">R$20,00/aula</div></div><div class="info">1x Dia | Presencial | Matrícula: GRÁTIS | 7 vagas/horário</div></div>
-    <div class="plano" onclick="selPlano(this)" data-nome="Online Mensal" data-valor="60" data-mat="50" data-tipo="mensal_online" data-freq="5"><div class="topo"><div class="nome">PLANO ONLINE MENSAL</div><div class="valor">R$60,00/mês</div></div><div class="info">Escolha dias | App + WhatsApp | Matrícula: R$50,00</div></div>
-    <div class="plano" onclick="selPlano(this)" data-nome="Presencial 1x" data-valor="60" data-mat="50" data-tipo="mensal_pres" data-freq="1"><div class="topo"><div class="nome">PLANO PRESENCIAL 1x SEMANA</div><div class="valor">R$60,00/mês</div></div><div class="info">Matrícula: R$50,00</div></div>
-    <div class="plano" onclick="selPlano(this)" data-nome="Presencial 2x" data-valor="80" data-mat="50" data-tipo="mensal_pres" data-freq="2"><div class="topo"><div class="nome">PLANO PRESENCIAL 2x SEMANA</div><div class="valor">R$80,00/mês</div></div><div class="info">Matrícula: R$50,00</div></div>
-    <div class="plano" onclick="selPlano(this)" data-nome="Presencial 3x" data-valor="100" data-mat="50" data-tipo="mensal_pres" data-freq="3"><div class="topo"><div class="nome">PLANO PRESENCIAL 3x SEMANA</div><div class="valor">R$100,00/mês</div></div><div class="info">Matrícula: R$50,00</div></div>
-    <div class="plano" onclick="selPlano(this)" data-nome="Presencial 4x" data-valor="130" data-mat="50" data-tipo="mensal_pres" data-freq="4"><div class="topo"><div class="nome">PLANO PRESENCIAL 4x SEMANA</div><div class="valor">R$130,00/mês</div></div><div class="info">Matrícula: R$50,00</div></div>
-    <div class="plano" onclick="selPlano(this)" data-nome="Presencial 5x" data-valor="150" data-mat="50" data-tipo="mensal_pres" data-freq="5"><div class="topo"><div class="nome">PLANO PRESENCIAL 5x SEMANA</div><div class="valor">R$150,00/mês</div></div><div class="info">Matrícula: R$50,00</div></div>
-  </div>
-  <div class="card"><div class="titulo">2. ESCOLHA DIAS E HORÁRIO</div><div class="sub">DIAS: SEG À SEX</div><div class="grid-5" id="diasGrid"><div class="dia" data-dia="Segunda">SEG</div><div class="dia" data-dia="Terça">TER</div><div class="dia" data-dia="Quarta">QUA</div><div class="dia" data-dia="Quinta">QUI</div><div class="dia" data-dia="Sexta">SEX</div></div><div id="avisoDias" class="aviso">Selecione um plano primeiro</div><div class="sub">HORÁRIO FIXO: 06h às 10h | 16h às 05h</div><div class="grid-4" id="horasGrid"></div></div>
-  <button class="btn" onclick="irParaDados()">CONTINUAR</button>
-  <button class="btn voltar" onclick="mostrarTela('tela1')">VOLTAR</button>
+<div id="listaObjetivosSelecionados" class="lista-selecionados">Nenhum objetivo selecionado</div>
+<input type="hidden" id="objetivos">
+
+<label>Nível de Atividade Física</label>
+<select id="nivelAtividade"><option value="">Selecione</option><option>Iniciante</option><option>Intermediário</option><option>Avançado</option></select>
+
+<label>1. Já praticou atividade física antes?</label><input id="q1" placeholder="Ex: Sim, academia 2 anos">
+<label>2. Como você descreve sua ALIMENTAÇÃO atual?</label><input id="q2" placeholder="Ex: Boa, irregular...">
+<label>3. Quantas horas você DORME por noite?</label><input id="q3" placeholder="Ex: 7 horas">
+<label>4. Possui alguma RESTRIÇÃO alimentar?</label><input id="q4" placeholder="Ex: Não, leite, glúten...">
+<label>5. Qual parte do corpo quer MELHORAR mais?</label><input id="q5" placeholder="Ex: Abdômen, braços...">
+<label>6. Possui alguma DEFICIENCIA ou LIMITAÇÃO fisica?</label><input id="q6" placeholder="Ex: Não, joelho...">
+<label>7. Está passando ou JÁ TEVE acompanhamento profissional PSICOLÓGICO?</label><input id="q7" placeholder="Sim / Não">
+<label>8. Está fazendo ALGUM TRATAMENTO fisico ou psicológico?</label><input id="q8" placeholder="Sim / Não">
+<label>9. Está fazendo USO DE MEDICAMENTOS? Quais?</label><input id="q9" placeholder="Ex: Não, anti depressivo...">
+
+<button class="btn" onclick="irParaPlanos()">PRÓXIMO → PLANOS</button>
 </div>
-<div id="tela3" class="oculto">
-  <h1>K-TP Treinamento Personalizado | Projeto TRANSFORMAÇÃO</h1>
-  <div class="passos"><div class="etapa"><span class="num">1</span>ANAMNESE</div><div class="etapa"><span class="num">2</span>PLANOS</div><div class="etapa ativo"><span class="num">3</span>DADOS</div></div>
-  <div class="card">
-    <div class="titulo-secao">3. DADOS PESSOAIS</div>
-    <div class="input-group"><label>Nome Completo *</label><input type="text" id="nome"></div>
-    <div class="grid-2"><div class="input-group"><label>CPF *</label><input type="text" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)"></div><div class="input-group"><label>Data Nasc *</label><input type="date" id="nasc" onchange="calcularIdade()"></div></div>
-    <div class="grid-2"><div class="input-group"><label>Idade</label><input type="text" id="idade" readonly></div><div class="input-group"><label>Gênero *</label><select id="publico"><option>Selecione</option><option>Masculino</option><option>Feminino</option></select></div></div>
-    <div class="input-group"><label>WhatsApp *</label><input type="tel" id="whats" placeholder="(11) 99999-9999" oninput="mascaraWhats(this)"></div>
-    <div class="input-group"><label>Email</label><input type="email" id="email"></div>
-    <div class="titulo-secao" style="margin-top:16px;">ENDEREÇO</div>
-    <div class="input-group"><label>CEP *</label><input type="text" id="cep" maxlength="9" placeholder="00000-000" onblur="buscarCEP(this.value)" oninput="mascaraCEP(this)"></div>
-    <div class="grid-3"><div class="input-group"><label>Rua</label><input type="text" id="rua"></div><div class="input-group"><label>Número *</label><input type="text" id="numero"></div><div class="input-group"><label>Bairro</label><input type="text" id="bairro"></div></div>
-    <div class="input-group"><label>Cidade</label><input type="text" id="cidade"></div>
-    <button class="btn" onclick="enviarWhatsApp()">FINALIZAR INSCRIÇÃO</button>
-    <button class="btn voltar" onclick="mostrarTela('tela2')">Voltar</button>
-  </div>
+
+<!-- TELA 2 -->
+<div id="tela2" class="tela">
+<h2 style="color:#00ff88;font-size:14px;margin-bottom:10px">TELA 2 - PLANO + DIAS + HORÁRIO</h2>
+<label>1. ESCOLHA 1 PLANO</label>
+<div class="plano-grid">
+<div class="plano-card" onclick="selPlano('Avulsa Online R$20',20,0,'avulsa')"><b>Avulsa Online</b><br>R$20</div>
+<div class="plano-card" onclick="selPlano('Avulsa Presencial R$20',20,0,'avulsa')"><b>Avulsa Presencial</b><br>R$20</div>
+<div class="plano-card" onclick="selPlano('Online Mensal R$60+50',60,50,'5x')"><b>Online Mensal</b><br>R$60+50</div>
+<div class="plano-card" onclick="selPlano('Presencial 1x R$60+50',60,50,'1x')"><b>Presencial 1x</b><br>R$60+50</div>
+<div class="plano-card" onclick="selPlano('Presencial 2x R$80+50',80,50,'2x')"><b>Presencial 2x</b><br>R$80+50</div>
+<div class="plano-card" onclick="selPlano('Presencial 3x R$100+50',100,50,'3x')"><b>Presencial 3x</b><br>R$100+50</div>
+<div class="plano-card" onclick="selPlano('Presencial 4x R$130+50',130,50,'4x')"><b>Presencial 4x</b><br>R$130+50</div>
+<div class="plano-card" onclick="selPlano('Presencial 5x R$150+50',150,50,'5x')"><b>Presencial 5x</b><br>R$150+50</div>
 </div>
+
+<label>2. ESCOLHA DIAS - SEG À SEX</label>
+<div class="dias-grid">
+<button class="dia-btn" onclick="toggleDia(this,'Segunda')">Segunda</button>
+<button class="dia-btn" onclick="toggleDia(this,'Terça')">Terça</button>
+<button class="dia-btn" onclick="toggleDia(this,'Quarta')">Quarta</button>
+<button class="dia-btn" onclick="toggleDia(this,'Quinta')">Quinta</button>
+<button class="dia-btn" onclick="toggleDia(this,'Sexta')">Sexta</button>
+</div>
+
+<label>HORÁRIO FIXO: 06h às 10h | 16h às 05h</label>
+<select id="horaSelect" onchange="hora=this.value">
+<option value="">Selecione horário</option>
+<option>06:00</option><option>07:00</option><option>08:00</option><option>09:00</option><option>10:00</option>
+<option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option><option>20:00</option>
+<option>21:00</option><option>22:00</option><option>23:00</option><option>00:00</option><option>01:00</option>
+<option>02:00</option><option>03:00</option><option>04:00</option><option>05:00</option>
+</select>
+
+<div class="grid2" style="margin-top:12px">
+<button class="btn btn-sec" onclick="mostrarTela(1)">← VOLTAR</button>
+<button class="btn" onclick="irParaDados()">PRÓXIMO → DADOS</button>
+</div>
+</div>
+
+<!-- TELA 3 -->
+<div id="tela3" class="tela">
+<h2 style="color:#00ff88;font-size:14px;margin-bottom:10px">TELA 3 - DADOS PESSOAIS + ENDEREÇO</h2>
+<label>Nome Completo</label><input id="nome" placeholder="Ex: Maria Silva Santos">
+<div class="grid2">
+<div><label>CPF</label><input id="cpf" placeholder="000.000.000-00" oninput="mascaraCPF(this)"></div>
+<div><label>Data Nasc</label><input id="nasc" type="date"></div>
+</div>
+<div class="grid2">
+<div><label>Idade</label><input id="idade" placeholder="Ex: 28 anos"></div>
+<div><label>Gênero</label><select id="publico"><option value="">Selecione</option><option>Feminino</option><option>Masculino</option><option>Outro</option></select></div>
+</div>
+<div class="grid2">
+<div><label>WhatsApp</label><input id="whats" placeholder="(00) 00000-0000" oninput="mascaraWhats(this)"></div>
+<div><label>Email</label><input id="email" type="email" placeholder="seu@email.com"></div>
+</div>
+
+<label>CEP</label><div class="grid2"><input id="cep" placeholder="00000-000" oninput="mascaraCEP(this)"><button class="btn btn-sec" style="margin-top:0" onclick="buscarCEP()">BUSCAR CEP</button></div>
+<label>Rua</label><input id="rua">
+<div class="grid2"><div><label>Número</label><input id="numero"></div><div><label>Bairro</label><input id="bairro"></div></div>
+<label>Cidade</label><input id="cidade">
+
+<button class="btn" style="background:#00f5ff;color:#000" onclick="enviarWhatsApp()">🚀 CONFIRMAR INSCRIÇÃO - SALVAR DUAL JS+JSON</button>
+<button class="btn btn-sec" onclick="mostrarTela(2)">← VOLTAR</button>
+</div>
+</div>
+
+<div id="popup-confirmado">CONFIRMADO</div>
+
 <script>
-let plano={}, dias=[], hora='', maxDias=0;
 let objetivosSelecionados = [];
-const horarios = ['06:00','07:00','08:00','09:00','10:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','00:00','01:00','02:00','03:00','04:00','05:00'];
-horarios.forEach(h=>{ document.getElementById('horasGrid').innerHTML += `<div class="hora" data-hora="${h}">${h}<div class="vagas">7 vagas</div></div>`; });
-function toggleObjetivo(el){
-  let obj = el.dataset.obj;
-  let index = objetivosSelecionados.indexOf(obj);
-  if(index > -1){ objetivosSelecionados.splice(index, 1); el.classList.remove('sel'); }
-  else { if(objetivosSelecionados.length >= 7) return; objetivosSelecionados.push(obj); el.classList.add('sel'); }
-  document.querySelectorAll('.obj').forEach(item=>{
-    let nome = item.dataset.obj; let pos = objetivosSelecionados.indexOf(nome);
-    if(pos > -1){ item.innerHTML = `<b style="color:#00ff88;">${pos+1}.</b> ${nome}`; } else { item.innerHTML = nome; }
-  });
-  document.getElementById('listaObjetivosSelecionados').innerText = objetivosSelecionados.length > 0? 'PRIORIDADE: ' + objetivosSelecionados.map((o,i)=>`${i+1}º ${o}`).join(' > ') : '';
-  document.getElementById('objetivos').value = objetivosSelecionados.join(' | ');
+let plano = {nome:'', valor:0, mat:0, freq:''};
+let dias = [];
+let hora = '';
+
+function toggleObjetivo(btn, val){
+  const idx = objetivosSelecionados.indexOf(val);
+  if(idx>-1){ objetivosSelecionados.splice(idx,1); btn.classList.remove('selecionado'); }
+  else { if(objetivosSelecionados.length>=7){ alert('Máximo 7 objetivos'); return; } objetivosSelecionados.push(val); btn.classList.add('selecionado'); }
+  const lista = document.getElementById('listaObjetivosSelecionados');
+  const hidden = document.getElementById('objetivos');
+  if(objetivosSelecionados.length===0){ lista.innerText='Nenhum objetivo selecionado'; hidden.value=''; }
+  else { lista.innerText = objetivosSelecionados.map((o,i)=> (i+1)+'º '+o).join(' | '); hidden.value = objetivosSelecionados.join(' | '); }
 }
-function mostrarTela(id){ document.querySelectorAll('#tela1,#tela2,#tela3').forEach(t=>t.classList.add('oculto')); document.getElementById(id).classList.remove('oculto'); window.scrollTo(0,0); }
-function irParaPlanos(){ if(objetivosSelecionados.length == 0){alert('Selecione pelo menos 1 objetivo');return;} mostrarTela('tela2'); }
-function selPlano(el){
-  document.querySelectorAll('.plano').forEach(p=>p.classList.remove('sel')); el.classList.add('sel');
-  plano = {nome:el.dataset.nome, valor:el.dataset.valor, mat:el.dataset.mat, tipo:el.dataset.tipo, freq:parseInt(el.dataset.freq)};
-  dias=[]; hora=''; document.querySelectorAll('.dia,.hora').forEach(i=>i.classList.remove('sel','lib','bloq')); maxDias=plano.freq;
-  document.querySelectorAll('.dia,.hora').forEach(i=>i.classList.add('lib'));
-  if(plano.freq==5){ document.querySelectorAll('.dia').forEach(d=>{d.classList.add('sel','bloq'); dias.push(d.dataset.dia);}); document.getElementById('avisoDias').innerText=`Dias: Segunda, Terça, Quarta, Quinta, Sexta`; }
-  else { document.getElementById('avisoDias').innerText=`Faltam ${maxDias} dia(s)`; }
+function toggleDia(btn, dia){
+  const i = dias.indexOf(dia);
+  if(i>-1){ dias.splice(i,1); btn.classList.remove('ativo'); }
+  else { dias.push(dia); btn.classList.add('ativo'); }
 }
-document.querySelectorAll('.dia').forEach(dia=>{
-  dia.addEventListener('click', function(){
-    if(!this.classList.contains('lib') || this.classList.contains('bloq')) return;
-    if(this.classList.contains('sel')){this.classList.remove('sel'); dias=dias.filter(d=>d!=this.dataset.dia);}
-    else{if(dias.length>=maxDias)return; this.classList.add('sel'); dias.push(this.dataset.dia);}
-    document.querySelectorAll('.dia').forEach(d=>{if(!d.classList.contains('sel')&&dias.length>=maxDias)d.classList.add('bloq');else d.classList.remove('bloq');});
-    let faltam=maxDias-dias.length; document.getElementById('avisoDias').innerText= faltam>0? `Faltam ${faltam} dia(s)` : `Dias: ${dias.join(', ')}`;
-  });
-});
-document.querySelectorAll('.hora').forEach(horaEl=>{
-  horaEl.addEventListener('click', function(){
-    if(!this.classList.contains('lib')) return;
-    document.querySelectorAll('.hora').forEach(h=>h.classList.remove('sel')); this.classList.add('sel'); hora=this.dataset.hora;
-  });
-});
-function irParaDados(){ if(!plano.nome){alert('Selecione um plano');return;} if(dias.length!=maxDias){alert(`Selecione ${maxDias} dia(s)`);return;} if(!hora){alert('Selecione 1 horário');return;} mostrarTela('tela3'); }
-function calcularIdade(){let nasc = document.getElementById('nasc').value; if(!nasc) return;let idade = new Date().getFullYear() - new Date(nasc).getFullYear();document.getElementById('idade').value = idade + ' anos';}
-function mascaraCPF(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2"); }
-function mascaraWhats(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{2})(\d)/,"($1) $2").replace(/(\d{5})(\d)/,"$1-$2"); }
-function mascaraCEP(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{5})(\d)/,"$1-$2"); }
-async function buscarCEP(cep){ cep = cep.replace(/\D/g,''); if(cep.length!== 8) return; try{ let res = await fetch(`https://viacep.com.br/ws/${cep}/json/`); let data = await res.json(); if(!data.erro){ document.getElementById('rua').value = data.logradouro; document.getElementById('bairro').value = data.bairro; document.getElementById('cidade').value = data.localidade; } }catch(e){} }
+function mostrarTela(n){
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+  document.getElementById('tela'+n).classList.add('ativa');
+  window.scrollTo(0,0);
+}
+function irParaPlanos(){
+  if(objetivosSelecionados.length===0){ alert('Escolha pelo menos 1 objetivo'); return; }
+  mostrarTela(2);
+}
+function selPlano(nome, valor, mat, freq){
+  document.querySelectorAll('.plano-card').forEach(c=>c.classList.remove('ativo'));
+  event.currentTarget.classList.add('ativo');
+  plano = {nome, valor, mat, freq};
+}
+function irParaDados(){
+  if(!plano.nome){ alert('Escolha 1 plano'); return; }
+  if(dias.length===0){ alert('Escolha dias'); return; }
+  if(!hora){ alert('Escolha horário'); return; }
+  mostrarTela(3);
+}
+function mascaraCPF(el){ let v=el.value.replace(/\D/g,''); v=v.replace(/(\d{3})(\d)/,'$1.$2'); v=v.replace(/(\d{3})(\d)/,'$1.$2'); v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2'); el.value=v; }
+function mascaraWhats(el){ let v=el.value.replace(/\D/g,''); v=v.replace(/^(\d{2})(\d)/g,'($1) $2'); v=v.replace(/(\d{5})(\d)/,'$1-$2'); el.value=v; }
+function mascaraCEP(el){ let v=el.value.replace(/\D/g,''); v=v.replace(/(\d{5})(\d)/,'$1-$2'); el.value=v; }
+async function buscarCEP(){
+  const cep = document.getElementById('cep').value.replace(/\D/g,'');
+  if(cep.length!==8){ alert('CEP inválido'); return; }
+  try{ const r=await fetch('https://viacep.com.br/ws/'+cep+'/json/'); const j=await r.json(); if(j.erro){ alert('CEP não encontrado'); return; } document.getElementById('rua').value=j.logradouro||''; document.getElementById('bairro').value=j.bairro||''; document.getElementById('cidade').value=j.localidade||''; }catch(e){ alert('Erro CEP'); }
+}
+
+// >>> VERSÃO COMPLETA DUAL JS+JSON COM ANAMNESE COMPLETA - NÃO ALTERAR LÓGICA ABAIXO <<<
 async function enviarWhatsApp(){
   const nomeEl = document.getElementById('nome');
   const nomeCompleto = (nomeEl ? nomeEl.value : '').trim();
   if(!nomeCompleto){ alert('Preencha nome completo'); return; }
 
   const TOKEN_ATUAL = (typeof GH_TOKEN !== 'undefined' ? GH_TOKEN : (window.GH_TOKEN || window.GH_TOKEN_REAL || localStorage.getItem('ktpRealToken') || localStorage.getItem('gh_token') || ''));
-  if(!TOKEN_ATUAL){ alert('GH_TOKEN não encontrado. Cole no campo de token do master.'); return; }
+  if(!TOKEN_ATUAL){ alert('GH_TOKEN não encontrado'); return; }
 
-  const basePath = "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial";
-  const centralPath = "korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.js";
+  const basePath = "korvil/sections/ktp/projetotransformacao/inscricao-do-projeto/inscritos/2026";
+  const centralPathJS = "korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.js";
+  const centralPathJSON = "korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.json";
 
-  // 1. Determinar último número pasta mãe
   let max = 0;
   try{
-    const r = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}?ref=main`,{
-      headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Accept":"application/vnd.github.v3+json" }
-    });
+    const r = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${basePath}?ref=main`,{headers:{"Authorization":`token ${TOKEN_ATUAL}`,"Accept":"application/vnd.github.v3+json"}});
     if(r.ok){
       const lista = await r.json();
       const reMae = /^(\d+)-/;
       if(Array.isArray(lista)){
         for(const it of lista){
           const m = it.name.match(reMae);
-          if(m){
-            const n = parseInt(m[1],10);
-            if(!isNaN(n) && n > max) max = n;
-          }
+          if(m){ const n = parseInt(m[1],10); if(!isNaN(n) && n>max) max=n; }
         }
       }
     }
-  }catch(e){ console.warn('fallback max', e); max = 41; }
+  }catch(e){ max=41; }
+  let prox = max+1; if(prox===43) prox=44; if(prox<42) prox=42;
 
-  let prox = max + 1;
-  if(prox === 43) prox = 44;
-  if(prox < 42) prox = 42;
-
-  const primeiro = nomeCompleto.split(/\s+/)[0] || 'aluno';
+  const primeiro = nomeCompleto.split(/\s+/)[0]||'aluno';
   const primeiroNomeReal = primeiro.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
   const pastaMae = `${prox}-${primeiroNomeReal}${prox}`;
   const nomeArq = `${pastaMae}.json`;
   const fullPath = `${basePath}/${pastaMae}/${nomeArq}`;
 
-  // Coleta TODOS dados reais das 3 telas
+  // COLETA TODAS ESCOLHAS 3 TELAS EM ORDEM EXATA
   const objetivos = document.getElementById('objetivos')?.value || objetivosSelecionados.join(' | ');
   const nivelAtividade = document.getElementById('nivelAtividade')?.value || '';
   const q1 = document.getElementById('q1')?.value || '';
@@ -230,9 +248,60 @@ async function enviarWhatsApp(){
   const bairro = document.getElementById('bairro')?.value || '';
   const cidade = document.getElementById('cidade')?.value || '';
 
-  const vencData = new Date();
-  vencData.setDate(vencData.getDate()+30);
+  const vencData = new Date(); vencData.setDate(vencData.getDate()+30);
   const vencStr = vencData.toLocaleDateString('pt-BR');
+
+  // ANAMNESE COMPLETA COM PERGUNTAS + RESPOSTAS
+  const anamneseCompleta = {
+    "TELA_1_OBJETIVOS": {
+      "pergunta": "OBJETIVOS: Clique e escolha seus objetivos na ordem de prioridade. De 1 até no máximo 7",
+      "opcoes_disponiveis": ["Ganho de Peso","Emagrecimento","Definição Muscular","Saúde","Condicionamento Físico","Hipertrofia","Reabilitação Física"],
+      "escolhas_aluno_ordem": objetivosSelecionados,
+      "prioridade_formatada": document.getElementById('listaObjetivosSelecionados')?.innerText || '',
+      "valor": objetivos
+    },
+    "TELA_1_ANAMNESE": {
+      "nivel_atividade": {"pergunta":"Nível de Atividade Física","resposta":nivelAtividade},
+      "q1": {"pergunta":"1. Já praticou atividade física antes?","resposta":q1},
+      "q2": {"pergunta":"2. Como você descreve sua ALIMENTAÇÃO atual?","resposta":q2},
+      "q3": {"pergunta":"3. Quantas horas você DORME por noite?","resposta":q3},
+      "q4": {"pergunta":"4. Possui alguma RESTRIÇÃO alimentar?","resposta":q4},
+      "q5": {"pergunta":"5. Qual parte do corpo quer MELHORAR mais?","resposta":q5},
+      "q6": {"pergunta":"6. Possui alguma DEFICIENCIA ou LIMITAÇÃO fisica?","resposta":q6},
+      "q7": {"pergunta":"7. Está passando ou JÁ TEVE acompanhamento profissional PSICOLÓGICO?","resposta":q7},
+      "q8": {"pergunta":"8. Está fazendo ALGUM TRATAMENTO fisico ou psicológico?","resposta":q8},
+      "q9": {"pergunta":"9. Está fazendo USO DE MEDICAMENTOS? Quais?","resposta":q9}
+    },
+    "TELA_2_PLANOS": {
+      "pergunta":"1. ESCOLHA 1 PLANO",
+      "opcoes_disponiveis": ["Avulsa Online R$20","Avulsa Presencial R$20","Online Mensal R$60+50","Presencial 1x R$60+50","Presencial 2x R$80+50","Presencial 3x R$100+50","Presencial 4x R$130+50","Presencial 5x R$150+50"],
+      "escolha_aluno": plano
+    },
+    "TELA_2_DIAS_HORARIO": {
+      "pergunta_dias":"2. ESCOLHA DIAS - SEG À SEX",
+      "opcoes_dias": ["Segunda","Terça","Quarta","Quinta","Sexta"],
+      "escolhas_dias": dias,
+      "pergunta_horario":"HORÁRIO FIXO: 06h às 10h | 16h às 05h",
+      "opcoes_horario": ['06:00','07:00','08:00','09:00','10:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','00:00','01:00','02:00','03:00','04:00','05:00'],
+      "escolha_horario": hora
+    },
+    "TELA_3_DADOS_PESSOAIS": {
+      "nome_completo": {"pergunta":"Nome Completo","resposta":nomeCompleto},
+      "cpf": {"pergunta":"CPF","resposta":cpf},
+      "data_nasc": {"pergunta":"Data Nasc","resposta":nasc},
+      "idade": {"pergunta":"Idade","resposta":idade},
+      "genero": {"pergunta":"Gênero","resposta":genero},
+      "whatsapp": {"pergunta":"WhatsApp","resposta":whats},
+      "email": {"pergunta":"Email","resposta":email}
+    },
+    "TELA_3_ENDERECO": {
+      "cep": {"pergunta":"CEP","resposta":cep},
+      "rua": {"pergunta":"Rua","resposta":rua},
+      "numero": {"pergunta":"Número","resposta":numero},
+      "bairro": {"pergunta":"Bairro","resposta":bairro},
+      "cidade": {"pergunta":"Cidade","resposta":cidade}
+    }
+  };
 
   const dadosCompletos = {
     id: prox,
@@ -242,82 +311,77 @@ async function enviarWhatsApp(){
     nome: nomeCompleto,
     primeiroNome: primeiroNomeReal,
     idSlug: `${primeiroNomeReal}${prox}`,
-    // TELA 1
-    objetivos: objetivos,
-    objetivosArray: objetivosSelecionados,
-    nivelAtividade: nivelAtividade,
-    q1: q1, q2: q2, q3: q3, q4: q4, q5: q5, q6: q6, q7: q7, q8: q8, q9: q9,
-    // TELA 2
-    plano: plano,
-    dias: dias,
-    hora: hora,
-    // TELA 3
-    cpf: cpf, nasc: nasc, idade: idade, genero: genero, whats: whats, email: email,
-    cep: cep, rua: rua, numero: numero, bairro: bairro, cidade: cidade,
     criadoEm: new Date().toISOString(),
-    versao: 'V23-3ACOES'
+    versao: 'V24-DUAL-ANAMNESE',
+    // DADOS EM ORDEM EXATA 3 TELAS
+    tela1_objetivos: anamneseCompleta.TELA_1_OBJETIVOS,
+    tela1_anamneses: anamneseCompleta.TELA_1_ANAMNESE,
+    tela2_plano: anamneseCompleta.TELA_2_PLANOS,
+    tela2_dias_horario: anamneseCompleta.TELA_2_DIAS_HORARIO,
+    tela3_dados: anamneseCompleta.TELA_3_DADOS_PESSOAIS,
+    tela3_endereco: anamneseCompleta.TELA_3_ENDERECO,
+    // COMPATIBILIDADE FLAT
+    objetivos: objetivos,
+    nivel_atividade: nivelAtividade,
+    q1: q1, q2: q2, q3: q3, q4: q4, q5: q5, q6: q6, q7: q7, q8: q8, q9: q9,
+    plano: plano, dias: dias, hora: hora,
+    cpf: cpf, nasc: nasc, idade: idade, genero: genero, whats: whats, email: email,
+    cep: cep, rua: rua, numero: numero, bairro: bairro, cidade: cidade
   };
 
   const conteudoStr = JSON.stringify(dadosCompletos, null, 2);
   const conteudoBase64 = btoa(unescape(encodeURIComponent(conteudoStr)));
 
-  // AÇÃO 1: PUT pasta mãe individual
+  // AÇÃO 1: PASTA MÃE INDIVIDUAL
   const putRes = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${fullPath}`,{
     method:'PUT',
-    headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Content-Type":"application/json" },
-    body: JSON.stringify({ message: `feat: inscricao ${pastaMae} [V23-3ACOES]`, content: conteudoBase64, branch: 'main' })
+    headers:{"Authorization":`token ${TOKEN_ATUAL}`,"Content-Type":"application/json"},
+    body: JSON.stringify({message:`feat: inscricao ${pastaMae} [V24-DUAL]`,content:conteudoBase64,branch:'main'})
   });
-  if(!putRes.ok){
-    const txt = await putRes.text();
-    throw new Error('PUT individual falhou: '+txt);
-  }
+  if(!putRes.ok) throw new Error('PUT individual falhou: '+await putRes.text());
 
-  // AÇÃO 2: ATUALIZAR BANCO CENTRAL cronograma-de-alunos.js com todos os dados por numeração
-  try{
-    let shaCentral = null;
-    let centralStr = null;
-    const getCentral = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${centralPath}?ref=main`,{
-      headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Accept":"application/vnd.github.v3+json" }
-    });
-    if(getCentral.ok){
-      const centralJson = await getCentral.json();
-      shaCentral = centralJson.sha;
-      centralStr = atob(centralJson.content.replace(/\n/g,''));
-    }
+  // FUNÇÃO PARA ATUALIZAR BANCO CENTRAL (JS e JSON)
+  async function atualizaBancoCentral(path, isJSON){
+    let sha = null;
+    let data = {ALUNOS_DB:{}, ALUNOS_PRESENCIAL:{}, ALUNOS_ONLINE:{}, CRONOGRAMA_DB:{PRESENCIAL:[], ONLINE:[]}};
+    try{
+      const getRes = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${path}?ref=main`,{headers:{"Authorization":`token ${TOKEN_ATUAL}`,"Accept":"application/vnd.github.v3+json"}});
+      if(getRes.ok){
+        const j = await getRes.json();
+        sha = j.sha;
+        const decoded = atob(j.content.replace(/\n/g,''));
+        if(isJSON){
+          data = JSON.parse(decoded);
+        }else{
+          try{
+            const tempWindow = {};
+            const func = new Function('window', decoded + '\n; return window.KTP_CRONOGRAMA || {};');
+            data = func(tempWindow) || data;
+          }catch(e){ console.warn('parse JS falhou',e); }
+        }
+      }
+    }catch(e){}
 
-    let centralData = {ALUNOS_DB:{}, ALUNOS_PRESENCIAL:{}, ALUNOS_ONLINE:{}, CRONOGRAMA_DB:{PRESENCIAL:[], ONLINE:[]}};
-    if(centralStr){
-      try{
-        const tempWindow = {};
-        const func = new Function('window', centralStr + '\n; return window.KTP_CRONOGRAMA || {};');
-        centralData = func(tempWindow) || centralData;
-        if(!centralData.ALUNOS_DB) centralData.ALUNOS_DB = {};
-        if(!centralData.ALUNOS_PRESENCIAL) centralData.ALUNOS_PRESENCIAL = {};
-        if(!centralData.CRONOGRAMA_DB) centralData.CRONOGRAMA_DB = {PRESENCIAL:[], ONLINE:[]};
-        if(!centralData.CRONOGRAMA_DB.PRESENCIAL) centralData.CRONOGRAMA_DB.PRESENCIAL = [];
-      }catch(e){ console.warn('parse central falhou, criando novo', e); }
-    }
+    if(!data.ALUNOS_DB) data.ALUNOS_DB={};
+    if(!data.ALUNOS_PRESENCIAL) data.ALUNOS_PRESENCIAL={};
+    if(!data.CRONOGRAMA_DB) data.CRONOGRAMA_DB={PRESENCIAL:[], ONLINE:[]};
+    if(!data.CRONOGRAMA_DB.PRESENCIAL) data.CRONOGRAMA_DB.PRESENCIAL=[];
 
-    // Adiciona no ALUNOS_DB
-    centralData.ALUNOS_DB[`${primeiroNomeReal}${prox}`] = {"nome": nomeCompleto, "tipo":"ALUNO", "id": prox, "pasta": pastaMae};
+    data.ALUNOS_DB[`${primeiroNomeReal}${prox}`] = {"nome":nomeCompleto,"tipo":"ALUNO","id":prox,"pasta":pastaMae};
+    data.ALUNOS_PRESENCIAL[`${primeiroNomeReal}${prox}`] = {"nome":nomeCompleto,"tipo":"ALUNO"};
 
-    // Adiciona no ALUNOS_PRESENCIAL
-    centralData.ALUNOS_PRESENCIAL[`${primeiroNomeReal}${prox}`] = {"nome": nomeCompleto, "tipo":"ALUNO"};
-
-    // Adiciona no CRONOGRAMA_DB.PRESENCIAL no slot da hora
     const horaKey = `${hora} ⭐`;
-    let slot = centralData.CRONOGRAMA_DB.PRESENCIAL.find(s => s.hora && s.hora.startsWith(hora.split(':')[0]));
-    if(!slot){
-      slot = {"hora": horaKey, "status":"ATIVOS", "alunos":[]};
-      centralData.CRONOGRAMA_DB.PRESENCIAL.push(slot);
-    }
-    const novoAlunoCronograma = {
+    let slot = data.CRONOGRAMA_DB.PRESENCIAL.find(s=>s.hora && s.hora.startsWith(hora.split(':')[0]));
+    if(!slot){ slot={"hora":horaKey,"status":"ATIVOS","alunos":[]}; data.CRONOGRAMA_DB.PRESENCIAL.push(slot); }
+
+    const novoAluno = {
       "n": prox,
       "id": `${primeiroNomeReal}${prox}`,
       "aluno": nomeCompleto,
       "dias": dias.join(', '),
       "freq": `${plano.freq}x`,
       "objetivo": objetivos,
+      "objetivos_array": objetivosSelecionados,
       "valor": `R$${plano.valor},00`,
       "matricula": `R$${plano.mat},00`,
       "total": `R$${parseInt(plano.valor||0)+parseInt(plano.mat||0)},00`,
@@ -326,24 +390,28 @@ async function enviarWhatsApp(){
       "cpf": cpf, "nasc": nasc, "idade": idade, "genero": genero, "whats": whats, "email": email,
       "nivel_atividade": nivelAtividade,
       "q1": q1, "q2": q2, "q3": q3, "q4": q4, "q5": q5, "q6": q6, "q7": q7, "q8": q8, "q9": q9,
-      "plano": plano.nome || '',
-      "cep": cep, "rua": rua, "numero": numero, "bairro": bairro, "cidade": cidade
+      "plano": plano.nome||'',
+      "cep": cep, "rua": rua, "numero": numero, "bairro": bairro, "cidade": cidade,
+      "anamnese_completa": anamneseCompleta
     };
-    slot.alunos.push(novoAlunoCronograma);
+    slot.alunos.push(novoAluno);
 
-    // Reconstrói arquivo JS completo
-    const novoCentralStr = `// korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.js
+    let novoConteudo;
+    if(isJSON){
+      novoConteudo = JSON.stringify(data, null, 2);
+    }else{
+      novoConteudo = `// korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.js
 // ARQUIVO EXTERNO - CRONOGRAMA COMPLETO - PUXADO POR ÂNCORA
 // Caminho GitHub: https://github.com/sistemak/korvil-app/edit/main/korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.json
 window.KTP_CRONOGRAMA = window.KTP_CRONOGRAMA || {};
 
-window.KTP_CRONOGRAMA.ALUNOS_DB = ${JSON.stringify(centralData.ALUNOS_DB, null, 2)};
+window.KTP_CRONOGRAMA.ALUNOS_DB = ${JSON.stringify(data.ALUNOS_DB, null, 2)};
 
-window.KTP_CRONOGRAMA.ALUNOS_PRESENCIAL = ${JSON.stringify(centralData.ALUNOS_PRESENCIAL, null, 2)};
+window.KTP_CRONOGRAMA.ALUNOS_PRESENCIAL = ${JSON.stringify(data.ALUNOS_PRESENCIAL, null, 2)};
 
-window.KTP_CRONOGRAMA.ALUNOS_ONLINE = ${JSON.stringify(centralData.ALUNOS_ONLINE || {}, null, 2)};
+window.KTP_CRONOGRAMA.ALUNOS_ONLINE = ${JSON.stringify(data.ALUNOS_ONLINE || {}, null, 2)};
 
-window.KTP_CRONOGRAMA.CRONOGRAMA_DB = ${JSON.stringify(centralData.CRONOGRAMA_DB, null, 2)};
+window.KTP_CRONOGRAMA.CRONOGRAMA_DB = ${JSON.stringify(data.CRONOGRAMA_DB, null, 2)};
 
 // Compatibilidade - variáveis originais por âncora
 var Sr = window.KTP_CRONOGRAMA.ALUNOS_DB;
@@ -354,37 +422,42 @@ var CRONOGRAMA = window.KTP_CRONOGRAMA.CRONOGRAMA_DB;
 
 // TOKEN FALSO SÓ PRA LEMBRAR FORMATO (não usar): hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG
 `;
+    }
 
-    const novoCentralBase64 = btoa(unescape(encodeURIComponent(novoCentralStr)));
-    const putCentral = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${centralPath}`,{
+    const base64 = btoa(unescape(encodeURIComponent(novoConteudo)));
+    const putRes = await fetch(`https://api.github.com/repos/sistemak/korvil-app/contents/${path}`,{
       method:'PUT',
-      headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Content-Type":"application/json" },
-      body: JSON.stringify({ message: `feat: atualiza banco central ${pastaMae} [V23]`, content: novoCentralBase64, branch: 'main', ...(shaCentral?{sha: shaCentral}:{}) })
+      headers:{"Authorization":`token ${TOKEN_ATUAL}`,"Content-Type":"application/json"},
+      body: JSON.stringify({message:`feat: atualiza banco central ${pastaMae} ${isJSON?'JSON':'JS'} [V24]`,content:base64,branch:'main',...(sha?{sha}:{})})
     });
-    if(!putCentral.ok){ console.warn('PUT central falhou', await putCentral.text()); }
-  }catch(e){ console.warn('Erro ao atualizar banco central', e); }
+    return putRes.ok;
+  }
 
-  // AÇÃO 2.5: Popup mini verde CONFIRMADO #00ff88
+  // AÇÃO 2: ATUALIZA JS E JSON SIMULTANEO
+  await atualizaBancoCentral(centralPathJS, false);
+  await atualizaBancoCentral(centralPathJSON, true);
+
+  // AÇÃO 2.5: POPUP CONFIRMADO
   let popup = document.getElementById('popup-confirmado');
   if(!popup){
     popup = document.createElement('div');
     popup.id = 'popup-confirmado';
-    popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#00ff88;color:#000;padding:24px 48px;border-radius:14px;font-weight:900;font-size:22px;z-index:9999;box-shadow:0 10px 40px rgba(0,255,136,.4);font-family:monospace;letter-spacing:0.04em;';
+    popup.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#00ff88;color:#000;padding:24px 48px;border-radius:14px;font-weight:900;font-size:22px;z-index:9999;box-shadow:0 10px 40px rgba(0,255,136,.4);font-family:monospace;';
     document.body.appendChild(popup);
   }
   popup.textContent = 'CONFIRMADO';
   popup.style.display = 'block';
   setTimeout(()=>{ if(popup) popup.style.display='none'; },3000);
 
-  // AÇÃO 3: WhatsApp via workflow dispatch sem sair da página com TODOS dados
+  // AÇÃO 3: WHATSAPP DISPATCH COM TODOS DADOS
   try{
-    const msgWhats = `NOVA INSCRIÇÃO K-TP%0A%0ANome: ${encodeURIComponent(nomeCompleto)}%0AID: ${prox} - ${pastaMae}%0APlano: ${encodeURIComponent(plano.nome||'')}%0ADias: ${encodeURIComponent(dias.join(','))}%0AHora: ${encodeURIComponent(hora)}%0AWhats: ${encodeURIComponent(whats)}%0AObjetivo: ${encodeURIComponent(objetivos)}%0ACPF: ${encodeURIComponent(cpf)}`;
+    const msg = `NOVA INSCRIÇÃO K-TP%0A%0ANome: ${encodeURIComponent(nomeCompleto)}%0AID: ${prox} - ${pastaMae}%0APlano: ${encodeURIComponent(plano.nome||'')}%0ADias: ${encodeURIComponent(dias.join(','))}%0AHora: ${encodeURIComponent(hora)}%0AWhats: ${encodeURIComponent(whats)}%0AObjetivos: ${encodeURIComponent(objetivos)}%0ANivel: ${encodeURIComponent(nivelAtividade)}%0AQ1: ${encodeURIComponent(q1)}%0AQ5: ${encodeURIComponent(q5)}`;
     await fetch(`https://api.github.com/repos/sistemak/korvil-app/actions/workflows/whatsapp.yml/dispatches`,{
       method:'POST',
-      headers:{ "Authorization": `token ${TOKEN_ATUAL}`, "Content-Type":"application/json" },
-      body: JSON.stringify({ ref: 'main', inputs: { pasta: pastaMae, nome: nomeCompleto, caminho: fullPath, mensagem: msgWhats } })
+      headers:{"Authorization":`token ${TOKEN_ATUAL}`,"Content-Type":"application/json"},
+      body: JSON.stringify({ref:'main',inputs:{pasta:pastaMae,nome:nomeCompleto,caminho:fullPath,mensagem:msg}})
     });
-  }catch(e){ console.warn('dispatch whatsapp', e); }
+  }catch(e){ console.warn('dispatch whatsapp',e); }
 }
 </script>
 </body>
