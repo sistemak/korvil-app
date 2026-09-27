@@ -1,7 +1,7 @@
-// gerar.js - util para gerar pasta mãe manualmente
-const { gerarPastaMae, gerarConta } = require('./login/criar-conta-logic.js');
-const nome = process.argv[2] || 'Sistema K';
-console.log('Nome:', nome);
-console.log('pasta-mae:', gerarPastaMae(nome));
-console.log('arquivo:', gerarPastaMae(nome)+'.json');
-console.log('path final:', 'korvil/sections/korvil-loja/login/contas/'+gerarPastaMae(nome)+'/'+gerarPastaMae(nome)+'.json');
+// gerar estrutura inicial se necessario
+const fs=require('fs'); const path=require('path');
+const base=path.join(__dirname,'login','contas');
+fs.mkdirSync(base,{recursive:true});
+fs.writeFileSync(path.join(base,'.gitkeep'),'# keep
+');
+console.log('gerar.js ok',base);
