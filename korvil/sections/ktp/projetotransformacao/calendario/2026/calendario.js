@@ -1,97 +1,122 @@
-// K-TP CALENDARIO 2026 - BANCO DE DADOS OFICIAL - 52 SEMANAS
-const KTP_CALENDARIO_2026 = {
-  "2026-01-05": {fase:"FASE 1: OFF SEASON", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Regeneração | Adaptações | Aprendizados", texto:`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
-SEMANA DE MANUTENÇÃO
-Essa é uma semana única dentro do processo — uma pausa estratégica para ajustar, aprender e evoluir com mais consciência.
+// korvil/sections/ktp/projetotransformacao/calendario/2026/calendario.js
+// Arquivo completo do calendário K-TP 2026 - separado do projetotransformacao.html
+// NÃO ALTERAR ESTRUTURA - apenas separado para diminuir peso do HTML principal
 
-OBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados
-Aqui, a intensidade diminui, mas a atenção aumenta. É o momento de aprender mais sobre os exercícios, melhorar a execução dos movimentos e corrigir detalhes que fazem toda a diferença lá na frente.
+window.KTP_CALENDARIO = window.KTP_CALENDARIO || {};
 
-O foco está na regeneração muscular, na mobilidade e na qualidade de cada exercício. Um corpo bem recuperado responde melhor, ganha mais eficiência e reduz o risco de lesões.
-
-Menos carga, mais controle. Menos pressa, mais precisão.
-
-Semana mais leve. É ela que sustenta sua evolução e prepara você para voltar ainda mais forte.`},
-  "2026-01-12": {fase:"FASE 1: OFF SEASON", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Regeneração | Adaptações | Aprendizados", texto:`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
-SEMANA DE RESISTÊNCIA
-OBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados
-Essa é uma semana fundamental dentro do processo — onde você constrói a base que sustenta toda evolução física.
-
-Aqui, o foco não está no peso, mas na capacidade do músculo trabalhar por mais tempo, suportar esforço e melhorar a recuperação entre exercícios.
-
-A intensidade vem do volume e da continuidade, não da carga. É o momento de fortalecer o fôlego, a mente e a disciplina física.
-
-Mais repetições, menos peso.
-Mais constância, menos pausa.
-Mais resistência, mais preparação.`},
-  "2026-01-19": {fase:"FASE 1: OFF SEASON", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Regeneração | Adaptações | Aprendizados", texto:`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
-SEMANA DE FORÇA
-OBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados
-Foco da semana: ficar mais forte de verdade
-Não é estética — é força, resistência e controle
-Ser musculoso ≠ ser forte
-Definição é aparência
-Força é desempenho real
-TREINO: Poucas repetições 3 a 6 | Carga mais alta ~70% | Execução controlada | Mais descanso`},
-  "2026-01-26": {fase:"FASE 1: OFF SEASON", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Regeneração | Adaptações | Aprendizados", texto:`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
-SEMANA DE HIPERTROFIA
-OBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados
-Foco: Desenvolvimento e crescimento do físico através de treino estruturado, controlado e eficiente.
-ESTRUTURA DO TREINO:
-HIPERTROFIA 10 a 12 repetições até a falha
-Mistura de força + resistência
-Estímulo máximo para crescimento muscular`},
-  "2026-02-02": {fase:"FASE 2: BASE FORTE", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Base Forte | Consistência", texto:"K-TP | FASE 2: BASE FORTE - SEMANA DE MANUTENÇÃO\nOBJETIVO: Base Forte | Consistência"},
-  "2026-02-09": {fase:"FASE 2: BASE FORTE", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Base Forte | Consistência", texto:"K-TP | FASE 2: BASE FORTE - SEMANA DE RESISTÊNCIA"},
-  "2026-02-16": {fase:"FASE 2: BASE FORTE", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Base Forte | Consistência", texto:"K-TP | FASE 2: BASE FORTE - SEMANA DE FORÇA"},
-  "2026-02-23": {fase:"FASE 2: BASE FORTE", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Base Forte | Consistência", texto:"K-TP | FASE 2: BASE FORTE - SEMANA DE HIPERTROFIA"},
-  "2026-03-02": {fase:"FASE 3: VOLUME", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Volume | Intensidade", texto:"K-TP | FASE 3: VOLUME"},
-  "2026-03-09": {fase:"FASE 3: VOLUME", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Volume | Intensidade", texto:"K-TP | FASE 3: VOLUME"},
-  "2026-03-16": {fase:"FASE 3: VOLUME", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Volume | Intensidade", texto:"K-TP | FASE 3: VOLUME"},
-  "2026-03-23": {fase:"FASE 3: VOLUME", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Volume | Intensidade", texto:"K-TP | FASE 3: VOLUME"},
-  "2026-03-30": {fase:"FASE 4: CUTTING INICIAL", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Definição | Secar", texto:"K-TP | FASE 4: CUTTING INICIAL"},
-  "2026-04-06": {fase:"FASE 4: CUTTING INICIAL", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Definição | Secar", texto:"K-TP | FASE 4"},
-  "2026-04-13": {fase:"FASE 4: CUTTING INICIAL", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Definição | Secar", texto:"K-TP | FASE 4"},
-  "2026-04-20": {fase:"FASE 4: CUTTING INICIAL", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Definição | Secar", texto:"K-TP | FASE 4"},
-  "2026-04-27": {fase:"FASE 5: POTÊNCIA", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Potência | Explosão", texto:"K-TP | FASE 5"},
-  "2026-05-04": {fase:"FASE 5: POTÊNCIA", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Potência | Explosão", texto:"K-TP | FASE 5"},
-  "2026-05-11": {fase:"FASE 5: POTÊNCIA", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Potência | Explosão", texto:"K-TP | FASE 5"},
-  "2026-05-18": {fase:"FASE 5: POTÊNCIA", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Potência | Explosão", texto:"K-TP | FASE 5"},
-  "2026-05-25": {fase:"FASE 6: CUTTING AVANÇADO", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Rasgar | Secar Máximo", texto:"K-TP | FASE 6"},
-  "2026-06-01": {fase:"FASE 6: CUTTING AVANÇADO", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Rasgar | Secar Máximo", texto:"K-TP | FASE 6"},
-  "2026-06-08": {fase:"FASE 6: CUTTING AVANÇADO", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Rasgar | Secar Máximo", texto:"K-TP | FASE 6"},
-  "2026-06-15": {fase:"FASE 6: CUTTING AVANÇADO", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Rasgar | Secar Máximo", texto:"K-TP | FASE 6"},
-  "2026-06-22": {fase:"FASE 7: SHAPE FINAL", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Shape | Estética", texto:"K-TP | FASE 7"},
-  "2026-06-29": {fase:"FASE 7: SHAPE FINAL", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Shape | Estética", texto:"K-TP | FASE 7"},
-  "2026-07-06": {fase:"FASE 7: SHAPE FINAL", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Shape | Estética", texto:"K-TP | FASE 7"},
-  "2026-07-13": {fase:"FASE 7: SHAPE FINAL", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Shape | Estética", texto:"K-TP | FASE 7"},
-  "2026-07-20": {fase:"FASE 8: PERFORMANCE", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Performance Total", texto:"K-TP | FASE 8"},
-  "2026-07-27": {fase:"FASE 8: PERFORMANCE", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Performance Total", texto:"K-TP | FASE 8"},
-  "2026-08-03": {fase:"FASE 8: PERFORMANCE", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Performance Total", texto:"K-TP | FASE 8"},
-  "2026-08-10": {fase:"FASE 8: PERFORMANCE", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Performance Total", texto:"K-TP | FASE 8"},
-  "2026-08-17": {fase:"FASE 9: BULKING LIMPO", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Ganho Limpo", texto:"K-TP | FASE 9"},
-  "2026-08-24": {fase:"FASE 9: BULKING LIMPO", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Ganho Limpo", texto:"K-TP | FASE 9"},
-  "2026-08-31": {fase:"FASE 9: BULKING LIMPO", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Ganho Limpo", texto:"K-TP | FASE 9"},
-  "2026-09-07": {fase:"FASE 9: BULKING LIMPO", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Ganho Limpo", texto:"K-TP | FASE 9"},
-  "2026-09-14": {fase:"FASE 10: DEFINIÇÃO", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Definição Final", texto:"K-TP | FASE 10"},
-  "2026-09-21": {fase:"FASE 10: DEFINIÇÃO", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Definição Final", texto:"K-TP | FASE 10"},
-  "2026-09-28": {fase:"FASE 10: DEFINIÇÃO", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Definição Final", texto:"K-TP | FASE 10"},
-  "2026-10-05": {fase:"FASE 10: DEFINIÇÃO", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Definição Final", texto:"K-TP | FASE 10"},
-  "2026-10-12": {fase:"FASE 11: RETA FINAL", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Reta Final", texto:"K-TP | FASE 11"},
-  "2026-10-19": {fase:"FASE 11: RETA FINAL", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Reta Final", texto:"K-TP | FASE 11"},
-  "2026-10-26": {fase:"FASE 11: RETA FINAL", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Reta Final", texto:"K-TP | FASE 11"},
-  "2026-11-02": {fase:"FASE 11: RETA FINAL", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Reta Final", texto:"K-TP | FASE 11"},
-  "2026-11-09": {fase:"FASE 12: PEAK", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Peak | Auge", texto:"K-TP | FASE 12"},
-  "2026-11-16": {fase:"FASE 12: PEAK", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Peak | Auge", texto:"K-TP | FASE 12"},
-  "2026-11-23": {fase:"FASE 12: PEAK", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Peak | Auge", texto:"K-TP | FASE 12"},
-  "2026-11-30": {fase:"FASE 12: PEAK", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Peak | Auge", texto:"K-TP | FASE 12"},
-  "2026-12-07": {fase:"DEZEMBRO: FINALIZAÇÃO", tipo:"semana-de-manutencao", nome:"SEMANA DE MANUTENÇÃO", objetivo:"Consolidar resultados", texto:"K-TP | DEZEMBRO: FINALIZAÇÃO"},
-  "2026-12-14": {fase:"DEZEMBRO: FINALIZAÇÃO", tipo:"semana-de-resistencia", nome:"SEMANA DE RESISTÊNCIA", objetivo:"Consolidar resultados", texto:"K-TP | DEZEMBRO: FINALIZAÇÃO"},
-  "2026-12-21": {fase:"DEZEMBRO: FÉRIAS", tipo:"semana-de-forca", nome:"SEMANA DE FORÇA", objetivo:"Mostrar os resultados", texto:"K-TP | DEZEMBRO: FÉRIAS"},
-  "2026-12-28": {fase:"DEZEMBRO: FÉRIAS", tipo:"semana-de-hipertrofia", nome:"SEMANA DE HIPERTROFIA", objetivo:"Mostrar os resultados", texto:`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS
-SEMANA DE HIPERTROFIA
-OBJETIVO DA FASE: Mostrar os resultados
-Último treino do ano. Celebração. Resultado e descanso merecido 💪`}
+window.KTP_CALENDARIO.Al = {
+"2026-01-05":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE MANUTENÇÃO`,"2026-01-12":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE RESISTÊNCIA`,"2026-01-19":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE FORÇA`,"2026-01-26":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE HIPERTROFIA`,"2026-02-02":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE MANUTENÇÃO`,"2026-02-09":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE RESISTÊNCIA`,"2026-02-16":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE FORÇA`,"2026-02-23":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE HIPERTROFIA`,"2026-03-02":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE MANUTENÇÃO`,"2026-03-09":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE RESISTÊNCIA`,"2026-03-16":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE FORÇA`,"2026-03-23":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE HIPERTROFIA`,"2026-03-30":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE HIPERTROFIA`,"2026-04-06":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE MANUTENÇÃO`,"2026-04-13":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE RESISTÊNCIA`,"2026-04-20":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE FORÇA`,"2026-04-27":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE HIPERTROFIA`,"2026-05-04":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE MANUTENÇÃO`,"2026-05-11":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE RESISTÊNCIA`,"2026-05-18":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE FORÇA`,"2026-05-25":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 2: BULKING
+SEMANA DE HIPERTROFIA`,"2026-06-01":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE MANUTENÇÃO`,"2026-06-08":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE RESISTÊNCIA`,"2026-06-15":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE FORÇA`,"2026-06-22":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE HIPERTROFIA`,"2026-06-29":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE HIPERTROFIA`,"2026-07-06":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE MANUTENÇÃO`,"2026-07-13":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE FORÇA`,"2026-07-20":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE HIPERTROFIA`,"2026-07-27":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE HIPERTROFIA`,"2026-08-03":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE MANUTENÇÃO`,"2026-08-10":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE RESISTÊNCIA`,"2026-08-17":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE FORÇA`,"2026-08-24":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE HIPERTROFIA`,"2026-08-31":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 3: MAINTENANCE
+SEMANA DE HIPERTROFIA`,"2026-09-07":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE MANUTENÇÃO`,"2026-09-14":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE RESISTÊNCIA`,"2026-09-21":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE FORÇA`,"2026-09-28":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE HIPERTROFIA`,"2026-10-05":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE MANUTENÇÃO`,"2026-10-12":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE RESISTÊNCIA`,"2026-10-19":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE FORÇA`,"2026-10-26":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE HIPERTROFIA`,"2026-11-02":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE MANUTENÇÃO`,"2026-11-09":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE RESISTÊNCIA`,"2026-11-16":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE FORÇA`,"2026-11-23":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE HIPERTROFIA`,"2026-11-30":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE HIPERTROFIA`,"2026-12-07":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS
+SEMANA DE RESISTÊNCIA`,"2026-12-14":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS
+SEMANA DE FORÇA`,"2026-12-21":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS
+SEMANA DE HIPERTROFIA`,"2026-12-28":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS
+SEMANA DE HIPERTROFIA`
 };
-if (typeof module!== 'undefined' && module.exports) module.exports = KTP_CALENDARIO_2026;
-if (typeof window!== 'undefined') window.KTP_CALENDARIO_2026 = KTP_CALENDARIO_2026;
+
+window.KTP_CALENDARIO.df = {
+"2026-01-05":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE MANUTENÇÃO
+OBJETIVO DA FASE: Regeneração | Adaptações | Aprendizados`,"2026-01-12":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE RESISTÊNCIA
+OBJETIVO: Base aeróbica e adaptação neuromuscular`,"2026-01-19":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE FORÇA
+OBJETIVO: Força máxima e técnica`,"2026-01-26":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 1: OFF SEASON
+SEMANA DE HIPERTROFIA
+OBJETIVO: Volume muscular e controle`,"2026-09-07":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - FASE 4: CUTTING
+SEMANA DE MANUTENÇÃO
+OBJETIVO DA FASE: Eliminar máximo de gordura | Manter máximo de massa muscular magra | Modelagem do físico
+Essa é a semana de preparação para a FASE FINAL do projeto 2026. Foque nas orientações e estratégias de cada semana desta fase.
+FOCO: Preparação para fase final - Revisar todas as orientações e estratégias`,"2026-12-07":`K-TP | PROJETO TRANSFORMAÇÃO 11° ANO - DEZEMBRO: FÉRIAS
+SEMANA DE RESISTÊNCIA
+OBJETIVO: Manutenção leve em férias`
+};
+
+window.KTP_CALENDARIO.wt = {
+"FASE 1: OFF SEASON":["2026-01-05","2026-01-12","2026-01-19","2026-01-26","2026-02-02","2026-02-09","2026-02-16","2026-02-23"],
+"FASE 2: BULKING":["2026-03-02","2026-03-09","2026-03-16","2026-03-23","2026-03-30","2026-04-06","2026-04-13","2026-04-20","2026-04-27","2026-05-04","2026-05-11","2026-05-18","2026-05-25"],
+"FASE 3: MAINTENANCE":["2026-06-01","2026-06-08","2026-06-15","2026-06-22","2026-06-29","2026-07-06","2026-07-13","2026-07-20","2026-07-27","2026-08-03","2026-08-10","2026-08-17","2026-08-24","2026-08-31"],
+"FASE 4: CUTTING":["2026-09-07","2026-09-14","2026-09-21","2026-09-28","2026-10-05","2026-10-12","2026-10-19","2026-10-26","2026-11-02","2026-11-09","2026-11-16","2026-11-23","2026-11-30"],
+"DEZEMBRO: FÉRIAS":["2026-12-07","2026-12-14","2026-12-21","2026-12-28"]
+};
+
+window.KTP_CALENDARIO.helpers = {
+  Ae: function(){
+    let e=new Date,n=new Date(e);
+    if(e.getDay()===1&&e.getHours()<1)n.setDate(e.getDate()-7);
+    let t=n.getDay(),r=n.getDate()-t+(t===0?-6:1),l=new Date(n.setDate(r));
+    l.setHours(0,0,0,0);
+    let u=l.getFullYear(),i=String(l.getMonth()+1).padStart(2,"0"),o=String(l.getDate()).padStart(2,"0");
+    return `${u}-${i}-${o}`;
+  },
+  Wn: function(e){
+    try{return new Date(e+"T12:00:00").toLocaleDateString("pt-BR")}catch{return e}
+  },
+  mf: function(e){
+    return`${String(e.getDate()).padStart(2,"0")}/${String(e.getMonth()+1).padStart(2,"0")}/${e.getFullYear()}`
+  },
+  Kl: function(e){
+    let Al = window.KTP_CALENDARIO.Al;
+    let wt = window.KTP_CALENDARIO.wt;
+    let n=null;
+    for(let t in Al)if(t<=e){if(!n||t>n)n=t}
+    if(!n)n=Object.keys(Al)[0];
+    for(let t in wt)if(wt[t].includes(n))return{faseAtual:t,dataAtual:n};
+    return{faseAtual:Object.keys(wt)[0],dataAtual:n}
+  },
+  kr: function(){
+    let e=new Date,n=window.KTP_CALENDARIO.helpers.Ae(),t=new Date(n+"T00:00:00"),r=new Date(t);
+    return r.setDate(t.getDate()+4),r.setHours(0,0,0,0),e>=t&&e<r
+  }
+};
+
+// Compatibilidade com código antigo - expõe globais
+var Al = window.KTP_CALENDARIO.Al;
+var df = window.KTP_CALENDARIO.df;
+var wt = window.KTP_CALENDARIO.wt;
