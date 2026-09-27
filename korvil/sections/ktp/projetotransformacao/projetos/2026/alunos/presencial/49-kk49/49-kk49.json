@@ -1,0 +1,23 @@
+{
+  "id": 49,
+  "pastaMae": "49-kk49",
+  "arquivo": "49-kk49.json",
+  "caminhoCompleto": "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/49-kk49/49-kk49.json",
+  "nome": "Kk",
+  "primeiroNome": "kk",
+  "whatsapp": "(13) 99769-0898",
+  "tela1": {
+    "nome": "Kk",
+    "timestamp": "2026-09-27T10:08:35.896Z"
+  },
+  "tela2": {
+    "presenca": "presencial",
+    "ano": 2026
+  },
+  "tela3": {
+    "projeto": "transformacao",
+    "status": "inscrito"
+  },
+  "criadoEm": "2026-09-27T10:08:35.897Z",
+  "versao": "V22-FINAL"
+}
