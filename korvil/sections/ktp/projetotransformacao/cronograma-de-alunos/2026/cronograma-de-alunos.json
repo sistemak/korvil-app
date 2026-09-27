@@ -13,7 +13,7 @@
       "tipo": "ALUNO"
     },
     "hvitoria3": {
-      "nome": "Hellem Vitória Carvalho dos Santos",
+      "nome": "Hellem VitÃ³ria Carvalho dos Santos",
       "tipo": "ALUNO"
     },
     "alexandra4": {
@@ -45,7 +45,7 @@
       "tipo": "ALUNO"
     },
     "angel11": {
-      "nome": "Angélica",
+      "nome": "AngÃ©lica",
       "tipo": "ALUNO"
     },
     "anapaula12": {
@@ -77,7 +77,7 @@
       "tipo": "ALUNO"
     },
     "lau19": {
-      "nome": "Laura Jesus Aragão",
+      "nome": "Laura Jesus AragÃ£o",
       "tipo": "ALUNO"
     },
     "cass20": {
@@ -85,7 +85,7 @@
       "tipo": "ALUNO"
     },
     "katia21": {
-      "nome": "Kátia Paoli",
+      "nome": "KÃ¡tia Paoli",
       "tipo": "ALUNO"
     },
     "mara22": {
@@ -113,11 +113,11 @@
       "tipo": "ALUNO"
     },
     "joce28": {
-      "nome": "Jocélia",
+      "nome": "JocÃ©lia",
       "tipo": "ALUNO"
     },
     "marcos29": {
-      "nome": "Marcos França",
+      "nome": "Marcos FranÃ§a",
       "tipo": "ALUNO"
     },
     "lucas30": {
@@ -141,7 +141,7 @@
       "tipo": "ALUNO"
     },
     "pati35": {
-      "nome": "Patrícia",
+      "nome": "PatrÃ­cia",
       "tipo": "ALUNO"
     },
     "mel36": {
@@ -149,11 +149,11 @@
       "tipo": "ALUNO"
     },
     "naty37": {
-      "nome": "Natália Melo",
+      "nome": "NatÃ¡lia Melo",
       "tipo": "ALUNO"
     },
     "gon38": {
-      "nome": "José Gonzaga",
+      "nome": "JosÃ© Gonzaga",
       "tipo": "ALUNO"
     },
     "nicol39": {
@@ -161,11 +161,11 @@
       "tipo": "ALUNO"
     },
     "madel40": {
-      "nome": "Maria Adelaide Santos Araújo",
+      "nome": "Maria Adelaide Santos AraÃºjo",
       "tipo": "ALUNO"
     },
     "ednaS41": {
-      "nome": "Edna dos Santos da Conceição",
+      "nome": "Edna dos Santos da ConceiÃ§Ã£o",
       "tipo": "ALUNO"
     },
     "tchuco1": {
@@ -175,6 +175,12 @@
     "dani2": {
       "nome": "Daniele Vieira Leite",
       "tipo": "ALUNO"
+    },
+    "yyyy42": {
+      "nome": "Yyyy",
+      "tipo": "ALUNO",
+      "id": 42,
+      "pasta": "42-yyyy42"
     }
   },
   "ALUNOS_PRESENCIAL": {
@@ -191,15 +197,19 @@
       "tipo": "ALUNO"
     },
     "hvitoria3": {
-      "nome": "Hellem Vitória Carvalho dos Santos",
+      "nome": "Hellem VitÃ³ria Carvalho dos Santos",
       "tipo": "ALUNO"
     },
     "madel40": {
-      "nome": "Maria Adelaide Santos Araújo",
+      "nome": "Maria Adelaide Santos AraÃºjo",
       "tipo": "ALUNO"
     },
     "ednaS41": {
-      "nome": "Edna dos Santos da Conceição",
+      "nome": "Edna dos Santos da ConceiÃ§Ã£o",
+      "tipo": "ALUNO"
+    },
+    "yyyy42": {
+      "nome": "Yyyy",
       "tipo": "ALUNO"
     }
   },
@@ -216,7 +226,7 @@
   "CRONOGRAMA_DB": {
     "PRESENCIAL": [
       {
-        "hora": "06h00 🐦",
+        "hora": "06h00 ð¦",
         "status": "DESATIVADOS",
         "alunos": [
           {
@@ -255,7 +265,7 @@
             "aluno": "Jossiane Alves",
             "dias": "Seg a Sex",
             "freq": "5x",
-            "objetivo": "Definição",
+            "objetivo": "DefiniÃ§Ã£o",
             "valor": "R$150,00",
             "matricula": "R$0,00",
             "total": "R$150,00",
@@ -285,7 +295,7 @@
             "aluno": "amigaadrum",
             "dias": "--",
             "freq": "--",
-            "objetivo": "Saúde",
+            "objetivo": "SaÃºde",
             "valor": "--",
             "matricula": "--",
             "total": "--",
@@ -315,7 +325,7 @@
             "aluno": "amigaadrdois",
             "dias": "--",
             "freq": "--",
-            "objetivo": "Saúde",
+            "objetivo": "SaÃºde",
             "valor": "--",
             "matricula": "--",
             "total": "--",
@@ -342,16 +352,16 @@
         ]
       },
       {
-        "hora": "08h00 🐢",
+        "hora": "08h00 ð¢",
         "status": "ATIVOS",
         "alunos": [
           {
             "n": 0,
             "id": "mag1",
             "aluno": "Magda Gomes dos Santos",
-            "dias": "Segunda, Terça, Quarta, Quinta, Sexta",
+            "dias": "Segunda, TerÃ§a, Quarta, Quinta, Sexta",
             "freq": "5x",
-            "objetivo": "Definição Muscular",
+            "objetivo": "DefiniÃ§Ã£o Muscular",
             "valor": "R$150,00",
             "matricula": "R$50,00",
             "total": "R$200,00",
@@ -363,13 +373,13 @@
             "genero": "Feminino",
             "whats": "(13) 99636-4009",
             "email": "magdagomes998@gmail.com",
-            "nivel_atividade": "Intermediário",
+            "nivel_atividade": "IntermediÃ¡rio",
             "q1": "Sim",
             "q2": "Irregular",
             "q3": "9 horas",
-            "q4": "Não",
-            "q5": "Abdômen",
-            "q6": "Não",
+            "q4": "NÃ£o",
+            "q5": "AbdÃ´men",
+            "q6": "NÃ£o",
             "q7": "Sim",
             "q8": "Sim",
             "q9": "Anti depressivo",
@@ -381,7 +391,7 @@
             "aluno": "Maria Carla Carvalho Santos",
             "dias": "Segunda, Quinta, Sexta",
             "freq": "3x",
-            "objetivo": "Emagrecimento | Saúde | Hipertrofia | Definição Muscular | Condicionamento Físico | Reabilitação Física",
+            "objetivo": "Emagrecimento | SaÃºde | Hipertrofia | DefiniÃ§Ã£o Muscular | Condicionamento FÃ­sico | ReabilitaÃ§Ã£o FÃ­sica",
             "valor": "R$100,00",
             "matricula": "R$50,00",
             "total": "R$150,00",
@@ -397,9 +407,9 @@
             "q1": "Sim",
             "q2": "Mais ou menos, preciso melhorar",
             "q3": "6 a 7 horas",
-            "q4": "Não",
-            "q5": "Barriga, braços e pernas",
-            "q6": "Não",
+            "q4": "NÃ£o",
+            "q5": "Barriga, braÃ§os e pernas",
+            "q6": "NÃ£o",
             "q7": "Sim",
             "q8": "Sim",
             "q9": "Vitaminas e ferro norimpurum",
@@ -408,10 +418,10 @@
           {
             "n": 2,
             "id": "hvitoria3",
-            "aluno": "Hellem Vitória Carvalho dos Santos",
+            "aluno": "Hellem VitÃ³ria Carvalho dos Santos",
             "dias": "Segunda, Quinta, Sexta",
             "freq": "3x",
-            "objetivo": "Definição Muscular | Saúde | Hipertrofia | Condicionamento Físico | Reabilitação Física | Emagrecimento",
+            "objetivo": "DefiniÃ§Ã£o Muscular | SaÃºde | Hipertrofia | Condicionamento FÃ­sico | ReabilitaÃ§Ã£o FÃ­sica | Emagrecimento",
             "valor": "R$100,00",
             "matricula": "R$50,00",
             "total": "R$150,00",
@@ -425,23 +435,23 @@
             "email": "vitoria2018201@gmail.com",
             "nivel_atividade": "Iniciante",
             "q1": "Sim",
-            "q2": "Normal,preciso aumentar a proteína",
+            "q2": "Normal,preciso aumentar a proteÃ­na",
             "q3": "7 horas",
-            "q4": "Não",
-            "q5": "Braços,barriga, culote e pernas.",
-            "q6": "Não",
+            "q4": "NÃ£o",
+            "q5": "BraÃ§os,barriga, culote e pernas.",
+            "q6": "NÃ£o",
             "q7": "Sim",
             "q8": "Sim",
-            "q9": "Só noripurum",
+            "q9": "SÃ³ noripurum",
             "plano": "Presencial 3x"
           },
           {
             "n": 3,
             "id": "madel40",
-            "aluno": "Maria Adelaide Santos Araújo",
+            "aluno": "Maria Adelaide Santos AraÃºjo",
             "dias": "Segunda, Quinta",
             "freq": "2x",
-            "objetivo": "Emagrecimento | Definição Muscular | Saúde | Hipertrofia | Condicionamento Físico | Reabilitação Física",
+            "objetivo": "Emagrecimento | DefiniÃ§Ã£o Muscular | SaÃºde | Hipertrofia | Condicionamento FÃ­sico | ReabilitaÃ§Ã£o FÃ­sica",
             "valor": "R$80,00",
             "matricula": "R$50,00",
             "total": "R$130,00",
@@ -453,19 +463,19 @@
             "genero": "Feminino",
             "whats": "(13) 99653-6319",
             "email": "mariaadelaidesantos2014@gmail.com",
-            "nivel_atividade": "Intermediário",
+            "nivel_atividade": "IntermediÃ¡rio",
             "q1": "Sim",
             "q2": "Boa",
             "q3": "Quatro",
-            "q4": "Não",
+            "q4": "NÃ£o",
             "q5": "Tudo",
             "q6": "Sim",
-            "q7": "Não",
-            "q8": "Não",
-            "q9": "Não",
+            "q7": "NÃ£o",
+            "q8": "NÃ£o",
+            "q9": "NÃ£o",
             "plano": "Mensal Presencial 2x",
             "cep": "11250-600",
-            "rua": "Condomínio Portal dos Dourados",
+            "rua": "CondomÃ­nio Portal dos Dourados",
             "numero": "2407",
             "bairro": "Jardim Vicente de Carvalho",
             "cidade": "Bertioga"
@@ -473,10 +483,10 @@
           {
             "n": 4,
             "id": "ednaS41",
-            "aluno": "Edna dos Santos da Conceição",
+            "aluno": "Edna dos Santos da ConceiÃ§Ã£o",
             "dias": "Segunda, Quinta, Sexta",
             "freq": "3x",
-            "objetivo": "Definição Muscular",
+            "objetivo": "DefiniÃ§Ã£o Muscular",
             "valor": "R$100,00",
             "matricula": "R$50,00",
             "total": "R$150,00",
@@ -490,11 +500,11 @@
             "email": "santosedna2808@gmail.com",
             "nivel_atividade": "Iniciante",
             "q1": "Sim",
-            "q2": "Não tão saudável",
+            "q2": "NÃ£o tÃ£o saudÃ¡vel",
             "q3": "Poucas",
             "q4": "Leite",
             "q5": "Barriga e perna",
-            "q6": "Não",
+            "q6": "NÃ£o",
             "q7": "Sim",
             "q8": "Sim",
             "q9": "Sim. Cloridrato de Sertralina",
@@ -508,13 +518,13 @@
         ]
       },
       {
-        "hora": "19h00 ⭐",
+        "hora": "19h00 â­",
         "status": "ATIVOS",
         "alunos": [
           {
             "n": 0,
             "id": "gon38",
-            "aluno": "José Gonzaga",
+            "aluno": "JosÃ© Gonzaga",
             "dias": "Seg Qua Sex",
             "freq": "3x",
             "objetivo": "Hipertrofia",
@@ -547,7 +557,7 @@
             "aluno": "Nicoli da Silga Guedes",
             "dias": "Segunda, Quarta, Sexta",
             "freq": "3x",
-            "objetivo": "Definição Muscular | Condicionamento Físico | Reabilitação Física | Saúde",
+            "objetivo": "DefiniÃ§Ã£o Muscular | Condicionamento FÃ­sico | ReabilitaÃ§Ã£o FÃ­sica | SaÃºde",
             "valor": "R$100,00",
             "matricula": "R$50,00",
             "total": "R$150,00",
@@ -570,6 +580,41 @@
             "q8": "Sim",
             "q9": "Nao",
             "plano": "Presencial 3x"
+          },
+          {
+            "n": 42,
+            "id": "yyyy42",
+            "aluno": "Yyyy",
+            "dias": "Segunda, Terça, Quarta, Quinta, Sexta",
+            "freq": "5x",
+            "objetivo": "Ganho de Peso",
+            "valor": "R$150,00",
+            "matricula": "R$50,00",
+            "total": "R$200,00",
+            "venc": "27/10/2026",
+            "status": "Ativo",
+            "cpf": "107.101.304-14",
+            "nasc": "2026-09-27",
+            "idade": "0 anos",
+            "genero": "Feminino",
+            "whats": "(13) 99769-0898",
+            "email": "sistemak.srv@gmail.com",
+            "nivel_atividade": "Intermediário",
+            "q1": "",
+            "q2": "",
+            "q3": "",
+            "q4": "",
+            "q5": "",
+            "q6": "",
+            "q7": "",
+            "q8": "",
+            "q9": "",
+            "plano": "Presencial 5x",
+            "cep": "11250-524",
+            "rua": "Rua Oswaldo Cruz",
+            "numero": "2407",
+            "bairro": "Jardim Vicente de Carvalho",
+            "cidade": "Bertioga"
           }
         ]
       }
@@ -585,7 +630,7 @@
             "aluno": "Tchuco Silva",
             "dias": "Segunda a Sexta",
             "freq": "5x",
-            "objetivo": "Condicionamento Físico | Saúde",
+            "objetivo": "Condicionamento FÃ­sico | SaÃºde",
             "valor": "R$60,00",
             "matricula": "R$0,00",
             "total": "R$60,00",
@@ -615,7 +660,7 @@
             "aluno": "Daniele Vieira Leite",
             "dias": "Seg a Sex",
             "freq": "5x",
-            "objetivo": "Definição",
+            "objetivo": "DefiniÃ§Ã£o",
             "valor": "R$60,00",
             "matricula": "R$0,00",
             "total": "R$60,00",
