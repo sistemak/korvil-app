@@ -2,44 +2,87 @@ name: WhatsApp K-TP Inscrição
 on:
   workflow_dispatch:
     inputs:
-      pasta: {required: true, type: string}
-      nome: {required: true, type: string}
-      caminho: {required: false, type: string}
-      whatsapp: {required: false, type: string}
-      mensagem: {required: false, type: string}
-      dados_json: {required: false, type: string}
+      pasta:
+        description: Pasta mae ex 42-nome42
+        required: true
+        type: string
+      nome:
+        description: Nome completo
+        required: true
+        type: string
+      caminho:
+        description: Caminho completo arquivo json
+        required: true
+        type: string
+      whatsapp:
+        description: WhatsApp
+        required: false
+        type: string
+      mensagem:
+        description: Mensagem completa todas perguntas e respostas
+        required: false
+        type: string
+      dados_json:
+        description: JSON completo dados aluno
+        required: false
+        type: string
+
 jobs:
   enviar:
     runs-on: ubuntu-latest
-    permissions: {contents: write, issues: write}
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          mkdir -p logs/whatsapp
-          cat > logs/whatsapp/${{ inputs.pasta }}.log << EOF
-          NOVA INSCRICAO K-TP
-          Pasta: ${{ inputs.pasta }}
-          Nome: ${{ inputs.nome }}
-          Whats: ${{ inputs.whatsapp }}
-          Caminho: ${{ inputs.caminho }}
-          Mensagem: ${{ inputs.mensagem }}
-          Dados: ${{ inputs.dados_json }}
-          EOF
-      - uses: peter-evans/create-issue-from-file@v5
-        with:
-          title: "Nova Inscricao: ${{ inputs.nome }} - ${{ inputs.pasta }}"
-          content-filepath: logs/whatsapp/${{ inputs.pasta }}.log
-          labels: inscricao,ktp
-      - run: |
-          git config user.name "K-TP Bot"
-          git config user.email "bot@korvil.com"
-          git add logs/whatsapp/${{ inputs.pasta }}.log || true
-          git commit -m "feat: log ${{ inputs.pasta }}" || true
-          git push || true
-      - if: ${{ secrets.WHATSAPP_PHONE != '' }}
-        env:
-          PHONE: ${{ secrets.WHATSAPP_PHONE }}
-          APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
+
+      - name: Salvar log inscricao
         run: |
-          MSG="*NOVA INSCRICAO K-TP* ID ${{ inputs.pasta }} Nome ${{ inputs.nome }} Whats ${{ inputs.whatsapp }}"
-          curl -G "https://api.callmebot.com/whatsapp.php" --data-urlencode "phone=$PHONE" --data-urlencode "text=$MSG" --data-urlencode "apikey=$APIKEY" || true
+          mkdir -p logs/whatsapp
+          echo "=== NOVA INSCRICAO K-TP ===" > logs/whatsapp/${{ inputs.pasta }}.log
+          echo "Data: $(date)" >> logs/whatsapp/${{ inputs.pasta }}.log
+          echo "Pasta: ${{ inputs.pasta }}" >> logs/whatsapp/${{ inputs.pasta }}.log
+          echo "Nome: ${{ inputs.nome }}" >> logs/whatsapp/${{ inputs.pasta }}.log
+          echo "Caminho: ${{ inputs.caminho }}" >> logs/whatsapp/${{ inputs.pasta }}.log
+          echo "WhatsApp: ${{ inputs.whatsapp }}" >> logs/whatsapp/${{ inputs.pasta }}.log
+          echo "" >> logs/whatsapp/${{ inputs.pasta }}.log
+          echo "MENSAGEM COMPLETA:" >> logs/whatsapp/${{ inputs.pasta }}.log
+          echo "${{ inputs.mensagem }}" >> logs/whatsapp/${{ inputs.pasta }}.log
+          echo "" >> logs/whatsapp/${{ inputs.pasta }}.log
+          echo "DADOS JSON:" >> logs/whatsapp/${{ inputs.pasta }}.log
+          echo '${{ inputs.dados_json }}' >> logs/whatsapp/${{ inputs.pasta }}.log
+          cat logs/whatsapp/${{ inputs.pasta }}.log
+
+      - name: Criar Issue notificacao
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "K-TP Nova: ${{ inputs.nome }} - ${{ inputs.pasta }}"
+          content-filepath: logs/whatsapp/${{ inputs.pasta }}.log
+          labels: inscricao, ktp, whatsapp
+        continue-on-error: true
+
+      - name: Commit logs
+        run: |
+          git config user.name "K-TP Bot"
+          git config user.email "bot@ktp-transformacao.com"
+          git add logs/
+          git commit -m "log: inscricao ${{ inputs.pasta }} - ${{ inputs.nome }} [whatsapp]" || echo "nada para commitar"
+          git push || echo "push log falhou mas continua"
+        continue-on-error: true
+
+      - name: Enviar CallMeBot WhatsApp
+        run: |
+          if [ -n "${{ secrets.CALLMEBOT_APIKEY }}" ] && [ -n "${{ secrets.WHATSAPP_NUMERO }}" ]; then
+            MSG=$(echo "${{ inputs.mensagem }}" | jq -sRr @uri)
+            curl -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WHATSAPP_NUMERO }}&text=$MSG&apikey=${{ secrets.CALLMEBOT_APIKEY }}" || echo "CallMeBot falhou"
+          else
+            echo "CALLMEBOT_APIKEY ou WHATSAPP_NUMERO nao configurado - pulando envio direto"
+          fi
+        continue-on-error: true
+
+      - name: Enviar Webhook se configurado
+        run: |
+          if [ -n "${{ secrets.WEBHOOK_URL }}" ]; then
+            echo "Enviando para webhook..."
+            curl -s -X POST -H "Content-Type: application/json" -d "{"pasta":"${{ inputs.pasta }}","nome":"${{ inputs.nome }}","caminho":"${{ inputs.caminho }}","whatsapp":"${{ inputs.whatsapp }}","mensagem":$(echo ${{ toJSON(inputs.mensagem) }}),"dados":$(echo ${{ toJSON(inputs.dados_json) }})}" ${{ secrets.WEBHOOK_URL }} || echo "webhook falhou"
+          else
+            echo "WEBHOOK_URL nao configurado - log salvo e issue criada"
+          fi
+        continue-on-error: true
