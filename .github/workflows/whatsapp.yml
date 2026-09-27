@@ -1,0 +1,45 @@
+name: WhatsApp K-TP Inscrição
+on:
+  workflow_dispatch:
+    inputs:
+      pasta: {required: true, type: string}
+      nome: {required: true, type: string}
+      caminho: {required: false, type: string}
+      whatsapp: {required: false, type: string}
+      mensagem: {required: false, type: string}
+      dados_json: {required: false, type: string}
+jobs:
+  enviar:
+    runs-on: ubuntu-latest
+    permissions: {contents: write, issues: write}
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p logs/whatsapp
+          cat > logs/whatsapp/${{ inputs.pasta }}.log << EOF
+          NOVA INSCRICAO K-TP
+          Pasta: ${{ inputs.pasta }}
+          Nome: ${{ inputs.nome }}
+          Whats: ${{ inputs.whatsapp }}
+          Caminho: ${{ inputs.caminho }}
+          Mensagem: ${{ inputs.mensagem }}
+          Dados: ${{ inputs.dados_json }}
+          EOF
+      - uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "Nova Inscricao: ${{ inputs.nome }} - ${{ inputs.pasta }}"
+          content-filepath: logs/whatsapp/${{ inputs.pasta }}.log
+          labels: inscricao,ktp
+      - run: |
+          git config user.name "K-TP Bot"
+          git config user.email "bot@korvil.com"
+          git add logs/whatsapp/${{ inputs.pasta }}.log || true
+          git commit -m "feat: log ${{ inputs.pasta }}" || true
+          git push || true
+      - if: ${{ secrets.WHATSAPP_PHONE != '' }}
+        env:
+          PHONE: ${{ secrets.WHATSAPP_PHONE }}
+          APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
+        run: |
+          MSG="*NOVA INSCRICAO K-TP* ID ${{ inputs.pasta }} Nome ${{ inputs.nome }} Whats ${{ inputs.whatsapp }}"
+          curl -G "https://api.callmebot.com/whatsapp.php" --data-urlencode "phone=$PHONE" --data-urlencode "text=$MSG" --data-urlencode "apikey=$APIKEY" || true
