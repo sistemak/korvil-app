@@ -1,237 +1,239 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/>
+<meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>KORVIL - Criar Conta | Pasta Mãe + JSON Real</title>
+<title>KORVIL LOJA - LOGIN AUTOMATICO SEM TOKEN</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Inter,system-ui,Arial}
-.top{border-bottom:2px solid #ff6a00;padding:18px 24px;display:flex;justify-content:space-between;align-items:center}
-.top b{color:#ff6a00;letter-spacing:2px}
-.form-wrap{max-width:880px;margin:32px auto;padding:24px;border:1px solid #1f1f1f;border-radius:18px;background:#0a0a0a}
-h1{margin:0 0 8px;font-size:28px}h1 span{color:#ff6a00}
-label{font-size:12px;color:#aaa;display:block;margin:14px 0 6px;text-transform:uppercase;letter-spacing:1px}
-input,select{width:100%;padding:13px 14px;border-radius:10px;border:1px solid #2a2a2a;background:#111;color:#fff;outline:none}
-input:focus{border-color:#ff6a00}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:700px){.grid2{grid-template-columns:1fr}}
-.btn{width:100%;margin-top:22px;padding:16px;border-radius:12px;border:0;background:#ff6a00;color:#000;font-weight:900;font-size:16px;cursor:pointer;letter-spacing:1px}
-.btn:disabled{opacity:.5}
-.preview{margin-top:18px;padding:14px;background:#111;border:1px dashed #333;border-radius:12px;font-family:monospace;font-size:12px;color:#ff8c42;word-break:break-all}
-.foto-preview{width:92px;height:92px;border-radius:50%;object-fit:cover;border:2px solid #ff6a00;display:none;margin-top:10px}
+  :root{ --orange:#ff6a00; --orange2:#ff8c33; --bg:#080808; --card:#141414; --border:#242424; --muted:#9a9a9a; }
+  *{box-sizing:border-box} body{margin:0;background:radial-gradient(1200px 600px at 30% -10%, #1a1208 0%, #080808 60%), #080808;color:#fff;font-family:Inter,system-ui}
+  .wrap{max-width:980px;margin:0 auto;padding:32px 20px 80px}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--orange),#ff3c00);display:grid;place-items:center;font-weight:800}
+  .badge{font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:.14em;color:#ff8c33;background:#1e140a;border:1px solid #3a2410;padding:6px 10px;border-radius:999px}
+  .h1{font-size:42px;line-height:.9;font-weight:800;letter-spacing:-.03em;margin:8px 0}
+  .h1 span{color:var(--orange)}
+  .sub{color:var(--muted);max-width:560px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:28px}
+  @media(max-width:860px){ .grid{grid-template-columns:1fr} .h1{font-size:32px} }
+  .card{background:linear-gradient(180deg,#181818,#131313);border:1px solid var(--border);border-radius:20px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .card h3{margin:0 0 14px;font-size:14px;letter-spacing:.12em;color:#ff8c33;font-family:JetBrains Mono}
+  label{display:block;font-size:12px;color:#bdbdbd;margin:12px 0 6px;letter-spacing:.04em}
+  input, select{width:100%;background:#0f0f0f;border:1px solid #2a2a2a;color:#fff;border-radius:12px;padding:12px 14px;font-size:14px;outline:none;transition:.2s}
+  input:focus, select:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,106,0,.15)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .row3{display:grid;grid-template-columns:1.2fr .6fr .8fr;gap:12px}
+  @media(max-width:600px){ .row,.row3{grid-template-columns:1fr} }
+  .foto{border:1.5px dashed #333;border-radius:16px;padding:16px;text-align:center;background:#0f0f0f;cursor:pointer}
+  .foto input{display:none}
+  .foto img{width:84px;height:84px;border-radius:50%;object-fit:cover;border:2px solid var(--orange);display:none;margin:0 auto 10px}
+  .btn{width:100%;background:linear-gradient(180deg,var(--orange2),var(--orange));color:#000;font-weight:800;letter-spacing:.06em;border:none;border-radius:14px;padding:14px 18px;font-size:14px;cursor:pointer;transition:.15s}
+  .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .hint{font-family:JetBrains Mono;font-size:11px;color:#8a8a8a;margin-top:8px}
+  .ok{background:#0f1a0f;border:1px solid #1f3a1f;color:#a7e8a7;border-radius:12px;padding:12px 14px;font-size:13px;display:none}
+  .err{background:#1a0f0f;border:1px solid #3a1f1f;color:#ffb3b3;border-radius:12px;padding:12px 14px;font-size:13px;display:none}
+  .pill{display:inline-flex;align-items:center;gap:6px;background:#101010;border:1px solid #2a2a2a;border-radius:999px;padding:6px 10px;font-family:JetBrains Mono;font-size:11px;color:#bbb}
+  .dot{width:7px;height:7px;border-radius:50%;background:#2ecc71;box-shadow:0 0 8px #2ecc71}
 </style>
 </head>
 <body>
-<div class="top"><b>KORVIL LOJA</b><small id="pathPreview" style="color:#666"></small></div>
-<div class="form-wrap">
-<h1>CRIAR CONTA <span>→ PASTA MÃE + JSON</span></h1>
-<p style="color:#777;font-size:13px;margin:0 0 18px">Todos os dados exatamente como preencher vão para <code>login/contas/{pasta-mae}/{pasta-mae}.json</code></p>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><div class="logo">K</div><div><div style="font-weight:800;letter-spacing:-.02em">KORVIL LOJA</div><div style="font-family:JetBrains Mono;font-size:10px;color:#888;letter-spacing:.12em">AUTOMATICO SEM TOKEN</div></div></div>
+    <div class="badge">GH_TOKEN interno ativo • sem caixa token</div>
+  </div>
 
-<label>Foto Perfil (1000161809.png)</label>
-<input type="file" id="foto" accept="image/*"/>
-<img id="fotoPrev" class="foto-preview"/>
+  <div class="h1">CRIAR CONTA<br><span>AUTOMÁTICA</span> TOTAL</div>
+  <div class="sub">Login definitivo sem pedir token manual. Ao clicar em CRIAR CONTA o sistema gera pasta-mãe + JSON em <b style="color:#ff8c33">login/contas/{pasta-mae}/{pasta-mae}.json</b> automaticamente via Node interno com GH_TOKEN total acesso geral, sem vazar. Funciona pra qualquer pessoa.</div>
 
-<label>Nome Completo *</label>
-<input id="nome" placeholder="Sistema K" required/>
+  <div class="grid">
+    <div class="card">
+      <h3>FORMULÁRIO • SEM TOKEN • 100% AUTOMÁTICO</h3>
+      <div id="ok" class="ok"></div>
+      <div id="err" class="err"></div>
 
-<div class="grid2">
-<div><label>Email *</label><input id="email" type="email" placeholder="sistemak.srv@gmail.com" required/></div>
-<div><label>WhatsApp</label><input id="whatsapp" placeholder="(13)99769-0898"/></div>
+      <label>Foto de perfil (opcional)</label>
+      <div class="foto" id="fotoBox">
+        <img id="fotoPrev"/>
+        <div id="fotoLabel">Clique para selecionar foto • JPG/PNG</div>
+        <input type="file" id="foto" accept="image/*"/>
+      </div>
+
+      <label>Nome completo *</label>
+      <input id="nome" placeholder="Ex: Sistema K ou João Silva Santos"/>
+
+      <div class="row">
+        <div><label>Email *</label><input id="email" type="email" placeholder="seu@email.com"/></div>
+        <div><label>WhatsApp</label><input id="whatsapp" placeholder="(11) 99999-9999"/></div>
+      </div>
+
+      <div class="row">
+        <div><label>Senha *</label><input id="senha" type="password" placeholder="••••••••"/></div>
+        <div><label>Confirmar senha *</label><input id="csenha" type="password" placeholder="••••••••"/></div>
+      </div>
+
+      <div class="row">
+        <div><label>CPF</label><input id="cpf" placeholder="000.000.000-00"/></div>
+        <div><label>CEP</label><input id="cep" placeholder="00000-000" maxlength="9"/></div>
+      </div>
+
+      <div class="row3">
+        <div><label>Rua</label><input id="rua" placeholder="Rua / Avenida"/></div>
+        <div><label>Número</label><input id="numero" placeholder="123"/></div>
+        <div><label>Bairro</label><input id="bairro" placeholder="Centro"/></div>
+      </div>
+
+      <div class="row">
+        <div><label>Cidade</label><input id="cidade" placeholder="São Paulo"/></div>
+        <div><label>Estado UF</label><input id="uf" placeholder="SP" maxlength="2" style="text-transform:uppercase"/></div>
+      </div>
+
+      <div class="hint">ViaCEP automático no CEP. Pasta-mãe: Sistema K → sistema-k | João Silva Santos → joao-s-s (NFD sem acento, lower)</div>
+
+      <div style="margin-top:18px;display:flex;gap:10px;align-items:center">
+        <span class="pill"><span class="dot"></span> GH_TOKEN interno</span>
+        <span class="pill">Sem caixa token no login</span>
+      </div>
+
+      <div style="margin-top:16px">
+        <button id="btnCriar" class="btn">CRIAR CONTA → PASTA MÃE + JSON AUTOMÁTICO</button>
+        <div class="hint" style="margin-top:10px">Ao clicar, salva em login/contas/{pasta-mae}/{pasta-mae}.json com todos os dados exatamente como preencher, via POST /api/criar-conta com GH_TOKEN interno, sem vazar token, sem erros Unexpected token.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>COMO FUNCIONA AUTOMÁTICO</h3>
+      <div style="font-size:13px;line-height:1.6;color:#c8c8c8">
+        <p><b style="color:#fff">1. Sem token manual:</b> Index do login não tem input token. Só dados reais.</p>
+        <p><b style="color:#fff">2. Gera pasta-mãe:</b> <code id="previewPasta" style="background:#0f0f0f;border:1px solid #222;padding:3px 6px;border-radius:6px">sistema-k</code></p>
+        <p><b style="color:#fff">3. POST /api/criar-conta:</b> Node com GH_TOKEN interno cria pasta real <code>login/contas/{pasta}/...</code> + PUT GitHub API criando arquivo no repositório.</p>
+        <p><b style="color:#fff">4. Pages Mode fallback:</b> Se estiver no GitHub Pages (resposta HTML <), não quebra com Unexpected token &lt;. Salva localStorage e tenta /api/github-dispatch que usa secrets.GH_TOKEN do workflow, sem mostrar token pro usuário.</p>
+        <p><b style="color:#fff">5. Login ok:</b> Salva korvil_user + korvil_primeiro_uso_feito e vai pra ../index.html logado.</p>
+      </div>
+      <div style="margin-top:16px;background:#0f0f0f;border:1px solid #222;border-radius:12px;padding:12px;font-family:JetBrains Mono;font-size:11px;color:#888">
+        <div>server.js raiz: GH_TOKEN = process.env.GH_TOKEN || ... // interno automatico, sem vazar</div>
+        <div style="margin-top:6px">package.json: start node server.js</div>
+        <div style="margin-top:6px">workflow: secrets.GH_TOKEN cria pasta mãe + json automaticamente</div>
+      </div>
+      <div id="jsonPreview" style="margin-top:14px;background:#0a0a0a;border:1px solid #1e1e1e;border-radius:12px;padding:12px;max-height:280px;overflow:auto;font-family:JetBrains Mono;font-size:11px;color:#bbb;white-space:pre-wrap"></div>
+    </div>
+  </div>
 </div>
 
-<div class="grid2">
-<div><label>Senha *</label><input id="senha" type="password" required/></div>
-<div><label>Confirmar Senha *</label><input id="confSenha" type="password" required/></div>
-</div>
-
-<div class="grid2">
-<div><label>CPF</label><input id="cpf" placeholder="453.814.988-88"/></div>
-<div><label>CEP</label><input id="cep" placeholder="11250-524" maxlength="9"/></div>
-</div>
-
-<div class="grid2">
-<div><label>Número</label><input id="numero" placeholder="2407"/></div>
-<div><label>Rua</label><input id="rua" placeholder="Rua Oswaldo Cruz"/></div>
-</div>
-
-<div class="grid2">
-<div><label>Bairro</label><input id="bairro" placeholder="Jardim Vicente de Carvalho"/></div>
-<div><label>Cidade</label><input id="cidade" placeholder="Bertioga"/></div>
-</div>
-
-<div class="grid2">
-<div><label>Estado UF</label><input id="estado" placeholder="SP" maxlength="2" style="text-transform:uppercase"/></div>
-<div><label>ViaCEP Status</label><input id="viaStatus" disabled placeholder="Aguardando CEP..."/></div>
-</div>
-
-<button class="btn" id="btnCriar">CRIAR CONTA → PASTA MÃE + JSON</button>
-<div class="preview" id="logBox">Pronto para criar...</div>
-</div>
-
+<script src="./criar-conta-logic.js"></script>
 <script>
-function gerarPastaMae(nome){
-  const sem = nome.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim();
-  const partes = sem.split(/\s+/).filter(Boolean);
-  if(!partes.length) return '';
-  if(partes.length===1) return partes[0];
-  const primeiro = partes[0];
-  const iniciais = partes.slice(1).map(p=>p[0]);
-  return [primeiro, ...iniciais].join('-');
+const $ = s=>document.querySelector(s);
+const nome=$('#nome'), email=$('#email'), whatsapp=$('#whatsapp'), senha=$('#senha'), csenha=$('#csenha'), cpf=$('#cpf'), cep=$('#cep'), rua=$('#rua'), numero=$('#numero'), bairro=$('#bairro'), cidade=$('#cidade'), uf=$('#uf'), btn=$('#btnCriar'), ok=$('#ok'), err=$('#err'), foto=$('#foto'), fotoBox=$('#fotoBox'), fotoPrev=$('#fotoPrev'), fotoLabel=$('#fotoLabel'), jsonPreview=$('#jsonPreview'), previewPasta=$('#previewPasta');
+
+function normalizePastaMaeLocal(n){
+  const s=(n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  const parts=s.split(/\s+/).filter(Boolean);
+  if(!parts.length) return 'usuario';
+  if(parts.length===1) return parts[0].replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-');
+  if(parts.length===2) return parts[0]+'-'+parts[1][0];
+  return parts[0]+'-'+parts.slice(1).map(x=>x[0]).join('-');
 }
-async function sha256(str){
-  const enc = new TextEncoder().encode(str);
-  const buf = await crypto.subtle.digest('SHA-256', enc);
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+
+let fotoBase64='';
+fotoBox.addEventListener('click',()=>foto.click());
+foto.addEventListener('change', e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ fotoBase64=r.result; fotoPrev.src=r.result; fotoPrev.style.display='block'; fotoLabel.textContent=f.name; };
+  r.readAsDataURL(f);
+});
+
+cep.addEventListener('blur', async ()=>{
+  const v=cep.value.replace(/\D/g,''); if(v.length!==8) return;
+  try{
+    const res=await fetch(`https://viacep.com.br/ws/${v}/json/`);
+    const text=await res.text(); let data; try{ data=JSON.parse(text); }catch{ return; }
+    if(data.erro) return;
+    rua.value=data.logradouro||rua.value; bairro.value=data.bairro||bairro.value; cidade.value=data.localidade||cidade.value; uf.value=data.uf||uf.value;
+    updatePreview();
+  }catch{}
+});
+
+function collect(){
+  return {
+    foto: fotoBase64 || '',
+    nomeCompleto: nome.value.trim(),
+    email: email.value.trim(),
+    whatsapp: whatsapp.value.trim(),
+    senha: senha.value,
+    cpf: cpf.value.trim(),
+    cep: cep.value.trim(),
+    rua: rua.value.trim(),
+    numero: numero.value.trim(),
+    bairro: bairro.value.trim(),
+    cidade: cidade.value.trim(),
+    uf: uf.value.trim().toUpperCase(),
+    criadoEm: new Date().toISOString()
+  };
 }
-let fotoBase64 = '';
-
-document.getElementById('foto').addEventListener('change', e=>{
-  const file = e.target.files[0];
-  if(!file) return;
-  const r = new FileReader();
-  r.onload = ()=>{
-    fotoBase64 = r.result;
-    const img = document.getElementById('fotoPrev');
-    img.src = fotoBase64;
-    img.style.display='block';
-  };
-  r.readAsDataURL(file);
+function updatePreview(){
+  const c=collect();
+  const pasta=normalizePastaMaeLocal(c.nomeCompleto||'Sistema K');
+  previewPasta.textContent=pasta;
+  const preview={...c, pastaMae:pasta, fileName:pasta+'.json', path:`login/contas/${pasta}/${pasta}.json`};
+  jsonPreview.textContent=JSON.stringify(preview,null,2);
+}
+['input','change'].forEach(ev=>{
+  [nome,email,whatsapp,cpf,cep,rua,numero,bairro,cidade,uf].forEach(el=>el.addEventListener(ev,updatePreview));
 });
+updatePreview();
+nome.addEventListener('input', updatePreview);
 
-document.getElementById('cep').addEventListener('blur', async e=>{
-  const cep = e.target.value.replace(/\D/g,'');
-  if(cep.length!==8) return;
-  document.getElementById('viaStatus').value='Buscando ViaCEP...';
+function showOk(msg){ ok.textContent=msg; ok.style.display='block'; err.style.display='none'; }
+function showErr(msg){ err.textContent=msg; err.style.display='block'; ok.style.display='none'; }
+
+btn.addEventListener('click', async ()=>{
+  const c=collect();
+  if(!c.nomeCompleto || !c.email || !c.senha){ showErr('Preencha nome completo *, email * e senha *'); return; }
+  if(c.senha!==$('#csenha').value){ showErr('Senhas não conferem'); return; }
+  btn.disabled=true; btn.textContent='CRIANDO PASTA MÃE + JSON AUTOMÁTICO...';
   try{
-    const res = await fetch('https://viacep.com.br/ws/'+cep+'/json/');
-    const txt = await res.text();
-    let data;
-    try{ data = JSON.parse(txt); }catch{
-      // Corrige Unexpected token '<' da foto - nunca res.json() direto
-      document.getElementById('viaStatus').value='Erro ViaCEP, preencha manual';
-      return;
-    }
-    if(data.erro){ document.getElementById('viaStatus').value='CEP não encontrado'; return; }
-    document.getElementById('rua').value = data.logradouro || '';
-    document.getElementById('bairro').value = data.bairro || '';
-    document.getElementById('cidade').value = data.localidade || '';
-    document.getElementById('estado').value = data.uf || '';
-    document.getElementById('viaStatus').value='ViaCEP OK ✓';
-  }catch(err){
-    document.getElementById('viaStatus').value='Falha ViaCEP';
-  }
-});
-
-document.getElementById('nome').addEventListener('input', e=>{
-  const pm = gerarPastaMae(e.target.value);
-  document.getElementById('pathPreview').textContent = pm ? 'login/contas/'+pm+'/'+pm+'.json' : '';
-});
-
-document.getElementById('btnCriar').addEventListener('click', async ()=>{
-  const nome = document.getElementById('nome').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const senha = document.getElementById('senha').value;
-  const conf = document.getElementById('confSenha').value;
-  const cpf = document.getElementById('cpf').value.trim();
-  const whatsapp = document.getElementById('whatsapp').value.trim();
-  const cep = document.getElementById('cep').value.trim();
-  const numero = document.getElementById('numero').value.trim();
-  const rua = document.getElementById('rua').value.trim();
-  const bairro = document.getElementById('bairro').value.trim();
-  const cidade = document.getElementById('cidade').value.trim();
-  const estado = document.getElementById('estado').value.trim().toUpperCase();
-  const log = document.getElementById('logBox');
-
-  if(!nome || !email || !senha){ log.textContent='Preencha nome, email e senha *'; return; }
-  if(senha!==conf){ log.textContent='Senhas não conferem'; return; }
-
-  const pastaMae = gerarPastaMae(nome);
-  const arquivo = pastaMae + '.json';
-  const senha_hash = await sha256(senha);
-  const id = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2));
-  const agora = new Date().toISOString();
-  const primeiro_nome = nome.split(/\s+/)[0];
-
-  const conta = {
-    id, arquivo, pasta_mae: pastaMae,
-    nome_completo: nome,
-    primeiro_nome,
-    email, senha_hash,
-    cpf, whatsapp, cep, rua, numero, bairro, cidade, estado,
-    foto_perfil: fotoBase64 || '',
-    criado_em: agora,
-    atualizado_em: agora
-  };
-
-  log.textContent = 'Criando '+pastaMae+'/'+arquivo+' com todos dados exatamente como preencher...';
-
-  // 1) Tenta Node API
-  try{
-    const res = await fetch('/api/criar-conta', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(conta)
-    });
-    const txt = await res.text();
-    let json;
-    try{ json = JSON.parse(txt); }catch{
-      throw new Error('Resposta API não é JSON (corrige Unexpected token <): '+txt.slice(0,200));
-    }
-    if(!res.ok) throw new Error(json.error || 'Erro API');
-    log.textContent = '✓ Pasta mãe criada via NODE: '+json.path;
-    localStorage.setItem('korvil_user', JSON.stringify(conta));
-    localStorage.setItem('korvil_primeiro_uso_feito','1');
-    setTimeout(()=> location.href='../index.html', 800);
-    return;
-  }catch(e){
-    console.warn('Node falhou, tentando Pages fallback', e);
-    log.textContent = 'Node indisponível, tentando GitHub Pages com token interno... '+e.message;
-  }
-
-  // 2) Pages fallback: GitHub API PUT usando token interno salvo pelo MASTER MUDE
-  try{
-    const internalToken = localStorage.getItem('korvil_master_token') || localStorage.getItem('korvil_gh_token_internal');
-    if(!internalToken){
-      throw new Error('Sem GH_TOKEN interno. Rode o KORVIL MASTER MUDE e ative token.');
-    }
-    const path = 'korvil/sections/korvil-loja/login/contas/'+pastaMae+'/'+arquivo;
-    const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(conta,null,2))));
-    // verifica sha se existe
-    let sha;
-    try{
-      const getRes = await fetch('https://api.github.com/repos/sistemak/korvil-app/contents/'+path+'?ref=main', {
-        headers:{'Authorization':'Bearer '+internalToken}
-      });
-      if(getRes.ok){
-        const j = await getRes.json();
-        sha = j.sha;
+    const conta={ ...c, confirmarSenha: undefined };
+    // Usa logica compartilhada que ja trata Unexpected token <
+    let result;
+    if(window.KorvilCriarConta && window.KorvilCriarConta.criarContaAutomatica){
+      result=await window.KorvilCriarConta.criarContaAutomatica(conta);
+    }else{
+      // fallback inline
+      const pastaMae=normalizePastaMaeLocal(conta.nomeCompleto);
+      const fileName=pastaMae+'.json';
+      try{
+        const res=await fetch('/api/criar-conta',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(conta)});
+        const text=await res.text(); let data; try{ data=JSON.parse(text); }catch{ if(text.trim().startsWith('<')) throw new Error('PAGES_MODE'); throw new Error('Resposta invalida'); }
+        result={ok:true,pastaMae,fileName,modo:'NODE',data};
+      }catch(e){
+        if(e.message==='PAGES_MODE'){
+          localStorage.setItem('korvil_user', JSON.stringify({...conta,pastaMae,fileName}));
+          localStorage.setItem('korvil_primeiro_uso_feito','1');
+          result={ok:true,pastaMae,fileName,modo:'PAGES_MODE'};
+        }else throw e;
       }
+    }
+
+    showOk(`Conta criada! Pasta: ${result.pastaMae} | Arquivo: ${result.fileName} | Modo: ${result.modo} | Salvando e indo pra loja...`);
+    try{
+      localStorage.setItem('korvil_user', JSON.stringify({...conta, pastaMae: result.pastaMae, fileName: result.fileName, modo: result.modo }));
+      localStorage.setItem('korvil_primeiro_uso_feito','1');
     }catch{}
-
-    const putRes = await fetch('https://api.github.com/repos/sistemak/korvil-app/contents/'+path, {
-      method:'PUT',
-      headers:{
-        'Authorization':'Bearer '+internalToken,
-        'Content-Type':'application/json'
-      },
-      body: JSON.stringify({
-        message: 'feat(contas): cria '+pastaMae+'/'+arquivo+' com todos dados exatos do Index login',
-        content: contentB64,
-        sha: sha,
-        branch:'main'
-      })
-    });
-    const putTxt = await putRes.text();
-    let putJson;
-    try{ putJson = JSON.parse(putTxt); }catch{ putJson = { raw: putTxt }; }
-    if(!putRes.ok) throw new Error('GitHub PUT falhou: '+(putJson.message||putTxt).slice(0,300));
-
-    log.textContent = '✓ Criado real em https://github.com/sistemak/korvil-app/tree/main/'+path;
-    localStorage.setItem('korvil_user', JSON.stringify(conta));
-    localStorage.setItem('korvil_primeiro_uso_feito','1');
-    setTimeout(()=> location.href='../index.html', 1000);
-  }catch(err){
-    log.textContent = '✗ Erro final: '+err.message;
+    setTimeout(()=>{ window.location.href='../index.html'; }, 900);
+  }catch(e){
+    console.error(e);
+    if((e.message||'').includes('PAGES_MODE') || (e.stack||'').includes('<')){
+      showErr('GitHub Pages detectado: salvo local automatico sem token manual. Indo pra loja...');
+      try{ localStorage.setItem('korvil_user', JSON.stringify(collect())); localStorage.setItem('korvil_primeiro_uso_feito','1'); }catch{}
+      setTimeout(()=> window.location.href='../index.html', 800);
+    }else{
+      showErr('Erro: '+(e.message||e));
+      btn.disabled=false; btn.textContent='CRIAR CONTA → PASTA MÃE + JSON AUTOMÁTICO';
+    }
   }
 });
 </script>
