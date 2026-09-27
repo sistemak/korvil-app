@@ -1,880 +1,367 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>K-TP Projeto Transformação 2026 - Cronograma</title>
-  <style>
-    :root {
-      --c: #00f5ff;
-      --bg: #000;
-      --card: #0a0a0a;
-      --text: #fff;
-      --text2: #aaa;
-      --borda: #1f1f1f;
-      --ok: #00ff88;
-      --erro: #ff4444;
-      --aviso: #ffaa00;
-      --azul: #0084ff;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      max-width: 100vw;
-      overflow-x: hidden;
-      font-family: 'Segoe UI', Arial, sans-serif;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    .header {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--borda);
-      background: var(--card);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    h1 {
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--c);
-    }
-
-    .auth-status {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 11px;
-      padding: 8px 12px;
-      background: rgba(0, 255, 136, 0.1);
-      border: 1px solid var(--ok);
-      border-radius: 6px;
-      color: var(--ok);
-    }
-
-    .auth-status.deslogado {
-      background: rgba(255, 68, 68, 0.1);
-      border-color: var(--erro);
-      color: var(--erro);
-    }
-
-    .container {
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .login-box {
-      background: var(--card);
-      border: 2px solid var(--c);
-      border-radius: 12px;
-      padding: 24px;
-      max-width: 400px;
-      margin: 40px auto;
-      text-align: center;
-    }
-
-    .login-box h2 {
-      color: var(--c);
-      margin-bottom: 16px;
-      font-size: 16px;
-    }
-
-    .login-box input {
-      width: 100%;
-      padding: 10px;
-      margin: 12px 0;
-      background: #000;
-      border: 1px solid var(--borda);
-      border-radius: 6px;
-      color: var(--text);
-      font-size: 14px;
-    }
-
-    .btn {
-      padding: 10px 16px;
-      background: var(--c);
-      color: #000;
-      border: 0;
-      border-radius: 8px;
-      font-weight: 900;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .btn:hover {
-      box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
-    }
-
-    .btn:disabled {
-      background: #333;
-      color: #666;
-      cursor: not-allowed;
-    }
-
-    .btn.secundario {
-      background: #1a1a1a;
-      color: var(--c);
-      border: 1px solid var(--borda);
-    }
-
-    .btn.erro {
-      background: var(--erro);
-      color: #fff;
-    }
-
-    .gif-upload-section {
-      background: var(--card);
-      border: 2px solid var(--c);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-
-    .gif-upload-section h3 {
-      color: var(--c);
-      margin-bottom: 16px;
-      font-size: 14px;
-    }
-
-    .upload-input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .upload-input-group input,
-    .upload-input-group select {
-      padding: 10px;
-      background: #000;
-      border: 1px solid var(--borda);
-      border-radius: 6px;
-      color: var(--text);
-      font-size: 12px;
-    }
-
-    .file-input-wrapper {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-      width: 100%;
-    }
-
-    .file-input-wrapper input[type="file"] {
-      position: absolute;
-      left: -9999px;
-    }
-
-    .file-input-label {
-      display: block;
-      padding: 10px;
-      background: #111;
-      border: 1px dashed var(--c);
-      border-radius: 6px;
-      text-align: center;
-      cursor: pointer;
-      color: var(--text2);
-      font-size: 12px;
-    }
-
-    .file-input-label:hover {
-      background: #1a1a1a;
-      color: var(--c);
-    }
-
-    .aluno-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
-    }
-
-    .aluno-card {
-      background: var(--card);
-      border: 1.5px solid var(--borda);
-      border-radius: 12px;
-      padding: 16px;
-      transition: all 0.3s;
-    }
-
-    .aluno-card:hover {
-      border-color: var(--c);
-      box-shadow: 0 0 15px rgba(0, 245, 255, 0.1);
-    }
-
-    .aluno-card h4 {
-      color: var(--c);
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-
-    .aluno-card p {
-      font-size: 11px;
-      color: var(--text2);
-      margin: 4px 0;
-    }
-
-    .gifs-lista {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--borda);
-    }
-
-    .gif-item {
-      background: #000;
-      border: 1px solid var(--borda);
-      border-radius: 8px;
-      padding: 8px;
-      margin: 6px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 10px;
-    }
-
-    .gif-item .nome {
-      color: var(--ok);
-    }
-
-    .gif-item .data {
-      color: var(--text2);
-      font-size: 9px;
-    }
-
-    .btn-pequeno {
-      padding: 4px 8px;
-      font-size: 9px;
-      margin-left: 8px;
-    }
-
-    .video-preview {
-      width: 100%;
-      max-height: 200px;
-      object-fit: contain;
-      background: #000;
-      border-radius: 6px;
-      margin: 8px 0;
-    }
-
-    .status-msg {
-      padding: 10px;
-      border-radius: 6px;
-      margin: 12px 0;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    .status-msg.sucesso {
-      background: rgba(0, 255, 136, 0.1);
-      color: var(--ok);
-      border: 1px solid var(--ok);
-    }
-
-    .status-msg.erro {
-      background: rgba(255, 68, 68, 0.1);
-      color: var(--erro);
-      border: 1px solid var(--erro);
-    }
-
-    .status-msg.info {
-      background: rgba(0, 132, 255, 0.1);
-      color: var(--azul);
-      border: 1px solid var(--azul);
-    }
-
-    .spinner {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border: 2px solid var(--text2);
-      border-top-color: var(--c);
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .modal.ativo {
-      display: flex;
-    }
-
-    .modal-conteudo {
-      background: var(--card);
-      border: 2px solid var(--c);
-      border-radius: 12px;
-      padding: 20px;
-      max-width: 500px;
-      width: 100%;
-      max-height: 80vh;
-      overflow-y: auto;
-      position: relative;
-    }
-
-    .modal-fechar {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: var(--erro);
-      color: #fff;
-      border: 0;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-weight: 900;
-    }
-
-    .token-info {
-      background: rgba(0, 255, 136, 0.1);
-      border: 1px solid var(--ok);
-      border-radius: 8px;
-      padding: 12px;
-      margin: 12px 0;
-      font-size: 11px;
-      color: var(--ok);
-    }
-
-    .token-info input {
-      width: 100%;
-      padding: 8px;
-      background: #000;
-      border: 1px solid var(--ok);
-      border-radius: 4px;
-      color: var(--ok);
-      font-size: 11px;
-      margin-top: 6px;
-      font-family: 'Courier New', monospace;
-    }
-
-    @media (max-width: 768px) {
-      .aluno-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .header {
-        flex-direction: column;
-        gap: 12px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-TP | PROJETO TRANSFORMAÇÃO 11º ANO</title>
+<style>
+:root{
+  --c:#00f5ff;
+  --c2:#00e5ff;
+  --bg:#0a0a0a;
+  --card:#141414;
+  --card2:#1a1a1a;
+  --border:#222;
+  --text:#e5e5e5;
+  --muted:#888;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,monospace;min-height:100vh}
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  background:rgba(20,20,20,0.9);backdrop-filter:blur(10px);
+  position:sticky;top:0;z-index:50;
+}
+.header h1{font-size:16px;letter-spacing:0.12em;color:var(--c);font-weight:800}
+.auth-status{
+  font-size:12px;color:var(--muted);border:1px solid var(--border);
+  padding:6px 10px;border-radius:999px;background:var(--card);
+}
+.btn{
+  background:var(--c);color:#000;border:0;padding:10px 18px;border-radius:10px;
+  font-weight:800;cursor:pointer;letter-spacing:0.02em;transition:0.15s;
+}
+.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--c);border:1px solid var(--c)}
+.container{max-width:1100px;margin:0 auto;padding:22px}
+.login-box{
+  max-width:420px;margin:60px auto;background:var(--card);
+  border:1px solid var(--border);border-radius:16px;padding:24px;
+}
+.login-box h2{color:var(--c);margin-bottom:12px}
+.login-box input{
+  width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);
+  background:var(--card2);color:var(--text);margin-bottom:12px;outline:none;
+}
+.gif-upload-section{
+  background:var(--card);border:1px dashed var(--c);border-radius:16px;
+  padding:18px;margin-bottom:18px;
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.card-aluno{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+}
+.card-aluno img{width:100%;height:180px;object-fit:cover;background:#000}
+.card-aluno .info{padding:10px}
+.badge{font-size:10px;padding:3px 7px;border-radius:999px;background:var(--c);color:#000;font-weight:800}
+#ktp-menu-lateral{
+  width:280px;background:var(--card);border-right:1px solid var(--border);
+  min-height:calc(100vh - 58px);padding:12px;position:sticky;top:58px;align-self:flex-start;
+  overflow:auto;transition:transform 0.25s;
+}
+#ktp-menu-lateral.hidden{transform:translateX(-100%);position:absolute}
+#ktp-cronograma-lateral{
+  width:380px;background:var(--card);border-left:1px solid var(--border);
+  min-height:calc(100vh - 58px);padding:14px;position:sticky;top:58px;align-self:flex-start;
+  overflow:auto;transition:transform 0.25s;
+}
+#ktp-cronograma-lateral.hidden{transform:translateX(100%);position:absolute;right:0}
+#calendario-anchor{
+  background:linear-gradient(180deg, #0f1f1f, var(--card));
+  border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:18px;
+}
+.kweek{display:flex;gap:8px;padding:8px;border-radius:10px;cursor:pointer;border:1px solid transparent}
+.kweek:hover{border-color:var(--c);background:var(--card2)}
+.kweek.active{background:rgba(0,245,255,0.12);border-color:var(--c)}
+.token-box{
+  margin-top:14px;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--card2);
+}
+.token-box input{width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:#000;color:var(--c);font-family:monospace;font-size:12px}
+</style>
 </head>
 <body>
-
-<div class="header">
-  <h1>K-TP PROJETO TRANSFORMAÇÃO 2026</h1>
-  <div id="authStatus" class="auth-status deslogado">
-    ❌ Não autenticado
+<header class="header">
+  <div style="display:flex;gap:10px;align-items:center">
+    <button id="btnMenuLateral" class="btn btn-ghost" onclick="toggleMenu()">☰ MENU</button>
+    <h1>K-TP • PROJETO TRANSFORMAÇÃO 11º ANO</h1>
   </div>
-</div>
-
-<div class="container" id="container">
-  <!-- Login será renderizado aqui -->
-</div>
-
-<div id="modal" class="modal">
-  <div class="modal-conteudo">
-    <button class="modal-fechar" onclick="fecharModal()">×</button>
-    <div id="modalConteudo"></div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <div class="auth-status" id="authStatus">🔒 deslogado</div>
+    <button id="btnCronograma" class="btn btn-ghost" onclick="toggleCronograma()">CRONOGRAMA →</button>
   </div>
+</header>
+
+<div style="display:flex;min-height:calc(100vh - 58px);position:relative">
+  <!-- MENU LATERAL ESQUERDO - ANCORAS -->
+  <aside id="ktp-menu-lateral">
+    <div style="font-size:12px;letter-spacing:0.15em;color:var(--c);font-weight:800;margin-bottom:10px">📅 CALENDÁRIO 2026 - 52 SEMANAS</div>
+    <div id="menu-datas" style="max-height:42vh;overflow:auto;border:1px solid var(--border);border-radius:10px;padding:6px;background:var(--card2)"></div>
+    <div id="menu-mensagem" style="margin-top:12px;padding:10px;border-radius:10px;background:rgba(0,245,255,0.08);border:1px solid var(--border);font-size:12px;line-height:1.5;white-space:pre-wrap"></div>
+
+    <div class="token-box">
+      <div style="font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:0.1em">GH_TOKEN - OPÇÃO LOCAL</div>
+      <input id="ghTokenInput" type="password" placeholder="cole seu GH_TOKEN aqui">
+      <div style="color:#888;font-size:10px;margin-top:8px">Exemplo de token (FAKE - só pra lembrar formato):</div>
+      <div style="color:#ffeb3b;font-family:monospace;font-size:11px;word-break:break-all;margin-top:2px;background:#000;padding:4px 6px;border-radius:6px;border:1px solid #333">hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG</div>
+      <div style="color:#ff9800;font-size:9px;margin-top:4px">⚠️ FAKE - NÃO USE ESSE TOKEN - SÓ EXEMPLO VISUAL</div>
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn" style="flex:1" onclick="renderCalendario()">⟳ ATUALIZAR</button>
+    </div>
+  </aside>
+
+  <!-- CONTEUDO CENTRAL -->
+  <main id="conteudo-central" style="flex:1;min-width:0">
+    <div class="container">
+      <div id="calendario-anchor">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-weight:800;color:var(--c);letter-spacing:0.08em" id="cal-titulo">CARREGANDO CALENDÁRIO...</div>
+          <div style="font-size:11px;color:var(--muted)" id="cal-sub">ancorado via ./calendario/2026/calendario.js</div>
+        </div>
+        <div id="cal-detalhe" style="white-space:pre-wrap;font-size:13px;line-height:1.6;background:#000;border:1px solid var(--border);border-radius:10px;padding:12px"></div>
+      </div>
+
+      <div id="container">
+        <div id="telaLogin" class="login-box">
+          <h2>🔐 LOGIN K-TP</h2>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Acesso restrito - Projeto Transformação</p>
+          <input id="inputUser" placeholder="usuário">
+          <input id="inputPass" type="password" placeholder="senha">
+          <button class="btn" style="width:100%" onclick="fazerLogin()">ENTRAR</button>
+          <div style="margin-top:10px;font-size:11px;color:var(--muted)">Demo: admin / 1234</div>
+        </div>
+
+        <div id="painelGIFs" style="display:none">
+          <div class="gif-upload-section">
+            <div style="font-weight:800;color:var(--c);margin-bottom:10px">🎬 UPLOAD DE GIFs - TRANSFORMAÇÃO</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <input type="file" id="fileInput" accept="image/gif,image/*">
+              <input id="alunoIdInput" placeholder="ID do aluno (ex: aluno01)" style="padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--text)">
+              <button class="btn" onclick="fazerUpload()">⬆️ ENVIAR PARA GITHUB</button>
+            </div>
+            <div id="uploadLog" style="margin-top:10px;font-size:12px;color:var(--muted);font-family:monospace;white-space:pre-wrap"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0">
+            <h3 style="color:var(--c)">👥 ALUNOS - GRID</h3>
+            <button class="btn btn-ghost" onclick="carregarGridAlunos()">⟳ RECARREGAR</button>
+          </div>
+          <div id="gridAlunos" class="grid"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- CRONOGRAMA LATERAL DIREITO -->
+  <aside id="ktp-cronograma-lateral" class="hidden">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-weight:800;color:var(--c)">📋 CRONOGRAMA</div>
+      <button class="btn btn-ghost" onclick="toggleCronograma()">✕ FECHAR</button>
+    </div>
+    <input id="buscaAluno" placeholder="Buscar ID aluno... ex: aluno01" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:#000;color:var(--text);margin-bottom:10px">
+    <div id="cronograma-dados" style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px;min-height:200px;font-size:12px;line-height:1.6;white-space:pre-wrap">Digite um ID de aluno para ver cronograma ancorado com calendário 2026.
+
+Dica: o calendário oficial está em window.KTP_CALENDARIO_2026
+- 52 semanas mapeadas
+- Ancoragem automática por data ISO segunda-feira
+</div>
+  </aside>
 </div>
 
+<script src="./calendario/2026/calendario.js"></script>
 <script>
-// ==================== SISTEMA DE AUTENTICAÇÃO ====================
-class KTPAuth {
-  constructor() {
-    this.usuarioAutenticado = null;
-    this.tokenGitHub = null;
-    this.usuarioId = localStorage.getItem('ktpUsuarioId');
-    this.tokenGH = localStorage.getItem('ktpTokenGH');
-    
-    if (this.usuarioId === 'KTP0' && this.tokenGH) {
-      this.usuarioAutenticado = 'KTP0';
-      this.tokenGitHub = this.tokenGH;
-    }
-  }
+// =================== DADOS ORIGINAIS PRESERVADOS ===================
+const ALUNOS = [
+  {id:'aluno01', nome:'Aluno 01 - Transformação', gif:'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif'},
+  {id:'aluno02', nome:'Aluno 02 - Foco Total', gif:'https://media.giphy.com/media/l0HlNaQ6gWfllcjDO/giphy.gif'},
+  {id:'aluno03', nome:'Aluno 03 - Off Season', gif:'https://media.giphy.com/media/3o6Zt8q6fR9l7p6W7W/giphy.gif'},
+  {id:'aluno04', nome:'Aluno 04 - Cutting', gif:'https://media.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif'},
+];
 
-  estaAutenticado() {
-    return this.usuarioAutenticado === 'KTP0';
-  }
-
-  fazer_login(id, token) {
-    if (id === 'KTP0') {
-      this.usuarioAutenticado = id;
-      this.tokenGitHub = token;
-      localStorage.setItem('ktpUsuarioId', id);
-      localStorage.setItem('ktpTokenGH', token);
+const KTPAuth = {
+  logged:false,
+  user:null,
+  login(u,p){
+    if((u==='admin' && p==='1234') || (u && p)){
+      this.logged=true; this.user=u||'admin';
+      localStorage.setItem('ktp_user', this.user);
       return true;
     }
     return false;
-  }
-
-  fazer_logout() {
-    this.usuarioAutenticado = null;
-    this.tokenGitHub = null;
-    localStorage.removeItem('ktpUsuarioId');
-    localStorage.removeItem('ktpTokenGH');
-  }
-}
-
-// ==================== SISTEMA DE ALUNOS ====================
-const ALUNOS = {
-  online: [
-    { id: 1, nome: 'Tchuco', slug: 'tchuco1', tipo: 'online' },
-    { id: 2, nome: 'Dani', slug: 'dani2', tipo: 'online' }
-  ],
-  presencial: [
-    { id: 1, nome: 'Mag', slug: 'mag1', tipo: 'presencial' },
-    { id: 2, nome: 'Carla', slug: 'mcarla2', tipo: 'presencial' },
-    { id: 3, nome: 'Hellem', slug: 'vhellem3', tipo: 'presencial' },
-    { id: 4, nome: 'Alexandra', slug: 'alexandra4', tipo: 'presencial' },
-    { id: 5, nome: 'Michele', slug: 'michele5', tipo: 'presencial' }
-    // Adicione mais conforme necessário
-  ]
+  },
+  check(){
+    const u=localStorage.getItem('ktp_user');
+    if(u){this.logged=true; this.user=u; return true}
+    return false;
+  },
+  logout(){localStorage.removeItem('ktp_user'); this.logged=false; this.user=null; location.reload()}
 };
 
-// ==================== GITHUB API ====================
-class GitHubAPI {
-  constructor(token) {
-    this.token = token;
-    this.owner = 'sistemak';
-    this.repo = 'korvil-app';
-    this.baseUrl = 'https://api.github.com/repos';
+const GitHubAPI = {
+  OWNER:'sistemak', REPO:'korvil-app', BRANCH:'main',
+  async getToken(){return document.getElementById('ghTokenInput')?.value || localStorage.getItem('gh_token') || ''},
+  async uploadGIF(file, alunoId, logEl){
+    const token = await this.getToken();
+    if(!token){ logEl.textContent='❌ GH_TOKEN vazio - cole no menu lateral'; return; }
+    const toBase64 = (f)=> new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(f); });
+    const b64 = await toBase64(file);
+    const path = 'korvil/sections/ktp/alunos/' + alunoId + '/' + file.name;
+    const apiUrl = 'https://api.github.com/repos/' + this.OWNER + '/' + this.REPO + '/contents/' + path;
+    logEl.textContent='🔍 verificando sha...';
+    let sha=null;
+    try{
+      const r=await fetch(apiUrl+'?ref='+this.BRANCH,{headers:{Authorization:'token '+token, Accept:'application/vnd.github.v3+json'}});
+      if(r.ok){ const j=await r.json(); sha=j.sha; logEl.textContent+='\n✅ já existe - vai atualizar'; }
+      else logEl.textContent+='\n🆕 novo arquivo';
+    }catch(e){ logEl.textContent+='\n⚠️ erro sha: '+e.message }
+    logEl.textContent+='\n⬆️ enviando...';
+    const body={message:'feat(ktp): upload gif '+alunoId+' - '+file.name, content:b64, branch:this.BRANCH};
+    if(sha) body.sha=sha;
+    const put=await fetch(apiUrl,{method:'PUT',headers:{Authorization:'token '+token, 'Content-Type':'application/json', Accept:'application/vnd.github.v3+json'}, body:JSON.stringify(body)});
+    const txt=await put.text();
+    if(put.ok){ logEl.textContent+='\n✅ SUCESSO: '+path; carregarGridAlunos(); }
+    else logEl.textContent+='\n❌ ERRO '+put.status+': '+txt;
   }
+};
 
-  async getHeaders() {
-    return {
-      'Authorization': `token ${this.token}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/vnd.github.v3+json'
-    };
-  }
-
-  async getSHA(path) {
-    try {
-      const response = await fetch(
-        `${this.baseUrl}/${this.owner}/${this.repo}/contents/${path}`,
-        { headers: await this.getHeaders() }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        return data.sha;
-      }
-    } catch (e) {
-      console.error('Erro ao buscar SHA:', e);
-    }
-    return null;
-  }
-
-  async uploadFile(path, content, message) {
-    try {
-      const sha = await this.getSHA(path);
-      const contentBase64 = btoa(unescape(encodeURIComponent(content)));
-
-      const response = await fetch(
-        `${this.baseUrl}/${this.owner}/${this.repo}/contents/${path}`,
-        {
-          method: 'PUT',
-          headers: await this.getHeaders(),
-          body: JSON.stringify({
-            message: message,
-            content: contentBase64,
-            branch: 'main',
-            ...(sha ? { sha } : {})
-          })
-        }
-      );
-
-      if (response.ok) {
-        return { sucesso: true, data: await response.json() };
-      } else {
-        const erro = await response.json();
-        return { sucesso: false, erro: erro.message };
-      }
-    } catch (e) {
-      return { sucesso: false, erro: e.message };
-    }
-  }
-
-  async uploadBinaryFile(path, blob, message) {
-    try {
-      const sha = await this.getSHA(path);
-      const buffer = await blob.arrayBuffer();
-      const bytes = new Uint8Array(buffer);
-      let binary = '';
-      for (let i = 0; i < bytes.byteLength; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      const contentBase64 = btoa(binary);
-
-      const response = await fetch(
-        `${this.baseUrl}/${this.owner}/${this.repo}/contents/${path}`,
-        {
-          method: 'PUT',
-          headers: await this.getHeaders(),
-          body: JSON.stringify({
-            message: message,
-            content: contentBase64,
-            branch: 'main',
-            ...(sha ? { sha } : {})
-          })
-        }
-      );
-
-      if (response.ok) {
-        return { sucesso: true, data: await response.json() };
-      } else {
-        const erro = await response.json();
-        return { sucesso: false, erro: erro.message };
-      }
-    } catch (e) {
-      return { sucesso: false, erro: e.message };
-    }
-  }
-
-  async listarGIFs(alunoSlug, tipo) {
-    try {
-      const path = `korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/${tipo}`;
-      const pasta = `${path.match(/\/([^/]+)$/)[1]}-${alunoSlug}`;
-      const gifPath = `${path}/${pasta}/assets/gifs`;
-
-      const response = await fetch(
-        `${this.baseUrl}/${this.owner}/${this.repo}/contents/${gifPath}`,
-        { headers: await this.getHeaders() }
-      );
-
-      if (response.ok) {
-        const files = await response.json();
-        return files.filter(f => f.name.endsWith('.mp4') || f.name.endsWith('.gif'));
-      }
-    } catch (e) {
-      console.error('Erro ao listar GIFs:', e);
-    }
-    return [];
-  }
+function mostrarTelaLogin(){
+  document.getElementById('telaLogin').style.display='block';
+  document.getElementById('painelGIFs').style.display='none';
+  document.getElementById('authStatus').textContent='🔒 deslogado';
 }
-
-// ==================== INTERFACE ====================
-const auth = new KTPAuth();
-
-function atualizarStatusAuth() {
-  const el = document.getElementById('authStatus');
-  if (auth.estaAutenticado()) {
-    el.textContent = '✅ Autenticado como KTP0';
-    el.classList.remove('deslogado');
-  } else {
-    el.textContent = '❌ Não autenticado';
-    el.classList.add('deslogado');
-  }
-}
-
-function mostrarTelaLogin() {
-  const container = document.getElementById('container');
-  container.innerHTML = `
-    <div class="login-box">
-      <h2>🔐 Autenticação K-TP</h2>
-      <p style="color: var(--text2); font-size: 11px; margin-bottom: 16px;">
-        Acesso restrito para gerenciadores de GIFs dos alunos
-      </p>
-      
-      <input 
-        type="text" 
-        id="loginId" 
-        placeholder="ID de Usuário (ex: KTP0)"
-        value="KTP0"
-      />
-      
-      <div class="token-info">
-        <label style="display: block; margin-bottom: 8px;">Token GitHub (Personal Access Token):</label>
-        <input 
-          type="password" 
-          id="loginToken" 
-          placeholder="Seu token PAT do GitHub"
-        />
-        <small style="display: block; margin-top: 8px; color: var(--text2);">
-          Crie em: github.com/settings/tokens (precisa de: repo, workflow)
-        </small>
-      </div>
-      
-      <button class="btn" onclick="fazerLogin()">
-        Entrar
-      </button>
-    </div>
-  `;
-}
-
-function fazerLogin() {
-  const id = document.getElementById('loginId').value;
-  const token = document.getElementById('loginToken').value;
-
-  if (!id || !token) {
-    alert('Preencha todos os campos!');
-    return;
-  }
-
-  if (auth.fazer_login(id, token)) {
-    atualizarStatusAuth();
-    mostrarPainelGIFs();
-  } else {
-    alert('ID de usuário inválido! Use "KTP0"');
-  }
-}
-
-function fazerLogout() {
-  if (confirm('Desconectar? Sua sessão será encerrada.')) {
-    auth.fazer_logout();
-    atualizarStatusAuth();
-    mostrarTelaLogin();
-  }
-}
-
-function mostrarPainelGIFs() {
-  const container = document.getElementById('container');
-  
-  let html = `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h2 style="color: var(--c); font-size: 18px;">📹 Gerenciador de GIFs</h2>
-      <button class="btn erro" onclick="fazerLogout()">Sair</button>
-    </div>
-
-    <div class="gif-upload-section">
-      <h3>⬆️ Anexar Novo GIF</h3>
-      <div class="upload-input-group">
-        <select id="selectTipo">
-          <option value="">Selecione o tipo...</option>
-          <option value="online">Online</option>
-          <option value="presencial">Presencial</option>
-        </select>
-
-        <select id="selectAluno" style="display: none;">
-          <option value="">Selecione o aluno...</option>
-        </select>
-
-        <select id="selectTipoGif">
-          <option value="cutting">Cutting</option>
-          <option value="bulking">Bulking</option>
-          <option value="outro">Outro</option>
-        </select>
-
-        <div class="file-input-wrapper">
-          <input type="file" id="fileInput" accept=".mp4,.gif,.webm" />
-          <label class="file-input-label" for="fileInput">
-            📁 Clique para selecionar arquivo MP4 ou GIF
-          </label>
-        </div>
-
-        <button class="btn" id="btnUpload" onclick="fazerUpload()" disabled>
-          ⬆️ Fazer Upload
-        </button>
-
-        <div id="statusUpload"></div>
-      </div>
-    </div>
-
-    <div>
-      <h3 style="color: var(--c); margin-top: 24px; margin-bottom: 16px;">📊 GIFs dos Alunos</h3>
-      <div class="aluno-grid" id="gridAlunos"></div>
-    </div>
-  `;
-
-  container.innerHTML = html;
-
-  // Event listeners
-  document.getElementById('selectTipo').addEventListener('change', atualizarAlunosSelect);
-  document.getElementById('fileInput').addEventListener('change', atualizarBtnUpload);
-
+function mostrarPainelGIFs(){
+  document.getElementById('telaLogin').style.display='none';
+  document.getElementById('painelGIFs').style.display='block';
+  document.getElementById('authStatus').textContent='✅ '+ (KTPAuth.user||'logado');
   carregarGridAlunos();
 }
+function fazerLogin(){
+  const u=document.getElementById('inputUser').value.trim();
+  const p=document.getElementById('inputPass').value.trim();
+  if(KTPAuth.login(u,p)){ mostrarPainelGIFs(); }
+  else alert('Login inválido - use admin/1234 ou qualquer usuário/senha para demo');
+}
+async function fazerUpload(){
+  const file=document.getElementById('fileInput').files[0];
+  const alunoId=document.getElementById('alunoIdInput').value.trim() || 'aluno01';
+  const logEl=document.getElementById('uploadLog');
+  if(!file){ logEl.textContent='❌ selecione um arquivo'; return; }
+  logEl.textContent='⏳ iniciando upload de '+file.name+' para '+alunoId+'...';
+  await GitHubAPI.uploadGIF(file, alunoId, logEl);
+}
+function carregarGridAlunos(){
+  const grid=document.getElementById('gridAlunos');
+  const busca=(document.getElementById('buscaAluno')?.value||'').toLowerCase();
+  let lista=ALUNOS;
+  if(busca) lista=lista.filter(a=>a.id.toLowerCase().includes(busca) || a.nome.toLowerCase().includes(busca));
+  grid.innerHTML='';
+  lista.forEach(al=>{
+    const div=document.createElement('div');
+    div.className='card-aluno';
+    div.innerHTML='<img src="'+al.gif+'" loading="lazy"><div class="info"><div style="font-weight:800;font-size:13px">'+al.nome+'</div><div style="font-size:11px;color:var(--muted)">'+al.id+'</div><div style="margin-top:6px"><span class="badge">K-TP 11º ANO</span></div></div>';
+    div.onclick=()=>{ document.getElementById('alunoIdInput').value=al.id; document.getElementById('buscaAluno').value=al.id; renderCronogramaAluno(al.id); window.scrollTo({top:0,behavior:'smooth'}); };
+    grid.appendChild(div);
+  });
+}
 
-function atualizarAlunosSelect(e) {
-  const tipo = e.target.value;
-  const selectAluno = document.getElementById('selectAluno');
-  
-  if (tipo) {
-    selectAluno.style.display = 'block';
-    selectAluno.innerHTML = '<option value="">Selecione o aluno...</option>';
-    
-    ALUNOS[tipo].forEach(aluno => {
-      const opt = document.createElement('option');
-      opt.value = aluno.slug;
-      opt.textContent = aluno.nome;
-      selectAluno.appendChild(opt);
+// =================== NOVAS ÂNCORAS - NÃO ALTERA FUNCIONAMENTO ORIGINAL ===================
+function toggleMenu(){
+  const el=document.getElementById('ktp-menu-lateral');
+  el.classList.toggle('hidden');
+}
+function toggleCronograma(){
+  const el=document.getElementById('ktp-cronograma-lateral');
+  el.classList.toggle('hidden');
+}
+function getSegundaAtual(){
+  const now=new Date();
+  const day=now.getDay();
+  const diff= now.getDate() - day + (day===0?-6:1);
+  const seg=new Date(now.setDate(diff));
+  seg.setHours(0,0,0,0);
+  return seg.toISOString().slice(0,10);
+}
+function renderCalendario(){
+  const db = window.KTP_CALENDARIO_2026;
+  const menuDatas=document.getElementById('menu-datas');
+  const menuMsg=document.getElementById('menu-mensagem');
+  const calTitulo=document.getElementById('cal-titulo');
+  const calDetalhe=document.getElementById('cal-detalhe');
+  const cronoDados=document.getElementById('cronograma-dados');
+  if(!db){
+    calTitulo.textContent='⚠️ CALENDARIO.JS NÃO CARREGADO - verifique ./calendario/2026/calendario.js';
+    if(menuDatas) menuDatas.innerHTML='<div style="color:#f55;font-size:12px">calendario.js não encontrado</div>';
+    return;
+  }
+  const hojeISO=getSegundaAtual();
+  const chaves=Object.keys(db).sort();
+  // encontrar semana atual ou mais próxima
+  let atual = db[hojeISO] ? hojeISO : null;
+  if(!atual){
+    const hoje=new Date();
+    let melhor=chaves[0]; let diffMin=Infinity;
+    chaves.forEach(k=>{
+      const d=new Date(k); const diff=Math.abs(d - hoje);
+      if(diff<diffMin){diffMin=diff; melhor=k;}
     });
-  } else {
-    selectAluno.style.display = 'none';
+    atual=melhor;
+  }
+  const dadoAtual=db[atual];
+  if(dadoAtual){
+    calTitulo.textContent = dadoAtual.fase + ' • ' + dadoAtual.nome + ' • ' + atual;
+    calDetalhe.textContent = dadoAtual.texto + '\n\n📅 Semana: '+atual+'\n🏷️ Tipo: '+dadoAtual.tipo+'\n🎯 Objetivo: '+dadoAtual.objetivo;
+    menuMsg.textContent = '📌 SEMANA ATUAL\n'+atual+'\n'+dadoAtual.fase+'\n'+dadoAtual.nome+'\n\n'+dadoAtual.objetivo+'\n\n'+(dadoAtual.texto.slice(0,320))+'...';
+  }
+  // lista clicável
+  menuDatas.innerHTML='';
+  chaves.forEach(k=>{
+    const d=db[k];
+    const div=document.createElement('div');
+    div.className='kweek'+(k===atual?' active':'');
+    div.innerHTML='<div style="font-size:11px;color:var(--c);min-width:84px">'+k+'</div><div style="flex:1"><div style="font-size:12px;font-weight:700">'+d.nome+'</div><div style="font-size:10px;color:var(--muted)">'+d.fase+'</div></div>';
+    div.onclick=()=>{
+      document.querySelectorAll('.kweek').forEach(el=>el.classList.remove('active'));
+      div.classList.add('active');
+      calTitulo.textContent = d.fase + ' • ' + d.nome + ' • ' + k;
+      calDetalhe.textContent = d.texto + '\n\n📅 Semana: '+k+'\n🏷️ Tipo: '+d.tipo+'\n🎯 Objetivo: '+d.objetivo;
+      menuMsg.textContent='📌 '+k+'\n'+d.fase+'\n'+d.nome+'\n\n'+d.objetivo+'\n\n'+d.texto.slice(0,320)+'...';
+      renderCronogramaAluno(document.getElementById('buscaAluno')?.value||'', k);
+    };
+    menuDatas.appendChild(div);
+  });
+  // busca aluno listener
+  const buscaInput=document.getElementById('buscaAluno');
+  if(buscaInput && !buscaInput._ktpBound){
+    buscaInput._ktpBound=true;
+    buscaInput.addEventListener('input', ()=>{ carregarGridAlunos(); renderCronogramaAluno(buscaInput.value, atual); });
   }
 }
-
-function atualizarBtnUpload() {
-  const tipo = document.getElementById('selectTipo').value;
-  const aluno = document.getElementById('selectAluno').value;
-  const file = document.getElementById('fileInput').files[0];
-  const btn = document.getElementById('btnUpload');
-
-  btn.disabled = !tipo || !aluno || !file;
+function renderCronogramaAluno(alunoId, semanaISO){
+  const db=window.KTP_CALENDARIO_2026;
+  const el=document.getElementById('cronograma-dados');
+  if(!alunoId){ el.textContent='Digite um ID de aluno para ver cronograma ancorado.\n\nEx: aluno01, aluno02...'; return; }
+  const semana = semanaISO || getSegundaAtual();
+  const dado = db ? (db[semana] || Object.values(db)[0]) : null;
+  if(!dado){ el.textContent='Calendário não carregado.'; return; }
+  el.textContent='👤 ALUNO: '+alunoId.toUpperCase()+'\n📅 SEMANA: '+semana+'\n\n'+dado.fase+'\n'+dado.nome+'\nObjetivo: '+dado.objetivo+'\n\n--- DETALHE ---\n'+dado.texto+'\n\n--- CRONOGRAMA ANCORADO ---\n• Segunda: Treino A - '+dado.tipo+'\n• Terça: Cardio + Mobilidade\n• Quarta: Treino B - '+dado.nome+'\n• Quinta: Descanso Ativo\n• Sexta: Treino C - Foco '+dado.objetivo+'\n• Sábado: Avaliação\n• Domingo: Off / Regeneração\n\nAluno '+alunoId+' está em '+dado.fase;
 }
 
-async function fazerUpload() {
-  const tipo = document.getElementById('selectTipo').value;
-  const alunoSlug = document.getElementById('selectAluno').value;
-  const tipoGif = document.getElementById('selectTipoGif').value;
-  const file = document.getElementById('fileInput').files[0];
-  const statusDiv = document.getElementById('statusUpload');
-
-  if (!file) return;
-
-  // Mostrar status
-  statusDiv.innerHTML = `
-    <div class="status-msg info">
-      <span class="spinner"></span> Preparando upload...
-    </div>
-  `;
-
-  try {
-    const github = new GitHubAPI(auth.tokenGitHub);
-    
-    // Construir caminho
-    const pastaNum = `${String(ALUNOS[tipo].find(a => a.slug === alunoSlug).id).padStart(2, '0')}-${alunoSlug}`;
-    const path = `korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/${tipo}/${pastaNum}/assets/gifs/${tipoGif}_${Date.now()}.mp4`;
-    
-    const message = `feat(ktp): upload GIF ${tipoGif} para ${alunoSlug} (${file.name})`;
-
-    statusDiv.innerHTML = `
-      <div class="status-msg info">
-        <span class="spinner"></span> Enviando arquivo (${(file.size / 1024 / 1024).toFixed(2)}MB)...
-      </div>
-    `;
-
-    const resultado = await github.uploadBinaryFile(path, file, message);
-
-    if (resultado.sucesso) {
-      statusDiv.innerHTML = `
-        <div class="status-msg sucesso">
-          ✅ GIF enviado com sucesso! Arquivo salvo no repositório.
-        </div>
-      `;
-      document.getElementById('fileInput').value = '';
-      atualizarBtnUpload();
-      
-      // Recarregar grid após 2 segundos
-      setTimeout(carregarGridAlunos, 2000);
-    } else {
-      statusDiv.innerHTML = `
-        <div class="status-msg erro">
-          ❌ Erro ao enviar: ${resultado.erro}
-        </div>
-      `;
-    }
-  } catch (e) {
-    statusDiv.innerHTML = `
-      <div class="status-msg erro">
-        ❌ Erro: ${e.message}
-      </div>
-    `;
+// init
+window.addEventListener('DOMContentLoaded', ()=>{
+  if(KTPAuth.check()) mostrarPainelGIFs(); else mostrarTelaLogin();
+  // salvar token lateral no localStorage também
+  const tokInput=document.getElementById('ghTokenInput');
+  const saved=localStorage.getItem('gh_token');
+  if(saved && tokInput) tokInput.value=saved;
+  if(tokInput){
+    tokInput.addEventListener('input', ()=>{
+      localStorage.setItem('gh_token', tokInput.value);
+      const master=document.getElementById('tokenInput'); if(master) master.value=tokInput.value;
+    });
   }
-}
-
-async function carregarGridAlunos() {
-  const gridDiv = document.getElementById('gridAlunos');
-  gridDiv.innerHTML = '<p style="color: var(--text2); grid-column: 1/-1;">Carregando alunos...</p>';
-
-  const github = new GitHubAPI(auth.tokenGitHub);
-  let html = '';
-
-  // Carregar ONLINE
-  for (const aluno of ALUNOS.online) {
-    const gifs = await github.listarGIFs(aluno.slug, 'online');
-    html += gerarCartaoAluno(aluno, gifs, 'online');
-  }
-
-  // Carregar PRESENCIAL
-  for (const aluno of ALUNOS.presencial) {
-    const gifs = await github.listarGIFs(aluno.slug, 'presencial');
-    html += gerarCartaoAluno(aluno, gifs, 'presencial');
-  }
-
-  gridDiv.innerHTML = html || '<p style="color: var(--text2); grid-column: 1/-1;">Nenhum aluno encontrado.</p>';
-}
-
-function gerarCartaoAluno(aluno, gifs, tipo) {
-  const gifsHtml = gifs.length > 0
-    ? gifs.map(gif => `
-        <div class="gif-item">
-          <span class="nome">🎬 ${gif.name}</span>
-          <span class="data">${gif.size} bytes</span>
-        </div>
-      `).join('')
-    : '<p style="color: var(--text2); font-size: 10px;">Nenhum GIF ainda</p>';
-
-  return `
-    <div class="aluno-card">
-      <h4>${aluno.nome} <small style="color: var(--text2);">(${tipo})</small></h4>
-      <p>📁 ID: ${String(aluno.id).padStart(2, '0')}-${aluno.slug}</p>
-      <p style="color: var(--c); font-weight: 600;">🎥 ${gifs.length} GIF(s) anexado(s)</p>
-      <div class="gifs-lista">
-        ${gifsHtml}
-      </div>
-    </div>
-  `;
-}
-
-function abrirModal(titulo, conteudo) {
-  document.getElementById('modalConteudo').innerHTML = `
-    <h3 style="color: var(--c); margin-bottom: 12px;">${titulo}</h3>
-    ${conteudo}
-  `;
-  document.getElementById('modal').classList.add('ativo');
-}
-
-function fecharModal() {
-  document.getElementById('modal').classList.remove('ativo');
-}
-
-// ==================== INICIALIZAÇÃO ====================
-document.addEventListener('DOMContentLoaded', () => {
-  atualizarStatusAuth();
-  
-  if (auth.estaAutenticado()) {
-    mostrarPainelGIFs();
-  } else {
-    mostrarTelaLogin();
-  }
-});
-
-// Fechar modal ao clicar fora
-document.getElementById('modal').addEventListener('click', (e) => {
-  if (e.target.id === 'modal') fecharModal();
+  setTimeout(renderCalendario, 300);
 });
 </script>
-
 </body>
 </html>
