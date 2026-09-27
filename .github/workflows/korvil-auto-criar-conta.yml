@@ -1,0 +1,77 @@
+name: KORVIL AUTO CRIAR CONTA SEM TOKEN LOGIN
+
+on:
+  push:
+    paths:
+      - 'korvil/sections/korvil-loja/login/contas/**'
+      - 'korvil/sections/korvil-loja/**'
+  workflow_dispatch:
+    inputs:
+      conta_json:
+        description: 'JSON da conta (opcional)'
+        required: false
+        type: string
+  repository_dispatch:
+    types: [criar-conta, korvil-criar-conta]
+
+permissions:
+  contents: write
+
+jobs:
+  auto-criar-pasta-mae:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout com GH_TOKEN interno
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Verificar estrutura contas
+        run: |
+          echo "GH_TOKEN ativo? ${{ secrets.GH_TOKEN != '' }}"
+          mkdir -p korvil/sections/korvil-loja/login/contas
+          touch korvil/sections/korvil-loja/login/contas/.gitkeep
+          ls -R korvil/sections/korvil-loja/login/contas || true
+          if [ -f "korvil/sections/korvil-loja/scripts/ensure-contas-structure.js" ]; then
+            node korvil/sections/korvil-loja/scripts/ensure-contas-structure.js || echo "ensure script ok"
+          fi
+
+      - name: Criar conta via dispatch se houver payload
+        if: github.event.client_payload.conta != null || inputs.conta_json != ''
+        run: |
+          echo '${{ toJson(github.event.client_payload) }}' > /tmp/payload.json
+          cat /tmp/payload.json
+          node -e "
+            const fs=require('fs');
+            let conta=null;
+            try{ const p=JSON.parse(fs.readFileSync('/tmp/payload.json','utf8')); conta=p.conta || (p.inputs?JSON.parse(p.inputs.conta_json||'null'):null) || JSON.parse(process.env.INPUT_CONTA_JSON||'null'); }catch(e){ console.error(e); }
+            if(!conta){ console.log('sem conta no dispatch'); process.exit(0); }
+            function norm(n){ const s=(n||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim(); const parts=s.split(/\s+/).filter(Boolean); if(parts.length<=1) return s.replace(/[^a-z0-9-]/g,'-'); if(parts.length==2) return parts[0]+'-'+parts[1][0]; return parts[0]+'-'+parts.slice(1).map(x=>x[0]).join('-'); }
+            const pasta=norm(conta.nomeCompleto||conta.nome||'usuario');
+            const file=pasta+'.json';
+            const dir='korvil/sections/korvil-loja/login/contas/'+pasta;
+            fs.mkdirSync(dir,{recursive:true});
+            fs.writeFileSync(dir+'/'+file, JSON.stringify({...conta,pastaMae:pasta,fileName:file,criadoEm:new Date().toISOString(),via:'workflow GH_TOKEN interno'},null,2));
+            console.log('Criado',dir+'/'+file);
+          "
+        env:
+          INPUT_CONTA_JSON: ${{ inputs.conta_json }}
+
+      - name: Commit automatico estrutura
+        run: |
+          git config user.name "korvil-bot [GH_TOKEN interno]"
+          git config user.email "korvil-bot@sistemak.local"
+          git add korvil/sections/korvil-loja/login/contas/ || true
+          git add korvil/sections/korvil-loja/ || true
+          git diff --staged --quiet && echo "nada pra commit" && exit 0
+          git commit -m "feat(contas): auto criar pasta mae + json via secrets.GH_TOKEN interno sem token no login - ${{ github.sha }}"
+          git push origin HEAD:main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
