@@ -1,0 +1,213 @@
+{
+  "id": 42,
+  "pastaMae": "42-sistema42",
+  "arquivo": "42-sistema42.json",
+  "caminhoCompleto": "korvil/sections/ktp/projetotransformacao/inscricao-do-projeto/inscritos/2026/42-sistema42/42-sistema42.json",
+  "nome": "Sistema K",
+  "primeiroNome": "sistema",
+  "idSlug": "sistema42",
+  "criadoEm": "2026-09-27T11:52:14.590Z",
+  "versao": "V24-DUAL-ANAMNESE",
+  "tela1_objetivos": {
+    "pergunta": "OBJETIVOS: Clique e escolha seus objetivos na ordem de prioridade. De 1 até no máximo 7",
+    "opcoes_disponiveis": [
+      "Ganho de Peso",
+      "Emagrecimento",
+      "Definição Muscular",
+      "Saúde",
+      "Condicionamento Físico",
+      "Hipertrofia",
+      "Reabilitação Física"
+    ],
+    "escolhas_aluno_ordem": [
+      "Condicionamento Físico"
+    ],
+    "prioridade_formatada": "1º Condicionamento Físico",
+    "valor": "Condicionamento Físico"
+  },
+  "tela1_anamneses": {
+    "nivel_atividade": {
+      "pergunta": "Nível de Atividade Física",
+      "resposta": "Intermediário"
+    },
+    "q1": {
+      "pergunta": "1. Já praticou atividade física antes?",
+      "resposta": ""
+    },
+    "q2": {
+      "pergunta": "2. Como você descreve sua ALIMENTAÇÃO atual?",
+      "resposta": ""
+    },
+    "q3": {
+      "pergunta": "3. Quantas horas você DORME por noite?",
+      "resposta": ""
+    },
+    "q4": {
+      "pergunta": "4. Possui alguma RESTRIÇÃO alimentar?",
+      "resposta": ""
+    },
+    "q5": {
+      "pergunta": "5. Qual parte do corpo quer MELHORAR mais?",
+      "resposta": ""
+    },
+    "q6": {
+      "pergunta": "6. Possui alguma DEFICIENCIA ou LIMITAÇÃO fisica?",
+      "resposta": ""
+    },
+    "q7": {
+      "pergunta": "7. Está passando ou JÁ TEVE acompanhamento profissional PSICOLÓGICO?",
+      "resposta": ""
+    },
+    "q8": {
+      "pergunta": "8. Está fazendo ALGUM TRATAMENTO fisico ou psicológico?",
+      "resposta": ""
+    },
+    "q9": {
+      "pergunta": "9. Está fazendo USO DE MEDICAMENTOS? Quais?",
+      "resposta": ""
+    }
+  },
+  "tela2_plano": {
+    "pergunta": "1. ESCOLHA 1 PLANO",
+    "opcoes_disponiveis": [
+      "Avulsa Online R$20",
+      "Avulsa Presencial R$20",
+      "Online Mensal R$60+50",
+      "Presencial 1x R$60+50",
+      "Presencial 2x R$80+50",
+      "Presencial 3x R$100+50",
+      "Presencial 4x R$130+50",
+      "Presencial 5x R$150+50"
+    ],
+    "escolha_aluno": {
+      "nome": "Presencial 3x R$100+50",
+      "valor": 100,
+      "mat": 50,
+      "freq": "3x"
+    }
+  },
+  "tela2_dias_horario": {
+    "pergunta_dias": "2. ESCOLHA DIAS - SEG À SEX",
+    "opcoes_dias": [
+      "Segunda",
+      "Terça",
+      "Quarta",
+      "Quinta",
+      "Sexta"
+    ],
+    "escolhas_dias": [
+      "Quinta",
+      "Sexta",
+      "Quarta"
+    ],
+    "pergunta_horario": "HORÁRIO FIXO: 06h às 10h | 16h às 05h",
+    "opcoes_horario": [
+      "06:00",
+      "07:00",
+      "08:00",
+      "09:00",
+      "10:00",
+      "16:00",
+      "17:00",
+      "18:00",
+      "19:00",
+      "20:00",
+      "21:00",
+      "22:00",
+      "23:00",
+      "00:00",
+      "01:00",
+      "02:00",
+      "03:00",
+      "04:00",
+      "05:00"
+    ],
+    "escolha_horario": "18:00"
+  },
+  "tela3_dados": {
+    "nome_completo": {
+      "pergunta": "Nome Completo",
+      "resposta": "Sistema K"
+    },
+    "cpf": {
+      "pergunta": "CPF",
+      "resposta": "453.814.988-88"
+    },
+    "data_nasc": {
+      "pergunta": "Data Nasc",
+      "resposta": "2026-09-27"
+    },
+    "idade": {
+      "pergunta": "Idade",
+      "resposta": ""
+    },
+    "genero": {
+      "pergunta": "Gênero",
+      "resposta": "Masculino"
+    },
+    "whatsapp": {
+      "pergunta": "WhatsApp",
+      "resposta": "(13) 99769-0898"
+    },
+    "email": {
+      "pergunta": "Email",
+      "resposta": "korvil.p@gmail.com"
+    }
+  },
+  "tela3_endereco": {
+    "cep": {
+      "pergunta": "CEP",
+      "resposta": "11250-524"
+    },
+    "rua": {
+      "pergunta": "Rua",
+      "resposta": "Rua Oswaldo Cruz"
+    },
+    "numero": {
+      "pergunta": "Número",
+      "resposta": "2407"
+    },
+    "bairro": {
+      "pergunta": "Bairro",
+      "resposta": "Jardim Vicente de Carvalho"
+    },
+    "cidade": {
+      "pergunta": "Cidade",
+      "resposta": "Bertioga"
+    }
+  },
+  "objetivos": "Condicionamento Físico",
+  "nivel_atividade": "Intermediário",
+  "q1": "",
+  "q2": "",
+  "q3": "",
+  "q4": "",
+  "q5": "",
+  "q6": "",
+  "q7": "",
+  "q8": "",
+  "q9": "",
+  "plano": {
+    "nome": "Presencial 3x R$100+50",
+    "valor": 100,
+    "mat": 50,
+    "freq": "3x"
+  },
+  "dias": [
+    "Quinta",
+    "Sexta",
+    "Quarta"
+  ],
+  "hora": "18:00",
+  "cpf": "453.814.988-88",
+  "nasc": "2026-09-27",
+  "idade": "",
+  "genero": "Masculino",
+  "whats": "(13) 99769-0898",
+  "email": "korvil.p@gmail.com",
+  "cep": "11250-524",
+  "rua": "Rua Oswaldo Cruz",
+  "numero": "2407",
+  "bairro": "Jardim Vicente de Carvalho",
+  "cidade": "Bertioga"
+}
