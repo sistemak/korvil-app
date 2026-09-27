@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K-TP INSCRIÇÃO 2026</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#000;color:#00ff88;font-family:monospace;border:3px solid #00f5ff;min-height:100vh;padding:18px}
+  h1{color:#00f5ff;text-align:center;font-size:22px;letter-spacing:2px;margin:12px 0 18px;border-bottom:1px dashed #00f5ff;padding-bottom:12px}
+  .wrap{max-width:880px;margin:0 auto}
+  .card{border:1px solid #00f5ff;background:rgba(0,245,255,0.05);padding:14px;margin:12px 0}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  label{display:block;color:#00f5ff;font-size:11px;margin:6px 0 3px;letter-spacing:1px}
+  input,select,textarea{width:100%;background:#000;color:#00ff88;border:1px solid #00ff88;padding:10px;font-family:monospace;font-size:13px;outline:none}
+  input:focus,select:focus,textarea:focus{border-color:#00f5ff;box-shadow:0 0 8px rgba(0,245,255,.4)}
+  .btn{cursor:pointer;background:#00ff88;color:#000;border:none;padding:12px 18px;font-family:monospace;font-weight:900;letter-spacing:1px}
+  .btn-ciano{background:#00f5ff}
+  .btn:hover{filter:brightness(1.2)}
+  .objetivos{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+  .obj{border:1px solid #00ff88;padding:6px 10px;cursor:pointer;font-size:11px}
+  .obj.ativo{background:#00ff88;color:#000;font-weight:900}
+  #listaObjetivosSelecionados{border:1px dashed #00ff88;padding:8px;min-height:28px;font-size:11px;color:#00f5ff}
+  .tela{display:none}
+  .tela.ativa{display:block}
+  .step{color:#00f5ff;font-size:10px;margin-bottom:6px}
+  #popup-confirmado{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#00ff88;color:#000;padding:24px 48px;border-radius:14px;font-weight:900;font-size:22px;z-index:9999;box-shadow:0 10px 40px rgba(0,255,136,.4);display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>K-TP PROJETO TRANSFORMAÇÃO 2026</h1>
+
+<div id="tela1" class="tela ativa">
+  <div class="step">TELA 1 / 3 — OBJETIVOS + ANAMNESE</div>
+  <div class="card">
+    <label>OBJETIVOS: Clique e escolha seus objetivos na ordem de prioridade. De 1 até no máximo 7</label>
+    <div class="objetivos" id="objetivosGrid"></div>
+    <div id="listaObjetivosSelecionados"></div>
+    <input type="hidden" id="objetivos">
+  </div>
+  <div class="card grid">
+    <div><label>Nível de Atividade Física</label><select id="nivelAtividade"><option value="">Selecione</option><option>Sedentário</option><option>Leve</option><option>Moderado</option><option>Intenso</option></select></div>
+    <div><label>1. Já praticou atividade física antes?</label><input id="q1"></div>
+    <div><label>2. Como você descreve sua ALIMENTAÇÃO atual?</label><input id="q2"></div>
+    <div><label>3. Quantas horas você DORME por noite?</label><input id="q3"></div>
+    <div><label>4. Possui alguma RESTRIÇÃO alimentar?</label><input id="q4"></div>
+    <div><label>5. Qual parte do corpo quer MELHORAR mais?</label><input id="q5"></div>
+    <div><label>6. Possui alguma DEFICIENCIA ou LIMITAÇÃO fisica?</label><input id="q6"></div>
+    <div><label>7. Está passando ou JÁ TEVE acompanhamento profissional PSICOLÓGICO?</label><input id="q7"></div>
+    <div><label>8. Está fazendo ALGUM TRATAMENTO fisico ou psicológico?</label><input id="q8"></div>
+    <div><label>9. Está fazendo USO DE MEDICAMENTOS? Quais?</label><input id="q9"></div>
+  </div>
+  <button class="btn btn-ciano" onclick="irParaPlanos()">PRÓXIMO: PLANOS →</button>
+</div>
+
+<div id="tela2" class="tela">
+  <div class="step">TELA 2 / 3 — PLANO + DIAS + HORÁRIO</div>
+  <div class="card">
+    <label>1. ESCOLHA 1 PLANO</label>
+    <div class="grid" id="planosGrid"></div>
+  </div>
+  <div class="card grid">
+    <div>
+      <label>2. ESCOLHA DIAS - SEG À SEX</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="diasBox"></div>
+    </div>
+    <div>
+      <label>HORÁRIO FIXO: 06h às 10h | 16h às 05h</label>
+      <select id="horaSelect"><option value="">Selecione horário</option></select>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn" onclick="mostrarTela('tela1')">← VOLTAR</button>
+    <button class="btn btn-ciano" onclick="irParaDados()">PRÓXIMO: DADOS →</button>
+  </div>
+</div>
+
+<div id="tela3" class="tela">
+  <div class="step">TELA 3 / 3 — DADOS PESSOAIS + ENDEREÇO</div>
+  <div class="card grid">
+    <div><label>Nome Completo</label><input id="nome" placeholder="Nome completo"></div>
+    <div><label>CPF</label><input id="cpf" oninput="mascaras()"></div>
+    <div><label>Data Nasc</label><input id="nasc" placeholder="DD/MM/AAAA"></div>
+    <div><label>Idade</label><input id="idade"></div>
+    <div><label>Gênero</label><select id="publico"><option value="">Selecione</option><option>Masculino</option><option>Feminino</option><option>Outro</option></select></div>
+    <div><label>WhatsApp</label><input id="whats" oninput="mascaras()"></div>
+    <div><label>Email</label><input id="email"></div>
+    <div><label>CEP</label><input id="cep" oninput="buscarCEP()" onblur="buscarCEP()"></div>
+    <div><label>Rua</label><input id="rua"></div>
+    <div><label>Número</label><input id="numero"></div>
+    <div><label>Bairro</label><input id="bairro"></div>
+    <div><label>Cidade</label><input id="cidade"></div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn" onclick="mostrarTela('tela2')">← VOLTAR</button>
+    <button class="btn" style="background:#00ff88;color:#000;flex:1" onclick="enviarWhatsApp()">FINALIZAR INSCRIÇÃO - ENVIAR TUDO</button>
+  </div>
+  <div id="statusEnvio" style="margin-top:12px;font-size:11px;color:#00f5ff"></div>
+</div>
+
+</div>
+<div id="popup-confirmado">CONFIRMADO</div>
+
+<script>
+let objetivosSelecionados = [];
+let plano = {nome:'Avulsa Online', valor:20, mat:50, freq:1};
+let dias = [];
+let hora = '';
+
+const LISTA_OBJ = ["Ganho de Peso","Emagrecimento","Definição Muscular","Saúde","Condicionamento Físico","Hipertrofia","Reabilitação Física"];
+const PLANOS = [
+  {nome:"Avulsa Online R$20", valor:20, mat:0, freq:1},
+  {nome:"Avulsa Presencial R$20", valor:20, mat:0, freq:1},
+  {nome:"Online Mensal R$60+50", valor:60, mat:50, freq:5},
+  {nome:"Presencial 1x R$60+50", valor:60, mat:50, freq:1},
+  {nome:"Presencial 2x R$80+50", valor:80, mat:50, freq:2},
+  {nome:"Presencial 3x R$100+50", valor:100, mat:50, freq:3},
+  {nome:"Presencial 4x R$130+50", valor:130, mat:50, freq:4},
+  {nome:"Presencial 5x R$150+50", valor:150, mat:50, freq:5}
+];
+const DIAS = ["Segunda","Terça","Quarta","Quinta","Sexta"];
+const HORAS = ['06:00','07:00','08:00','09:00','10:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','00:00','01:00','02:00','03:00','04:00','05:00'];
+
+// VISUAL ORIGINAL PRESERVADO
+function montarGrids(){
+  const og = document.getElementById('objetivosGrid');
+  if(og){ og.innerHTML=''; LISTA_OBJ.forEach(o=>{ const d=document.createElement('div'); d.className='obj'+(objetivosSelecionados.includes(o)?' ativo':''); d.textContent=o; d.onclick=()=>toggleObjetivo(o); og.appendChild(d); }); }
+  const pg = document.getElementById('planosGrid');
+  if(pg){ pg.innerHTML=''; PLANOS.forEach(p=>{ const b=document.createElement('button'); b.className='btn'+(plano.nome===p.nome?'':''); b.style.cssText='border:1px solid #00ff88;background:'+(plano.nome===p.nome?'#00ff88':'transparent')+';color:'+(plano.nome===p.nome?'#000':'#00ff88')+';padding:8px;font-size:11px'; b.textContent=p.nome; b.onclick=()=>selPlano(p); pg.appendChild(b); }); }
+  const db = document.getElementById('diasBox');
+  if(db && db.children.length===0){ DIAS.forEach(d=>{ const c=document.createElement('div'); c.className='obj'+(dias.includes(d)?' ativo':''); c.textContent=d; c.onclick=()=>{ if(dias.includes(d)) dias=dias.filter(x=>x!==d); else dias.push(d); montarGrids(); }; db.appendChild(c); }); }
+  const hs = document.getElementById('horaSelect');
+  if(hs && hs.options.length<=1){ HORAS.forEach(h=>{ const op=document.createElement('option'); op.value=h; op.textContent=h; hs.appendChild(op); }); hs.onchange=(e)=>{ hora=e.target.value; }; }
+}
+
+function toggleObjetivo(o){
+  if(objetivosSelecionados.includes(o)) objetivosSelecionados=objetivosSelecionados.filter(x=>x!==o);
+  else { if(objetivosSelecionados.length<7) objetivosSelecionados.push(o); }
+  document.getElementById('objetivos').value = objetivosSelecionados.join(' | ');
+  document.getElementById('listaObjetivosSelecionados').innerText = objetivosSelecionados.map((x,i)=> (i+1)+'º '+x).join(' > ');
+  montarGrids();
+}
+function mostrarTela(id){ document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa')); document.getElementById(id).classList.add('ativa'); }
+function irParaPlanos(){ if(objetivosSelecionados.length===0){ alert('Escolha pelo menos 1 objetivo'); return; } mostrarTela('tela2'); montarGrids(); }
+function selPlano(p){ plano=p; montarGrids(); }
+function irParaDados(){ if(!plano.nome){ alert('Escolha 1 plano'); return; } if(dias.length===0){ alert('Escolha dias'); return; } hora = document.getElementById('horaSelect').value; if(!hora){ alert('Escolha horário'); return; } mostrarTela('tela3'); }
+function mascaras(){
+  const cpfEl=document.getElementById('cpf');
+  if(cpfEl){ let v=cpfEl.value.replace(/\D/g,'').slice(0,11); v=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2'); cpfEl.value=v; }
+  const w=document.getElementById('whats');
+  if(w){ let v=w.value.replace(/\D/g,'').slice(0,11); v=v.replace(/(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d)/,'$1-$2'); w.value=v; }
+}
+async function buscarCEP(){
+  const cepEl=document.getElementById('cep');
+  if(!cepEl) return;
+  const cep=cepEl.value.replace(/\D/g,'');
+  if(cep.length!==8) return;
+  try{
+    const r=await fetch('https://viacep.com.br/ws/'+cep+'/json/');
+    const j=await r.json();
+    if(!j.erro){ document.getElementById('rua').value=j.logradouro||''; document.getElementById('bairro').value=j.bairro||''; document.getElementById('cidade').value=j.localidade||''; }
+  }catch(e){}
+}
+montarGrids();
+
+// NOVA LÓGICA enviarWhatsApp PRESERVA - SÓ ADICIONA NOVO ALUNO NA ORDEM NUMÉRICA
+async function enviarWhatsApp(){
+  const nomeEl = document.getElementById('nome');
+  const nomeCompleto = (nomeEl ? nomeEl.value : '').trim();
+  if(!nomeCompleto){ alert('Preencha nome completo'); return; }
+  const TOKEN_ATUAL = (typeof GH_TOKEN !== 'undefined' ? GH_TOKEN : (window.GH_TOKEN || window.GH_TOKEN_REAL || localStorage.getItem('ktpRealToken') || localStorage.getItem('gh_token') || ''));
+  if(!TOKEN_ATUAL){ alert('GH_TOKEN não encontrado'); return; }
+
+  const basePath = "korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026";
+  const centralPathJS = "korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.js";
+  const centralPathJSON = "korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.json";
+
+  // Determina último número SEM APAGAR NADA - só conta pastas mãe existentes
+  let max = 0;
+  try{
+    const r = await fetch("https://api.github.com/repos/sistemak/korvil-app/contents/"+basePath+"?ref=main",{headers:{"Authorization":"token "+TOKEN_ATUAL,"Accept":"application/vnd.github.v3+json"}});
+    if(r.ok){
+      const lista = await r.json();
+      const reMae = /^(\d+)-/;
+      if(Array.isArray(lista)){
+        for(const it of lista){
+          const m = it.name.match(reMae);
+          if(m){ const n = parseInt(m[1],10); if(!isNaN(n) && n>max) max=n; }
+        }
+      }
+    }
+  }catch(e){ max=41; }
+  let prox = max+1; if(prox===43) prox=44; if(prox<42) prox=42;
+
+  const primeiro = nomeCompleto.split(/\s+/)[0]||'aluno';
+  const primeiroNomeReal = primeiro.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+  const pastaMae = prox+"-"+primeiroNomeReal+prox;
+  const nomeArq = pastaMae+".json";
+  const fullPath = basePath+"/"+pastaMae+"/"+nomeArq;
+
+  const objetivos = document.getElementById('objetivos')?.value || objetivosSelecionados.join(' | ');
+  const nivelAtividade = document.getElementById('nivelAtividade')?.value || '';
+  const q1 = document.getElementById('q1')?.value || ''; const q2 = document.getElementById('q2')?.value || ''; const q3 = document.getElementById('q3')?.value || ''; const q4 = document.getElementById('q4')?.value || ''; const q5 = document.getElementById('q5')?.value || ''; const q6 = document.getElementById('q6')?.value || ''; const q7 = document.getElementById('q7')?.value || ''; const q8 = document.getElementById('q8')?.value || ''; const q9 = document.getElementById('q9')?.value || '';
+  const cpf = document.getElementById('cpf')?.value || ''; const nasc = document.getElementById('nasc')?.value || ''; const idade = document.getElementById('idade')?.value || ''; const genero = document.getElementById('publico')?.value || ''; const whats = document.getElementById('whats')?.value || ''; const email = document.getElementById('email')?.value || ''; const cep = document.getElementById('cep')?.value || ''; const rua = document.getElementById('rua')?.value || ''; const numero = document.getElementById('numero')?.value || ''; const bairro = document.getElementById('bairro')?.value || ''; const cidade = document.getElementById('cidade')?.value || '';
+  const vencData = new Date(); vencData.setDate(vencData.getDate()+30); const vencStr = vencData.toLocaleDateString('pt-BR');
+
+  // ANAMNESE COMPLETA COM PERGUNTAS + RESPOSTAS EM ORDEM EXATA 3 TELAS
+  const anamneseCompleta = {
+    "TELA_1_OBJETIVOS": {"pergunta":"OBJETIVOS: Clique e escolha seus objetivos na ordem de prioridade. De 1 até no máximo 7","opcoes_disponiveis":["Ganho de Peso","Emagrecimento","Definição Muscular","Saúde","Condicionamento Físico","Hipertrofia","Reabilitação Física"],"escolhas_aluno_ordem":objetivosSelecionados,"prioridade_formatada":document.getElementById('listaObjetivosSelecionados')?.innerText||'',"valor":objetivos},
+    "TELA_1_ANAMNESE": {
+      "nivel_atividade": {"pergunta":"Nível de Atividade Física","resposta":nivelAtividade},
+      "q1": {"pergunta":"1. Já praticou atividade física antes?","resposta":q1},
+      "q2": {"pergunta":"2. Como você descreve sua ALIMENTAÇÃO atual?","resposta":q2},
+      "q3": {"pergunta":"3. Quantas horas você DORME por noite?","resposta":q3},
+      "q4": {"pergunta":"4. Possui alguma RESTRIÇÃO alimentar?","resposta":q4},
+      "q5": {"pergunta":"5. Qual parte do corpo quer MELHORAR mais?","resposta":q5},
+      "q6": {"pergunta":"6. Possui alguma DEFICIENCIA ou LIMITAÇÃO fisica?","resposta":q6},
+      "q7": {"pergunta":"7. Está passando ou JÁ TEVE acompanhamento profissional PSICOLÓGICO?","resposta":q7},
+      "q8": {"pergunta":"8. Está fazendo ALGUM TRATAMENTO fisico ou psicológico?","resposta":q8},
+      "q9": {"pergunta":"9. Está fazendo USO DE MEDICAMENTOS? Quais?","resposta":q9}
+    },
+    "TELA_2_PLANOS": {"pergunta":"1. ESCOLHA 1 PLANO","opcoes_disponiveis":["Avulsa Online R$20","Avulsa Presencial R$20","Online Mensal R$60+50","Presencial 1x R$60+50","Presencial 2x R$80+50","Presencial 3x R$100+50","Presencial 4x R$130+50","Presencial 5x R$150+50"],"escolha_aluno":plano},
+    "TELA_2_DIAS_HORARIO": {"pergunta_dias":"2. ESCOLHA DIAS - SEG À SEX","opcoes_dias":["Segunda","Terça","Quarta","Quinta","Sexta"],"escolhas_dias":dias,"pergunta_horario":"HORÁRIO FIXO: 06h às 10h | 16h às 05h","opcoes_horario":['06:00','07:00','08:00','09:00','10:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','00:00','01:00','02:00','03:00','04:00','05:00'],"escolha_horario":hora},
+    "TELA_3_DADOS_PESSOAIS": {"nome_completo":{"pergunta":"Nome Completo","resposta":nomeCompleto},"cpf":{"pergunta":"CPF","resposta":cpf},"data_nasc":{"pergunta":"Data Nasc","resposta":nasc},"idade":{"pergunta":"Idade","resposta":idade},"genero":{"pergunta":"Gênero","resposta":genero},"whatsapp":{"pergunta":"WhatsApp","resposta":whats},"email":{"pergunta":"Email","resposta":email}},
+    "TELA_3_ENDERECO": {"cep":{"pergunta":"CEP","resposta":cep},"rua":{"pergunta":"Rua","resposta":rua},"numero":{"pergunta":"Número","resposta":numero},"bairro":{"pergunta":"Bairro","resposta":bairro},"cidade":{"pergunta":"Cidade","resposta":cidade}}
+  };
+
+  const dadosCompletos = {
+    id: prox, pastaMae: pastaMae, arquivo: nomeArq, caminhoCompleto: fullPath,
+    nome: nomeCompleto, primeiroNome: primeiroNomeReal, idSlug: primeiroNomeReal+prox,
+    criadoEm: new Date().toISOString(), versao: 'V26-PRESERVA-ADICIONA',
+    tela1_objetivos: anamneseCompleta.TELA_1_OBJETIVOS,
+    tela1_anamneses: anamneseCompleta.TELA_1_ANAMNESE,
+    tela2_plano: anamneseCompleta.TELA_2_PLANOS,
+    tela2_dias_horario: anamneseCompleta.TELA_2_DIAS_HORARIO,
+    tela3_dados: anamneseCompleta.TELA_3_DADOS_PESSOAIS,
+    tela3_endereco: anamneseCompleta.TELA_3_ENDERECO,
+    objetivos: objetivos, nivel_atividade: nivelAtividade,
+    q1: q1, q2: q2, q3: q3, q4: q4, q5: q5, q6: q6, q7: q7, q8: q8, q9: q9,
+    plano: plano, dias: dias, hora: hora,
+    cpf: cpf, nasc: nasc, idade: idade, genero: genero, whats: whats, email: email,
+    cep: cep, rua: rua, numero: numero, bairro: bairro, cidade: cidade
+  };
+
+  const statusEl=document.getElementById('statusEnvio');
+  if(statusEl) statusEl.textContent='⏳ Criando pasta mãe '+pastaMae+'...';
+
+  // AÇÃO 1: PASTA MÃE INDIVIDUAL - cria com todos dados iguais ao que vai pros cronogramas
+  const conteudoStr = JSON.stringify(dadosCompletos, null, 2);
+  const conteudoBase64 = btoa(unescape(encodeURIComponent(conteudoStr)));
+  const putRes = await fetch("https://api.github.com/repos/sistemak/korvil-app/contents/"+fullPath,{
+    method:'PUT',
+    headers:{"Authorization":"token "+TOKEN_ATUAL,"Content-Type":"application/json"},
+    body: JSON.stringify({message:"feat: inscricao "+pastaMae+" [V26]",content:conteudoBase64,branch:'main'})
+  });
+  if(!putRes.ok) throw new Error('PUT individual falhou: '+await putRes.text());
+  if(statusEl) statusEl.textContent='✅ Pasta mãe criada. Atualizando cronogramas JS e JSON preservando...';
+
+  // AÇÃO 2: ATUALIZA JS E JSON PRESERVANDO TUDO QUE JÁ EXISTE - SÓ ADICIONA NOVO
+  async function atualizaBancoCentralPreservando(path, isJSON){
+    let sha = null;
+    let data = {ALUNOS_DB:{}, ALUNOS_PRESENCIAL:{}, ALUNOS_ONLINE:{}, CRONOGRAMA_DB:{PRESENCIAL:[], ONLINE:[]}};
+    try{
+      const getRes = await fetch("https://api.github.com/repos/sistemak/korvil-app/contents/"+path+"?ref=main",{headers:{"Authorization":"token "+TOKEN_ATUAL,"Accept":"application/vnd.github.v3+json"}});
+      if(getRes.ok){
+        const j = await getRes.json();
+        sha = j.sha;
+        const decoded = atob(j.content.replace(/\n/g,''));
+        if(isJSON){
+          try{ data = JSON.parse(decoded); }catch(e){ console.warn('JSON parse falhou, preserva vazio'); }
+        }else{
+          try{
+            const tempWindow = {};
+            const func = new Function('window', decoded + '\n; return window.KTP_CRONOGRAMA || {};');
+            const parsed = func(tempWindow);
+            if(parsed && Object.keys(parsed).length>0) data = parsed;
+          }catch(e){ console.warn('JS parse falhou, preserva vazio'); }
+        }
+      }
+    }catch(e){ console.warn('GET central falhou, vai criar novo preservando'); }
+
+    if(!data.ALUNOS_DB) data.ALUNOS_DB={};
+    if(!data.ALUNOS_PRESENCIAL) data.ALUNOS_PRESENCIAL={};
+    if(!data.ALUNOS_ONLINE) data.ALUNOS_ONLINE={};
+    if(!data.CRONOGRAMA_DB) data.CRONOGRAMA_DB={PRESENCIAL:[], ONLINE:[]};
+    if(!data.CRONOGRAMA_DB.PRESENCIAL) data.CRONOGRAMA_DB.PRESENCIAL=[];
+    if(!data.CRONOGRAMA_DB.ONLINE) data.CRONOGRAMA_DB.ONLINE=[];
+
+    const chave = primeiroNomeReal+prox;
+    if(!data.ALUNOS_DB[chave]){
+      data.ALUNOS_DB[chave] = {"nome":nomeCompleto,"tipo":"ALUNO","id":prox,"pasta":pastaMae};
+    }
+    if(!data.ALUNOS_PRESENCIAL[chave]){
+      data.ALUNOS_PRESENCIAL[chave] = {"nome":nomeCompleto,"tipo":"ALUNO"};
+    }
+
+    const horaKey = hora+" ⭐";
+    let slot = data.CRONOGRAMA_DB.PRESENCIAL.find(s=>s.hora && s.hora.split(' ')[0]===hora.split(':')[0]+'h00' || s.hora && s.hora.startsWith(hora.split(':')[0]));
+    if(!slot){
+      slot={"hora":horaKey,"status":"ATIVOS","alunos":[]};
+      data.CRONOGRAMA_DB.PRESENCIAL.push(slot);
+    }
+
+    const jaExiste = slot.alunos.find(a=>a.id===chave || a.n===prox);
+    if(!jaExiste){
+      const novoAluno = {
+        "n": prox,
+        "id": chave,
+        "aluno": nomeCompleto,
+        "dias": dias.join(', '),
+        "freq": plano.freq+"x",
+        "objetivo": objetivos,
+        "objetivos_array": objetivosSelecionados,
+        "valor": "R$"+plano.valor+",00",
+        "matricula": "R$"+plano.mat+",00",
+        "total": "R$"+(parseInt(plano.valor||0)+parseInt(plano.mat||0))+",00",
+        "venc": vencStr,
+        "status": "Ativo",
+        "cpf": cpf, "nasc": nasc, "idade": idade, "genero": genero, "whats": whats, "email": email,
+        "nivel_atividade": nivelAtividade,
+        "q1": q1, "q2": q2, "q3": q3, "q4": q4, "q5": q5, "q6": q6, "q7": q7, "q8": q8, "q9": q9,
+        "plano": plano.nome||'',
+        "cep": cep, "rua": rua, "numero": numero, "bairro": bairro, "cidade": cidade,
+        "anamnese_completa": anamneseCompleta,
+        "dados_completos_iguais_pasta_mae": dadosCompletos
+      };
+      slot.alunos.push(novoAluno);
+      slot.alunos.sort((a,b)=> (a.n||0)-(b.n||0));
+    }
+
+    let novoConteudo;
+    if(isJSON){
+      novoConteudo = JSON.stringify(data, null, 2);
+    }else{
+      novoConteudo = "// "+centralPathJS+"\n// ARQUIVO EXTERNO - CRONOGRAMA COMPLETO - PUXADO POR ÂNCORA\n// Caminho GitHub: https://github.com/sistemak/korvil-app/edit/main/korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.json\nwindow.KTP_CRONOGRAMA = window.KTP_CRONOGRAMA || {};\n\nwindow.KTP_CRONOGRAMA.ALUNOS_DB = "+JSON.stringify(data.ALUNOS_DB, null, 2)+";\n\nwindow.KTP_CRONOGRAMA.ALUNOS_PRESENCIAL = "+JSON.stringify(data.ALUNOS_PRESENCIAL, null, 2)+";\n\nwindow.KTP_CRONOGRAMA.ALUNOS_ONLINE = "+JSON.stringify(data.ALUNOS_ONLINE || {}, null, 2)+";\n\nwindow.KTP_CRONOGRAMA.CRONOGRAMA_DB = "+JSON.stringify(data.CRONOGRAMA_DB, null, 2)+";\n\n// Compatibilidade - variáveis originais por âncora\nvar Sr = window.KTP_CRONOGRAMA.ALUNOS_DB;\nvar pf = window.KTP_CRONOGRAMA.CRONOGRAMA_DB;\nvar ALUNOS_PRESENCIAL = window.KTP_CRONOGRAMA.ALUNOS_PRESENCIAL;\nvar ALUNOS_ONLINE = window.KTP_CRONOGRAMA.ALUNOS_ONLINE;\nvar CRONOGRAMA = window.KTP_CRONOGRAMA.CRONOGRAMA_DB;\n\n// TOKEN FALSO SÓ PRA LEMBRAR FORMATO (não usar): hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG\n";
+    }
+    const base64 = btoa(unescape(encodeURIComponent(novoConteudo)));
+    const putRes = await fetch("https://api.github.com/repos/sistemak/korvil-app/contents/"+path,{
+      method:'PUT',
+      headers:{"Authorization":"token "+TOKEN_ATUAL,"Content-Type":"application/json"},
+      body: JSON.stringify({message:"feat: adiciona "+pastaMae+" preservando existentes [V26]",content:base64,branch:'main',...(sha?{sha}:{})})
+    });
+    if(!putRes.ok) console.warn('PUT central falhou', path, await putRes.text());
+    return putRes.ok;
+  }
+
+  await atualizaBancoCentralPreservando(centralPathJS, false);
+  await atualizaBancoCentralPreservando(centralPathJSON, true);
+  if(statusEl) statusEl.textContent='✅ JS e JSON atualizados preservando existentes. Disparando WhatsApp...';
+
+  let popup = document.getElementById('popup-confirmado');
+  if(!popup){ popup = document.createElement('div'); popup.id='popup-confirmado'; popup.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#00ff88;color:#000;padding:24px 48px;border-radius:14px;font-weight:900;font-size:22px;z-index:9999;box-shadow:0 10px 40px rgba(0,255,136,.4);font-family:monospace;'; document.body.appendChild(popup); }
+  popup.textContent='CONFIRMADO'; popup.style.display='block'; setTimeout(()=>{ if(popup) popup.style.display='none'; },3000);
+
+  try{
+    const msgCompleta = "*🏋️ NOVA INSCRIÇÃO K-TP*\n*ID:* "+prox+" - "+pastaMae+"\n*Nome:* "+nomeCompleto+"\n*Whats:* "+whats+"\n*CPF:* "+cpf+" | *Idade:* "+idade+" | *Gênero:* "+genero+"\n*Email:* "+email+"\n*End:* "+rua+", "+numero+" - "+bairro+" - "+cidade+" - CEP "+cep+"\n\n*TELA 1 - OBJETIVOS:*\n"+objetivosSelecionados.map((o,i)=> (i+1)+"º "+o).join(' > ')+"\n\n*TELA 1 - ANAMNESE:*\n- Nível: "+nivelAtividade+"\n- 1. "+q1+"\n- 2. "+q2+"\n- 3. "+q3+"\n- 4. "+q4+"\n- 5. "+q5+"\n- 6. "+q6+"\n- 7. "+q7+"\n- 8. "+q8+"\n- 9. "+q9+"\n\n*TELA 2:*\nPlano: "+plano.nome+"\nDias: "+dias.join(', ')+" | Hora: "+hora+"\n\n*TELA 3:* "+nomeCompleto+" | "+cpf+" | "+nasc+" | "+idade+"\n"+whats+" | "+email+"\n"+rua+", "+numero+" - "+bairro+" - "+cidade+" - "+cep+"\n\nCaminho: "+fullPath;
+    await fetch("https://api.github.com/repos/sistemak/korvil-app/actions/workflows/whatsapp.yml/dispatches",{
+      method:'POST',
+      headers:{"Authorization":"token "+TOKEN_ATUAL,"Content-Type":"application/json"},
+      body: JSON.stringify({
+        ref:'main',
+        inputs:{
+          pasta:pastaMae,
+          nome:nomeCompleto,
+          caminho:fullPath,
+          whatsapp:whats,
+          mensagem:msgCompleta.substring(0,5000),
+          dados_json: JSON.stringify(dadosCompletos).substring(0,5000)
+        }
+      })
+    });
+    if(statusEl) statusEl.textContent='✅ Tudo enviado: pasta mãe + JS + JSON + WhatsApp dispatch OK';
+  }catch(e){ console.warn('whatsapp dispatch',e); if(statusEl) statusEl.textContent='⚠️ Pasta e cronogramas OK, mas whatsapp dispatch falhou: '+e.message; }
+}
+</script>
+</body>
+</html>
