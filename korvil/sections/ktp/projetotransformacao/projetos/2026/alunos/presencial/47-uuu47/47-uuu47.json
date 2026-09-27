@@ -1,0 +1,23 @@
+{
+  "id": 47,
+  "pastaMae": "47-uuu47",
+  "arquivo": "47-uuu47.json",
+  "caminhoCompleto": "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/47-uuu47/47-uuu47.json",
+  "nome": "Uuu",
+  "primeiroNome": "uuu",
+  "whatsapp": "",
+  "tela1": {
+    "nome": "Uuu",
+    "timestamp": "2026-09-27T03:47:28.935Z"
+  },
+  "tela2": {
+    "presenca": "presencial",
+    "ano": 2026
+  },
+  "tela3": {
+    "projeto": "transformacao",
+    "status": "inscrito"
+  },
+  "criadoEm": "2026-09-27T03:47:28.943Z",
+  "versao": "V22-FINAL"
+}
