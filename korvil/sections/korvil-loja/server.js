@@ -1,52 +1,25 @@
-require('dotenv').config();
+// korvil/sections/korvil-loja/server.js - mesmo lógica GH_TOKEN interno automático
 const express = require('express');
-const cors = require('cors');
-const fs = require('fs');
 const path = require('path');
-
-const GH_TOKEN = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || process.env.GH_PAT || '';
-const REPO = 'sistemak/korvil-app';
-const BRANCH = 'main';
-
+const fs = require('fs');
+const crypto = require('crypto');
+const GH_TOKEN = process.env.GH_TOKEN || process.env.GITHUB_TOKEN || '';
 const app = express();
-app.use(cors());
-app.use(express.json({ limit: '10mb' }));
-app.use(express.static(__dirname));
-
-function normalizePastaMae(nome){
-  const n = (nome||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-  const parts = n.split(/\s+/).filter(Boolean);
-  if(!parts.length) return 'usuario';
-  if(parts.length===1) return parts[0].replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-');
-  if(parts.length===2) return `${parts[0]}-${parts[1][0]}`;
-  return `${parts[0]}-${parts.slice(1).map(p=>p[0]).join('-')}`;
-}
-
-async function githubPutFile(filePath, content){
-  if(!GH_TOKEN) return null;
-  const apiUrl = `https://api.github.com/repos/${REPO}/contents/${filePath.split('/').map(encodeURIComponent).join('/')}`;
-  let sha;
-  try{ const r = await fetch(apiUrl, { headers:{ Authorization: `Bearer ${GH_TOKEN}`, Accept:'application/vnd.github+json' } }); if(r.ok){ const j=await r.json(); sha=j.sha; } }catch{}
-  const body = { message: `feat(contas): ${filePath} via GH_TOKEN interno automatico`, content: Buffer.from(content,'utf8').toString('base64'), branch: BRANCH, ...(sha?{sha}:{}) };
-  const put = await fetch(apiUrl, { method:'PUT', headers:{ Authorization: `Bearer ${GH_TOKEN}`, 'Content-Type':'application/json', Accept:'application/vnd.github+json' }, body: JSON.stringify(body) });
-  if(!put.ok) throw new Error(await put.text());
-  return put.json();
-}
-
+app.use(express.json({limit:'15mb'}));
+const CONTAS_DIR = path.join(__dirname, 'login/contas');
+function ensureDir(p){ fs.mkdirSync(p,{recursive:true}); }
+function gerarPastaMae(nome){ const n=nome.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim(); const parts=n.split(/\s+/).filter(Boolean); let r=parts.length===1?parts[0]:parts.length===2?parts[0]+'-'+parts[1][0]:parts[0]+'-'+parts[1][0]+'-'+parts[2][0]; return r.replace(/[^a-z0-9-]/g,'').replace(/--+/g,'-').replace(/^-+|-+$/g,''); }
+function sha256(t){ return crypto.createHash('sha256').update(t).digest('hex'); }
 app.post('/api/criar-conta', async (req,res)=>{
-  try{
-    const conta = req.body;
-    const pastaMae = normalizePastaMae(conta.nomeCompleto);
-    const fileName = `${pastaMae}.json`;
-    const rel = `korvil/sections/korvil-loja/login/contas/${pastaMae}/${fileName}`;
-    const fullDir = path.join(__dirname, 'login/contas', pastaMae);
-    const fullPath = path.join(fullDir, fileName);
-    fs.mkdirSync(fullDir, { recursive:true });
-    const data = { ...conta, pastaMae, fileName, criadoEm: new Date().toISOString(), origem:'Node automatico sem token no login' };
-    fs.writeFileSync(fullPath, JSON.stringify(data,null,2), 'utf8');
-    let gh=null; try{ gh=await githubPutFile(rel, JSON.stringify(data,null,2)); }catch(e){ console.error(e); }
-    res.json({ ok:true, pastaMae, fileName, path: rel, github: gh? 'ok':'local' });
-  }catch(e){ res.status(500).json({ ok:false, error:e.message }); }
+  const {nome_completo,email,senha,cpf,whatsapp,cep,rua,numero,bairro,cidade,estado,foto_perfil,pastaMae,arquivo}=req.body;
+  const pm=pastaMae||gerarPastaMae(nome_completo);
+  const arq=arquivo||pm+'.json';
+  const conta={id:crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2), arquivo:arq, pasta_mae:pm, nome_completo:nome_completo.trim(), primeiro_nome:nome_completo.trim().split(/\s+/)[0], email:email.trim(), senha_hash:sha256(senha), cpf:(cpf||'').trim(), whatsapp:(whatsapp||'').trim(), cep:(cep||'').trim(), numero:(numero||'').trim(), rua:(rua||'').trim(), bairro:(bairro||'').trim(), cidade:(cidade||'').trim(), estado:(estado||'').trim().toUpperCase(), foto_perfil:foto_perfil||'', criado_em:new Date().toISOString(), atualizado_em:new Date().toISOString()};
+  ensureDir(path.join(CONTAS_DIR,pm));
+  fs.writeFileSync(path.join(CONTAS_DIR,pm,arq), JSON.stringify(conta,null,2));
+  if(GH_TOKEN){
+    try{ const filePathRepo='korvil/sections/korvil-loja/login/contas/'+pm+'/'+arq; const contentB64=Buffer.from(JSON.stringify(conta,null,2)).toString('base64'); const apiUrl='https://api.github.com/repos/sistemak/korvil-app/contents/'+filePathRepo; let sha=null; try{ const getRes=await fetch(apiUrl,{headers:{Authorization:'token '+GH_TOKEN}}); if(getRes.ok){const j=await getRes.json(); sha=j.sha;}}catch{} await fetch(apiUrl,{method:'PUT', headers:{Authorization:'token '+GH_TOKEN,'Content-Type':'application/json'}, body:JSON.stringify({message:'KORVIL: conta '+pm+' - '+conta.email, content:contentB64, branch:'main', ...(sha?{sha}:{})})}); }catch(e){ console.warn(e.message); }
+  }
+  res.json({ok:true,pastaMae:pm,arquivo:arq,path:'korvil/sections/korvil-loja/login/contas/'+pm+'/'+arq});
 });
-
-app.listen(process.env.PORT||3001, ()=> console.log('KORVIL LOJA server.js GH_TOKEN '+(GH_TOKEN?'ATIVO':'AUSENTE')));
+app.listen(process.env.PORT||3001, ()=>console.log('korvil-loja server GH_TOKEN interno '+(GH_TOKEN?'ativo':'off')));
