@@ -1,0 +1,25 @@
+name: K-TP Mensagens 05h
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # 05h BRT = 08h UTC
+  workflow_dispatch:
+
+jobs:
+  disparo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: Instalar deps
+        working-directory: korvil/sections/ktp/projetotransformacao/mensagens-automaticas-whatsapp
+        run: npm install
+      - name: Verificar evolução + Disparar WhatsApp
+        working-directory: korvil/sections/ktp/projetotransformacao/mensagens-automaticas-whatsapp
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          WHATSAPP_TOKEN: ${{ secrets.WHATSAPP_TOKEN }}
+        run: |
+          node lib/github-checker.js
+          node lib/whatsapp-sender.js
