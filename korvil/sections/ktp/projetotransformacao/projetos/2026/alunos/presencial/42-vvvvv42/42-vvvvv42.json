@@ -1,0 +1,52 @@
+{
+  "id": 42,
+  "pastaMae": "42-vvvvv42",
+  "arquivo": "42-vvvvv42.json",
+  "caminhoCompleto": "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/42-vvvvv42/42-vvvvv42.json",
+  "nome": "Vvvvv",
+  "primeiroNome": "vvvvv",
+  "idSlug": "vvvvv42",
+  "objetivos": "Ganho de Peso",
+  "objetivosArray": [
+    "Ganho de Peso"
+  ],
+  "plano": {
+    "nome": "Presencial 5x",
+    "valor": "150",
+    "mat": "50",
+    "tipo": "mensal_pres",
+    "freq": 5
+  },
+  "dias": [
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta"
+  ],
+  "hora": "08:00",
+  "cpf": "107.101.304-14",
+  "nasc": "2026-09-30",
+  "idade": "0 anos",
+  "genero": "Feminino",
+  "whats": "(13) 99769-0898",
+  "email": "korvil.p@gmail.com",
+  "nivelAtividade": "Intermediário",
+  "q1": "",
+  "q2": "",
+  "q3": "",
+  "q4": "",
+  "q5": "",
+  "q6": "",
+  "q7": "",
+  "q8": "",
+  "q9": "",
+  "cep": "11250-524",
+  "rua": "Rua Oswaldo Cruz",
+  "numero": "2407",
+  "bairro": "Jardim Vicente de Carvalho",
+  "cidade": "Bertioga",
+  "criadoEm": "2026-09-30T19:41:25.899Z",
+  "versao": "V23-PRESERVA-REAL-FINAL",
+  "venc": "30/10/2026"
+}
