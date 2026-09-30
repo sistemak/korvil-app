@@ -1,0 +1,14 @@
+{
+  "ativas": [
+    "Bom dia {nome}! ☀️ Hoje celebramos {dia} - sua evolução ontem foi incrível. Vamos com tudo hoje? - K-TP 2026",
+    "Fala {nome}! 🚀 Mais um dia de {dia}. Seu commit de ontem inspirou o time. Bora manter a constância 05h?",
+    "{nome}, 11 anos de K-TP e você fazendo parte disso. 💛 Sua jornada está sendo vista. Pronto pro próximo nível?"
+  ],
+  "incentivo": [
+    "Bom dia {nome}! 💛 {dia} - mesmo sem commit ontem, seu processo continua. Hoje é o recomeço 05h. K-TP acredita em você!",
+    "{nome}, pausas fazem parte de {dia}. O importante é voltar. Mensagem automática das 05h pra lembrar: estamos juntos. 🙏",
+    "Fala {nome}, mensagem das 05h: {dia} não é sobre perfeição, é sobre presença. Hoje pode ser seu dia. Vamos?"
+  ],
+  "horario": "05:00 America/Sao_Paulo",
+  "remetente": "K-TP Bot Oficial"
+}
