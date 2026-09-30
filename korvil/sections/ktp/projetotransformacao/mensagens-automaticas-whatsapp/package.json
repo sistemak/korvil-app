@@ -1,10 +1,17 @@
 {
-  "name": "mensagens-automaticas-whatsapp",
+  "name": "ktp-mensagens-whatsapp",
   "version": "1.0.0",
-  "main": "mensagens-automaticas-whatsapp.js",
-  "scripts": { "start": "node mensagens-automaticas-whatsapp.js" },
+  "description": "K-TP 11 anos - Mensagens automáticas 05h",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node lib/github-checker.js",
+    "send": "node lib/whatsapp-sender.js"
+  },
   "dependencies": {
-    "whatsapp-web.js": "^1.23.0",
-    "node-cron": "^3.0.3"
-  }
+    "@octokit/rest": "^20.0.2",
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1"
+  },
+  "engines": { "node": ">=18" }
 }
