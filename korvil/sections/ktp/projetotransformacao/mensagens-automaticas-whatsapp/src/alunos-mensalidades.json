@@ -1,0 +1,26 @@
+[
+  {
+    "id": "a1",
+    "nome": "Exemplo Aluno 1",
+    "phone": "5513999999999",
+    "dia_vencimento": 10,
+    "valor": "97,00",
+    "pix": "seu-pix-aqui"
+  },
+  {
+    "id": "a2",
+    "nome": "Aluno KTP Exemplo 2",
+    "phone": "5513988888888",
+    "dia_vencimento": 15,
+    "valor": "147,00",
+    "pix": "pix-ktp-2"
+  },
+  {
+    "id": "a3",
+    "nome": "Aluna KTP 003",
+    "phone": "5513977777777",
+    "dia_vencimento": 20,
+    "valor": "97,00",
+    "pix": "pix-ktp-3"
+  }
+]
