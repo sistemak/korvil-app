@@ -1,0 +1,52 @@
+{
+  "id": 3,
+  "pastaMae": "3-uuu3",
+  "arquivo": "3-uuu3.json",
+  "caminhoCompleto": "korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/online/3-uuu3/3-uuu3.json",
+  "nome": "Uuu",
+  "primeiroNome": "uuu",
+  "idSlug": "uuu3",
+  "objetivos": "Ganho de Peso",
+  "objetivosArray": [
+    "Ganho de Peso"
+  ],
+  "plano": {
+    "nome": "Online Mensal",
+    "valor": "60",
+    "mat": "50",
+    "tipo": "mensal_online",
+    "freq": 5
+  },
+  "dias": [
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta"
+  ],
+  "hora": "19:00",
+  "cpf": "107.101.304-14",
+  "nasc": "",
+  "idade": "",
+  "genero": "Masculino",
+  "whats": "(13) 99769-0898",
+  "email": "korvil.p@gmail.com",
+  "nivelAtividade": "Intermediário",
+  "q1": "",
+  "q2": "",
+  "q3": "",
+  "q4": "",
+  "q5": "",
+  "q6": "",
+  "q7": "",
+  "q8": "",
+  "q9": "",
+  "cep": "11250-524",
+  "rua": "Rua Oswaldo Cruz",
+  "numero": "2407",
+  "bairro": "Jardim Vicente de Carvalho",
+  "cidade": "Bertioga",
+  "criadoEm": "2026-09-30T03:31:03.952Z",
+  "versao": "V23-PRESERVA-REAL-FINAL",
+  "venc": "30/10/2026"
+}
