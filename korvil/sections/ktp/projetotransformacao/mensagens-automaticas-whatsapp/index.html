@@ -1,15 +1,38 @@
-Crie o 3 
-Use o GH_TOKEN que está funcionando 
-Configure o node 
-Mostre um código mestre que vai verificar dentro do repositorio original de já existe pastas e arquivos e códigos criados pra fazer tudo isso funcionar certo , se existir só adiciona acrescentando as programações e configurações, se não existir então você cria, só não misture, não bagunçe , não exclua nada.
-O objetivo é criar um programador que envia mensagem automaticamente para os whatsapp das pessoas .
-Permita ações diferentes de : 
-enviar mensagens sobre orientações do projeto transformação para os participantes do projeto 
- Mensagem de cobranças das datas das mensalidades para cada participante 
-Mensagens de anúncios para todas pessoas que não participa do projeto pra atrair eles pra participar do Projeto 
-E muito mais coisas que puder fazer 
-Mostre pág HTML pra eu poder programar as coisas, as mensagens, escolher pra quem vai enviar etc muitas outras coisas que puder fazer 
-Quero que isso tudo funcione automático do jeito que eu programar 
-
-Tenta deixar o máximo possível dentro do caminho: https://github.com/sistemak/korvil-app/blob/main/korvil/sections/ktp/projetotransformacao/mensagens-automaticas-whatsapp/
-o Index será: https://github.com/sistemak/korvil-app/blob/main/korvil/sections/ktp/projetotransformacao/mensagens-automaticas-whatsapp/index.html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K-TP 2026 | Painel Mensagens Automáticas WhatsApp</title>
+<style>
+  :root{--gold:#d4af37;--blue:#00d4ff;--bg:#0a0a0a}
+  body{margin:0;background:var(--bg);color:#f5f5f5;font-family:Inter,system-ui}
+  header{border-bottom:1px solid #1f1f1f;padding:24px;text-align:center}
+  .badge{display:inline-flex;gap:8px;border:1px solid var(--gold);color:var(--gold);padding:6px 12px;border-radius:999px;font-size:12px;letter-spacing:.12em}
+  h1{font-size:28px;margin:16px 0 8px;font-weight:800}
+  h1 span{color:var(--gold)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding:24px;max-width:1200px;margin:0 auto}
+  .card{background:#111;border:1px solid #222;border-radius:16px;padding:18px}
+  .card h3{margin:0 0 8px;color:var(--blue);font-size:14px;letter-spacing:.08em}
+  .status{width:10px;height:10px;border-radius:50%;display:inline-block;background:#22c55e;box-shadow:0 0 12px #22c55e}
+</style>
+</head>
+<body>
+<header>
+  <div class="badge">K-TP • PROJETO TRANSFORMAÇÃO 2026 • 11 ANOS</div>
+  <h1>Painel <span>Mensagens Automáticas</span> WhatsApp</h1>
+  <p style="opacity:.6">Automação diária às 05h - Verificação de evolução + envio humanizado</p>
+</header>
+<div class="grid">
+  <div class="card"><h3><span class="status"></span> SISTEMA ATIVO</h3><p>Cron .github/workflows/ktp-05h.yml rodando diariamente</p></div>
+  <div class="card"><h3>ÚLTIMA VERIFICAÇÃO</h3><p id="lastCheck">Carregando...</p></div>
+  <div class="card"><h3>PARTICIPANTES</h3><p id="participants">Carregando config/participantes.json</p></div>
+</div>
+<script>
+  fetch('./config/participantes.json').then(r=>r.json()).then(d=>{
+    document.getElementById('participants').textContent = d.length + ' participantes ativos';
+  });
+  document.getElementById('lastCheck').textContent = new Date().toLocaleString('pt-BR');
+</script>
+</body>
+</html>
