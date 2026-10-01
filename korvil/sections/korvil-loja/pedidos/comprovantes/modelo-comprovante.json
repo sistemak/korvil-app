@@ -1,0 +1,25 @@
+{
+  "marketplace": "korvil-loja",
+  "versao": "1.0",
+  "assinatura_digital": "korvil-loja-assinado",
+  "pagamento": {
+    "metodo": "pix/cartao/boleto",
+    "status": "pago/aprovado",
+    "comprovante_id": "comp-{{id}}",
+    "dados_assinados": true,
+    "recibo": "arquivo correto igual mercado livre",
+    "local": "korvil/sections/korvil-loja/pedidos/comprovantes/"
+  },
+  "cliente": {
+    "nome": "",
+    "cpf": "",
+    "email": ""
+  },
+  "pedido": {
+    "codigo": "korvil-xxxx-pro",
+    "valor": "",
+    "data": "",
+    "itens": []
+  },
+  "observacao": "todos os dados e informações dos comprovantes das compras assinados dentro de arquivo correto igual mercado livre"
+}
