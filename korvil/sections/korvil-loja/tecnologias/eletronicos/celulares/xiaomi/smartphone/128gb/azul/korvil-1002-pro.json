@@ -1,0 +1,15 @@
+{
+  "codigo": "korvil-1002-pro",
+  "nome": "celular xiaomi 128gb",
+  "setor": "tecnologias",
+  "categoria": "eletronicos",
+  "subcategoria": "celulares",
+  "marca": "xiaomi",
+  "tipo": "smartphone",
+  "tamanho": "128gb",
+  "cor": "azul",
+  "polegadas": "6.67",
+  "modelo": "note-12",
+  "preco": "R$ 1199,00",
+  "img": "https://via.placeholder.com/300?text=xiaomi"
+}
