@@ -1,0 +1,15 @@
+{
+  "codigo": "korvil-0001-pro",
+  "pedido": "ped-0001",
+  "status": "pago",
+  "assinatura": "korvil-loja",
+  "pagamento": {
+    "metodo": "pix",
+    "comprovante_id": "comp-ped-0001",
+    "valor": "R$ 89,90",
+    "dados_assinados": true,
+    "recibo_assinado": "comprovante mercado livre style"
+  },
+  "data": "2026-01-01",
+  "marketplace": "korvil-loja"
+}
