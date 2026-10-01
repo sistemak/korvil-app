@@ -1,0 +1,21 @@
+{
+  "marketplace": "korvil-loja",
+  "cor_fundo": "#C0C0C0",
+  "cor_ouro": "#FFD700",
+  "gh_token_env": "GH_TOKEN",
+  "node": "20",
+  "redes": {
+    "youtube": "@K-TP.p",
+    "tiktok": "@ktp.treinamento.p",
+    "instagram": "@ktreinamento.p",
+    "facebook": "korvil.tp@gmail.com",
+    "whatsapp": "13 997690898",
+    "wa_me": "wa.me/5513997690898",
+    "email": "korvil.tp@gmail.com"
+  },
+  "comprovantes": {
+    "pasta": "korvil/sections/korvil-loja/pedidos/comprovantes/",
+    "assinatura": "korvil-loja-assinado",
+    "modelo": "igual mercado livre - dados assinados"
+  }
+}
