@@ -1,0 +1,34 @@
+{
+  "redes": {
+    "youtube": "@K-TP.p",
+    "tiktok": "@ktp.treinamento.p",
+    "instagram": "@ktreinamento.p",
+    "facebook": "korvil.tp@gmail.com",
+    "whatsapp": "5513997690898",
+    "wa_link": "wa.me/5513997690898",
+    "email": "korvil.tp@gmail.com"
+  },
+  "autobot": {
+    "gerar_descricao": true,
+    "gerar_texto": true,
+    "gerar_imagem": true,
+    "gerar_video": true,
+    "gerar_musica": false,
+    "agendar": true,
+    "postar_auto": true,
+    "usar_token_backend": "secrets.GH_TOKEN",
+    "node_version": "20"
+  },
+  "backend": {
+    "token_source": "secrets.GH_TOKEN",
+    "secrets_path": "Settings > Secrets and variables > Actions > GH_TOKEN",
+    "workflow": ".github/workflows/korvil-deploy.yml",
+    "node": "20",
+    "protecao": "token nunca hardcode, usa process.env.GH_TOKEN"
+  },
+  "comprovantes": {
+    "pix_chave": "korvilloja@gmail.com",
+    "assinatura": "korvil-loja - comprovantes assinados igual mercado livre",
+    "arquivo": "korvil/sections/korvil-loja/comprovantes/comprovantes.json"
+  }
+}
