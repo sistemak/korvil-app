@@ -1,4 +1,4 @@
-// korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.js
+// https://github.com/sistemak/korvil-app/blob/main/korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/cronograma-de-alunos.js
 // ARQUIVO EXTERNO - CRONOGRAMA COMPLETO - PUXADO POR ÂNCORA
 // Atualizado automaticamente preservando tudo em 2026-09-30T03:31:05.762Z
 window.KTP_CRONOGRAMA = window.KTP_CRONOGRAMA || {};
