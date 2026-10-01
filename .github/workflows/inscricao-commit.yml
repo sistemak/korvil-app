@@ -1,0 +1,54 @@
+name: Inscricao K-TP - Commit Real Automatico (GitHub + Node + GH_TOKEN Secreto)
+
+on:
+  repository_dispatch:
+    types: [nova-inscricao]
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: 'JSON payload da inscricao (nomeCompleto, plano, dias, hora, objetivos, dadosExtras)'
+        required: true
+        type: string
+  push:
+    paths:
+      - 'korvil/sections/ktp/projetotransformacao/inscricao-do-projeto/index.html'
+
+jobs:
+  commit-inscricao:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo com GH_TOKEN secreto
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Commit inscricao e cronogramas (GH_TOKEN original real em secrets.GH_TOKEN)
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          PAYLOAD: ${{ github.event.client_payload.payload || inputs.payload }}
+        run: |
+          echo "GH_TOKEN configurado em secrets.GH_TOKEN - original real, sem mostrar nem vazar"
+          if [ -z "$PAYLOAD" ]; then
+            echo "Sem payload - apenas atualizando Index"
+            exit 0
+          fi
+          node .github/scripts/commit-inscricao.js "$PAYLOAD"
+
+      - name: Commit se houver mudanças
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git config user.name "K-TP Bot"
+          git config user.email "bot@korvil.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "feat: commit real automatico inscricao + cronogramas + index [GITHUB-NODE-AUTO]"
+            git push origin main
+          fi
