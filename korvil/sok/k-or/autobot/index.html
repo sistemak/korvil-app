@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>korvil autobot - painel programacao redes sociais</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>.bg-prata{background:linear-gradient(145deg,#fff,#C0C0C0,#a8a8a8)}</style>
+</head>
+<body class="bg-black text-white min-h-screen font-mono">
+<div class="max-w-[1200px] mx-auto p-4">
+<div class="bg-prata rounded-xl p-3 flex items-center gap-3 border-2 border-[#FFD700]">
+<div class="w-12 h-12 rounded-full flex items-center justify-center font-black text-[#FFD700] border-2 border-[#FFD700]" style="background:radial-gradient(circle at 30% 30%,#fff,#C0C0C0 55%,#8a8a8a)">KL</div>
+<div>
+<h1 class="font-black text-black text-lg">korvil/sok/k-or/autobot/index.html</h1>
+<p class="text-[11px] text-black">painel onde vou programar todas as postagens, criacoes automaticas nas redes sociais - K-TP</p>
+</div>
+<div class="ml-auto text-[10px] text-black bg-white/60 rounded px-2 py-1">alias: index.hrml</div>
+</div>
+
+<div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+<div class="bg-zinc-900 border border-zinc-700 rounded-xl p-3">
+<h2 class="text-[#FFD700] font-bold text-sm">REDES SOCIAIS K-TP CONFIGURADAS</h2>
+<div class="mt-3 space-y-2 text-xs">
+<div class="bg-black border border-zinc-700 rounded p-2 flex justify-between"><span>YouTube</span><b class="text-[#FFD700]">@K-TP.p</b></div>
+<div class="bg-black border border-zinc-700 rounded p-2 flex justify-between"><span>TikTok</span><b class="text-[#FFD700]">@ktp.treinamento.p</b></div>
+<div class="bg-black border border-zinc-700 rounded p-2 flex justify-between"><span>Instagram</span><b class="text-[#FFD700]">@ktreinamento.p</b></div>
+<div class="bg-black border border-zinc-700 rounded p-2 flex justify-between"><span>Facebook</span><b class="text-[#FFD700]">korvil.tp@gmail.com</b></div>
+<div class="bg-black border border-zinc-700 rounded p-2 flex justify-between"><span>WhatsApp</span><b class="text-[#FFD700]">13 997690898 / wa.me/5513997690898</b></div>
+<div class="bg-black border border-zinc-700 rounded p-2 flex justify-between"><span>Email</span><b class="text-[#FFD700]">korvil.tp@gmail.com</b></div>
+</div>
+<div class="mt-3 text-[10px] text-zinc-500">token backend: secrets.GH_TOKEN - node 20 - workflow .github/workflows/korvil-deploy.yml - nunca exposto no front</div>
+</div>
+
+<div class="lg:col-span-2 bg-zinc-900 border-2 border-[#FFD700] rounded-xl p-3">
+<h2 class="text-[#FFD700] font-black text-sm">PAINEL PROGRAMADOR - PROGRAMAR POSTAGENS AUTOMATICAS</h2>
+<div class="mt-3 grid grid-cols-1 md:grid-cols-4 gap-2">
+<select class="bg-black border border-zinc-600 rounded p-2 text-xs"><option>programar</option><option>editar</option><option>criar</option><option>agendar</option><option>postar</option></select>
+<select class="bg-black border rounded p-2 text-xs"><option>descricao</option><option>texto</option><option>imagem</option><option>video</option><option>musica</option></select>
+<select class="bg-black border rounded p-2 text-xs"><option>todos setores</option><option>sistema-k</option><option>tecnologias</option><option>k-tp</option><option>k-afortunado</option><option>k-alma</option></select>
+<select class="bg-black border border-[#FFD700] rounded p-2 text-xs"><option>todas redes</option><option>youtube</option><option>tiktok</option><option>instagram</option><option>facebook</option><option>whatsapp</option></select>
+</div>
+<div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+<textarea class="w-full h-32 bg-black border border-zinc-600 rounded p-2 text-xs" placeholder="descricao automatica para postagem... autobot gera com IA"></textarea>
+<textarea class="w-full h-32 bg-black border border-[#FFD700]/30 rounded p-2 text-[11px]">{
+  "redes": {
+    "youtube": "@K-TP.p",
+    "tiktok": "@ktp.treinamento.p",
+    "instagram": "@ktreinamento.p",
+    "facebook": "korvil.tp@gmail.com",
+    "whatsapp": "5513997690898",
+    "email": "korvil.tp@gmail.com"
+  },
+  "autobot": {
+    "gerar_descricao": true,
+    "gerar_texto": true,
+    "gerar_imagem": true,
+    "gerar_video": true,
+    "agendar": "auto",
+    "postar_programado": true,
+    "usar_token_backend": "secrets.GH_TOKEN",
+    "node_version": "20"
+  }
+}</textarea>
+</div>
+<div class="mt-3 flex gap-2">
+<button class="bg-[#FFD700] text-black font-bold px-5 py-2 rounded text-xs">GERAR DESCRICAO AUTOBOT</button>
+<button class="bg-zinc-700 px-5 py-2 rounded text-xs">GERAR IMAGEM</button>
+<button class="bg-zinc-700 px-5 py-2 rounded text-xs">GERAR VIDEO</button>
+<button class="bg-zinc-700 px-5 py-2 rounded text-xs">AGENDAR</button>
+<button class="bg-white text-black font-bold px-5 py-2 rounded text-xs ml-auto">POSTAR AGORA</button>
+</div>
+<div class="mt-4 bg-black rounded p-3 border border-zinc-800">
+<h3 class="text-[11px] text-[#FFD700] font-bold">LOG AUTOBOT - programacoes agendadas</h3>
+<div class="mt-2 text-[11px] text-zinc-400 space-y-1">
+<div>[12:00] postagem k-tp suplementos profit whey -> youtube @K-TP.p, tiktok @ktp.treinamento.p, instagram @ktreinamento.p</div>
+<div>[12:30] postagem sistema-k eletricista multimetro -> facebook korvil.tp@gmail.com</div>
+<div>[13:00] postagem k-alma massoterapia oleo lavanda -> instagram + whatsapp 13 997690898</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="mt-4 bg-zinc-900 border border-zinc-700 rounded-xl p-3 text-[11px]">
+<p class="text-[#FFD700] font-bold">este index e diferente do korvil-loja - nao confunda os index dos pedidos</p>
+<p class="text-zinc-400 mt-1">korvil-loja/index.html = loja oficial marketplace publico (fundo prata #C0C0C0, logo KL ouro, busca, vitrine). Este arquivo autobot/index.html = painel privado programador onde programa todas as postagens, criacoes, textos, imagens, videos, musicas, agendamentos nas redes sociais automaticamente.</p>
+</div>
+</div>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+</html>
