@@ -1,39 +1,15 @@
 [
   {
-    "id": "1790818519943_0_gi230",
+    "id": "1790819842040_0_eoc3j",
     "phone": "5513997690898",
     "nome": "K-TP OFICIAL",
-    "message": "Olá K-TP! Treino hoje às 22:37? 💪🏽 - K-TP",
-    "send_at": "2026-09-30T22:37:00",
+    "message": "Olá K-TP! Treino hoje às 22:58? 💪🏽 - K-TP",
+    "send_at": "2026-09-30T22:58:00",
     "status": "pending",
     "contact_id": "c_0000",
     "file_base64": "data:text/plain;base64,dGVzdGU=",
     "file_mime": "text/plain",
-    "file_name": "anexo-1790818376513.txt",
-    "repeticao": {
-      "tipo": "Uma vez",
-      "cada": 1,
-      "unidade": "dias",
-      "dias_semana": [
-        1,
-        3,
-        5
-      ],
-      "ate": "2026-12-31",
-      "rotacionar": false
-    }
-  },
-  {
-    "id": "1790819562460_0_t1yon",
-    "phone": "5513997690898",
-    "nome": "K-TP OFICIAL",
-    "message": "Olá K-TP! Treino hoje às 22:53? 💪🏽 - K-TP",
-    "send_at": "2026-09-30T22:53:00",
-    "status": "pending",
-    "contact_id": "c_0000",
-    "file_base64": "data:text/plain;base64,dGVzdGU=",
-    "file_mime": "text/plain",
-    "file_name": "anexo-1790819529532.txt",
+    "file_name": "anexo-1790819787297.txt",
     "repeticao": {
       "tipo": "Uma vez",
       "cada": 1,
