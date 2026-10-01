@@ -1,0 +1,27 @@
+{
+  "tema": "prata cromado #C0C0C0 metalico",
+  "ouro": "#FFD700",
+  "marketplace": "shopee/mercado livre/amazon",
+  "loja": "korvil/sections/korvil-loja/ - maximo possivel dentro",
+  "backend": {
+    "token_source": "secrets.GH_TOKEN",
+    "node": "20",
+    "workflow": ".github/workflows/korvil-deploy.yml",
+    "secrets_path": "Settings > Secrets and variables > Actions > GH_TOKEN",
+    "protecao": "token nunca hardcode, usa process.env.GH_TOKEN"
+  },
+  "redes": {
+    "youtube": "@K-TP.p",
+    "tiktok": "@ktp.treinamento.p",
+    "instagram": "@ktreinamento.p",
+    "facebook": "korvil.tp@gmail.com",
+    "whatsapp": "5513997690898",
+    "wa_link": "wa.me/5513997690898",
+    "email": "korvil.tp@gmail.com"
+  },
+  "comprovantes": {
+    "arquivo": "korvil/sections/korvil-loja/comprovantes/comprovantes.json",
+    "assinatura": "igual mercado livre",
+    "pix_chave": "korvilloja@gmail.com"
+  }
+}
