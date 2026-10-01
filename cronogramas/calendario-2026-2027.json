@@ -1,0 +1,43 @@
+{
+  "anos": [
+    2026,
+    2027
+  ],
+  "agendamento": {
+    "youtube": "@K-TP.p",
+    "tiktok": "@ktp.treinamento.p",
+    "instagram": "@ktreinamento.p",
+    "facebook": "korvil.tp@gmail.com",
+    "whatsapp": "13 997690898",
+    "email": "korvil.tp@gmail.com"
+  },
+  "posts": [
+    {
+      "data": "2026-01-10",
+      "rede": "youtube",
+      "handle": "@K-TP.p",
+      "tipo": "short"
+    },
+    {
+      "data": "2026-01-11",
+      "rede": "tiktok",
+      "handle": "@ktp.treinamento.p",
+      "tipo": "video"
+    },
+    {
+      "data": "2026-01-12",
+      "rede": "instagram",
+      "handle": "@ktreinamento.p",
+      "tipo": "reels"
+    }
+  ],
+  "autobot": {
+    "descricao": true,
+    "textos": true,
+    "imagens": true,
+    "videos": true,
+    "musicas": true,
+    "agendar": true,
+    "postar": true
+  }
+}
