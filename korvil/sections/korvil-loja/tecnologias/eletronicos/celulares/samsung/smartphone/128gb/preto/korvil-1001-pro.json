@@ -1,0 +1,15 @@
+{
+  "codigo": "korvil-1001-pro",
+  "nome": "celular samsung 128gb",
+  "setor": "tecnologias",
+  "categoria": "eletronicos",
+  "subcategoria": "celulares",
+  "marca": "samsung",
+  "tipo": "smartphone",
+  "tamanho": "128gb",
+  "cor": "preto",
+  "polegadas": "6.5",
+  "modelo": "a54",
+  "preco": "R$ 1299,00",
+  "img": "https://via.placeholder.com/300?text=samsung"
+}
