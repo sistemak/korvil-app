@@ -1,0 +1,34 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>autobot k-tp - painel programacao</title><script src="https://cdn.tailwindcss.com"></script><style>.bg-prata{background:linear-gradient(145deg,#fff,#C0C0C0)} .logo-prata{background:radial-gradient(circle at 30% 30%,#fff,#C0C0C0 55%,#8a8a8a);border:2px solid #FFD700}</style></head><body class="bg-black text-white min-h-screen font-mono p-4"><div class="max-w-[1200px] mx-auto"><div class="bg-prata rounded-xl p-3 flex items-center gap-3 border-2 border-[#FFD700]"><div class="w-12 h-12 rounded-full logo-prata flex items-center justify-center font-black text-[#FFD700]">KL</div><div><h1 class="font-black text-black text-sm">korvil/sok/k-or/autobot/index.html - painel onde programa todas as postagens automaticas - K-TP</h1><p class="text-[11px] text-black/70">autobot para descricao, textos, imagens, videos, musicas, agendar, postar nas redes sociais automaticamente - redes configuradas abaixo</p></div><div class="ml-auto text-[10px] bg-white/60 text-black rounded px-2 py-1">alias: index.hrml - https://github.com/sistemak/korvil-app/blob/main/korvil/sok/k-or/autobot/index.hrml</div></div><div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4"><div class="bg-zinc-900 border rounded-xl p-3"><h2 class="text-[#FFD700] font-bold text-xs">REDES SOCIAIS K-TP - programado automatico</h2><div class="mt-3 space-y-2 text-xs"><div class="bg-black border rounded p-2 flex justify-between"><span>YouTube</span><b class="text-[#FFD700]">@K-TP.p</b></div><div class="bg-black border rounded p-2 flex justify-between"><span>TikTok</span><b class="text-[#FFD700]">@ktp.treinamento.p</b></div><div class="bg-black border rounded p-2 flex justify-between"><span>Instagram</span><b class="text-[#FFD700]">@ktreinamento.p</b></div><div class="bg-black border rounded p-2 flex justify-between"><span>Facebook</span><b>korvil.tp@gmail.com</b></div><div class="bg-black border rounded p-2 flex justify-between"><span>WhatsApp</span><b>13 997690898 / wa.me/5513997690898</b></div><div class="bg-black border rounded p-2 flex justify-between"><span>Email</span><b>korvil.tp@gmail.com</b></div></div><div class="mt-3 text-[10px] text-zinc-500">backend: secrets.GH_TOKEN Node 20 - token nunca exposto - comprovantes assinados igual ML pix korvilloja@gmail.com</div></div><div class="lg:col-span-2 bg-zinc-900 border-2 border-[#FFD700] rounded-xl p-3"><h2 class="text-[#FFD700] font-black text-xs">AUTOBOT - GERAR DESCRICAO, TEXTOS, IMAGENS, VIDEOS, MUSICAS, AGENDAR, POSTAR</h2><div class="mt-3 grid grid-cols-4 gap-2"><select class="bg-black border rounded p-2 text-xs"><option>programar</option><option>editar</option><option>criar</option><option>agendar</option><option>postar</option></select><select class="bg-black border rounded p-2 text-xs"><option>descricao</option><option>texto</option><option>imagem</option><option>video</option><option>musica</option></select><select class="bg-black border rounded p-2 text-xs"><option>k-tp</option><option>sistema-k</option><option>tecnologias</option><option>k-afortunado</option><option>k-alma</option></select><select class="bg-black border border-[#FFD700] rounded p-2 text-xs"><option>todas redes</option><option>youtube</option><option>tiktok</option><option>instagram</option><option>facebook</option><option>whatsapp</option></select></div><textarea class="w-full h-40 bg-black border border-[#FFD700]/30 rounded p-2 text-[11px] mt-3">{
+  "redes": {
+    "youtube": "@K-TP.p",
+    "tiktok": "@ktp.treinamento.p",
+    "instagram": "@ktreinamento.p",
+    "facebook": "korvil.tp@gmail.com",
+    "whatsapp": "5513997690898",
+    "wa_link": "wa.me/5513997690898",
+    "email": "korvil.tp@gmail.com"
+  },
+  "autobot": {
+    "gerar_descricao": true,
+    "gerar_texto": true,
+    "gerar_imagem": true,
+    "gerar_video": true,
+    "gerar_musica": false,
+    "agendar": true,
+    "postar_auto": true,
+    "usar_token_backend": "secrets.GH_TOKEN",
+    "node_version": "20"
+  },
+  "backend": {
+    "token_source": "secrets.GH_TOKEN",
+    "secrets_path": "Settings > Secrets and variables > Actions > GH_TOKEN",
+    "workflow": ".github/workflows/korvil-deploy.yml",
+    "node": "20",
+    "protecao": "token nunca hardcode, usa process.env.GH_TOKEN"
+  },
+  "comprovantes": {
+    "pix_chave": "korvilloja@gmail.com",
+    "assinatura": "korvil-loja - comprovantes assinados igual mercado livre",
+    "arquivo": "korvil/sections/korvil-loja/comprovantes/comprovantes.json"
+  }
+}</textarea><div class="mt-3 flex gap-2"><button class="bg-[#FFD700] text-black font-bold px-4 py-2 rounded text-xs">GERAR DESCRICAO AUTOBOT</button><button class="bg-zinc-700 px-4 py-2 rounded text-xs">GERAR IMAGEM</button><button class="bg-zinc-700 px-4 py-2 rounded text-xs">GERAR VIDEO</button><button class="bg-white text-black font-bold px-4 py-2 rounded text-xs ml-auto">POSTAR AGORA - agendado automatico</button></div><div class="mt-4 bg-black rounded p-3 border border-zinc-800"><h3 class="text-[11px] text-[#FFD700] font-bold">LOG AUTOBOT - programacoes agendadas - comprovantes assinados</h3><div class="mt-2 text-[11px] text-zinc-400 space-y-1"><div>[auto] k-tp suplementos profit whey pote 900g -> youtube @K-TP.p, tiktok @ktp.treinamento.p, instagram @ktreinamento.p - comprovante assinado</div><div>[auto] k-alma massoterapia oleo lavanda -> instagram + whatsapp 13 997690898 - pix korvilloja@gmail.com</div></div></div></div></div><div class="mt-4 bg-zinc-900 border rounded-xl p-3 text-[11px]"><p class="text-[#FFD700] font-bold">este index.hrml e painel programador postagens - diferente da loja</p><p class="text-zinc-400 mt-1">korvil-loja/index.html = loja oficial marketplace publico (fundo prata #C0C0C0, logo KL ouro, busca, vitrine). este autobot/index.hrml = painel privado onde programa todas as postagens, criacoes, textos, imagens, videos, musicas, agendamentos nas redes sociais automaticamente com comprovantes assinados igual ML.</p></div></div></body></html>
