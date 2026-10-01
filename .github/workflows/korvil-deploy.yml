@@ -1,0 +1,18 @@
+name: korvil deploy
+on:
+  push:
+    branches: [main]
+    paths: ['korvil/sections/korvil-loja/**','configs/**','cronogramas/**','korvil/sok/k-or/autobot/**']
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: validate gh_token
+        run: node -e "console.log('ok gh_token via secrets')"
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
