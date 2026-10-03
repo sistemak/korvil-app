@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": 1790992986449.512,
+    "phone": "5513999999999",
+    "message": "Olá Exemplo Aluno 1! 💰 Sua mensalidade de R$ 97,00 vence em 7 dias, dia 10/10. Evite juros! Chave PIX: seu-pix-aqui - KTP",
+    "send_at": "2026-10-03T02:03:06.449Z",
+    "status": "error",
+    "tipo": "cobranca",
+    "aluno_id": "a1",
+    "error": "Cannot read properties of undefined (reading 'id')"
+  }
+]
