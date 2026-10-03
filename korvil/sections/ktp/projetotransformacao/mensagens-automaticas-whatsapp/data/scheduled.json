@@ -38,5 +38,15 @@
     "tipo": "cobranca",
     "aluno_id": "a1",
     "error": "Cannot read properties of undefined (reading 'id')"
+  },
+  {
+    "id": 1791047905589.7976,
+    "phone": "5513999999999",
+    "message": "Olá Exemplo Aluno 1! 💰 Sua mensalidade de R$ 97,00 vence em 7 dias, dia 10/10. Evite juros! Chave PIX: seu-pix-aqui - KTP",
+    "send_at": "2026-10-03T17:18:25.589Z",
+    "status": "error",
+    "tipo": "cobranca",
+    "aluno_id": "a1",
+    "error": "Cannot read properties of undefined (reading 'id')"
   }
 ]
