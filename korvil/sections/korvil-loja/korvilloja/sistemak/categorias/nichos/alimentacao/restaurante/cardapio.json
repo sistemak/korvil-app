@@ -1,0 +1,20 @@
+[
+  {
+    "prato": "Parmegiana Korvil",
+    "preco": "R$ 38,90",
+    "tempo": "25m",
+    "cat": "Principal"
+  },
+  {
+    "prato": "Feijoada Completa",
+    "preco": "R$ 42,00",
+    "tempo": "40m",
+    "cat": "Principal"
+  },
+  {
+    "prato": "Pudim Artesanal",
+    "preco": "R$ 12,00",
+    "tempo": "5m",
+    "cat": "Sobremesa"
+  }
+]

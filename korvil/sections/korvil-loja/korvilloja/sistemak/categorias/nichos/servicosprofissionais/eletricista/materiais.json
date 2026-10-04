@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "item": "Fio 2.5mm 100m",
+    "un": "rl",
+    "preco": "R$ 189,90",
+    "estoque": 42
+  },
+  {
+    "id": 2,
+    "item": "Disjuntor DIN 20A",
+    "un": "pc",
+    "preco": "R$ 18,50",
+    "estoque": 120
+  },
+  {
+    "id": 3,
+    "item": "Tomada 10A",
+    "un": "pc",
+    "preco": "R$ 7,90",
+    "estoque": 300
+  }
+]

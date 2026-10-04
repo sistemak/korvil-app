@@ -1,0 +1,20 @@
+[
+  {
+    "servico": "Consulta Geral",
+    "duracao": "45m",
+    "preco": "R$ 180,00",
+    "agenda": "Seg-Sex"
+  },
+  {
+    "servico": "Check-up Completo",
+    "duracao": "120m",
+    "preco": "R$ 450,00",
+    "agenda": "Agendado"
+  },
+  {
+    "servico": "Retorno",
+    "duracao": "20m",
+    "preco": "R$ 0,00",
+    "agenda": "15 dias"
+  }
+]

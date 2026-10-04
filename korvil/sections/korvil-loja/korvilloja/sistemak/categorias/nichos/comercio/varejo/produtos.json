@@ -1,0 +1,20 @@
+[
+  {
+    "sku": "VAR-001",
+    "produto": "Kit Limpeza Korvil",
+    "qtd": 48,
+    "preco": "R$ 59,90"
+  },
+  {
+    "sku": "VAR-002",
+    "produto": "Organizador Pro",
+    "qtd": 112,
+    "preco": "R$ 89,00"
+  },
+  {
+    "sku": "VAR-003",
+    "produto": "Suporte Multiuso",
+    "qtd": 76,
+    "preco": "R$ 34,90"
+  }
+]

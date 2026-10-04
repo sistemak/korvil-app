@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "item": "Tubo PVC 25mm 6m",
+    "un": "br",
+    "preco": "R$ 29,90",
+    "estoque": 80
+  },
+  {
+    "id": 2,
+    "item": "Joelho 90º 25mm",
+    "un": "pc",
+    "preco": "R$ 1,20",
+    "estoque": 500
+  },
+  {
+    "id": 3,
+    "item": "Fita Veda Rosca",
+    "un": "pc",
+    "preco": "R$ 4,50",
+    "estoque": 200
+  }
+]

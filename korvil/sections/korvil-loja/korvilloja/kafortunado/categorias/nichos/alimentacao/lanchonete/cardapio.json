@@ -1,0 +1,20 @@
+[
+  {
+    "prato": "X-Korvil Salada",
+    "preco": "R$ 22,90",
+    "tempo": "12m",
+    "cat": "Lanche"
+  },
+  {
+    "prato": "Batata C/ Cheddar",
+    "preco": "R$ 18,50",
+    "tempo": "10m",
+    "cat": "Porção"
+  },
+  {
+    "prato": "Suco Natural 500ml",
+    "preco": "R$ 9,90",
+    "tempo": "4m",
+    "cat": "Bebida"
+  }
+]

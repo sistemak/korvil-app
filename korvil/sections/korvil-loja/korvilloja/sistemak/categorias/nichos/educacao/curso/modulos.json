@@ -1,0 +1,20 @@
+[
+  {
+    "modulo": "Fundamentos Korvil",
+    "aulas": 12,
+    "horas": "8h",
+    "nivel": "Iniciante"
+  },
+  {
+    "modulo": "Gestão de Loja",
+    "aulas": 18,
+    "horas": "14h",
+    "nivel": "Intermediário"
+  },
+  {
+    "modulo": "Commit Real V9",
+    "aulas": 8,
+    "horas": "6h",
+    "nivel": "Avançado"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "sku": "ATA-100",
+    "produto": "Caixa Fio 2.5mm (10 rolos)",
+    "qtd": 12,
+    "preco": "R$ 1.799,00"
+  },
+  {
+    "sku": "ATA-101",
+    "produto": "Lote Disjuntores 100un",
+    "qtd": 8,
+    "preco": "R$ 1.550,00"
+  },
+  {
+    "sku": "ATA-102",
+    "produto": "Pallet Bloco 500un",
+    "qtd": 3,
+    "preco": "R$ 1.900,00"
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "item": "Tinta Acrílica 18L Branco",
+    "un": "lt",
+    "preco": "R$ 289,00",
+    "estoque": 25
+  },
+  {
+    "id": 2,
+    "item": "Rolo Lã 23cm",
+    "un": "pc",
+    "preco": "R$ 32,00",
+    "estoque": 70
+  },
+  {
+    "id": 3,
+    "item": "Lixa 220",
+    "un": "pc",
+    "preco": "R$ 2,50",
+    "estoque": 400
+  }
+]

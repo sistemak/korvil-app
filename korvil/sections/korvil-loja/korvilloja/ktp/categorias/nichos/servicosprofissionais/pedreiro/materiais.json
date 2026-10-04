@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "item": "Cimento CPII 50kg",
+    "un": "sc",
+    "preco": "R$ 42,00",
+    "estoque": 60
+  },
+  {
+    "id": 2,
+    "item": "Argamassa AC3 20kg",
+    "un": "sc",
+    "preco": "R$ 38,90",
+    "estoque": 90
+  },
+  {
+    "id": 3,
+    "item": "Bloco 14x19x39",
+    "un": "pc",
+    "preco": "R$ 3,80",
+    "estoque": 1000
+  }
+]
