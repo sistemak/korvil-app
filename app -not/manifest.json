@@ -1,0 +1,25 @@
+{
+  "name": "K-ONVERSA",
+  "short_name": "K-ONVERSA",
+  "id": "k-onversa-cyan-oficial-v4",
+  "description": "K-ONVERSA - WhatsApp Oficial Personalizado Ciano Neon",
+  "start_url": "https://sistemak.github.io/korvil-app/app%20-not/whatsapp.html",
+  "scope": "https://sistemak.github.io/korvil-app/app%20-not/",
+  "display": "standalone",
+  "theme_color": "#00E5CC",
+  "background_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
