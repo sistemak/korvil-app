@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.korvil.mestre">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_korvil"
+        android:label="KORVIL MESTRE"
+        android:roundIcon="@mipmap/ic_korvil"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBarLaunch">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- ALIAS KORVIL PRINCIPAL -->
+        <activity-alias
+            android:name=".MainActivityKorvil"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_korvil"
+            android:roundIcon="@mipmap/ic_korvil"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".MainActivitySistemak"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_sistemak"
+            android:roundIcon="@mipmap/ic_sistemak"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".MainActivityKafortunado"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_kafortunado"
+            android:roundIcon="@mipmap/ic_kafortunado"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".MainActivityKalma"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_kalma"
+            android:roundIcon="@mipmap/ic_kalma"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".MainActivityKtp"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_ktp"
+            android:roundIcon="@mipmap/ic_ktp"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+
+    </application>
+</manifest>
