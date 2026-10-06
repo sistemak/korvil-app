@@ -1,1 +1,165 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>KORVIL v7-instant</title><link rel="manifest" href="manifest.json"></head><body><h1>KORVIL HUB v7-instant deploy 2026-10-06T04:27:42.099Z</h1><script>console.log('KORVIL deployed')</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="theme-color" content="#25D366"/>
+<link id="dynamic-manifest" rel="manifest" href="./manifest.json"/>
+<title>KORVIL MESTRE</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"/>
+<style>*{font-family:'Inter',system-ui,sans-serif}::-webkit-scrollbar{width:0}.no-scrollbar{scrollbar-width:none}</style>
+</head>
+<body class="bg-[#0a0a0a] text-white min-h-screen flex flex-col overflow-hidden">
+<header class="h-[64px] flex items-center justify-between px-4 md:px-6 border-b border-white/10 bg-black/60 backdrop-blur sticky top-0 z-20">
+  <div class="flex items-center gap-3">
+    <img id="headerLogo" src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png" class="w-9 h-9 rounded-full object-cover bg-white"/>
+    <div>
+      <p class="font-extrabold tracking-tight leading-none text-[15px]">KORVIL MESTRE</p>
+      <p id="headerSub" class="text-[10px] opacity-60 tracking-[0.2em] uppercase">Hub Dinâmico v5</p>
+    </div>
+  </div>
+  <div class="flex items-center gap-2">
+    <span id="sectorBadge" class="hidden md:inline text-[10px] px-2 py-1 rounded-full bg-white/10 border border-white/10">KORVIL</span>
+    <button id="btnInstall" class="hidden bg-[#25D366] text-black font-bold text-[12px] px-4 py-2 rounded-full">INSTALAR APP</button>
+  </div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+  <aside class="w-[86px] md:w-[104px] bg-[#111] border-r border-white/10 flex flex-col items-center py-4 gap-3 overflow-y-auto no-scrollbar">
+    <div id="hubList" class="flex flex-col gap-3"></div>
+    <div class="mt-auto pt-4 text-[9px] opacity-30 text-center">SISTEMA<br/>K</div>
+  </aside>
+  <main class="flex-1 relative bg-[#0a0a0a]">
+    <iframe id="sectorFrame" class="w-full h-full border-0 bg-white" src="../korvil/index.html"></iframe>
+    <div id="loading" class="absolute inset-0 grid place-items-center bg-[#0a0a0a] transition-opacity">
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-10 h-10 border-2 border-white/20 border-t-[#25D366] rounded-full animate-spin"></div>
+        <p class="text-xs opacity-60">Carregando setor...</p>
+      </div>
+    </div>
+  </main>
+</div>
+<script>
+const SECTORS = [
+  { id:'korvil', name:'KORVIL', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png', entry:'../korvil/index.html', icon:'korvil' },
+  { id:'sistemak', name:'SISTEMA K', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/sistemak/images/logosistemak.png', entry:'../korvil/sections/sistemak/index.html', icon:'sistemak' },
+  { id:'kafortunado', name:'K-AFORTUNADO', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kafortunado/images/logokafortunado.png', entry:'../korvil/sections/kafortunado/index.html', icon:'kafortunado' },
+  { id:'kalma', name:'K-ALMA', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kalma/images/logokalma.png', entry:'../korvil/sections/kalma/index.html', icon:'kalma' },
+  { id:'ktp', name:'K-TP', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/ktp/projetotransformacao/assets/images/logotipos/logoprojetotransformacao.png', entry:'../korvil/sections/ktp/projetotransformacao/index.html', icon:'ktp' }
+];
+const LS_KEY='korvil_last_sector';
+const hubList=document.getElementById('hubList');
+const frame=document.getElementById('sectorFrame');
+const loading=document.getElementById('loading');
+const headerLogo=document.getElementById('headerLogo');
+const headerSub=document.getElementById('headerSub');
+const sectorBadge=document.getElementById('sectorBadge');
+let currentSector = localStorage.getItem(LS_KEY) || 'korvil';
+let lastIconSector = currentSector;
+let idleTimer=null;
+let deferredPrompt=null;
+
+function renderHub(){
+  hubList.innerHTML='';
+  SECTORS.forEach(s=>{
+    const btn=document.createElement('button');
+    btn.className='group flex flex-col items-center gap-1.5';
+    btn.innerHTML = `
+      <div class="w-[56px] h-[56px] rounded-full p-[2px] ${currentSector===s.id?'bg-[#25D366]':'bg-white/10 group-hover:bg-white/20'} transition">
+        <img src="${s.logo}" class="w-full h-full rounded-full object-cover bg-white"/>
+      </div>
+      <span class="text-[9px] tracking-widest ${currentSector===s.id?'text-[#25D366] font-bold':'opacity-60'}">${s.id.toUpperCase()}</span>
+    `;
+    btn.onclick=()=> switchSector(s.id, true);
+    hubList.appendChild(btn);
+  });
+}
+
+function updateAppIcon(opts){
+  const sector = SECTORS.find(x=>x.id===opts.id) || SECTORS[0];
+  try{
+    const manifest = {
+      name: sector.name+' - KORVIL MESTRE',
+      short_name: sector.name,
+      start_url: './index.html?sector='+sector.id,
+      display: 'standalone',
+      background_color: '#0a0a0a',
+      theme_color: '#25D366',
+      icons: [{ src: sector.logo, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }]
+    };
+    const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const link = document.getElementById('dynamic-manifest');
+    if(link) link.href=url;
+    lastIconSector = sector.id;
+    if(window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.IconChanger){
+      window.Capacitor.Plugins.IconChanger.changeIcon({icon: sector.id});
+    }
+  }catch(e){ console.log('manifest blob fail',e); }
+}
+
+function switchSector(id, saveIcon){
+  const sector = SECTORS.find(s=>s.id===id) || SECTORS[0];
+  currentSector=id;
+  localStorage.setItem(LS_KEY, id);
+  if(saveIcon){ updateAppIcon({id: id}); }
+  renderHub();
+  headerLogo.src=sector.logo;
+  headerSub.textContent=sector.name+' • HUB DINÂMICO';
+  sectorBadge.textContent=sector.name;
+  loading.style.opacity='1'; loading.style.pointerEvents='auto';
+  frame.src=sector.entry+'?v='+Date.now();
+  frame.onload=()=>{ loading.style.opacity='0'; loading.style.pointerEvents='none'; };
+}
+
+frame.addEventListener('load',()=>{ loading.style.opacity='0'; });
+renderHub();
+switchSector(currentSector, false);
+if(!localStorage.getItem(LS_KEY)){ updateAppIcon({id:'korvil'}); } else { updateAppIcon({id: currentSector}); }
+
+// Timer 60s visibilitychange -> volta pro KORVIL mas mantém ícone setor em segundo plano
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden){
+    idleTimer=setTimeout(()=>{
+      const keepIcon = lastIconSector;
+      switchSector('korvil', false);
+      lastIconSector = keepIcon;
+      sectorBadge.textContent='KORVIL ( ícone '+keepIcon+' em bg )';
+    }, 60000);
+  } else {
+    if(idleTimer) clearTimeout(idleTimer);
+  }
+});
+
+// PWA Install button #25D366 topo direito
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault(); deferredPrompt=e;
+  const btn=document.getElementById('btnInstall'); btn.classList.remove('hidden');
+});
+document.getElementById('btnInstall').addEventListener('click', async()=>{
+  if(deferredPrompt){ deferredPrompt.prompt(); const c=await deferredPrompt.userChoice; deferredPrompt=null; document.getElementById('btnInstall').classList.add('hidden'); }
+});
+
+// Service Worker inline blob com cache korvil-v5-dynamic
+if('serviceWorker' in navigator){
+  const swCode = `
+    const CACHE='korvil-v5-dynamic';
+    const ASSETS=['./','./index.html','./manifest.json'];
+    self.addEventListener('install',e=>{ e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())); });
+    self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });
+    self.addEventListener('fetch',e=>{
+      e.respondWith(caches.match(e.request).then(r=> r || fetch(e.request).then(res=>{
+        if(e.request.method==='GET' && res.status===200){ const clone=res.clone(); caches.open(CACHE).then(c=>c.put(e.request, clone)); }
+        return res;
+      }).catch(()=>caches.match('./index.html'))));
+    });
+  `;
+  const blob = new Blob([swCode], {type:'application/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).then(()=>console.log('SW inline ok')).catch(console.error);
+  // tenta também registrar sw.js separado se existir
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
