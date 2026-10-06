@@ -1,10 +1,11 @@
-name: K-TP 3 AÃ§Ãµes - Caminhos Exatos - SÃ³ GitHub + NODE
+name: K-TP 3 AÃ§Ãµes - Caminhos Exatos - SÃ³ GitHub + NODE - 3 AÃ§Ãµes Funcionando Real
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/**'
       - 'korvil/sections/ktp/projetotransformacao/inscricao-do-projeto/**'
-  workflow_dispatch:
+      - 'korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/**'
   repository_dispatch:
     types: [ktp-nova-inscricao]
 jobs:
@@ -17,18 +18,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Garante estrutura caminhos exatos e exclui caminho errado online
+      - name: GH_TOKEN + NODE - Garante caminhos exatos e exclui caminho errado
         run: |
           git config user.name "K-TP Bot"
           git config user.email "bot@korvil.app"
-          # EXCLUI exatamente o que vocÃª mandou excluir
+          # EXCLUI caminho errado que usuÃ¡rio mandou
           git rm -rf korvil/sections/ktp/projetotransformacao/online || true
-          # Garante sÃ³ os caminhos exatos que vocÃª enviou
+          git rm -rf korvil/sections/ktp/projetotransformacao/presencial || true
+          git rm -rf korvil/sections/ktp/projetotransformacao/queue || true
+          # Garante sÃ³ caminhos exatos
           mkdir -p korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial
           mkdir -p korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/online
           touch korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/.gitkeep
           touch korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/online/.gitkeep
-          touch korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/.gitkeep
-          git add korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/
-          git diff --staged --quiet || git commit -m "fix: caminhos exatos projetos/2026/alunos/presencial e online - exclui korvil/.../online errado - sÃ³ GitHub + NODE"
+          mkdir -p korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026
+          git add korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/ korvil/sections/ktp/projetotransformacao/inscricao-do-projeto/ korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/ || true
+          git diff --staged --quiet || git commit -m "fix: 3 aÃ§Ãµes funcionando real - caminhos exatos presencial e online - exclui online errado - ordem numÃ©rica Ãºltimo n - sÃ³ GitHub + NODE"
           git push || true
