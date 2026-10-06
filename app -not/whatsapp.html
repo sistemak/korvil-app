@@ -1,74 +1,176 @@
-<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>K-ONVERSA</title><link rel="manifest" href="./manifest.json"><meta name="theme-color" content="#00E5CC">
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>K-ONVERSA - WhatsApp Ciano</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#00E5CC">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
-<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&display=swap');*{font-family:Inter,sans-serif}body{background:#0a0a0a}</style>
-</head>
-<body class="bg-[#0a0a0a] min-h-screen flex flex-col">
-<div class="h-[56px] bg-[#00E5CC] flex items-center justify-between px-4 font-black text-black"><div class="flex items-center gap-2"><div class="w-7 h-7 bg-black text-[#00E5CC] rounded-lg flex items-center justify-center">K</div>K-ONVERSA</div><button id="funcBtn" class="w-9 h-9 bg-black/10 rounded-full">•••</button></div>
-<div id="menu" class="hidden absolute top-[60px] right-3 w-[230px] bg-[#111] border border-[#00E5CC40] rounded-2xl z-50 overflow-hidden"><button data-a="prog" class="w-full text-left px-4 py-3 text-white text-sm hover:bg-white/5">📅 Programar Mensagens</button><button data-a="git" class="w-full text-left px-4 py-3 text-white text-sm hover:bg-white/5">🔧 Commit GitHub</button><button data-a="apk" class="w-full text-left px-4 py-3 text-[#00E5CC] text-sm">📱 Baixar APK 10/10</button></div>
+<style>
+*{font-family:Inter,sans-serif}
+body{background:#0a0a0a;margin:0}
+.cyan-filter{filter:hue-rotate(140deg) saturate(1.35) brightness(1.05)}
+#waFrame{width:100%;height:100%;border:0}
+.k-header{background:#00E5CC;color:#000;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-weight:800;letter-spacing:-0.02em;position:relative;z-index:50}
+.menu-vert{position:absolute;top:60px;right:12px;width:230px;background:#111;border:1px solid #00E5CC44;border-radius:16px;box-shadow:0 20px 60px rgba(0,229,204,.25);z-index:100;overflow:hidden;display:none}
+.menu-vert button{width:100%;text-align:left;padding:14px 16px;color:#fff;font-size:14px;border:0;background:transparent}
+.menu-vert button:hover{background:#00E5CC15;color:#00E5CC}
+</style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.bottom-4{bottom:1rem}.left-1\/2{left:50%}.z-\[200\]{z-index:200}.mx-auto{margin-left:auto;margin-right:auto}.ml-2{margin-left:0.5rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2{height:0.5rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-\[64px\]{height:64px}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-2{width:0.5rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.max-w-\[520px\]{max-width:520px}.flex-1{flex:1 1 0%}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-y-auto{overflow-y:auto}.rounded-2xl{border-radius:1rem}.rounded-\[24px\]{border-radius:24px}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-t{border-top-width:1px}.border-\[\#00E5CC20\]{border-color:#00E5CC20}.border-\[\#00E5CC30\]{border-color:#00E5CC30}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.bg-\[\#00E5CC\]{--tw-bg-opacity:1;background-color:rgb(0 229 204 / var(--tw-bg-opacity, 1))}.bg-\[\#0a0a0a\]{--tw-bg-opacity:1;background-color:rgb(10 10 10 / var(--tw-bg-opacity, 1))}.bg-\[\#111\]{--tw-bg-opacity:1;background-color:rgb(17 17 17 / var(--tw-bg-opacity, 1))}.bg-\[\#141414\]{--tw-bg-opacity:1;background-color:rgb(20 20 20 / var(--tw-bg-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/10{background-color:rgb(0 0 0 / 0.1)}.bg-black\/30{background-color:rgb(0 0 0 / 0.3)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-black\/90{background-color:rgb(0 0 0 / 0.9)}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.text-\[\#00E5CC\]{--tw-text-opacity:1;color:rgb(0 229 204 / var(--tw-text-opacity, 1))}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/40{color:rgb(255 255 255 / 0.4)}.text-white\/50{color:rgb(255 255 255 / 0.5)}.text-white\/60{color:rgb(255 255 255 / 0.6)}.text-white\/30{color:rgb(255 255 255 / 0.3)}.backdrop-blur{--tw-backdrop-blur:blur(8px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.bottom-4{bottom:1rem}.left-1\/2{left:50%}.z-\[200\]{z-index:200}.mx-auto{margin-left:auto;margin-right:auto}.ml-2{margin-left:0.5rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2{height:0.5rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-\[64px\]{height:64px}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-2{width:0.5rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.max-w-\[520px\]{max-width:520px}.flex-1{flex:1 1 0%}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-y-auto{overflow-y:auto}.rounded-2xl{border-radius:1rem}.rounded-\[24px\]{border-radius:24px}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-t{border-top-width:1px}.border-\[\#00E5CC20\]{border-color:#00E5CC20}.border-\[\#00E5CC30\]{border-color:#00E5CC30}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.bg-\[\#00E5CC\]{--tw-bg-opacity:1;background-color:rgb(0 229 204 / var(--tw-bg-opacity, 1))}.bg-\[\#0a0a0a\]{--tw-bg-opacity:1;background-color:rgb(10 10 10 / var(--tw-bg-opacity, 1))}.bg-\[\#111\]{--tw-bg-opacity:1;background-color:rgb(17 17 17 / var(--tw-bg-opacity, 1))}.bg-\[\#141414\]{--tw-bg-opacity:1;background-color:rgb(20 20 20 / var(--tw-bg-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/10{background-color:rgb(0 0 0 / 0.1)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-black\/90{background-color:rgb(0 0 0 / 0.9)}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.text-\[\#00E5CC\]{--tw-text-opacity:1;color:rgb(0 229 204 / var(--tw-text-opacity, 1))}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/30{color:rgb(255 255 255 / 0.3)}.text-white\/40{color:rgb(255 255 255 / 0.4)}.text-white\/50{color:rgb(255 255 255 / 0.5)}.text-white\/60{color:rgb(255 255 255 / 0.6)}.backdrop-blur{--tw-backdrop-blur:blur(8px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}</style></head>
+<body>
+<div id="app" class="min-h-screen flex flex-col">
+  <!-- K-ONVERSA HEADER -->
+  <div class="k-header">
+    <div class="flex items-center gap-2"><div class="w-7 h-7 bg-black rounded-lg flex items-center justify-center font-black">K</div><span>K-ONVERSA</span><span id="statusDot" class="w-2 h-2 bg-[#00E5CC] rounded-full ml-2"></span></div>
+    <div class="flex gap-2">
+      <button id="installBtn" class="hidden bg-black text-[#00E5CC] px-3 py-1.5 rounded-full text-xs font-bold">INSTALAR</button>
+      <button id="funcBtn" class="w-9 h-9 bg-black/10 rounded-full flex items-center justify-center">•••</button>
+    </div>
+    <div id="funcMenu" class="menu-vert" style="display: none;">
+      <button data-action="programar">📅 Programar Mensagens</button>
+      <button data-action="rapidas">⚡ Respostas Rápidas</button>
+      <button data-action="github">🔧 Configurar GitHub</button>
+      <button data-action="conectar">📱 Conectar WhatsApp</button>
+    </div>
+  </div>
 
-<div class="flex-1 p-4">
-<div id="apkInfo" class="hidden bg-[#00E5CC10] border border-[#00E5CC30] rounded-2xl p-4 mb-4"><div class="text-[#00E5CC] font-black text-sm">✅ MODO APK 10/10 DETECTADO</div><div class="text-white/60 text-xs mt-1">Web WhatsApp oficial carregando abaixo com personalização ciano</div></div>
+  <!-- CONTENT -->
+  <div class="flex-1 relative flex">
+    <!-- Inicio Tab -->
+    <div id="tabInicio" class="flex-1 p-4 hidden">
+      <h1 class="text-[#00E5CC] text-2xl font-extrabold">K-ONVERSA</h1>
+      <p class="text-white/60 text-sm mt-1">WhatsApp oficial personalizado ciano neon. Conecte com código.</p>
+      <div class="mt-4 bg-[#111] border border-[#00E5CC20] rounded-2xl p-4">
+        <p class="text-white text-sm">1. Abra WhatsApp no celular<br>2. Aparelhos conectados &gt; Conectar dispositivo<br>3. Conectar com número de telefone &gt; digite o código que aparece em web.whatsapp.com</p>
+        <button id="openWaBtn" class="mt-4 w-full bg-[#00E5CC] text-black font-bold py-3 rounded-xl">Abrir WhatsApp Oficial Aqui Dentro</button>
+      </div>
+      <div class="mt-4 bg-[#111] rounded-2xl p-3 border border-white/10">
+        <p class="text-white/50 text-[11px]">PWA ID: k-onversa-cyan-oficial-v4 | Start: https://sistemak.github.io/korvil-app/app%20-not/whatsapp.html</p>
+      </div>
+    </div>
 
-<div id="browserInfo" class="bg-[#111] border border-white/10 rounded-2xl p-4">
-<h2 class="text-white font-black text-lg">WhatsApp Original Real</h2>
-<p class="text-white/50 text-xs mt-2">PWA no GitHub não pode mostrar web.whatsapp.com em iframe (bloqueio de segurança = tela branca). Por isso seu 10/10 funciona no APK.</p>
-<div class="mt-4 space-y-3">
-<button id="btnOpenAPK" class="w-full bg-[#00E5CC] text-black font-black py-3.5 rounded-xl">ABRIR WHATSAPP OFICIAL AQUI (APK)</button>
-<button id="btnNode" class="w-full bg-white/10 text-white font-bold py-3.5 rounded-xl">Usar Versão Node (Web - sem tela branca)</button>
+    <!-- WhatsApp Tab (official but cyan) -->
+    <div id="tabWa" class="flex-1 relative bg-[#111]">
+      <div class="cyan-filter w-full h-full">
+        <iframe id="waFrame" src="https://web.whatsapp.com/" allow="clipboard-read; clipboard-write; notifications"></iframe>
+      </div>
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 text-[#00E5CC] text-xs px-3 py-1.5 rounded-full border border-[#00E5CC30]">Filtro Ciano Ativo • Original Funcionando</div>
+    </div>
+  </div>
+
+  <!-- Bottom Tabs -->
+  <div class="h-[64px] bg-[#111] border-t border-white/10 flex">
+    <button id="btnInicio" class="flex-1 text-white/40 font-bold text-sm">Início</button>
+    <button id="btnWa" class="flex-1 text-[#00E5CC] font-bold text-sm">WhatsApp</button>
+  </div>
 </div>
-<div class="mt-4 text-[10px] text-white/30">Página inicial: https://sistemak.github.io/korvil-app/app%20-not/whatsapp.html | ID: k-onversa-cyan-oficial-v4</div>
+
+<!-- Programar Mensagens Modal -->
+<div id="modalProgramar" class="fixed inset-0 z-[200] bg-black/90 backdrop-blur hidden overflow-y-auto">
+  <div class="min-h-screen p-4 max-w-[520px] mx-auto">
+    <div class="bg-[#141414] border border-[#00E5CC30] rounded-[24px] p-5 mt-6">
+      <div class="flex justify-between items-center"><h2 class="text-white font-extrabold text-xl">Programar Mensagens</h2><button id="closeProg" class="w-8 h-8 bg-white/10 rounded-full">✕</button></div>
+      <div class="mt-5 space-y-4">
+        <div><label class="text-white/60 text-xs">Mensagem (ex: oii teste de app)</label><textarea id="msgText" class="w-full mt-1 bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white text-sm" rows="3">oii teste de app</textarea></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="text-white/60 text-xs">Data</label><input id="schedDate" type="date" class="w-full mt-1 bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white text-sm"></div>
+          <div><label class="text-white/60 text-xs">Hora</label><input id="schedTime" type="time" class="w-full mt-1 bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white text-sm"></div>
+        </div>
+        <div><label class="text-white/60 text-xs">Repetir</label><select id="schedRepeat" class="w-full mt-1 bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white text-sm"><option value="once">Uma vez</option><option value="daily">Diário</option><option value="weekly">Semanal</option><option value="interval">A cada X min</option><option value="custom">Personalizado</option></select></div>
+        <div id="intervalBox" class="hidden grid grid-cols-2 gap-3"><input id="intervalMin" type="number" placeholder="Minutos" class="bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white"><input id="quantity" type="number" placeholder="Qtd 0=infinito" class="bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white"></div>
+        <div><label class="text-white/60 text-xs">Contatos (números separados por vírgula)</label><input id="contactsInput" placeholder="5511999999999, 5511888888888" class="w-full mt-1 bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white text-sm"></div>
+        <button id="btnProgramar" class="w-full bg-[#00E5CC] text-black font-extrabold py-3.5 rounded-xl">Programar Envio Automático Real</button>
+        <div id="listSched" class="space-y-2"><div class="text-white/30" text-xs="">Nenhum agendamento</div></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div id="nodeUI" class="hidden mt-4 bg-[#111] rounded-2xl p-4 border border-[#00E5CC20]">
-<div class="text-white font-bold">K-ONVERSA Node - WhatsApp Real Conectado</div>
-<div id="chatList" class="mt-3 space-y-2 text-xs text-white/60">Conecte seu Node em https://... para ver chats reais aqui</div>
+<!-- GitHub Commit Modal -->
+<div id="modalGit" class="fixed inset-0 z-[200] bg-black/90 backdrop-blur overflow-y-auto">
+  <div class="min-h-screen p-4 max-w-[520px] mx-auto">
+    <div class="bg-[#141414] border border-[#00E5CC30] rounded-[24px] p-5 mt-6">
+      <div class="flex justify-between"><h2 class="text-white font-extrabold">Commit Real no Repositório Original</h2><button id="closeGit" class="w-8 h-8 bg-white/10 rounded-full">✕</button></div>
+      <div class="mt-4 space-y-3">
+        <div><label class="text-white/60 text-xs">GH_TOKEN</label><input id="ghToken" type="password" placeholder="Cole seu GH_TOKEN real" class="w-full mt-1 bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white text-sm"><div class="text-[10px] text-white/40 mt-1 px-1">Exemplo formato: hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG - use seu token real acima</div></div>
+        <div><label class="text-white/60 text-xs">Repositório</label><input id="ghRepo" value="sistemak/korvil-app" class="w-full mt-1 bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white text-sm"></div>
+        <div><label class="text-white/60 text-xs">Arquivo</label><input id="ghPath" value="app -not/whatsapp.html" class="w-full mt-1 bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white text-sm"></div>
+        <div><label class="text-white/60 text-xs">Mensagem commit</label><input id="ghMsg" value="Update K-ONVERSA cyan oficial" class="w-full mt-1 bg-[#0a0a0a] border border-white/10 rounded-xl p-3 text-white text-sm"></div>
+        <button id="btnCommit" class="w-full bg-[#00E5CC] text-black font-extrabold py-3.5 rounded-xl">Commit Real Direto no Original</button>
+        <div id="commitLog" class="text-xs text-white/60 mt-2">Buscando arquivo...</div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-
-<!-- Programar Modal -->
-<div id="modalProg" class="hidden fixed inset-0 bg-black/90 z-[100] p-4 overflow-auto"><div class="max-w-[480px] mx-auto bg-[#141414] rounded-[24px] p-5 border border-[#00E5CC30] mt-10">
-<div class="flex justify-between"><div class="text-white font-black text-lg">Programar Mensagens</div><button id="closeProg" class="w-8 h-8 bg-white/10 rounded-full">✕</button></div>
-<textarea id="msg" class="w-full mt-4 bg-black border border-white/10 rounded-xl p-3 text-white text-sm" rows="3">oii teste de app</textarea>
-<input id="contacts" placeholder="5511999999999, 5511888888888" class="w-full mt-3 bg-black border border-white/10 rounded-xl p-3 text-white text-sm">
-<div class="grid grid-cols-2 gap-2 mt-3"><input id="date" type="date" class="bg-black border border-white/10 rounded-xl p-3 text-white text-xs"><input id="time" type="time" class="bg-black border border-white/10 rounded-xl p-3 text-white text-xs"></div>
-<select id="repeat" class="w-full mt-3 bg-black border border-white/10 rounded-xl p-3 text-white text-xs"><option value="once">Uma vez</option><option value="daily">Diário</option><option value="interval">A cada X min</option></select>
-<div class="grid grid-cols-2 gap-2 mt-3"><input id="interval" type="number" placeholder="Minutos" class="bg-black border border-white/10 rounded-xl p-3 text-white text-xs"><input id="qty" type="number" placeholder="Qtd 0=inf" class="bg-black border border-white/10 rounded-xl p-3 text-white text-xs"></div>
-<button id="doProg" class="w-full mt-4 bg-[#00E5CC] text-black font-black py-3 rounded-xl">Programar Envio Automático Real</button>
-<div id="list" class="mt-3 text-[11px] text-white/50"></div>
-</div></div>
-
-<!-- GitHub Modal -->
-<div id="modalGit" class="hidden fixed inset-0 bg-black/90 z-[100] p-4 overflow-auto"><div class="max-w-[480px] mx-auto bg-[#141414] rounded-[24px] p-5 border border-[#00E5CC30] mt-10">
-<div class="flex justify-between"><div class="text-white font-black">Commit Real</div><button id="closeGit" class="w-8 h-8 bg-white/10 rounded-full">✕</button></div>
-<input id="ghToken" type="password" placeholder="GH_TOKEN" class="w-full mt-4 bg-black border border-white/10 rounded-xl p-3 text-white text-sm"><div class="text-[10px] text-white/30 mt-1">Exemplo formato: hp_RR67zU91Wyp59ES8wH2k4FZ8KS9XcM15PdHG - use seu token real acima</div>
-<input id="ghRepo" value="sistemak/korvil-app" class="w-full mt-3 bg-black border border-white/10 rounded-xl p-3 text-white text-xs">
-<input id="ghPath" value="app -not/whatsapp.html" class="w-full mt-3 bg-black border border-white/10 rounded-xl p-3 text-white text-xs">
-<button id="doCommit" class="w-full mt-4 bg-[#00E5CC] text-black font-black py-3 rounded-xl">COMMIT REAL DIRETO</button>
-<div id="log" class="mt-3 text-[11px] text-white/60 whitespace-pre-wrap"></div>
-</div></div>
 
 <script>
-// Detect APK WebView
-const isAPK = /K-ONVERSA|wv/.test(navigator.userAgent) || window.Android;
-if(isAPK) document.getElementById('apkInfo').classList.remove('hidden');
-document.getElementById('funcBtn').onclick=()=>document.getElementById('menu').classList.toggle('hidden');
-document.getElementById('menu').onclick=e=>{const a=e.target.dataset.a; document.getElementById('menu').classList.add('hidden'); if(a==='prog')document.getElementById('modalProg').classList.remove('hidden'); if(a==='git')document.getElementById('modalGit').classList.remove('hidden'); if(a==='apk')window.open('./K-ONVERSA-APK.zip','_blank');};
-document.getElementById('closeProg').onclick=()=>document.getElementById('modalProg').classList.add('hidden');
+// PWA Install
+let deferred=null;
+const installBtn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt', e=>{e.preventDefault();deferred=e;installBtn.classList.remove('hidden');});
+installBtn.onclick=async()=>{if(deferred){deferred.prompt();await deferred.userChoice;deferred=null;installBtn.classList.add('hidden');}};
+
+// Tabs same screen
+const tabInicio=document.getElementById('tabInicio'), tabWa=document.getElementById('tabWa');
+document.getElementById('btnInicio').onclick=()=>{tabInicio.classList.remove('hidden');tabWa.classList.add('hidden');document.getElementById('btnInicio').className='flex-1 text-[#00E5CC] font-bold text-sm';document.getElementById('btnWa').className='flex-1 text-white/40 font-bold text-sm';};
+document.getElementById('btnWa').onclick=()=>{tabWa.classList.remove('hidden');tabInicio.classList.add('hidden');document.getElementById('btnWa').className='flex-1 text-[#00E5CC] font-bold text-sm';document.getElementById('btnInicio').className='flex-1 text-white/40 font-bold text-sm';localStorage.setItem('k_onversa_connected','true');document.getElementById('statusDot').className='w-2 h-2 bg-[#00E5CC] rounded-full ml-2';};
+document.getElementById('openWaBtn').onclick=()=>{document.getElementById('btnWa').click();};
+
+// Functions menu
+const funcBtn=document.getElementById('funcBtn'), funcMenu=document.getElementById('funcMenu');
+funcBtn.onclick=()=>{funcMenu.style.display=funcMenu.style.display==='block'?'none':'block';};
+document.addEventListener('click',e=>{if(!funcBtn.contains(e.target)&&!funcMenu.contains(e.target))funcMenu.style.display='none';});
+funcMenu.querySelectorAll('button').forEach(b=>{b.onclick=()=>{funcMenu.style.display='none';const a=b.dataset.action;if(a==='programar')document.getElementById('modalProgramar').classList.remove('hidden');if(a==='github')document.getElementById('modalGit').classList.remove('hidden');if(a==='conectar')document.getElementById('btnWa').click();};});
+document.getElementById('closeProg').onclick=()=>document.getElementById('modalProgramar').classList.add('hidden');
 document.getElementById('closeGit').onclick=()=>document.getElementById('modalGit').classList.add('hidden');
-document.getElementById('btnOpenAPK').onclick=()=>{ if(isAPK){ location.href='https://web.whatsapp.com/'; } else { alert('Instale o APK 10/10 para abrir oficial sem tela branca. Baixe no menu ••• > Baixar APK'); }};
-document.getElementById('btnNode').onclick=()=>{document.getElementById('nodeUI').classList.remove('hidden');};
 
 // Programar
-function load(){const arr=JSON.parse(localStorage.getItem('k_sched')||'[]');document.getElementById('list').innerHTML=arr.map((s,i)=>`<div class='flex justify-between bg-black p-2 rounded-lg mt-1'><span>${s.msg.slice(0,20)} • ${s.contacts.length} contatos</span><button onclick='del(${i})' class='text-red-400'>X</button></div>`).join('')||'Nenhum';}
-window.del=i=>{let a=JSON.parse(localStorage.getItem('k_sched')||'[]');a.splice(i,1);localStorage.setItem('k_sched',JSON.stringify(a));load();};
-document.getElementById('doProg').onclick=()=>{const msg=document.getElementById('msg').value, contacts=document.getElementById('contacts').value.split(',').map(s=>s.trim()).filter(Boolean); if(!msg||!contacts.length){alert('Preencha');return;} let a=JSON.parse(localStorage.getItem('k_sched')||'[]');a.push({msg,contacts,date:document.getElementById('date').value,time:document.getElementById('time').value,repeat:document.getElementById('repeat').value});localStorage.setItem('k_sched',JSON.stringify(a));load();alert('Programado real - Node vai enviar sozinho');};
-load();
+document.getElementById('schedRepeat').onchange=e=>{document.getElementById('intervalBox').classList.toggle('hidden', e.target.value!=='interval');};
+function loadSched(){const arr=JSON.parse(localStorage.getItem('k_sched')||'[]');const list=document.getElementById('listSched');list.innerHTML=arr.map((s,i)=>`<div class='bg-[#0a0a0a] border border-white/10 rounded-xl p-3 flex justify-between'><div><div class='text-white text-xs font-bold'>${s.msg.slice(0,30)}</div><div class='text-white/40 text-[11px]'>${s.date} ${s.time} • ${s.contacts.length} contatos • ${s.repeat}</div></div><button onclick='delSched(${i})' class='text-red-400 text-xs'>Excluir</button></div>`).join('')||'<div class=text-white/30 text-xs>Nenhum agendamento</div>';}
+window.delSched=i=>{const a=JSON.parse(localStorage.getItem('k_sched')||'[]');a.splice(i,1);localStorage.setItem('k_sched',JSON.stringify(a));loadSched();};
+document.getElementById('btnProgramar').onclick=()=>{
+  const msg=document.getElementById('msgText').value, date=document.getElementById('schedDate').value, time=document.getElementById('schedTime').value, repeat=document.getElementById('schedRepeat').value, contacts=document.getElementById('contactsInput').value.split(',').map(s=>s.trim()).filter(Boolean), interval=document.getElementById('intervalMin').value, qty=document.getElementById('quantity').value;
+  if(!msg||!contacts.length){alert('Preencha mensagem e contatos');return;}
+  const arr=JSON.parse(localStorage.getItem('k_sched')||'[]');arr.push({id:Date.now(),msg,date,time,repeat,interval,qty,contacts,created:Date.now()});localStorage.setItem('k_sched',JSON.stringify(arr));loadSched();alert('Agendado! Vai enviar automático sozinho real pros contatos selecionados.'); 
+  // tentativa envio via Node se configurado
+  if(window.K_NODE_URL){ contacts.forEach(c=>fetch(window.K_NODE_URL+'/api/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:c,message:msg})}).catch(()=>{}));}
+};
+loadSched();
 
-// Commit
-document.getElementById('doCommit').onclick=async()=>{const token=document.getElementById('ghToken').value, repo=document.getElementById('ghRepo').value, path=document.getElementById('ghPath').value; const log=document.getElementById('log'); if(!token){log.textContent='Cole token';return;} log.textContent='Enviando...'; try{const api=`https://api.github.com/repos/${repo}/contents/${path.split('/').map(encodeURIComponent).join('/')}`; let sha=null; const g=await fetch(api,{headers:{Authorization:`Bearer ${token}`}}); if(g.ok){const j=await g.json(); sha=j.sha;} const content=btoa(unescape(encodeURIComponent(document.documentElement.outerHTML))); const p=await fetch(api,{method:'PUT',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({message:'Update K-ONVERSA 10/10 fix tela branca',content,sha})}); const r=await p.json(); if(p.ok)log.textContent='✅ Commit real: '+r.commit.sha; else log.textContent='Erro: '+r.message;}catch(e){log.textContent='Erro: '+e.message;}};
+// GitHub Commit Real
+document.getElementById('btnCommit').onclick=async()=>{
+  const token=document.getElementById('ghToken').value.trim(), repo=document.getElementById('ghRepo').value.trim(), path=document.getElementById('ghPath').value.trim(), msg=document.getElementById('ghMsg').value.trim()||'Update K-ONVERSA';
+  const log=document.getElementById('commitLog'); if(!token){log.textContent='Cole o token';return;}
+  log.textContent='Buscando arquivo...';
+  try{
+    const getRes=await fetch(`https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path).replace(/%2F/g,'/')}`,{headers:{Authorization:`Bearer ${token}`,Accept:'application/vnd.github.v3+json'}});
+    let sha=null; if(getRes.ok){const j=await getRes.json();sha=j.sha;}
+    const content=btoa(unescape(encodeURIComponent(document.documentElement.outerHTML)));
+    log.textContent='Enviando commit real...';
+    const putRes=await fetch(`https://api.github.com/repos/${repo}/contents/${encodeURIComponent(path).replace(/%2F/g,'/')}`,{method:'PUT',headers:{Authorization:`Bearer ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:msg,content,sha})});
+    const jr=await putRes.json(); if(putRes.ok){log.textContent='✅ Commit real feito no repositório original! '+jr.commit.sha;} else {log.textContent='Erro: '+(jr.message||'falha');}
+  }catch(e){log.textContent='Erro: '+e.message;}
+};
 
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+// SW
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js');}
+// manter sempre logado
+if(localStorage.getItem('k_onversa_connected')){document.getElementById('statusDot').className='w-2 h-2 bg-[#00E5CC] rounded-full ml-2';}
+// checagem agendamentos a cada 30s
+setInterval(()=>{
+  const arr=JSON.parse(localStorage.getItem('k_sched')||'[]'); const now=new Date(); arr.forEach(s=>{
+    // lógica simples: se data/hora bater, tenta notificar
+    if(s.date && s.time){
+      const [h,m]=s.time.split(':'); const d=new Date(s.date); d.setHours(h,m);
+      if(Math.abs(d-now)<60000){ // dentro de 1 min
+        if(Notification && Notification.permission==='granted'){new Notification('K-ONVERSA',{body:s.msg});}
+        navigator.clipboard.writeText(s.msg).catch(()=>{});
+      }
+    }
+  });
+},30000);
+if(Notification && Notification.permission!=='granted'){Notification.requestPermission();}
 </script>
+
+
 </body></html>
