@@ -1,165 +1,138 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<meta name="theme-color" content="#25D366"/>
-<link id="dynamic-manifest" rel="manifest" href="./manifest.json"/>
-<title>KORVIL MESTRE</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"/>
-<style>*{font-family:'Inter',system-ui,sans-serif}::-webkit-scrollbar{width:0}.no-scrollbar{scrollbar-width:none}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>KORVIL - FINAL INSTANTÂNEO</title>
+<link rel="icon" href="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#00F0FF">
+<style>
+  :root{--bg:#050507;--cyan:#00F0FF;--text:#EAFBFF;--glass:rgba(255,255,255,0.06);--border:rgba(0,240,255,0.2)}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow-x:hidden;min-height:100dvh}
+  canvas#p{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+  .vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(120% 80% at 50% 0%,rgba(0,240,255,0.10) 0%,transparent 55%),radial-gradient(80% 60% at 100% 100%,rgba(0,240,255,0.06) 0%,transparent 50%);z-index:1}
+  main{position:relative;z-index:2;max-width:420px;margin:0 auto;padding:calc(28px + env(safe-area-inset-top)) 20px 40px;display:flex;flex-direction:column;align-items:center;min-height:100dvh;perspective:1000px}
+  .logo{width:64px;height:64px;border-radius:18px;background:#fff;box-shadow:0 0 0 1px rgba(0,240,255,0.2),0 12px 32px rgba(0,240,255,0.25),0 0 32px rgba(0,240,255,0.4);display:flex;align-items:center;justify-content:center;animation:float 3.2s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(0,240,255,0.7))}
+  .logo img{width:64px;height:64px;object-fit:contain;padding:6px;border-radius:18px}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,240,255,0.7),0 0 20px #00F0FF}70%{box-shadow:0 0 0 12px rgba(0,240,255,0),0 0 20px #00F0FF}100%{box-shadow:0 0 0 0 rgba(0,240,255,0),0 0 20px #00F0FF}}
+  @keyframes in{from{transform:translateZ(60px) rotateX(10deg) translateY(16px);opacity:0}to{transform:translateZ(0) rotateX(0) translateY(0);opacity:1}}
+  .cards{margin-top:32px;width:100%;display:flex;flex-direction:column;gap:14px;transform-style:preserve-3d}
+  .card{height:84px;width:100%;display:flex;align-items:center;gap:14px;border-radius:24px;padding:0 14px;background:rgba(255,255,255,0.06);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border);box-shadow:0 8px 24px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.08);cursor:pointer;transition:all .3s;text-align:left;outline:none;animation:in .6s cubic-bezier(0.16,1,0.3,1) both;position:relative}
+  .card:hover{transform:scale(1.02) translateZ(20px);border-color:rgba(0,240,255,0.35)}
+  .card.active{box-shadow:0 0 0 1px rgba(0,240,255,0.35),0 0 32px rgba(0,240,255,0.25),inset 0 1px 0 rgba(255,255,255,0.12);transform:translateZ(24px) scale(1.015)}
+  .ic{width:56px;height:56px;border-radius:50%;background:#fff;padding:4px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+  .ic img{width:100%;height:100%;object-fit:contain;border-radius:50%}
+  .ic-ring{position:absolute;inset:-6px;border-radius:50%;border:2px solid #00F0FF;box-shadow:0 0 20px #00F0FF;animation:pulse 1.5s infinite}
+  .meta{flex:1;min-width:0;display:flex;flex-direction:column}
+  .meta b{font-size:14px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .meta span{font-size:11px;font-family:ui-monospace,monospace;color:rgba(234,251,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .meta i{margin-top:4px;display:flex;align-items:center;gap:6px;font-style:normal;font-size:10px;letter-spacing:.12em;color:rgba(0,240,255,.6)}
+  .dot{width:3px;height:3px;border-radius:50%;background:#00F0FF}
+  .arrow{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#00F0FF}
+  #viewer{position:fixed;inset:0;z-index:60;background:#050507;display:flex;flex-direction:column;transform:translateX(100%);opacity:0;transition:all .42s cubic-bezier(0.16,1,0.3,1);pointer-events:none}
+  #viewer.open{transform:translateX(0);opacity:1;pointer-events:auto}
+  #viewer header{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid rgba(0,240,255,.15);background:rgba(255,255,255,.03);backdrop-filter:blur(16px)}
+  #viewer iframe{flex:1;width:100%;border:0;background:#08080A}
+  .btn-back{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .pill{font-size:10px;font-family:ui-monospace,monospace;background:rgba(0,240,255,.1);border:1px solid rgba(0,240,255,.2);color:#00F0FF;padding:2px 8px;border-radius:999px}
+  footer{margin-top:auto;padding-top:48px;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.2);font-size:10px;font-family:ui-monospace,monospace;letter-spacing:.12em}
+</style>
 </head>
-<body class="bg-[#0a0a0a] text-white min-h-screen flex flex-col overflow-hidden">
-<header class="h-[64px] flex items-center justify-between px-4 md:px-6 border-b border-white/10 bg-black/60 backdrop-blur sticky top-0 z-20">
-  <div class="flex items-center gap-3">
-    <img id="headerLogo" src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png" class="w-9 h-9 rounded-full object-cover bg-white"/>
-    <div>
-      <p class="font-extrabold tracking-tight leading-none text-[15px]">KORVIL MESTRE</p>
-      <p id="headerSub" class="text-[10px] opacity-60 tracking-[0.2em] uppercase">Hub Dinâmico v5</p>
-    </div>
+<body>
+<canvas id="p"></canvas>
+<div class="vignette"></div>
+<main>
+  <div style="display:flex;flex-direction:column;align-items:center">
+    <div class="logo"><img src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png" alt="KORVIL"></div>
+    <h1 style="margin-top:12px;font-size:22px;letter-spacing:.22em;font-weight:800">KORVIL</h1>
+    <div style="margin-top:6px;height:1px;width:96px;background:linear-gradient(90deg,transparent,rgba(0,240,255,.6),transparent)"></div>
   </div>
-  <div class="flex items-center gap-2">
-    <span id="sectorBadge" class="hidden md:inline text-[10px] px-2 py-1 rounded-full bg-white/10 border border-white/10">KORVIL</span>
-    <button id="btnInstall" class="hidden bg-[#25D366] text-black font-bold text-[12px] px-4 py-2 rounded-full">INSTALAR APP</button>
-  </div>
-</header>
-<div class="flex flex-1 overflow-hidden">
-  <aside class="w-[86px] md:w-[104px] bg-[#111] border-r border-white/10 flex flex-col items-center py-4 gap-3 overflow-y-auto no-scrollbar">
-    <div id="hubList" class="flex flex-col gap-3"></div>
-    <div class="mt-auto pt-4 text-[9px] opacity-30 text-center">SISTEMA<br/>K</div>
-  </aside>
-  <main class="flex-1 relative bg-[#0a0a0a]">
-    <iframe id="sectorFrame" class="w-full h-full border-0 bg-white" src="../korvil/index.html"></iframe>
-    <div id="loading" class="absolute inset-0 grid place-items-center bg-[#0a0a0a] transition-opacity">
-      <div class="flex flex-col items-center gap-3">
-        <div class="w-10 h-10 border-2 border-white/20 border-t-[#25D366] rounded-full animate-spin"></div>
-        <p class="text-xs opacity-60">Carregando setor...</p>
-      </div>
+  <div class="cards" id="cards"></div>
+  <footer>
+    <div>INSTANT ICON • WEB AUDIO • 3D • FINAL v7</div>
+    <div id="navcount">0 NAV • 30 PARTICLES</div>
+  </footer>
+</main>
+<div id="viewer">
+  <header>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="btn-back" id="closeBtn">◀</button>
+      <div id="viewerMeta" style="display:flex;align-items:center;gap:8px"></div>
     </div>
-  </main>
+    <div style="display:flex;align-items:center;gap:8px"><span class="pill">ICON INSTANTÂNEO ATIVO</span><span style="width:8px;height:8px;border-radius:50%;background:#00F0FF;box-shadow:0 0 8px #00F0FF;display:inline-block;animation:pulse 1.5s infinite"></span></div>
+  </header>
+  <iframe id="vframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  <div style="height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-top:1px solid rgba(0,240,255,.1);background:rgba(0,0,0,.4);font-family:ui-monospace,monospace;font-size:10px;color:rgba(255,255,255,.3)">
+    <span>SLIDE 3D • WHOOSH 400Hz • GH_TOKEN backend via Secrets (não vaza aqui)</span>
+    <button onclick="closeViewer()" style="height:32px;padding:0 16px;border-radius:999px;background:#fff;color:#000;border:0;font-weight:700;font-size:12px;cursor:pointer">FECHAR</button>
+  </div>
 </div>
 <script>
-const SECTORS = [
-  { id:'korvil', name:'KORVIL', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png', entry:'../korvil/index.html', icon:'korvil' },
-  { id:'sistemak', name:'SISTEMA K', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/sistemak/images/logosistemak.png', entry:'../korvil/sections/sistemak/index.html', icon:'sistemak' },
-  { id:'kafortunado', name:'K-AFORTUNADO', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kafortunado/images/logokafortunado.png', entry:'../korvil/sections/kafortunado/index.html', icon:'kafortunado' },
-  { id:'kalma', name:'K-ALMA', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kalma/images/logokalma.png', entry:'../korvil/sections/kalma/index.html', icon:'kalma' },
-  { id:'ktp', name:'K-TP', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/ktp/projetotransformacao/assets/images/logotipos/logoprojetotransformacao.png', entry:'../korvil/sections/ktp/projetotransformacao/index.html', icon:'ktp' }
+const LOGOS={
+  korvil:"https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png",
+  sistemak:"https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/sistemak/images/logosistemak.png",
+  ktp:"https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/ktp/projetotransformacao/assets/images/logotipos/logoprojetotransformacao.png",
+  kafortunado:"https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kafortunado/images/logokafortunado.png",
+  kalma:"https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kalma/images/logokalma.png"
+};
+const SECTORS=[
+  {id:'sistemak',name:'SISTEMA K',sub:'Núcleo Central • OS v7',logo:LOGOS.sistemak,iframe:'../korvil/sections/sistemak/index.html'},
+  {id:'ktp',name:'K-TP',sub:'Projeto Transformação',logo:LOGOS.ktp,iframe:'../korvil/sections/ktp/projetotransformacao/index.html'},
+  {id:'kafortunado',name:'K-AFORTUNADO',sub:'Fluxo de Fortuna',logo:LOGOS.kafortunado,iframe:'../korvil/sections/kafortunado/index.html'},
+  {id:'kalma',name:'K-ALMA',sub:'Consciência & Presença',logo:LOGOS.kalma,iframe:'../korvil/sections/kalma/index.html'}
 ];
-const LS_KEY='korvil_last_sector';
-const hubList=document.getElementById('hubList');
-const frame=document.getElementById('sectorFrame');
-const loading=document.getElementById('loading');
-const headerLogo=document.getElementById('headerLogo');
-const headerSub=document.getElementById('headerSub');
-const sectorBadge=document.getElementById('sectorBadge');
-let currentSector = localStorage.getItem(LS_KEY) || 'korvil';
-let lastIconSector = currentSector;
-let idleTimer=null;
-let deferredPrompt=null;
-
-function renderHub(){
-  hubList.innerHTML='';
-  SECTORS.forEach(s=>{
-    const btn=document.createElement('button');
-    btn.className='group flex flex-col items-center gap-1.5';
-    btn.innerHTML = `
-      <div class="w-[56px] h-[56px] rounded-full p-[2px] ${currentSector===s.id?'bg-[#25D366]':'bg-white/10 group-hover:bg-white/20'} transition">
-        <img src="${s.logo}" class="w-full h-full rounded-full object-cover bg-white"/>
-      </div>
-      <span class="text-[9px] tracking-widest ${currentSector===s.id?'text-[#25D366] font-bold':'opacity-60'}">${s.id.toUpperCase()}</span>
-    `;
-    btn.onclick=()=> switchSector(s.id, true);
-    hubList.appendChild(btn);
+let audioCtx=null, manifestUrl=null, historyStack=[];
+function ensureAudio(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+function pop(f=800){ try{ const c=ensureAudio(); const o=c.createOscillator(), g=c.createGain(); o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(0,c.currentTime); g.gain.linearRampToValueAtTime(0.18,c.currentTime+0.01); g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.18); o.start(); o.stop(c.currentTime+0.2);}catch(e){} }
+function whoosh(){ try{ const c=ensureAudio(); const o=c.createOscillator(), g=c.createGain(), fl=c.createBiquadFilter(); o.type='sawtooth'; o.frequency.setValueAtTime(600,c.currentTime); o.frequency.exponentialRampToValueAtTime(120,c.currentTime+0.35); fl.type='lowpass'; fl.frequency.value=1200; o.connect(fl); fl.connect(g); g.connect(c.destination); g.gain.setValueAtTime(0.12,c.currentTime); g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.4); o.start(); o.stop(c.currentTime+0.4);}catch(e){} }
+function updateIcon(url){
+  try{
+    const mf={name:"KORVIL",short_name:"KORVIL",start_url:"./index.html",display:"standalone",background_color:"#050507",theme_color:"#00F0FF",icons:[{src:url,sizes:"192x192",type:"image/png"},{src:url,sizes:"512x512",type:"image/png"}]};
+    const blob=new Blob([JSON.stringify(mf)],{type:'application/json'}); const u=URL.createObjectURL(blob); if(manifestUrl) URL.revokeObjectURL(manifestUrl); manifestUrl=u;
+    let l=document.querySelector('link[rel="manifest"]'); if(!l){l=document.createElement('link'); l.rel='manifest'; document.head.appendChild(l);} l.href=u;
+    let f=document.querySelector('link[rel="icon"]'); if(f) f.href=url;
+    let a=document.querySelector('link[rel="apple-touch-icon"]'); if(a) a.href=url;
+  }catch(e){}
+}
+function render(){
+  const wrap=document.getElementById('cards'); wrap.innerHTML='';
+  SECTORS.forEach((s,i)=>{
+    const b=document.createElement('button'); b.className='card'; b.style.animationDelay=(i*0.08)+'s';
+    b.innerHTML='<div class="ic"><img src="'+s.logo+'" alt="'+s.name+'"></div><div class="meta"><b>'+s.name+'</b><span>'+s.sub+'</span><i><span class="dot"></span>ATIVO • READY</i></div><div class="arrow">›</div>';
+    b.onclick=()=>openSector(s);
+    wrap.appendChild(b);
   });
 }
-
-function updateAppIcon(opts){
-  const sector = SECTORS.find(x=>x.id===opts.id) || SECTORS[0];
-  try{
-    const manifest = {
-      name: sector.name+' - KORVIL MESTRE',
-      short_name: sector.name,
-      start_url: './index.html?sector='+sector.id,
-      display: 'standalone',
-      background_color: '#0a0a0a',
-      theme_color: '#25D366',
-      icons: [{ src: sector.logo, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }]
-    };
-    const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const link = document.getElementById('dynamic-manifest');
-    if(link) link.href=url;
-    lastIconSector = sector.id;
-    if(window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.IconChanger){
-      window.Capacitor.Plugins.IconChanger.changeIcon({icon: sector.id});
-    }
-  }catch(e){ console.log('manifest blob fail',e); }
+function openSector(s){
+  pop(800); try{navigator.vibrate&&navigator.vibrate([30])}catch(e){}
+  historyStack.push(s.id); document.getElementById('navcount').textContent=historyStack.length+' NAV • 30 PARTICLES';
+  updateIcon(s.logo); setTimeout(whoosh,80);
+  const v=document.getElementById('viewer'); const f=document.getElementById('vframe'); const m=document.getElementById('viewerMeta');
+  m.innerHTML='<div style="width:32px;height:32px;border-radius:50%;background:#fff;padding:3px;display:flex;align-items:center;justify-content:center"><img src="'+s.logo+'" style="width:100%;height:100%;object-fit:contain;border-radius:50%"></div><div style="line-height:1"><div style="font-weight:700;font-size:13px">'+s.name+'</div><div style="font-size:10px;color:rgba(255,255,255,.5);font-family:monospace">'+s.sub+'</div></div>';
+  f.src=s.iframe; v.classList.add('open');
 }
-
-function switchSector(id, saveIcon){
-  const sector = SECTORS.find(s=>s.id===id) || SECTORS[0];
-  currentSector=id;
-  localStorage.setItem(LS_KEY, id);
-  if(saveIcon){ updateAppIcon({id: id}); }
-  renderHub();
-  headerLogo.src=sector.logo;
-  headerSub.textContent=sector.name+' • HUB DINÂMICO';
-  sectorBadge.textContent=sector.name;
-  loading.style.opacity='1'; loading.style.pointerEvents='auto';
-  frame.src=sector.entry+'?v='+Date.now();
-  frame.onload=()=>{ loading.style.opacity='0'; loading.style.pointerEvents='none'; };
-}
-
-frame.addEventListener('load',()=>{ loading.style.opacity='0'; });
-renderHub();
-switchSector(currentSector, false);
-if(!localStorage.getItem(LS_KEY)){ updateAppIcon({id:'korvil'}); } else { updateAppIcon({id: currentSector}); }
-
-// Timer 60s visibilitychange -> volta pro KORVIL mas mantém ícone setor em segundo plano
-document.addEventListener('visibilitychange', ()=>{
-  if(document.hidden){
-    idleTimer=setTimeout(()=>{
-      const keepIcon = lastIconSector;
-      switchSector('korvil', false);
-      lastIconSector = keepIcon;
-      sectorBadge.textContent='KORVIL ( ícone '+keepIcon+' em bg )';
-    }, 60000);
-  } else {
-    if(idleTimer) clearTimeout(idleTimer);
-  }
-});
-
-// PWA Install button #25D366 topo direito
-window.addEventListener('beforeinstallprompt', (e)=>{
-  e.preventDefault(); deferredPrompt=e;
-  const btn=document.getElementById('btnInstall'); btn.classList.remove('hidden');
-});
-document.getElementById('btnInstall').addEventListener('click', async()=>{
-  if(deferredPrompt){ deferredPrompt.prompt(); const c=await deferredPrompt.userChoice; deferredPrompt=null; document.getElementById('btnInstall').classList.add('hidden'); }
-});
-
-// Service Worker inline blob com cache korvil-v5-dynamic
-if('serviceWorker' in navigator){
-  const swCode = `
-    const CACHE='korvil-v5-dynamic';
-    const ASSETS=['./','./index.html','./manifest.json'];
-    self.addEventListener('install',e=>{ e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())); });
-    self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });
-    self.addEventListener('fetch',e=>{
-      e.respondWith(caches.match(e.request).then(r=> r || fetch(e.request).then(res=>{
-        if(e.request.method==='GET' && res.status===200){ const clone=res.clone(); caches.open(CACHE).then(c=>c.put(e.request, clone)); }
-        return res;
-      }).catch(()=>caches.match('./index.html'))));
-    });
-  `;
-  const blob = new Blob([swCode], {type:'application/javascript'});
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).then(()=>console.log('SW inline ok')).catch(console.error);
-  // tenta também registrar sw.js separado se existir
-  navigator.serviceWorker.register('./sw.js').catch(()=>{});
-}
+function closeViewer(){ pop(400); updateIcon(LOGOS.korvil); document.getElementById('viewer').classList.remove('open'); }
+document.getElementById('closeBtn').onclick=closeViewer;
+window.addEventListener('beforeunload',()=>updateIcon(LOGOS.korvil));
+render();
+// particles
+(function(){
+  const c=document.getElementById('p'); const ctx=c.getContext('2d',{alpha:true}); let raf=0;
+  const parts=Array.from({length:30},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-0.5)*0.0004,vy:(Math.random()-0.5)*0.0004,r:Math.random()*1.8+0.6,a:Math.random()*0.5+0.2}));
+  function size(){ c.width=innerWidth*devicePixelRatio; c.height=innerHeight*devicePixelRatio; c.style.width='100%'; c.style.height='100%'; }
+  size(); addEventListener('resize',size);
+  function draw(){
+    const w=innerWidth,h=innerHeight; ctx.clearRect(0,0,w,h);
+    const g=ctx.createRadialGradient(w*0.5,h*0.35,0,w*0.5,h*0.35,w*0.8); g.addColorStop(0,'rgba(0,240,255,0.07)'); g.addColorStop(1,'rgba(0,240,255,0)'); ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+    parts.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>1) p.vx*=-1; if(p.y<0||p.y>1) p.vy*=-1; const px=p.x*w, py=p.y*h; ctx.beginPath(); ctx.arc(px,py,p.r,0,Math.PI*2); ctx.fillStyle='rgba(0,240,255,'+p.a+')'; ctx.shadowBlur=8; ctx.shadowColor='#00F0FF'; ctx.fill(); ctx.shadowBlur=0; });
+    raf=requestAnimationFrame(draw);
+  } draw();
+})();
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
 </script>
 </body>
 </html>
