@@ -1,11 +1,19 @@
 {
-  "name": "KORVIL - KORVIL",
+  "name": "KORVIL MESTRE - HUB DINÂMICO",
   "short_name": "KORVIL",
+  "description": "Hub mestre PWA com 5 setores e ícone dinâmico",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#050507",
+  "orientation": "any",
+  "background_color": "#0a0a0a",
   "theme_color": "#25D366",
   "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png",
       "sizes": "512x512",
