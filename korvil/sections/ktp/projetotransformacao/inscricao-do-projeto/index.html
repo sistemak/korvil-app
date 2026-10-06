@@ -186,6 +186,8 @@ function mascaraCEP(i){ i.value = i.value.replace(/\D/g,'').replace(/(\d{5})(\d)
 async function buscarCEP(cep){ cep = cep.replace(/\D/g,''); if(cep.length!== 8) return; try{ let res = await fetch(`https://viacep.com.br/ws/${cep}/json/`); let data = await res.json(); if(!data.erro){ document.getElementById('rua').value = data.logradouro; document.getElementById('bairro').value = data.bairro; document.getElementById('cidade').value = data.localidade; } }catch(e){} }
 
 // FINALIZAR TELA 3 - 3 AÃÃES JUNTAS - CORRIGIDO
+
+// FINALIZAR TELA 3 - 3 AÃÃES AUTOMÃTICAS - GH_TOKEN e NODE escondidos no Secrets, sem vazar, funciona pra qualquer pessoa
 async function finalizarTudo(){
   let nome = document.getElementById('nome').value.trim();
   if(nome==''){alert('Preencha o nome');return;}
@@ -199,13 +201,11 @@ async function finalizarTudo(){
   
   let btn = document.getElementById('btnFinalizar');
   btn.disabled = true;
-  btn.innerText = 'SALVANDO... 3 AÃÃES...';
+  btn.innerText = 'SALVANDO AUTOMÃTICO... 3 AÃÃES...';
 
   let hoje = new Date().toLocaleDateString('pt-BR');
 
-  // Monta payload completo com perguntas + respostas na ordem exata das 3 telas
   let payload = {
-    // TELA 1 - OBJETIVOS
     tela1_objetivos: {
       pergunta: "OBJETIVOS: Clique e escolha seus objetivos na ordem de prioridade. De 1 atÃ© no mÃ¡ximo 7",
       opcoes: ["Ganho de Peso","Emagrecimento","DefiniÃ§Ã£o Muscular","SaÃºde","Condicionamento FÃ­sico","Hipertrofia","ReabilitaÃ§Ã£o FÃ­sica"],
@@ -213,7 +213,6 @@ async function finalizarTudo(){
       prioridade: objetivosSelecionados.map((o,i)=>`${i+1}Âº ${o}`).join(' > '),
       valor_flat: document.getElementById('objetivos').value
     },
-    // TELA 1 - ANAMNESE
     tela1_anamese: {
       nivel_atividade: {pergunta:"NÃ­vel de Atividade FÃ­sica", resposta:document.getElementById('nivelAtividade').value},
       q1: {pergunta:"1. JÃ¡ praticou atividade fÃ­sica antes?", resposta:document.getElementById('q1').value},
@@ -226,13 +225,11 @@ async function finalizarTudo(){
       q8: {pergunta:"8. EstÃ¡ fazendo ALGUM TRATAMENTO fisico ou psicolÃ³gico?", resposta:document.getElementById('q8').value},
       q9: {pergunta:"9. EstÃ¡ fazendo USO DE MEDICAMENTOS? Quais?", resposta:document.getElementById('q9').value}
     },
-    // TELA 2 - PLANOS
     tela2_planos: {
       pergunta: "1. ESCOLHA 1 PLANO",
       opcoes: ["Avulsa Online R$20","Avulsa Presencial R$20","Online Mensal R$60","Presencial 1x R$60","Presencial 2x R$80","Presencial 3x R$100","Presencial 4x R$130","Presencial 5x R$150"],
       escolha: plano
     },
-    // TELA 2 - DIAS e HORÃRIO
     tela2_dias_horario: {
       pergunta_dias: "2. ESCOLHA DIAS E HORÃRIO - DIAS: SEG Ã SEX",
       opcoes_dias: ["Segunda","TerÃ§a","Quarta","Quinta","Sexta"],
@@ -242,7 +239,6 @@ async function finalizarTudo(){
       escolha_horario: hora,
       freq: plano.freq, valor: plano.valor, matricula: plano.mat, total: (parseInt(plano.valor)+parseInt(plano.mat)), venc: hoje, status: "Ativo"
     },
-    // TELA 3 - DADOS + ENDEREÃO
     tela3_dados: {
       nome: {pergunta:"Nome Completo", resposta:nome},
       cpf: {pergunta:"CPF", resposta:document.getElementById('cpf').value},
@@ -257,7 +253,6 @@ async function finalizarTudo(){
       bairro: {pergunta:"Bairro", resposta:document.getElementById('bairro').value},
       cidade: {pergunta:"Cidade", resposta:document.getElementById('cidade').value}
     },
-    // Flat compatibilidade
     nome: nome,
     cpf: document.getElementById('cpf').value,
     nasc: document.getElementById('nasc').value,
@@ -292,27 +287,52 @@ async function finalizarTudo(){
   };
 
   try{
-    // AÃÃO 1+2 - backend usa GH_TOKEN interno, cria pasta mÃ£e + dual save JS+JSON
+    // AUTOMÃTICO - chama API que usa GH_TOKEN e NODE escondidos no Secrets, sem precisar token na pÃ¡gina
     let res = await fetch('/api/ktp-inscricao-3-acoes',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
-    let data = await res.json();
+    let text = await res.text();
+    let data;
+    try{ data = JSON.parse(text); }catch(e){ throw new Error('Resposta nÃ£o Ã© JSON: '+text.slice(0,200)); }
     if(!res.ok) throw new Error(data.error||'Erro servidor');
 
-    // AÃÃO 3 - WhatsApp com todas perguntas + respostas + JSON completo
-    let msg = `*ð¨ NOVA INSCRIÃÃO K-TP - ${data.modalidade.toUpperCase()} - ${data.pastaMae.toUpperCase()} ð¨*\n\n`;
-    msg += `*PASTA MÃE:* ${data.pastaMae}/\n*ARQUIVO:* ${data.pastaMae}.json\n*CAMINHO:* ${data.caminho}\n*ID:* ${data.id} | NÂ° ${data.numero}\n\n`;
-    msg += `*MODALIDADE:* ${data.modalidade} | *HORÃRIO:* ${hora} | *DIAS:* ${dias.join(', ')} | *FREQ:* ${plano.freq}x\n`;
-    msg += `*PLANO:* ${plano.nome} | R$${plano.valor}+Mat R$${plano.mat}=R$${parseInt(plano.valor)+parseInt(plano.mat)} | VENC: ${hoje}\n\n`;
-    msg += `*TELA 1 - OBJETIVOS:* ${payload.tela1_objetivos.prioridade}\n`;
-    msg += `*TELA 1 - ANAMNESE:*\n`;
-    Object.values(payload.tela1_anamese).forEach(v=>{ msg+=`${v.pergunta} ${v.resposta}\n`; });
-    msg += `\n*TELA 2 - PLANOS:* ${plano.nome}\n*TELA 2 - DIAS:* ${dias.join(', ')} | *HORÃRIO:* ${hora}\n\n`;
-    msg += `*TELA 3 - DADOS:*\n`;
-    Object.values(payload.tela3_dados).forEach(v=>{ msg+=`${v.pergunta}: ${v.resposta}\n`; });
-    msg += `\n*JSON COMPLETO:*\n\`\`\`json\n${JSON.stringify(data.json, null, 2)}\n\`\`\``;
+    // AÃÃO 3 - WhatsApp automÃ¡tico com tudo
+    let msg = `*ð¨ NOVA INSCRIÃÃO K-TP - ${data.modalidade.toUpperCase()} - ${data.pastaMae.toUpperCase()} ð¨*
+
+`;
+    msg += `*PASTA MÃE:* ${data.pastaMae}/
+*ARQUIVO:* ${data.pastaMae}.json
+*CAMINHO:* ${data.caminho}
+*ID:* ${data.id} | NÂ° ${data.numero}
+
+`;
+    msg += `*MODALIDADE:* ${data.modalidade} | *HORÃRIO:* ${hora} | *DIAS:* ${dias.join(', ')} | *FREQ:* ${plano.freq}x
+`;
+    msg += `*PLANO:* ${plano.nome} | R$${plano.valor}+Mat R$${plano.mat}=R$${parseInt(plano.valor)+parseInt(plano.mat)} | VENC: ${hoje}
+
+`;
+    msg += `*TELA 1 - OBJETIVOS:* ${payload.tela1_objetivos.prioridade}
+`;
+    msg += `*TELA 1 - ANAMNESE:*
+`;
+    Object.values(payload.tela1_anamese).forEach(v=>{ msg+=`${v.pergunta} ${v.resposta}
+`; });
+    msg += `
+*TELA 2 - PLANOS:* ${plano.nome}
+*TELA 2 - DIAS:* ${dias.join(', ')} | *HORÃRIO:* ${hora}
+
+`;
+    msg += `*TELA 3 - DADOS:*
+`;
+    Object.values(payload.tela3_dados).forEach(v=>{ msg+=`${v.pergunta}: ${v.resposta}
+`; });
+    msg += `
+*JSON COMPLETO:*
+\`\`\`json
+${JSON.stringify(data.json, null, 2)}
+\`\`\``;
 
     window.location.href = `https://wa.me/5513997690898?text=${encodeURIComponent(msg)}`;
 
@@ -322,6 +342,7 @@ async function finalizarTudo(){
     btn.innerText = 'FINALIZAR INSCRIÃÃO';
   }
 }
+
 </script>
 </body>
 </html>
