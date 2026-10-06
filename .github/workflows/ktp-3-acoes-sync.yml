@@ -1,13 +1,13 @@
-name: K-TP 3 AÃ§Ãµes - SÃ³ GitHub + NODE - Processa fila automÃ¡tico
+name: K-TP 3 AÃ§Ãµes - Caminhos Certos - SÃ³ GitHub + NODE
 on:
+  workflow_dispatch:
   push:
     paths:
-      - 'korvil/sections/ktp/projetotransformacao/queue/**'
-  workflow_dispatch:
+      - 'korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/queue/**'
   repository_dispatch:
     types: [ktp-nova-inscricao]
 jobs:
-  processa-inscricao:
+  processa:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,28 +17,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: GH_TOKEN e NODE configurados escondidos
-        run: |
-          echo "GH_TOKEN via secrets.GH_TOKEN - nÃ£o vaza"
-          node --version
-      - name: Processa fila - 3 aÃ§Ãµes automÃ¡ticas - pasta mÃ£e + dual sem duplicar
+      - name: Processa fila e cria pastas nos caminhos certos - sem duplicar
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           node << 'EOS'
-          const fs=require('fs');
-          const path=require('path');
-          const queueDir='korvil/sections/ktp/projetotransformacao/queue';
+          const fs=require('fs'), path=require('path');
+          const queueDir='korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/queue';
           if(!fs.existsSync(queueDir)){ console.log('Sem fila'); process.exit(0); }
           const files=fs.readdirSync(queueDir).filter(f=>f.endsWith('.json'));
           if(files.length===0){ console.log('Fila vazia'); process.exit(0); }
 
-          // LÃª cronograma para prÃ³ximo n sem duplicar
           let maxN=0;
           try{
-            let cronoJS=fs.readFileSync('[STRIPPED 87 bytes].js','utf8');
-            let matches=[...cronoJS.matchAll(/"n"\s*:\s*(\d+)/g)];
-            if(matches.length) maxN=Math.max(...matches.map(m=>parseInt(m[1])));
+            let crono=fs.readFileSync('korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/cronograma-de-alunos.js','utf8');
+            let m=[...crono.matchAll(/"n"\s*:\s*(\d+)/g)];
+            if(m.length) maxN=Math.max(...m.map(x=>parseInt(x[1])));
           }catch(e){}
 
           for(let file of files){
@@ -46,42 +40,52 @@ jobs:
               let dados=JSON.parse(fs.readFileSync(path.join(queueDir,file),'utf8'));
               let nextN=++maxN;
               let nomeLimpo=(dados.nome||'aluno').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'').slice(0,10);
-              let idGerado=nomeLimpo+nextN;
+              let id=nomeLimpo+nextN;
               let isPres=(dados.plano_tipo||'').includes('pres');
               let baseFolder=isPres?'presencial':'online';
+              let basePath=`korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/${baseFolder}`;
 
-              // AÃÃO 1 - pasta mÃ£e + JSON com perguntas+respostas
-              let pastaMae=path.join('korvil/sections/ktp/projetotransformacao',baseFolder,idGerado);
+              // AÃÃO 1 - pasta mÃ£e caminho certo
+              let pastaMae=path.join(basePath,id);
               fs.mkdirSync(pastaMae,{recursive:true});
-              let jsonPath=path.join(pastaMae,idGerado+'.json');
+              let jsonPath=path.join(pastaMae,id+'.json');
               if(!fs.existsSync(jsonPath)){
-                let jsonCompleto={id:idGerado,n:nextN,pastaMae:idGerado,caminho:`${baseFolder}/${idGerado}/${idGerado}.json`,modalidade:baseFolder,...dados,meta:{criado_em:new Date().toISOString(),node:'20'}};
+                let jsonCompleto={id,n:nextN,pastaMae:id,caminho:`${baseFolder}/${id}/${id}.json`,modalidade:baseFolder,...dados,meta:{criado_em:new Date().toISOString(),node:'20',caminho_certo:basePath}};
                 fs.writeFileSync(jsonPath,JSON.stringify(jsonCompleto,null,2));
                 console.log(`Criado ${jsonPath}`);
               }
 
-              // AÃÃO 2 - dual JSON cronograma sem duplicar
+              // AÃÃO 2 - dual cronograma nos caminhos certos
               try{
-                let jsonCronoPath='[STRIPPED 87 bytes].json';
+                let jsonCronoPath='korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/cronograma-de-alunos.json';
                 let jsonCrono={};
                 if(fs.existsSync(jsonCronoPath)){ try{ jsonCrono=JSON.parse(fs.readFileSync(jsonCronoPath,'utf8')); }catch{} }
                 if(!jsonCrono[baseFolder]) jsonCrono[baseFolder]={};
-                let alunoFlat={n:nextN,id:idGerado,aluno:dados.nome,dias:(dados.dias||[]).join(', '),horario:dados.horario,freq:(dados.plano_freq||1)+'x',objetivo:dados.objetivos,valor:`R$${dados.plano_valor||0},00`,matricula:`R$${dados.plano_mat||0},00`,total:`R$${(parseInt(dados.plano_valor||0)+parseInt(dados.plano_mat||0))},00`,venc:new Date().toLocaleDateString('pt-BR'),status:'Ativo',cpf:dados.cpf,nasc:dados.nasc,idade:dados.idade,genero:dados.genero,whats:dados.whats,email:dados.email,nivel_atividade:dados.nivel_atividade,q1:dados.q1,q2:dados.q2,q3:dados.q3,q4:dados.q4,q5:dados.q5,q6:dados.q6,q7:dados.q7,q8:dados.q8,q9:dados.q9,plano:dados.plano_nome,cep:dados.cep,rua:dados.rua,numero:dados.numero,bairro:dados.bairro,cidade:dados.cidade};
-                jsonCrono[baseFolder][idGerado]=alunoFlat;
+                let alunoFlat={n:nextN,id,aluno:dados.nome,dias:(dados.dias||[]).join(', '),horario:dados.horario,freq:(dados.plano_freq||1)+'x',objetivo:dados.objetivos,valor:`R$${dados.plano_valor||0},00`,matricula:`R$${dados.plano_mat||0},00`,total:`R$${(parseInt(dados.plano_valor||0)+parseInt(dados.plano_mat||0))},00`,venc:new Date().toLocaleDateString('pt-BR'),status:'Ativo',cpf:dados.cpf,nasc:dados.nasc,idade:dados.idade,genero:dados.genero,whats:dados.whats,email:dados.email,cep:dados.cep,rua:dados.rua,numero:dados.numero,bairro:dados.bairro,cidade:dados.cidade};
+                jsonCrono[baseFolder][id]=alunoFlat;
                 fs.writeFileSync(jsonCronoPath,JSON.stringify(jsonCrono,null,2));
-                console.log(`Atualizado JSON cronograma ${idGerado}`);
               }catch(e){ console.error(e); }
 
-              // Remove da fila apÃ³s processar
               fs.unlinkSync(path.join(queueDir,file));
-              console.log(`Removido da fila ${file}`);
-            }catch(e){ console.error(`Erro ${file}`,e); }
+            }catch(e){ console.error(e); }
           }
           EOS
-      - name: Commit automÃ¡tico - sem duplicar - sÃ³ GitHub + NODE
+      - name: Commit caminhos certos - sem duplicar - exclui caminho errado online
         run: |
           git config user.name "K-TP Bot"
           git config user.email "bot@korvil.app"
-          git add korvil/sections/ktp/projetotransformacao/
-          git diff --staged --quiet || git commit -m "feat: 3 aÃ§Ãµes automÃ¡ticas - pasta mÃ£e + dual cronograma - sÃ³ GitHub + NODE - processa fila"
+          # Remove caminho errado que usuÃ¡rio mandou excluir
+          git rm -rf korvil/sections/ktp/projetotransformacao/online || true
+          git rm -rf korvil/sections/ktp/projetotransformacao/presencial || true
+          git rm -rf korvil/sections/ktp/projetotransformacao/queue || true
+          git rm -rf cronograma-de-alunos || true
+          mkdir -p korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial
+          mkdir -p korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/online
+          mkdir -p korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/queue
+          touch korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/presencial/.gitkeep
+          touch korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/online/.gitkeep
+          touch korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/queue/.gitkeep
+          git add korvil/sections/ktp/projetotransformacao/projetos/2026/alunos/
+          git add korvil/sections/ktp/projetotransformacao/inscricao-do-projeto/
+          git diff --staged --quiet || git commit -m "feat: 3 aÃ§Ãµes caminhos certos projetos/2026/alunos/presencial e online - exclui caminho errado online - sÃ³ GitHub + NODE"
           git push
