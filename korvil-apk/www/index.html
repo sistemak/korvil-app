@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="theme-color" content="#25D366"/>
+<title>KORVIL APK MESTRE</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/@capacitor/core@latest/dist/capacitor.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"/>
+<style>*{font-family:Inter,system-ui}</style>
+</head>
+<body class="bg-[#0a0a0a] text-white min-h-screen flex flex-col">
+<header class="h-[64px] flex items-center justify-between px-5 border-b border-white/10">
+  <div class="flex items-center gap-3">
+    <img id="hLogo" src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png" class="w-9 h-9 rounded-full bg-white object-cover"/>
+    <b>KORVIL APK</b>
+  </div>
+  <span id="apkBadge" class="text-[10px] px-2 py-1 bg-[#25D366] text-black rounded-full font-bold">CAPACITOR</span>
+</header>
+<div class="flex flex-1">
+  <aside class="w-[84px] bg-[#111] border-r border-white/10 flex flex-col items-center py-4 gap-3" id="hub"></aside>
+  <iframe id="frame" class="flex-1 border-0 bg-white" src="../../korvil/index.html"></iframe>
+</div>
+<script>
+const SECTORS=[
+ {id:'korvil', name:'KORVIL', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png', entry:'../../korvil/index.html'},
+ {id:'sistemak', name:'SISTEMA K', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/sistemak/images/logosistemak.png', entry:'../../korvil/sections/sistemak/index.html'},
+ {id:'kafortunado', name:'K-AFORTUNADO', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kafortunado/images/logokafortunado.png', entry:'../../korvil/sections/kafortunado/index.html'},
+ {id:'kalma', name:'K-ALMA', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kalma/images/logokalma.png', entry:'../../korvil/sections/kalma/index.html'},
+ {id:'ktp', name:'K-TP', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/ktp/projetotransformacao/assets/images/logotipos/logoprojetotransformacao.png', entry:'../../korvil/sections/ktp/projetotransformacao/index.html'}
+];
+const hub=document.getElementById('hub');
+const frame=document.getElementById('frame');
+let current=localStorage.getItem('korvil_last_sector')||'korvil';
+let lastIcon=current;
+let timer=null;
+
+function render(){
+ hub.innerHTML='';
+ SECTORS.forEach(s=>{
+  const b=document.createElement('button');
+  b.className='flex flex-col items-center gap-1';
+  b.innerHTML='<div class="w-[56px] h-[56px] rounded-full p-[2px] '+(current===s.id?'bg-[#25D366]':'bg-white/10')+'"><img src="'+s.logo+'" class="w-full h-full rounded-full bg-white object-cover"/></div><span class="text-[9px]">'+s.id.toUpperCase()+'</span>';
+  b.onclick=()=>switchTo(s.id,true);
+  hub.appendChild(b);
+ });
+}
+
+function changeIconNative(id){
+ try{
+  if(window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.IconChanger){
+    Capacitor.Plugins.IconChanger.changeIcon({icon:id});
+  } else if(window.IconChangerPlugin){
+    window.IconChangerPlugin.changeIcon(id);
+  }
+  lastIcon=id;
+  document.getElementById('apkBadge').textContent='ÍCONE: '+id.toUpperCase();
+ }catch(e){ console.log('IconChanger fail',e); }
+}
+
+function switchTo(id, withIcon){
+ current=id; localStorage.setItem('korvil_last_sector', id);
+ if(withIcon) changeIconNative(id);
+ render();
+ frame.src=SECTORS.find(x=>x.id===id).entry+'?t='+Date.now();
+ document.getElementById('hLogo').src=SECTORS.find(x=>x.id===id).logo;
+}
+
+render(); switchTo(current,false); changeIconNative(current);
+
+document.addEventListener('visibilitychange',()=>{
+ if(document.hidden){
+   timer=setTimeout(()=>{ const keep=lastIcon; switchTo('korvil', false); lastIcon=keep; },60000);
+ }else{ clearTimeout(timer); }
+});
+</script>
+</body>
+</html>
