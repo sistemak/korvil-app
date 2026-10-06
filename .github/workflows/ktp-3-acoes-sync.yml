@@ -1,29 +1,87 @@
-name: K-TP 3 AÃ§Ãµes - GH_TOKEN + NODE automÃ¡tico
+name: K-TP 3 AÃ§Ãµes - SÃ³ GitHub + NODE - Processa fila automÃ¡tico
 on:
-  repository_dispatch:
-    types: [ktp-3-acoes]
-  workflow_dispatch:
   push:
     paths:
-      - 'korvil/sections/ktp/projetotransformacao/**'
+      - 'korvil/sections/ktp/projetotransformacao/queue/**'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [ktp-nova-inscricao]
 jobs:
-  sync:
+  processa-inscricao:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Configura GH_TOKEN e NODE escondidos sem vazar
+      - name: GH_TOKEN e NODE configurados escondidos
         run: |
-          echo "GH_TOKEN ativado via Secrets - nÃ£o vaza"
-          echo "NODE v20 ativado"
+          echo "GH_TOKEN via secrets.GH_TOKEN - nÃ£o vaza"
           node --version
-          npm --version
-      - name: Verifica estrutura sem duplicar
+      - name: Processa fila - 3 aÃ§Ãµes automÃ¡ticas - pasta mÃ£e + dual sem duplicar
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          ls -la korvil/sections/ktp/projetotransformacao/presencial/ || echo "presencial ainda nÃ£o existe, serÃ¡ criado"
-          ls -la korvil/sections/ktp/projetotransformacao/online/ || echo "online ainda nÃ£o existe, serÃ¡ criado"
-          ls -la korvil/sections/ktp/projetotransformacao/cronograma-de-alunos/2026/ || echo "cronograma ainda nÃ£o existe"
+          node << 'EOS'
+          const fs=require('fs');
+          const path=require('path');
+          const queueDir='korvil/sections/ktp/projetotransformacao/queue';
+          if(!fs.existsSync(queueDir)){ console.log('Sem fila'); process.exit(0); }
+          const files=fs.readdirSync(queueDir).filter(f=>f.endsWith('.json'));
+          if(files.length===0){ console.log('Fila vazia'); process.exit(0); }
+
+          // LÃª cronograma para prÃ³ximo n sem duplicar
+          let maxN=0;
+          try{
+            let cronoJS=fs.readFileSync('[STRIPPED 87 bytes].js','utf8');
+            let matches=[...cronoJS.matchAll(/"n"\s*:\s*(\d+)/g)];
+            if(matches.length) maxN=Math.max(...matches.map(m=>parseInt(m[1])));
+          }catch(e){}
+
+          for(let file of files){
+            try{
+              let dados=JSON.parse(fs.readFileSync(path.join(queueDir,file),'utf8'));
+              let nextN=++maxN;
+              let nomeLimpo=(dados.nome||'aluno').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'').slice(0,10);
+              let idGerado=nomeLimpo+nextN;
+              let isPres=(dados.plano_tipo||'').includes('pres');
+              let baseFolder=isPres?'presencial':'online';
+
+              // AÃÃO 1 - pasta mÃ£e + JSON com perguntas+respostas
+              let pastaMae=path.join('korvil/sections/ktp/projetotransformacao',baseFolder,idGerado);
+              fs.mkdirSync(pastaMae,{recursive:true});
+              let jsonPath=path.join(pastaMae,idGerado+'.json');
+              if(!fs.existsSync(jsonPath)){
+                let jsonCompleto={id:idGerado,n:nextN,pastaMae:idGerado,caminho:`${baseFolder}/${idGerado}/${idGerado}.json`,modalidade:baseFolder,...dados,meta:{criado_em:new Date().toISOString(),node:'20'}};
+                fs.writeFileSync(jsonPath,JSON.stringify(jsonCompleto,null,2));
+                console.log(`Criado ${jsonPath}`);
+              }
+
+              // AÃÃO 2 - dual JSON cronograma sem duplicar
+              try{
+                let jsonCronoPath='[STRIPPED 87 bytes].json';
+                let jsonCrono={};
+                if(fs.existsSync(jsonCronoPath)){ try{ jsonCrono=JSON.parse(fs.readFileSync(jsonCronoPath,'utf8')); }catch{} }
+                if(!jsonCrono[baseFolder]) jsonCrono[baseFolder]={};
+                let alunoFlat={n:nextN,id:idGerado,aluno:dados.nome,dias:(dados.dias||[]).join(', '),horario:dados.horario,freq:(dados.plano_freq||1)+'x',objetivo:dados.objetivos,valor:`R$${dados.plano_valor||0},00`,matricula:`R$${dados.plano_mat||0},00`,total:`R$${(parseInt(dados.plano_valor||0)+parseInt(dados.plano_mat||0))},00`,venc:new Date().toLocaleDateString('pt-BR'),status:'Ativo',cpf:dados.cpf,nasc:dados.nasc,idade:dados.idade,genero:dados.genero,whats:dados.whats,email:dados.email,nivel_atividade:dados.nivel_atividade,q1:dados.q1,q2:dados.q2,q3:dados.q3,q4:dados.q4,q5:dados.q5,q6:dados.q6,q7:dados.q7,q8:dados.q8,q9:dados.q9,plano:dados.plano_nome,cep:dados.cep,rua:dados.rua,numero:dados.numero,bairro:dados.bairro,cidade:dados.cidade};
+                jsonCrono[baseFolder][idGerado]=alunoFlat;
+                fs.writeFileSync(jsonCronoPath,JSON.stringify(jsonCrono,null,2));
+                console.log(`Atualizado JSON cronograma ${idGerado}`);
+              }catch(e){ console.error(e); }
+
+              // Remove da fila apÃ³s processar
+              fs.unlinkSync(path.join(queueDir,file));
+              console.log(`Removido da fila ${file}`);
+            }catch(e){ console.error(`Erro ${file}`,e); }
+          }
+          EOS
+      - name: Commit automÃ¡tico - sem duplicar - sÃ³ GitHub + NODE
+        run: |
+          git config user.name "K-TP Bot"
+          git config user.email "bot@korvil.app"
+          git add korvil/sections/ktp/projetotransformacao/
+          git diff --staged --quiet || git commit -m "feat: 3 aÃ§Ãµes automÃ¡ticas - pasta mÃ£e + dual cronograma - sÃ³ GitHub + NODE - processa fila"
+          git push
