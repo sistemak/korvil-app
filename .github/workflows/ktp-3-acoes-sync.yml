@@ -1,0 +1,26 @@
+name: K-TP 3 AÃ§Ãµes Sync
+on:
+  repository_dispatch:
+    types: [ktp-3-acoes]
+  workflow_dispatch:
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Setup GH_TOKEN e NODE
+        run: |
+          echo "GH_TOKEN ativado via Secrets"
+          node --version
+      - name: Commit 3 aÃ§Ãµes
+        run: |
+          git config user.name "K-TP Bot"
+          git config user.email "bot@korvil.app"
+          git add korvil/sections/ktp/projetotransformacao/
+          git diff --staged --quiet || git commit -m "feat: 3 aÃ§Ãµes - pasta mÃ£e + dual cronograma + whatsapp"
+          git push
