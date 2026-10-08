@@ -20,11 +20,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Injetar GROQ_API_KEY
-        run: sed -i "s/GROQ_API_KEY_INJECT/${{ secrets.GROQ_API_KEY }}/g" x.html
-      - name: Publicar automatico com GH_TOKEN
+      - name: Injetar GROQ_API_KEY automatico
+        run: |
+          echo "Injetando GROQ_API_KEY do Secrets..."
+          sed -i "s|GROQ_API_KEY_INJECT|${{ secrets.GROQ_API_KEY }}|g" x.html
+          # fallback se seu secret se chamar GROQ
+          if grep -q "GROQ_API_KEY_INJECT" x.html; then
+            sed -i "s|GROQ_API_KEY_INJECT|${{ secrets.GROQ }}|g" x.html
+          fi
+          echo "OK injetado"
+      - name: Publicar com GH_TOKEN
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           publish_dir: ./
           publish_branch: gh-pages
+          force_orphan: true
