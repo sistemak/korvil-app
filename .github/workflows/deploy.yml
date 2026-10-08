@@ -2,6 +2,11 @@ name: Deploy Korvil
 on:
   push:
     branches: [ main ]
+
+permissions:
+  contents: write
+  pages: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,19 +22,19 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Injetar GROQ_API_KEY automatico
+        env:
+          GROQ_API_KEY_SECRET: ${{ secrets.GROQ_API_KEY }}
+          GROQ_SECRET: ${{ secrets.GROQ }}
         run: |
-          echo "Injetando GROQ_API_KEY do Secrets..."
-          sed -i "s|GROQ_API_KEY_INJECT|${{ secrets.GROQ_API_KEY }}|g" x.html
-          # fallback se seu secret se chamar GROQ
-          if grep -q "GROQ_API_KEY_INJECT" x.html; then
-            sed -i "s|GROQ_API_KEY_INJECT|${{ secrets.GROQ }}|g" x.html
-          fi
-          echo "OK injetado"
-      - name: Publicar com GH_TOKEN
+          KEY="$GROQ_API_KEY_SECRET"
+          if [ -z "$KEY" ]; then KEY="$GROQ_SECRET"; fi
+          sed -i "s|GROQ_API_KEY_INJECT|$KEY|g" x.html
+      - name: Publicar automatico com GH_TOKEN
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_TOKEN }}
