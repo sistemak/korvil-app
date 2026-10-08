@@ -21,10 +21,8 @@ jobs:
         with:
           node-version: '20'
       - name: Injetar GROQ_API_KEY
-        run: |
-          sed -i "s/GROQ_API_KEY_INJECT/${{ secrets.GROQ_API_KEY }}/g" x.html
-          sed -i "s/GROQ_API_KEY_INJECT/${{ secrets.GROQ }}/g" x.html
-      - name: Publicar Korvil com GH_TOKEN
+        run: sed -i "s/GROQ_API_KEY_INJECT/${{ secrets.GROQ_API_KEY }}/g" x.html
+      - name: Publicar automatico com GH_TOKEN
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_TOKEN }}
