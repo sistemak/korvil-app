@@ -1,41 +1,41 @@
-// korvil/sok/k-ai/groq/chat.js - injeta caixa fixa k-ai em qualquer página
 (function(){
-  const BOX_ID='kaiBox';
-  function mountKai(){
-    if(document.getElementById(BOX_ID)) return;
-    const box = document.createElement('div');
-    box.id = BOX_ID;
-    box.style.cssText = 'position:fixed;bottom:0;left:0;right:0;height:56px;background:#010409;border-top:1px solid #21262d;display:flex;align-items:center;gap:8px;padding:0 12px;z-index:99999;';
-    box.innerHTML = `
-      <div style="display:flex;align-items:center;gap:8px;width:100%;max-width:1280px;margin:0 auto;">
-        <span style="color:#7d8590;font:12px monospace;">k-ai</span>
-        <input id="kaiInput" placeholder="Digite: k-ai cria api/cadastro.js..." style="flex:1;background:#0d1117;border:1px solid #30363d;border-radius:6px;color:#e6edf3;padding:8px 12px;font:13px sans-serif;outline:none;" />
-        <button id="kaiSend" style="background:#238636;color:white;border:1px solid rgba(240,246,252,0.1);padding:6px 16px;border-radius:6px;font:14px sans-serif;font-weight:600;cursor:pointer;">Enviar</button>
-      </div>`;
-    document.body.appendChild(box);
-    const input = box.querySelector('#kaiInput');
-    const btn = box.querySelector('#kaiSend');
-    async function send(){
-      const prompt = (input.value||'').trim();
-      if(!prompt) return;
-      const ev = new CustomEvent('k-ai:prompt',{detail:prompt});
-      window.dispatchEvent(ev);
-      console.log('[k-ai] prompt:',prompt);
-      input.value='';
-      if(prompt.startsWith('k-ai ')){
-        // tenta chamar agent via fetch se GROQ key presente
+  function mountKaiChat(){
+    if(document.getElementById('kai-root-bar')) return;
+    var bar=document.createElement('div');
+    bar.id='kai-root-bar';
+    bar.style.cssText='position:fixed;bottom:0;left:0;right:0;height:56px;background:#010409;border-top:1px solid #30363d;display:flex;align-items:center;padding:0 16px;z-index:99999;font-family:ui-monospace,monospace';
+    bar.innerHTML='<div style="width:8px;height:8px;background:#3fb950;border-radius:50%;margin-right:10px;box-shadow:0 0 8px #3fb950"></div><span style="color:#3fb950;margin-right:12px;font-weight:600">k-ai ></span><input id="kaiInputGlobal" placeholder="Prompt K-AI • Enter para gerar arquivo" style="flex:1;background:transparent;border:none;color:#e6edf3;outline:none;font-size:14px"><span style="color:#484f58;font-size:11px;margin-left:12px">GROQ llama-3.3</span>';
+    document.body.appendChild(bar);
+    document.body.style.paddingBottom='56px';
+    var input=bar.querySelector('input');
+    input.addEventListener('keydown', function(e){
+      if(e.key==='Enter'){
+        var prompt=e.target.value.trim();
+        if(!prompt) return;
+        input.placeholder='Gerando...';
+        input.disabled=true;
         try{
-          const res = await fetch('/api/k-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
-          console.log('[k-ai] api response',res.status);
-        }catch(e){ console.warn('[k-ai] offline',e); }
+          if(window.KAI_GROQ_GENERATE){
+            window.KAI_GROQ_GENERATE(prompt);
+          }else{
+            var ev=new CustomEvent('kai-prompt',{detail:{prompt:prompt}});
+            window.dispatchEvent(ev);
+            var log=document.createElement('div');
+            log.textContent='> '+prompt;
+            log.style.cssText='position:fixed;bottom:64px;right:16px;background:#010409;border:1px solid #30363d;color:#3fb950;padding:8px 12px;border-radius:6px;font-size:12px;max-width:320px';
+            document.body.appendChild(log);
+            setTimeout(function(){log.remove();},3000);
+          }
+        }catch(err){ console.error(err); }
+        input.value='';
+        input.disabled=false;
+        input.placeholder='Prompt K-AI • Enter para gerar arquivo';
+        input.focus();
       }
-    }
-    btn.addEventListener('click',send);
-    input.addEventListener('keydown',e=>{ if(e.key==='Enter') send(); });
+    });
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mountKai);
-  else mountKai();
-  const obs = new MutationObserver(()=>{ mountKai(); });
-  obs.observe(document.documentElement,{childList:true,subtree:true});
-  window.mountKai = mountKai;
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',mountKaiChat);}else{mountKaiChat();}
+  var obs=new MutationObserver(function(){mountKaiChat();});
+  obs.observe(document.body,{childList:true,subtree:false});
+  window.mountKaiChat=mountKaiChat;
 })();
