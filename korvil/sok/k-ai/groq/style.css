@@ -1,12 +1,14 @@
-/* korvil/sok/k-ai/groq/style.css - GitHub clone exact */
-:root{ --gh-header:#24292f; --gh-header-search:#24292f; --gh-border:#d0d7de; --gh-canvas:#ffffff; --gh-canvas-subtle:#f6f8fa; --gh-fg:#24292f; --gh-accent:#0969da; }
+:root{--bg:#0d1117;--bg2:#010409;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--green:#238636;--green2:#3fb950}
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Noto Sans,Helvetica,Arial,sans-serif;background:var(--gh-canvas);color:var(--gh-fg)}
-.gh-header{background:#24292f;height:62px;display:flex;align-items:center;padding:0 16px;gap:16px;color:white}
-.gh-header input{background:#24292f;border:1px solid #57606a;border-radius:6px;color:#e6edf3;padding:5px 12px;width:320px;font-size:14px}
-.gh-repo-header{padding:16px;background:#f6f8fa;border-bottom:1px solid #d0d7de;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.gh-file-list{border:1px solid #d0d7de;border-radius:6px;overflow:hidden}
-.gh-file-row{display:flex;align-items:center;gap:8px;padding:6px 16px;border-top:1px solid #d0d7de;font-size:14px}
-.gh-file-row:hover{background:#f6f8fa}
-.gh-btn-green{background:#2da44e;color:white;border:1px solid rgba(27,31,36,.15);padding:5px 16px;border-radius:6px;font-weight:500;cursor:pointer}
-.gh-btn-green:hover{background:#2c974b}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);padding-bottom:56px}
+.header{height:62px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;position:sticky;top:0;z-index:10}
+.repo-title{font-weight:600}
+.file-nav{display:flex;gap:8px;padding:16px;border-bottom:1px solid var(--border)}
+.file-list .file-row{display:flex;justify-content:space-between;padding:8px 16px;border-bottom:1px solid #21262d;font-family:ui-monospace,SFMono-Regular,monospace;font-size:13px}
+.file-row:hover{background:#161b22}
+.readme{margin:16px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.readme-header{padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--border);font-weight:600}
+.readme-body{padding:24px;line-height:1.6}
+.kai-bar{position:fixed;bottom:0;left:0;right:0;height:56px;background:#010409;border-top:1px solid #30363d;display:flex;align-items:center;padding:0 16px;z-index:9999}
+.kai-bar input{flex:1;background:transparent;border:none;color:#e6edf3;outline:none;font-family:ui-monospace,monospace}
+.kai-bar .dot{width:8px;height:8px;background:#3fb950;border-radius:50%;margin-right:10px;box-shadow:0 0 8px #3fb950}
