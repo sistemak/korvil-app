@@ -2,6 +2,10 @@
   "name": "korvil-app",
   "version": "1.0.0",
   "type": "module",
-  "scripts": { "dev": "node agent.js" },
+  "scripts": {
+    "dev": "node agent.js",
+    "k-ai": "node korvil/sok/k-ai/groq/agent.js",
+    "k-ai:index": "node korvil/sok/k-ai/groq/index.js"
+  },
   "dependencies": {}
 }
