@@ -88,5 +88,15 @@
     "tipo": "cobranca",
     "aluno_id": "a2",
     "error": "Cannot read properties of undefined (reading 'id')"
+  },
+  {
+    "id": 1791490262205.7024,
+    "phone": "5513988888888",
+    "message": "Olá Aluno KTP Exemplo 2! 💰 Sua mensalidade de R$ 147,00 vence em 7 dias, dia 15/10. Evite juros! Chave PIX: pix-ktp-2 - KTP",
+    "send_at": "2026-10-08T20:11:02.205Z",
+    "status": "error",
+    "tipo": "cobranca",
+    "aluno_id": "a2",
+    "error": "Cannot read properties of undefined (reading 'id')"
   }
 ]
