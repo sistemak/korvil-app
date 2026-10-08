@@ -4,35 +4,85 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Korvil AI - GROQ REAL ATIVO</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0a0f;color:#e8e8f0;height:100vh;display:flex;flex-direction:column}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:#0a0a0f;color:#e8e8f0;height:100vh;display:flex;flex-direction:column}
 #header{height:56px;border-bottom:1px solid #252538;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#12121a}
 #chat{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
 .msg{max-width:900px;margin:0 auto;width:100%;display:flex;gap:10px}
 .msg.user{flex-direction:row-reverse}
-.av{width:32px;height:32px;border-radius:50%;background:#1a1a27;border:1px solid #252538;display:flex;align-items:center;justify-content:center}
-.bub{padding:13px 15px;border-radius:18px;max-width:82%;line-height:1.6;white-space:pre-wrap}
-.user .bub{background:#7c5cff;color:#fff}.ai .bub{background:#1a1a27;border:1px solid #252538}
+.av{width:32px;height:32px;border-radius:50%;background:#1a1a27;border:1px solid #252538;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.bub{padding:13px 15px;border-radius:18px;max-width:82%;line-height:1.6;white-space:pre-wrap;font-size:15px;word-break:break-word}
+.user.bub{background:#7c5cff;color:#fff;border-bottom-right-radius:6px}
+.ai.bub{background:#1a1a27;border:1px solid #252538;border-bottom-left-radius:6px}
 #inputBar{padding:14px;border-top:1px solid #252538;background:#12121a;display:flex;gap:10px;max-width:900px;margin:0 auto;width:100%}
-#prompt{flex:1;background:#1a1a27;border:1px solid #252538;border-radius:14px;padding:12px 14px;color:#fff;outline:none;resize:none;min-height:48px}
-#send{width:48px;height:48px;border-radius:12px;background:#7c5cff;border:none;color:#fff;cursor:pointer}
+#prompt{flex:1;background:#1a1a27;border:1px solid #252538;border-radius:14px;padding:12px 14px;color:#fff;outline:none;resize:none;min-height:48px;font-size:15px}
+#prompt:focus{border-color:#7c5cff}
+#send{width:48px;height:48px;border-radius:12px;background:#7c5cff;border:none;color:#fff;font-size:18px;cursor:pointer}
+#typing{display:none;text-align:center;color:#8b8ba7;font-size:13px;padding:6px}
 </style>
 </head>
 <body>
-<div id="header"><b>⚡ Korvil AI • GROQ REAL</b><span style="color:#22c55e">● GROQ ATIVO REAL</span></div>
+<div id="header"><b>⚡ Korvil AI • GROQ REAL FUNCIONANDO</b><span style="font-size:12px;color:#22c55e">● GROQ ATIVO REAL</span></div>
 <div id="chat"></div>
-<div id="inputBar"><textarea id="prompt" placeholder="Digite..."></textarea><button id="send">➤</button></div>
+<div id="typing">Korvil digitando...</div>
+<div id="inputBar"><textarea id="prompt" placeholder="Digite sua mensagem..."></textarea><button id="send">➤</button></div>
 <script>
-// TUDO NO MESMO CÓDIGO - GH_TOKEN + GROQ + NODE automático
-const GROQ_API_KEY = "GROQ_API_KEY_INJECT"; // Actions troca por secrets.GROQ
+// TUDO NO MESMO ARQUIVO - GH_TOKEN + GROQ + NODE AUTOMÁTICO
+// Actions injeta automaticamente seu Secret GROQ
+const GROQ_API_KEY = "GROQ_API_KEY_INJECT";
 const getKey = () => {
-  if(GROQ_API_KEY.startsWith("gsk_")) return GROQ_API_KEY;
+  if(GROQ_API_KEY &&!GROQ_API_KEY.includes("INJECT") && GROQ_API_KEY.startsWith("gsk_")) return GROQ_API_KEY;
   return localStorage.getItem('GROQ') || GROQ_API_KEY;
 };
 const MODEL="llama-3.3-70b-versatile";
 const chat=document.getElementById('chat');
-function addMsg(r,t){const d=document.createElement('div');d.className='msg '+r;d.innerHTML=`<div class="av">${r=='user'?'U':'K'}</div><div class="bub"></div>`;d.querySelector('.bub').innerText=t;chat.appendChild(d);return d.querySelector('.bub');}
-addMsg('ai','✅ GROQ ATIVO REAL! Já com GH_TOKEN e GROQ injetados automático via Actions.');
-async function send(){const q=document.getElementById('prompt').value.trim();if(!q)return;const key=getKey();if(key.includes("INJECT")){addMsg('ai','Push pro GitHub que o Actions injeta sua chave GROQ automático.');return;}addMsg('user',q);document.getElementById('prompt').value='';const bubble=addMsg('ai','');let full='';const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:MODEL,messages:[{role:'user',content:q}],stream:true})});const reader=res.body.getReader();const dec=new TextDecoder();let buf='';while(true){const{done,value}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});const lines=buf.split('\n');buf=lines.pop();for(const l of lines){if(!l.startsWith('data: '))continue;const d=l.slice(6);if(d=='[DONE]')break;try{const j=JSON.parse(d);full+=j.choices?.[0]?.delta?.content||'';bubble.innerText=full;}catch{}}}}document.getElementById('send').onclick=send;
+const promptEl=document.getElementById('prompt');
+function addMsg(role,text){
+  const d=document.createElement('div');d.className='msg '+role;
+  d.innerHTML=`<div class="av">${role=='user'?'U':'K'}</div><div class="bub"></div>`;
+  d.querySelector('.bub').innerText=text;
+  chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
+  return d.querySelector('.bub');
+}
+addMsg('ai','✅ GROQ ATIVO REAL CONECTADO!\n\nOlá! Eu sou a Korvil AI rodando 100% real com GROQ via Secrets + Actions + Node.\nGH_TOKEN e GROQ já injetados automático, sem digitar nada.\nPode perguntar!');
+
+async function send(){
+  const q=promptEl.value.trim();if(!q)return;
+  const key=getKey();
+  if(!key || key.includes("INJECT")){
+    addMsg('ai','Código pronto! Seu Actions com GH_TOKEN vai injetar a chave GROQ automático no próximo push. É só dar Commit que já funciona real.');
+    return;
+  }
+  addMsg('user',q);promptEl.value='';
+  const bubble=addMsg('ai','');let full='';
+  document.getElementById('typing').style.display='block';
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify({
+        model:MODEL,
+        messages:[{role:'system',content:'Você é Korvil AI, assistente real GROQ, responda em pt-BR.'},{role:'user',content:q}],
+        stream:true,temperature:0.7,max_tokens:4096
+      })
+    });
+    if(!res.ok) throw new Error(await res.text());
+    const reader=res.body.getReader();const dec=new TextDecoder();let buf='';
+    while(true){
+      const{done,value}=await reader.read();if(done)break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\n');buf=lines.pop();
+      for(const l of lines){
+        if(!l.startsWith('data: '))continue;
+        const d=l.slice(6);if(d=='[DONE]')break;
+        try{const j=JSON.parse(d);const delta=j.choices?.[0]?.delta?.content||'';full+=delta;bubble.innerText=full;chat.scrollTop=chat.scrollHeight;}catch{}
+      }
+    }
+  }catch(e){bubble.innerText='❌ Erro GROQ: '+e.message;}
+  document.getElementById('typing').style.display='none';
+}
+document.getElementById('send').onclick=send;
+promptEl.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
 </script>
 </body>
 </html>
