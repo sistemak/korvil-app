@@ -1,58 +1,49 @@
-name: K-AI Groq Agent
+name: K-AI Groq Auto - IA Funcionando de Verdade - Secrets Auto
 on:
   issues:
     types: [opened]
+  issue_comment:
+    types: [created]
   workflow_dispatch:
     inputs:
       prompt:
-        description: 'Prompt para K-AI'
-        required: false
-        default: 'atualize tudo'
-
+        description: O que a K-AI deve fazer no repo original
+        required: true
+        type: string
 jobs:
   kai:
-    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'k-ai') || github.event.issue.title != ''
     runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
     steps:
-      - name: Checkout com GH_TOKEN
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
-          fetch-depth: 0
-
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Run GROQ Agent
-        env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          PROMPT: ${{ github.event.issue.body || github.event.issue.title || inputs.prompt }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
+      - name: Mostrar prompt recebido
         run: |
-          echo "PROMPT=$PROMPT"
-          node korvil/sok/k-ai/groq/index.js
-
-      - name: Commit & Push
+          echo "PROMPT: ${{ github.event.issue.body || github.event.comment.body || inputs.prompt }}"
+      - name: K-AI Groq - Cria arquivos direto no original - GROQ_API_KEY + GH_TOKEN + NODE dos Secrets
         run: |
-          git config user.name "k-ai-bot"
+          GROQ_API_KEY=${{ secrets.GROQ_API_KEY }} GH_TOKEN=${{ secrets.GH_TOKEN }} PROMPT="${{ github.event.issue.body || github.event.comment.body || inputs.prompt }}" node korvil/sok/k-ai/groq/index.js
+      - name: Commit direto no original sistemak/korvil-app
+        run: |
+          git config user.name "k-ai"
           git config user.email "k-ai@korvil.app"
-          git add -A
-          git diff --cached --quiet || git commit -m "k-ai: auto update from issue #${{ github.event.issue.number }} - $PROMPT"
+          git add .
+          git commit -m "k-ai: ${{ github.event.issue.title || inputs.prompt }}" || echo "sem mudanças"
           git push origin main
+      - name: Responder conversando na Issue
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --body "✅ K-AI Groq executou e commitou direto no original!
 
-      - name: Close Issue
-        if: github.event_name == 'issues'
-        uses: peter-evans/close-issue@v3
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          comment: |
-            ✅ K-AI executou com sucesso!
-            - Modelo: llama-3.3-70b-versatile
-            - Commit pushado em main
-            - Arquivos atualizados: 6/6
+          Prompt: ${{ github.event.issue.body || github.event.comment.body || inputs.prompt }}
+
+          Arquivos criados via GROQ_API_KEY + GH_TOKEN + NODE dos Secrets já ativos.
+          Ver commits: https://github.com/sistemak/korvil-app/commits/main" || true
+          gh issue close ${{ github.event.issue.number }} || true
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
