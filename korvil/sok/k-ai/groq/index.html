@@ -2,138 +2,115 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>MiniGame 2D</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>korvil/sok/k-ai/groq · sistemak/korvil-app</title>
 <style>
-  body{margin:0;overflow:hidden;background:#111;}
-  canvas{display:block;margin:auto;background:#222;}
+:root{--bg:#0d1117;--bg2:#010409;--border:#21262d;--border2:#30363d;--text:#e6edf3;--muted:#8b949e;--green:#238636;--green2:#3fb950}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);padding-bottom:56px}
+.header{height:62px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:16px;position:sticky;top:0;z-index:10}
+.header .logo{width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900}
+.header .repo{font-weight:600}
+.header .badge{font-size:11px;border:1px solid var(--border2);padding:2px 6px;border-radius:12px;color:var(--muted)}
+.nav{border-bottom:1px solid var(--border);padding:0 16px;display:flex;gap:24px;overflow:auto}
+.nav a{padding:12px 0;font-size:14px;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent}
+.nav a.active{color:var(--text);border-bottom-color:#f78166;font-weight:600}
+.container{max-width:1280px;margin:0 auto;padding:0 16px}
+.branch-bar{display:flex;gap:8px;padding:16px 0;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--border2);background:#21262d;color:var(--text);padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer}
+.btn-green{background:#238636;border-color:rgba(240,246,252,0.1);color:#fff}
+.file-list{border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--bg2)}
+.file-header{padding:12px 16px;background:#161b22;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;font-size:14px}
+.file-row{display:flex;justify-content:space-between;padding:8px 16px;border-bottom:1px solid #21262d;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13px;gap:8px}
+.file-row:hover{background:#161b22}
+.file-row .icon{margin-right:8px}
+.readme{margin:16px 0 80px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.readme-header{padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--border);font-weight:600;display:flex;align-items:center;gap:8px}
+.readme-body{padding:24px;line-height:1.6;background:var(--bg)}
+.kai-bar{position:fixed;bottom:0;left:0;right:0;height:56px;background:#010409;border-top:1px solid #30363d;display:flex;align-items:center;padding:0 16px;z-index:9999}
+.kai-bar input{flex:1;background:transparent;border:none;color:#e6edf3;outline:none;font-family:ui-monospace,monospace;font-size:14px}
 </style>
 </head>
 <body>
-<canvas id="gameCanvas" width="800" height="480"></canvas>
-
+<div class="header">
+<div class="logo">K</div>
+<div class="repo">sistemak / korvil-app</div>
+<div class="badge">Public</div>
+<div style="margin-left:auto;display:flex;gap:8px"><button class="btn">★ Star</button><button class="btn btn-green">Code</button></div>
+</div>
+<div class="nav">
+<a class="active" href="#">Code</a><a href="#">Issues</a><a href="#">Pull requests</a><a href="#">Actions</a><a href="#">Projects</a><a href="#">Wiki</a>
+</div>
+<div class="container">
+<div class="branch-bar">
+<button class="btn">main ▾</button>
+<span style="color:#8b949e;font-size:13px">korvil/sok/k-ai/groq /</span>
+<span style="font-size:13px;color:#e6edf3">K-AI Groq Agent - Atualizado sem duplicar</span>
+<span style="margin-left:auto;color:#8b949e;font-size:12px">Último commit: agora • 7 arquivos</span>
+</div>
+<div class="file-list" id="fileListContainer">
+<div class="file-header"><span>📁 korvil/sok/k-ai/groq</span><span style="color:#8b949e">Atualizado via Código Mestre Final</span></div>
+<div class="file-row"><span><span class="icon">📄</span>agent.js</span><span style="color:#8b949e">Node ESM Groq agent - llama-3.3</span></div>
+<div class="file-row"><span><span class="icon">📄</span>chat.js</span><span style="color:#8b949e">Injeção fixed bottom bar + observer</span></div>
+<div class="file-row"><span><span class="icon">📄</span>config.js</span><span style="color:#8b949e">Model + system prompt</span></div>
+<div class="file-row"><span><span class="icon">📄</span>index.html</span><span style="color:#8b949e">GitHub clone real dark + K-AI</span></div>
+<div class="file-row"><span><span class="icon">📄</span>style.css</span><span style="color:#8b949e">GitHub dark styles</span></div>
+<div class="file-row"><span><span class="icon">📄</span>README.md</span><span style="color:#8b949e">Documentação K-AI</span></div>
+</div>
+<div id="dynamicFiles"></div>
+<div class="readme">
+<div class="readme-header">📖 README.md</div>
+<div class="readme-body">
+<h3 style="margin-top:0">K-AI Groq - Korvil SOK</h3>
+<p>Agente inteligente integrado ao GitHub. Geração de arquivos sem duplicar, apenas atualizando existentes.</p>
+<ul>
+<li>Modelo: <code>llama-3.3-70b-versatile</code> via Groq</li>
+<li>Chat fixo inferior em todas as páginas</li>
+<li>Workflow <code>.github/workflows/k-ai.yml</code> para execução automática</li>
+<li>Comandos: <code>npm run k-ai</code> e <code>npm run k-ai:index</code></li>
+</ul>
+<pre style="background:#161b22;padding:12px;border-radius:6px;border:1px solid #30363d;overflow:auto;font-size:12px">GROQ_API_KEY=... node korvil/sok/k-ai/groq/agent.js "crie login.tsx"</pre>
+<p style="color:#8b949e;font-size:13px">✅ Todos os arquivos atualizados sem duplicar via Código Mestre Final</p>
+</div>
+</div>
+</div>
+<div class="kai-bar">
+<div style="width:8px;height:8px;background:#3fb950;border-radius:50%;margin-right:10px;box-shadow:0 0 8px #3fb950"></div>
+<span style="color:#3fb950;margin-right:12px;font-weight:600;font-size:13px">k-ai ></span>
+<input id="kaiInput" placeholder="Digite prompt e Enter - ex: crie dashboard.tsx" autocomplete="off">
+<span style="color:#484f58;font-size:11px;margin-left:12px">GROQ • llama-3.3</span>
+</div>
 <script>
-// ------- Configs Básicos -------
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const TILE_SIZE = 32;
-
-// ------- Kíbs do Jogador -------
-const player = {
-  x: 100, y: 200,
-  w: 30, h: 50,
-  color: '#0f0',
-  vx: 0, vy: 0,
-  speed: 120,
-  jumpPower: -350,
-  onGround: false
-};
-
-const keys = {};
-
-// --------- Map (array 0=vazio, 1=bloco) ---------
-const level = [
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  // ... (adiciona mais quebras de linha na sua batata)
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-];
-
-// Convert array to canvas+rects
-const tiles = [];
-for(let r=0;r<level.length;r++){
-  for(let c=0;c<level[r].length;c++){
-    if(level[r][c]===1) tiles.push({x:c*TILE_SIZE,y:r*TILE_SIZE,w:TILE_SIZE,h:TILE_SIZE});
+(function(){
+  var input=document.getElementById('kaiInput');
+  function addFile(name){
+    var container=document.getElementById('fileListContainer');
+    var row=document.createElement('div');
+    row.className='file-row';
+    row.style.borderTop='1px solid #21262d';
+    row.innerHTML='<span><span class=icon>📄</span>'+name+'</span><span style=color:#3fb950>criado agora via K-AI • sem duplicar</span>';
+    container.appendChild(row);
   }
-}
-
-// FPS tracker
-let lastTime = performance.now();
-
-// ------- Evento de teclado -------
-window.addEventListener('keydown', e=>{
-  if(e.key==='ArrowRight') keys.right = true;
-  if(e.key==='ArrowLeft') keys.left = true;
-  if(e.key===' ') keys.jump = true; // espaço
-});
-
-window.addEventListener('keyup', e=>{
-  if(e.key==='ArrowRight') keys.right = false;
-  if(e.key==='ArrowLeft') keys.left = false;
-  if(e.key===' ') keys.jump = false;
-});
-
-// ------- Física -------
-function update(dt){
-  const accelX = keys.right? player.speed : keys.left? -player.speed : 0;
-  player.vx = accelX;
-  if(keys.jump && player.onGround){
-    player.vy = player.jumpPower;
-    player.onGround = false;
-  }
-
-  // Gravity
-  player.vy += 600 * dt;
-
-  // Movimento
-  player.x += player.vx * dt;
-  player.y += player.vy * dt;
-
-  // Colisões
-  // Zerar colisões antes
-  player.onGround = false;
-  tiles.forEach(t=>{
-    const left   = player.x   < t.x + t.w;
-    const right  = player.x + player.w > t.x;
-    const top    = player.y   < t.y + t.h;
-    const bottom = player.y + player.h > t.y;
-    if(left && right && top && bottom){
-      // Detectar qual lado do player bate com o bloco
-      const overlapX = Math.min(player.x + player.w - t.x, t.x + t.w - player.x);
-      const overlapY = Math.min(player.y + player.h - t.y, t.y + t.h - player.y);
-      if(overlapX < overlapY){
-        // X direction
-        if(player.x < t.x) player.x -= overlapX;
-        else player.x += overlapX;
-        player.vx = 0;
-      }else{
-        // Y direction
-        if(player.y < t.y) {
-          player.y -= overlapY;   // cima
-          player.vy = 0;
-        }else{
-          player.y += overlapY;   // baixo
-          player.vy = 0;
-          player.onGround = true;
+  if(input){
+    input.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){
+        var v=this.value.trim();
+        if(!v) return;
+        var fileName=v.split(' ').pop() || 'novo-arquivo.js';
+        if(fileName.indexOf('.')===-1) fileName+='.tsx';
+        addFile(fileName);
+        var toast=document.createElement('div');
+        toast.textContent='K-AI gerando: '+fileName;
+        toast.style.cssText='position:fixed;bottom:64px;left:16px;background:#010409;border:1px solid #238636;color:#3fb950;padding:8px 12px;border-radius:6px;font-size:12px;z-index:10000';
+        document.body.appendChild(toast);
+        setTimeout(function(){toast.remove();},3000);
+        this.value='';
+        if(window.parent && window.parent!==window){
+          try{window.parent.postMessage({type:'kai-create',file:fileName,prompt:v},'*');}catch(err){}
         }
       }
-    }
-  });
-
-  // Poderia fazer paredes esquerda/direita e tela, etc...
-}
-
-// ------- Render -------
-function render(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  // Tiles
-  ctx.fillStyle = '#444';
-  tiles.forEach(t=>ctx.fillRect(t.x,t.y,t.w,t.h));
-
-  // Player
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x,player.y,player.w,player.h);
-}
-
-// ------- Loop Principal -------
-function loop(timestamp){
-  const dt = (timestamp - lastTime)/1000;
-  lastTime = timestamp;
-  update(dt);
-  render();
-  requestAnimationFrame(loop);
-}
-requestAnimationFrame(loop);
-
+    });
+  }
+})();
 </script>
 </body>
 </html>
