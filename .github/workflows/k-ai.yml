@@ -1,23 +1,43 @@
-name: K-AI Auto
+name: K-AI Groq Agent
 on:
-  issues: {types: [opened, reopened]}
-  issue_comment: {types: [created]}
+  issues:
+    types: [opened, edited]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'k-ai prompt'
+        required: false
+        default: 'k-ai cria api/hello.js'
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 jobs:
-  kai:
-    if: contains(github.event.issue.title, 'k-ai') || contains(github.event.comment.body, 'k-ai')
+  k-ai:
     runs-on: ubuntu-latest
-    permissions: {contents: write}
     steps:
       - uses: actions/checkout@v4
-        with: {token: ${{ secrets.GH_TOKEN }}}
+        with:
+          token: ${{ secrets.GH_TOKEN }}
       - uses: actions/setup-node@v4
-        with: {node-version: 20}
-      - run: node agent.js "${{ github.event.issue.title }} ${{ github.event.issue.body }} ${{ github.event.comment.body }}"
-        env: {GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}}
-      - run: |
-          git config user.name "K-AI"
-          git config user.email "kai@korvil.app"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
-          git add -A
-          git diff --staged --quiet || git commit -m "K-AI: ${{ github.event.issue.title }}"
-          git push
+        with:
+          node-version: 20
+      - name: Run K-AI Groq Agent
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          K_AI_PROMPT: ${{ github.event.issue.body || github.event.comment.body || inputs.prompt }}
+        run: |
+          echo "Prompt: $K_AI_PROMPT"
+          node korvil/sok/k-ai/groq/agent.js "$K_AI_PROMPT"
+      - name: Commit changes
+        run: |
+          git config user.name "k-ai[bot]"
+          git config user.email "k-ai@korvil.app"
+          git add .
+          git diff --staged --quiet || git commit -m "feat: k-ai groq auto-commit $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push origin main || echo "nothing to push"
