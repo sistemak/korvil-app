@@ -1,31 +1,62 @@
-name: K-AI Groq Automation
+name: K-AI GROQ - igual Meta IA
+
 on:
-  push:
-    branches: [main, master]
+  issues:
+    types: [opened]
+  issue_comment:
+    types: [created]
   workflow_dispatch:
     inputs:
       prompt:
-        description: 'Prompt para K-AI gerar arquivo'
+        description: 'Prompt manual (ex: crie dashboard.tsx)'
         required: true
-        default: 'crie um componente'
+        type: string
+
 jobs:
-  kai:
+  k-ai:
+    if: contains(github.event.issue.title, 'k-ai') || contains(github.event.issue.body, 'k-ai') || contains(github.event.comment.body, 'k-ai') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          node-version: '20'
-      - name: Install deps
-        run: npm ci || npm install
-      - name: Run K-AI Agent
+          token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run K-AI Agent (GROQ via Secrets)
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        run: node korvil/sok/k-ai/groq/agent.js "${{ github.event.inputs.prompt }}"
-      - name: Commit generated
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          PROMPT: ${{ github.event.issue.body || github.event.comment.body || inputs.prompt }}
+          GITHUB_EVENT_PATH: ${{ env.GITHUB_EVENT_PATH }}
         run: |
-          git config user.name "k-ai-bot"
+          echo "Prompt length: ${#PROMPT}"
+          node korvil/sok/k-ai/groq/agent.js
+
+      - name: Commit changes
+        run: |
+          git config user.name "k-ai bot"
           git config user.email "k-ai@korvil.app"
           git add .
-          git diff --staged --quiet || git commit -m "k-ai: ${{ github.event.inputs.prompt }}"
-          git push || true
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "k-ai: ${{ github.event.issue.title || inputs.prompt }} [skip ci]"
+            git push origin HEAD:main || git push
+          fi
+
+      - name: Close issue and comment
+        if: github.event_name != 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue close ${{ github.event.issue.number }} --repo sistemak/korvil-app --reason completed || echo "close failed"
+          gh issue comment ${{ github.event.issue.number }} --repo sistemak/korvil-app --body "✅ K-AI executou (GROQ_API_KEY dos Secrets) e commitou. Veja em https://sistemak.github.io/korvil-app/korvil/sok/k-ai/groq/ ou /actions" || true
