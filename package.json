@@ -1,26 +1,7 @@
 {
   "name": "korvil-app",
-  "version": "2.0.0",
-  "private": true,
-  "description": "KORVIL MASTER FINAL AUTOMATICO SEM TOKEN NO LOGIN - GH_TOKEN interno",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "ensure": "node korvil/sections/korvil-loja/scripts/ensure-contas-structure.js",
-    "whatsapp:qr": "node korvil/sections/ktp/projetotransformacao/mensagens-automaticas-whatsapp/src/generate-qr.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "@whiskeysockets/baileys": "^6.7.8",
-    "qrcode-terminal": "^0.12.0",
-    "pino": "^9.0.0"
-  },
-  "engines": {
-    "node": ">=18"
-  },
+  "version": "1.0.0",
   "type": "module",
-  "_ktp_10_10_separacao": "--- SEPARAÇÃO 10/10 AUTÔNOMA - NÃO DUPLICAR - MANTENDO ANTIGO + NOVO ---"
+  "scripts": { "dev": "node agent.js" },
+  "dependencies": {}
 }
