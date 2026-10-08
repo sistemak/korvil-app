@@ -1,0 +1,11 @@
+name: Deploy Korvil
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Real Deploy at 2026-10-08T03:06:41.781Z
+        run: echo "deployed"
