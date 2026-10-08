@@ -5,7 +5,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
 
 jobs:
   deploy:
@@ -18,26 +17,39 @@ jobs:
   korvil-groq:
     runs-on: ubuntu-latest
     needs: deploy
+    if: always()
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout com GH_TOKEN
+        uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Injetar GROQ_API_KEY automatico
         env:
           GROQ_API_KEY_SECRET: ${{ secrets.GROQ_API_KEY }}
           GROQ_SECRET: ${{ secrets.GROQ }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          KEY="$GROQ_API_KEY_SECRET"
-          if [ -z "$KEY" ]; then KEY="$GROQ_SECRET"; fi
-          sed -i "s|GROQ_API_KEY_INJECT|$KEY|g" x.html
-      - name: Publicar automatico com GH_TOKEN
+          KEY="${GROQ_API_KEY_SECRET:-$GROQ_SECRET}"
+          if [ -z "$KEY" ]; then
+            echo "::warning::Secret GROQ_API_KEY nao encontrado, mantendo placeholder"
+            KEY="GROQ_API_KEY_INJECT"
+          fi
+          # Escapa para sed
+          ESCAPED=$(printf '%s\n' "$KEY" | sed 's/[&/\]/\\&/g')
+          sed -i "s|GROQ_API_KEY_INJECT|$ESCAPED|g" x.html || true
+          echo "Injecao feita"
+
+      - name: Publicar no gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
           publish_dir: ./
           publish_branch: gh-pages
-          force_orphan: true
+          exclude_assets: '.github'
+          force_orphan: false
