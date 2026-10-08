@@ -1,41 +1,48 @@
+// korvil/sok/k-ai/groq/chat.js - injects Meta IA style bar on any page
 (function(){
-  function mountKaiChat(){
-    if(document.getElementById('kai-root-bar')) return;
-    var bar=document.createElement('div');
-    bar.id='kai-root-bar';
-    bar.style.cssText='position:fixed;bottom:0;left:0;right:0;height:56px;background:#010409;border-top:1px solid #30363d;display:flex;align-items:center;padding:0 16px;z-index:99999;font-family:ui-monospace,monospace';
-    bar.innerHTML='<div style="width:8px;height:8px;background:#3fb950;border-radius:50%;margin-right:10px;box-shadow:0 0 8px #3fb950"></div><span style="color:#3fb950;margin-right:12px;font-weight:600">k-ai ></span><input id="kaiInputGlobal" placeholder="Prompt K-AI • Enter para gerar arquivo" style="flex:1;background:transparent;border:none;color:#e6edf3;outline:none;font-size:14px"><span style="color:#484f58;font-size:11px;margin-left:12px">GROQ llama-3.3</span>';
-    document.body.appendChild(bar);
-    document.body.style.paddingBottom='56px';
-    var input=bar.querySelector('input');
-    input.addEventListener('keydown', function(e){
-      if(e.key==='Enter'){
-        var prompt=e.target.value.trim();
-        if(!prompt) return;
-        input.placeholder='Gerando...';
-        input.disabled=true;
-        try{
-          if(window.KAI_GROQ_GENERATE){
-            window.KAI_GROQ_GENERATE(prompt);
-          }else{
-            var ev=new CustomEvent('kai-prompt',{detail:{prompt:prompt}});
-            window.dispatchEvent(ev);
-            var log=document.createElement('div');
-            log.textContent='> '+prompt;
-            log.style.cssText='position:fixed;bottom:64px;right:16px;background:#010409;border:1px solid #30363d;color:#3fb950;padding:8px 12px;border-radius:6px;font-size:12px;max-width:320px';
-            document.body.appendChild(log);
-            setTimeout(function(){log.remove();},3000);
-          }
-        }catch(err){ console.error(err); }
-        input.value='';
-        input.disabled=false;
-        input.placeholder='Prompt K-AI • Enter para gerar arquivo';
-        input.focus();
-      }
-    });
-  }
-  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',mountKaiChat);}else{mountKaiChat();}
-  var obs=new MutationObserver(function(){mountKaiChat();});
-  obs.observe(document.body,{childList:true,subtree:false});
-  window.mountKaiChat=mountKaiChat;
+  if(document.getElementById('kaiBottomBar')) return;
+  const barCss = `
+  #kaiBottomBar{position:fixed;bottom:0;left:0;right:0;height:62px;background:#010409;border-top:1px solid #30363d;display:flex;align-items:center;padding:0 14px;gap:10px;z-index:9999}
+  #kaiBottomBar input{flex:1;background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:11px 14px;color:#c9d1d9;outline:none;font-family:ui-monospace,monospace}
+  #kaiBottomBar input:focus{border-color:#1f6feb}
+  #kaiChat{position:fixed;bottom:72px;right:16px;width:360px;max-height:50vh;background:#0d1117;border:1px solid #30363d;border-radius:8px;display:flex;flex-direction:column;z-index:9999;overflow:hidden}
+  #kaiChatHead{padding:10px 12px;border-bottom:1px solid #21262d;font-weight:600;font-size:13px;display:flex;justify-content:space-between}
+  #kaiChatBody{flex:1;padding:10px;display:flex;flex-direction:column;gap:8px;overflow:auto;max-height:40vh}
+  .kai-bubble{padding:8px 10px;border-radius:10px;font-size:13px;max-width:85%;word-break:break-word}
+  .kai-bubble.user{align-self:flex-end;background:#1f6feb;color:#fff}
+  .kai-bubble.ai{align-self:flex-start;background:#161b22;border:1px solid #30363d;color:#c9d1d9}
+  `;
+  const style=document.createElement('style'); style.textContent=barCss; document.head.appendChild(style);
+
+  const chatWrap=document.createElement('div'); chatWrap.id='kaiChat';
+  chatWrap.innerHTML='<div id="kaiChatHead"><span>k-ai groq</span><span style="color:#8b949e;font-size:11px">GROQ nos Secrets</span></div><div id="kaiChatBody"><div class="kai-bubble ai">k-ai pronto. Digite abaixo.</div></div>';
+  document.body.appendChild(chatWrap);
+
+  const bar=document.createElement('div'); bar.id='kaiBottomBar';
+  bar.innerHTML='<span style="color:#3fb950;font-weight:700">k-ai&gt;</span><input id="kaiInputGlobal" placeholder="k-ai> digite prompt e Enter - ex: crie dashboard.tsx (igual Meta IA)"/><span style="color:#8b949e;font-size:11px">⏎</span>';
+  document.body.appendChild(bar);
+
+  const input=document.getElementById('kaiInputGlobal');
+  const body=document.getElementById('kaiChatBody');
+  function add(t,w){ const d=document.createElement('div'); d.className='kai-bubble '+w; d.textContent=t; body.appendChild(d); body.scrollTop=body.scrollHeight; return d; }
+  function getToken(){ return localStorage.getItem('GH_TOKEN')||''; }
+
+  input.addEventListener('keydown', async (e)=>{
+    if(e.key!=='Enter') return;
+    const prompt=input.value.trim(); if(!prompt) return;
+    add(prompt,'user'); input.value='';
+    const token=getToken();
+    if(!token){ add('⚠️ Sem GH_TOKEN. Rode instalador master.','ai'); return; }
+    const run=add('🚀 K-AI executando via GitHub Actions... (usando GROQ_API_KEY dos Secrets) - em 30s o arquivo aparece aqui','ai');
+    try{
+      const res=await fetch('https://api.github.com/repos/sistemak/korvil-app/issues',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({title:'k-ai: '+prompt.slice(0,80),body:prompt+'\n\n<!-- k-ai auto -->',labels:['k-ai']})});
+      let data=await res.json();
+      if(!res.ok && (res.status===422||res.status===404)){
+        const r2=await fetch('https://api.github.com/repos/sistemak/korvil-app/issues',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({title:'k-ai: '+prompt.slice(0,80),body:prompt})});
+        data=await r2.json();
+        if(!r2.ok) throw new Error(JSON.stringify(data).slice(0,400));
+      } else if(!res.ok){ throw new Error(JSON.stringify(data).slice(0,400)); }
+      run.textContent='✅ Issue #'+data.number+' criada! '+data.html_url;
+    }catch(err){ run.textContent='❌ '+err.message; }
+  });
 })();
