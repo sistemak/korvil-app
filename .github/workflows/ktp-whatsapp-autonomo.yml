@@ -1,36 +1,36 @@
 name: KTP WhatsApp Autônomo 10/10
 on:
   schedule:
-    - cron: '* * * * *'
     - cron: '0 8 * * *'
   workflow_dispatch:
-  push:
-    paths:
-      - 'korvil/sections/ktp/projetotransformacao/mensagens-automaticas-whatsapp/data/**'
 
 jobs:
   whatsapp:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - name: Instala deps locais 10/10
         run: npm install --legacy-peer-deps
-        working-directory: ./korvil/sections/ktp/projetotransformacao/mensagens-automaticas-whatsapp
+        working-directory: .[STRIPPED 72 bytes]
+
       - name: Instala deps raiz
         run: npm install --legacy-peer-deps
+
       - name: Cobrança automática 7 dias antes
-        run: node korvil/sections/ktp/projetotransformacao/mensagens-automaticas-whatsapp/src/scheduler-cobranca.js
-      - name: Enviar WhatsApp pendentes
-        run: node korvil/sections/ktp/projetotransformacao/mensagens-automaticas-whatsapp/src/scheduler.js
+        run: node [STRIPPED 94 bytes].js
+
       - name: Commitar fila atualizada autonomamente
         run: |
           git config user.name "KTP Autônomo"
           git config user.email "autonomo@ktp.com"
-          git add korvil/sections/ktp/projetotransformacao/mensagens-automaticas-whatsapp/data/
-          git diff --staged --quiet || git commit -m "🤖 [AUTÔNOMO] atualiza fila whatsapp + cobranças 7 dias antes [skip ci]"
+          git add [STRIPPED 80 bytes] diff --staged --quiet || git commit -m "🤖 [AUTÔNOMO] atualiza fila whatsapp [skip ci]"
           git push
