@@ -1,49 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>ModaBox – Loja de Roupas</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Arial,Helvetica,sans-serif;line-height:1.6;color:#333}
-    a{text-decoration:none;color:inherit}
-    header{background:#222;color:#fff;padding:1rem 2rem;position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center}
-    header a.logo{font-weight:bold;font-size:1.2rem}
-    nav ul{display:flex;list-style:none}
-    nav li{margin-left:1.5rem}
-    nav a{color:#fff;font-weight:500}
-    nav a:hover{color:#f90}
-    .hero{background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600') no-repeat center/cover;height:45vh;display:flex;flex-direction:column;justify-content:center;align-items:center;color:white;text-align:center}
-    .hero h1{font-size:2.5rem;margin-bottom:.5rem}
-    .hero p{font-size:1.2rem}
-    .categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;padding:2rem;max-width:1200px;margin:0 auto}
-    .cat-box{position:relative;overflow:hidden;border-radius:8px;cursor:pointer}
-    .cat-box img{width:100%;height:350px;object-fit:cover;display:block;transition:transform .3s ease}
-    .cat-box:hover img{transform:scale(1.05)}
-    .cat-box .label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;padding:.7rem 1rem;text-align:center;font-weight:bold}
-    footer{background:#222;color:#bbb;text-align:center;padding:1rem 0;font-size:.9rem}
-    footer a{color:#f90}
-    @media(max-width:600px){header{flex-direction:column;align-items:flex-start}nav ul{flex-direction:column;width:100%;margin-top:.5rem}nav li{margin:.5rem 0 0 0}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ModaBox – Loja de Roupas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;color:#333}
+a{text-decoration:none;color:inherit}
+header{background:#222;color:#fff;padding:1rem 2rem;position:sticky;top:0;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:bold;font-size:1.3rem}
+nav ul{display:flex;list-style:none;gap:1.5rem}
+nav a:hover{color:#f90}
+.hero{background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600') center/cover;height:45vh;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;text-align:center}
+.hero h1{font-size:2.5rem}
+.categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;padding:2rem;max-width:1200px;margin:auto}
+.cat-box{position:relative;overflow:hidden;border-radius:8px}
+.cat-box img{width:100%;height:350px;object-fit:cover;display:block}
+.cat-box .label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;padding:.7rem;text-align:center;font-weight:bold}
+footer{background:#222;color:#bbb;text-align:center;padding:1rem;font-size:.9rem}
+footer a{color:#f90}
+</style>
 </head>
 <body>
 <header>
-  <a href="#" class="logo">ModaBox</a>
-  <nav><ul><li><a href="#">Início</a></li><li><a href="#">Coleções</a></li><li><a href="#">Sobre</a></li><li><a href="#">Contato</a></li><li><a href="#">Carrinho (0)</a></li></ul></nav>
+<a class="logo" href="#">ModaBox</a>
+<nav><ul><li><a href="#">Início</a></li><li><a href="#">Coleções</a></li><li><a href="#">Contato</a></li><li><a href="#">Carrinho (0)</a></li></ul></nav>
 </header>
-
 <section class="hero">
-  <h1>Bem-vindo à ModaBox</h1>
-  <p>Descubra as peças que melhor expressam seu estilo.</p>
+<h1>Bem-vindo à ModaBox</h1>
+<p>Descubra as peças que melhor expressam seu estilo.</p>
 </section>
-
 <section class="categories">
-  <div class="cat-box"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600" alt="Camisetas"><div class="label">Camisetas</div></div>
-  <div class="cat-box"><img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600" alt="Calças Jeans"><div class="label">Jeans</div></div>
-  <div class="cat-box"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600" alt="Sapatos"><div class="label">Sapatos</div></div>
+<div class="cat-box"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600"><div class="label">Camisetas</div></div>
+<div class="cat-box"><img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600"><div class="label">Jeans</div></div>
+<div class="cat-box"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600"><div class="label">Sapatos</div></div>
 </section>
-
-<footer>© 2026 ModaBox – Todos os direitos reservados.<br><a href="#">Política de privacidade</a> | <a href="#">Termos de Uso</a></footer>
+<footer>© 2026 ModaBox<br><a href="#">Privacidade</a> | <a href="#">Termos</a></footer>
 </body>
 </html>
