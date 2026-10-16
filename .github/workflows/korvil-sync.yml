@@ -1,0 +1,14 @@
+name: KORVIL AUTO
+on: {push: {branches: [main]}}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+      - run: |
+          supabase link --project-ref vbckzfvqarcjadqxmdqc
+          supabase secrets set GROQ_API_KEY=${{ secrets.GROQ_API_KEY }} GH_TOKEN=${{ secrets.GH_TOKEN }} --project-ref vbckzfvqarcjadqxmdqc
+          supabase functions deploy cerebro --no-verify-jwt --project-ref vbckzfvqarcjadqxmdqc
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
