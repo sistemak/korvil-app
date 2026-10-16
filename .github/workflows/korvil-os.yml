@@ -1,0 +1,16 @@
+name: KORVIL OS
+on: {push:{branches:[main]}, workflow_dispatch:}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: {contents: write}
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p supabase/functions/cerebro
+          cat > supabase/functions/cerebro/index.ts <<'TS'
+          import {serve} from "https://deno.land/std@0.168.0/http/server.ts"
+          serve(async(req)=>{const {pedido}=await req.json();const k=Deno.env.get("GROQ_API_KEY");const r=await fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",headers:{Authorization:`Bearer ${k}`,"Content-Type":"application/json"},body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:[{role:"user",content:pedido}]})});const j=await r.json();return new Response(JSON.stringify({resposta:j.choices[0].message.content}),{headers:{"Access-Control-Allow-Origin":"*","Content-Type":"application/json"}})})
+          TS
+          echo "KORVIL OK - ${{ github.sha }}" > status.txt
+          git config user.name "korvil"; git config user.email "korvil@os"; git add .; git commit -m "korvil auto-fix" || true; git push
