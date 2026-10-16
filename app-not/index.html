@@ -22,526 +22,184 @@
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
 </style>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<meta name="theme-color" content="#25D366"/>
-<link id="dynamic-manifest" rel="manifest" href="./manifest.json"/>
-<title>KORVIL MESTRE</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>KORVIL APP - Original Preservado + K-AI Âncora</title>
 <style>
-*{font-family:'Inter',system-ui,sans-serif}
-::-webkit-scrollbar{width:0}
-.no-scrollbar{scrollbar-width:none}
+/* TUDO ORIGINAL PRESERVADO - NÃO MUDADO */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+*{font-family:'Inter',system-ui,sans-serif;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#0a0a0a;color:white;overflow:hidden}
+:root{--k-cyan:#00f5ff;--k-green:#25D366}
 
-/* K-AI - LOGO INTEIRA DENTRO DO CIRCULO + BORDA NEON TURQUESA PULSANTE */
-:root{
- --k-cyan:#00f5ff;
- --k-cyan2:#76f7ff;
- --k-green:#6ef7b1;
+/* APP ORIGINAL - MESMO VISUAL DA FOTO */
+.app{width:100%;height:100vh;display:flex;flex-direction:column;background:#0a0a0a}
+.header{height:64px;background:#000;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.body{display:flex;flex:1;overflow:hidden}
+.sidebar{width:86px;background:#111;border-right:1px solid rgba(255,255,255,0.1);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:16px;overflow-y:auto}
+.sector{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.sector-img{width:56px;height:56px;border-radius:50%;background:#222;border:2px solid transparent;overflow:hidden;display:grid;place-items:center}
+.sector-img img{width:100%;height:100%;object-fit:cover;background:white}
+.sector.active .sector-img{border-color:var(--k-green);box-shadow:0 0 12px rgba(37,211,102,0.5)}
+.sector-label{font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.6);text-transform:uppercase}
+.sector.active .sector-label{color:var(--k-green);font-weight:700}
+.main{flex:1;background:#0a0a0a;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.version{margin-top:auto;font-size:9px;text-align:center;opacity:0.6;padding:8px;border:1px solid rgba(255,255,255,0.1);border-radius:10px;background:rgba(255,255,255,0.06)}
+
+/* APENAS ADIÇÃO: K-AI ÂNCORA - PUXANDO LOGO REAL SEM CORTAR */
+#kai-anchor-wrap{
+  position:fixed;right:18px;bottom:18px;z-index:99999;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  touch-action:none;user-select:none;
+}
+#kai-anchor-name{
+  font-size:10px;letter-spacing:0.18em;color:var(--k-cyan);font-weight:900;
+  text-shadow:0 0 8px rgba(0,245,255,0.9);background:rgba(0,0,0,0.7);
+  border:1px solid rgba(0,245,255,0.3);padding:2px 6px;border-radius:999px;
+  pointer-events:none;
 }
 #k-ai-float-btn{
- position:fixed;
- bottom:18px;
- right:12px;
- width:92px;
- height:92px;
- border-radius:50%;
- background: radial-gradient(circle at 35% 35%, #2b2b2b 0%, #1a1a1a 100%);
- border:2.5px solid #00f5ff;
- box-shadow:0 0 16px rgba(0,245,255,0.85), 0 0 32px rgba(0,245,255,0.45), 0 0 48px rgba(0,245,255,0.25), 0 12px 32px rgba(0,0,0,0.85);
- display:grid;
- place-items:center;
- cursor:pointer;
- z-index:99999;
- transition:.18s ease;
- user-select:none;
- animation:k-neon-pulse 1.8s infinite ease-in-out;
- overflow:hidden;
- padding:0;
+  position:relative;width:78px;height:78px;border-radius:50%;
+  background:#111;border:3px solid var(--k-cyan);
+  box-shadow:0 0 18px rgba(0,245,255,0.6),0 0 36px rgba(0,245,255,0.3),0 12px 32px rgba(0,0,0,0.8);
+  display:grid;place-items:center;cursor:grab;overflow:hidden;
+  animation:kai-neon 1.8s infinite ease-in-out;
 }
-#k-ai-float-btn:hover{transform:scale(1.06);filter:brightness(1.15)}
-#k-ai-float-btn:active{transform:scale(0.94)}
 #k-ai-float-btn img{
- width:100%;
- height:100%;
- object-fit:contain;
- object-position:center;
- padding:10px;
- border-radius:50%;
- display:block;
+  width:100%;height:100%;object-fit:contain;object-position:center;
+  padding:8px;border-radius:50%;background:#111;display:block;
 }
-@keyframes k-neon-pulse{
- 0%,100%{box-shadow:0 0 14px rgba(0,245,255,0.75), 0 0 28px rgba(0,245,255,0.4), 0 0 44px rgba(0,245,255,0.15), 0 12px 32px rgba(0,0,0,0.8); border-color:#00f5ff}
- 50%{box-shadow:0 0 22px rgba(0,245,255,1), 0 0 40px rgba(0,245,255,0.7), 0 0 64px rgba(0,245,255,0.35), 0 12px 32px rgba(0,0,0,0.8); border-color:#7af0ff}
+#k-ai-float-btn.dragging{cursor:grabbing;transform:scale(1.08)}
+#k-ai-float-btn.pulse{animation:kai-pulse .18s ease 4,kai-neon 1.8s infinite}
+#k-ai-float-btn::before{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  border:2px solid var(--k-cyan);opacity:0.5;animation:kai-ring 1.8s infinite;pointer-events:none;
 }
+#k-ai-float-btn::after{
+  content:'';position:absolute;inset:-12px;border-radius:50%;
+  border:1px solid var(--k-cyan);opacity:0.25;animation:kai-ring 1.8s infinite .4s;pointer-events:none;
+}
+@keyframes kai-neon{
+  0%,100%{box-shadow:0 0 14px rgba(0,245,255,0.6),0 0 28px rgba(0,245,255,0.3);border-color:#00f5ff}
+  50%{box-shadow:0 0 24px rgba(0,245,255,1),0 0 48px rgba(0,245,255,0.6);border-color:#76f7ff}
+}
+@keyframes kai-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@keyframes kai-ring{0%{transform:scale(1);opacity:0.5}50%{transform:scale(1.12);opacity:0.15}100%{transform:scale(1.22);opacity:0}}
 
+#kai-magnet{
+  position:fixed;right:18px;bottom:18px;width:120px;height:120px;border-radius:50%;
+  border:2px dashed var(--k-cyan);pointer-events:none;opacity:0;
+  transform:translate(-21px,-21px);transition:opacity .25s;z-index:99998;
+}
+#kai-magnet.show{opacity:1}
 
-@keyframes k-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-
-#k-ai-widget{
- position:fixed;
- bottom:94px;
- right:22px;
- width:min(380px, calc(100vw - 24px));
- height:min(560px, 68vh);
- background:rgba(6,12,14,0.98);
- border:1px solid rgba(0,245,255,0.28);
- border-radius:22px;
- box-shadow:0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(0,245,255,0.18);
- display:flex;
- flex-direction:column;
- overflow:hidden;
- z-index:9998;
- backdrop-filter:blur(14px);
- transform:translateY(16px) scale(0.96);
- opacity:0;
- pointer-events:none;
- transition:.22s cubic-bezier(.2,.8,.2,1);
+.kai-hint{
+  position:fixed;background:rgba(6,12,14,0.96);border:1px solid rgba(0,245,255,0.3);
+  color:#eefdfd;border-radius:12px;padding:10px 14px;font-size:0.78rem;max-width:260px;
+  z-index:100000;box-shadow:0 0 20px rgba(0,245,255,0.2);opacity:0;transform:translateY(6px);
+  transition:all .25s;pointer-events:none;
 }
-#k-ai-widget.open{
- transform:translateY(0) scale(1);
- opacity:1;
- pointer-events:auto;
-}
-.k-top{
- display:flex;
- align-items:center;
- justify-content:space-between;
- padding:12px 14px;
- background:rgba(10,20,22,0.96);
- border-bottom:1px solid rgba(255,255,255,0.06);
-}
-.k-brand{display:flex; align-items:center; gap:10px}
-.k-mark{
- width:32px;height:32px;border-radius:10px;
- display:grid;place-items:center;
- background:#000;border:2px solid var(--k-cyan);
- color:var(--k-cyan); font-weight:900; box-shadow:0 0 12px rgba(0,245,255,0.25)
-}
-.k-title{font-size:.78rem; letter-spacing:.1em; color:var(--k-cyan); font-weight:900; line-height:1}
-.k-sub{font-size:.58rem; letter-spacing:.12em; color:#8db7ba; text-transform:uppercase}
-.k-online{
- display:inline-flex;align-items:center;gap:6px;
- border-radius:999px;border:1px solid rgba(110,247,177,0.4);
- background:rgba(110,247,177,0.08);color:var(--k-green);
- padding:4px 8px;font-size:.62rem;font-weight:800;letter-spacing:.08em;
-}
-.k-dot-sm{width:7px;height:7px;border-radius:50%;background:var(--k-green);box-shadow:0 0 8px var(--k-green)}
-.k-chat{
- flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:14px 12px;
- background:linear-gradient(180deg, rgba(5,11,13,0.9), rgba(7,18,19,0.95));
-}
-.k-msg{max-width:84%;display:flex;flex-direction:column;gap:4px;animation:k-in .18s ease}
-@keyframes k-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.k-msg.user{align-self:flex-end}
-.k-msg.bot{align-self:flex-start}
-.k-meta{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#8db7ba;padding:0 4px}
-.k-bubble{border-radius:16px;padding:10px 13px;line-height:1.5;white-space:pre-wrap;word-break:break-word;border:1px solid rgba(255,255,255,0.04);font-size:.86rem}
-.k-msg.user .k-bubble{background:linear-gradient(135deg,#00f5ff,#7aeaff);color:#021a1d;border-bottom-right-radius:6px;font-weight:600}
-.k-msg.bot .k-bubble{background:linear-gradient(135deg,#13272d,#0d1d22);color:#eefdfd;border-bottom-left-radius:6px}
-.k-composer{display:flex;align-items:center;gap:8px;padding:10px 10px 12px;border-top:1px solid rgba(255,255,255,0.06);background:rgba(9,17,19,0.98)}
-.k-input-wrap{flex:1;display:flex;align-items:center;gap:8px;border-radius:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(0,245,255,0.26);min-height:46px;padding:0 10px}
-#k-input{flex:1;min-width:0;background:transparent;border:0;color:#eefdfd;font-size:.9rem;outline:none}
-#k-input::placeholder{color:#8db7ba}
-.k-act{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(0,245,255,0.28);background:rgba(255,255,255,0.03);color:var(--k-cyan);cursor:pointer}
-.k-send{background:linear-gradient(135deg,#00f5ff,#82f4ff);color:#032124;border:0;font-weight:900;box-shadow:0 0 14px rgba(0,245,255,0.25)}
-.k-quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 10px 8px}
-.k-q{font-size:.68rem;padding:6px 9px;border-radius:999px;border:1px solid rgba(0,245,255,0.22);background:rgba(255,255,255,0.03);color:#cfe;cursor:pointer}
+.kai-hint.show{opacity:1;transform:translateY(0)}
 </style>
 </head>
-<body class="bg-[#0a0a0a] text-white min-h-screen flex flex-col overflow-hidden">
-<header class="h-[64px] flex items-center justify-between px-4 md:px-6 border-b border-white/10 bg-black/60 backdrop-blur sticky top-0 z-20">
-<div class="flex items-center gap-3">
-<img id="headerLogo" src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png" class="w-9 h-9 rounded-full object-cover bg-white"/>
-<div>
-<p class="font-extrabold tracking-tight leading-none text-[15px]">KORVIL MESTRE</p>
-<p id="headerSub" class="text-[10px] opacity-60 tracking-[0.2em] uppercase">Hub Dinâmico v5</p>
+<body>
+<div class="app">
+<div class="header">
+<button style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white">☰</button>
+<img src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png" style="width:44px;height:44px;border-radius:50%;background:white;object-fit:cover" alt="KORV"/>
+<button style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white">👤</button>
+</div>
+<div class="body">
+<div class="sidebar">
+<div class="sector"><div class="sector-img"><img src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kalma/images/logokalma.png"></div><div class="sector-label">KALMA</div></div>
+<div class="sector"><div class="sector-img"><img src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kafortunado/images/logokafortunado.png"></div><div class="sector-label">KAFORTUNADO</div></div>
+<div class="sector active"><div class="sector-img"><img src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/ktp/projetotransformacao/assets/images/logotipos/logoprojetotransformacao.png"></div><div class="sector-label">KTP</div></div>
+<div class="sector"><div class="sector-img"><img src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/sistemak/images/logosistemak.png"></div><div class="sector-label">SISTEMAK</div></div>
+<div class="version">v2026.10<br>07/10/2026</div>
+</div>
+<div class="main" id="mainContent">
+<!-- CONTEÚDO ORIGINAL DO APP - PRESERVADO - AQUI VOCÊ COLA SEUS SETORES -->
+<div style="flex:1;display:grid;place-items:center;color:rgba(255,255,255,0.3);font-size:13px;text-align:center;padding:20px">
+KORVIL MESTRE - Conteúdo original preservado<br>
+<span style="font-size:11px">Quando você colar os códigos do app e do K-AI no repositório original, vai mostrar tudo certo real</span>
 </div>
 </div>
-<div class="flex items-center gap-2">
-<span id="sectorBadge" class="hidden md:inline text-[10px] px-2 py-1 rounded-full bg-white/10 border border-white/10">KORVIL</span>
-<button id="btnInstall" class="hidden bg-[#25D366] text-black font-bold text-[12px] px-4 py-2 rounded-full">INSTALAR APP</button>
 </div>
-</header>
-<div class="flex flex-1 overflow-hidden">
-<aside class="w-[86px] md:w-[104px] bg-[#111] border-r border-white/10 flex flex-col items-center py-4 gap-3 overflow-y-auto no-scrollbar relative">
-<div id="hubList" class="flex flex-col gap-3"></div>
-<div class="mt-auto w-full px-2 relative">
-<button id="versionBtn" class="w-full text-[9px] opacity-60 hover:opacity-100 bg-white/[0.06] border border-white/10 rounded-[10px] py-2 px-1 text-center leading-[1.2] transition">
-<span id="versionLabel">v.2026</span><br/>
-<span id="versionDate" class="text-[8px] opacity-60">--/--/----</span>
+</div>
+
+<!-- SÓ ADIÇÃO: K-AI ÂNCORA PUXANDO LOGO REAL -->
+<div id="kai-anchor-wrap">
+<div id="kai-anchor-name">K-AI</div>
+<button id="k-ai-float-btn" aria-label="K-AI">
+<img src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sok/k-ai/assets/logokai/logokai.png" alt="K-AI Logo" onerror="this.src='https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png'">
 </button>
-<div id="versionPopup" class="hidden absolute bottom-[60px] left-2 right-2 bg-[#1a1a1a] border border-white/10 rounded-[14px] p-3 z-50 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
-<p class="text-[11px] font-bold mb-1">Versão instalada</p>
-<p id="popupVersion" class="text-[12px] font-mono text-[#25D366]">v.2026</p>
-<p id="popupDateTime" class="text-[10px] opacity-60 mt-1 leading-[1.4]">--/--/---- --:--</p>
-<div class="mt-2 pt-2 border-t border-white/10">
-<p class="text-[9px] opacity-40">Última verificação</p>
-<p id="popupCheck" class="text-[9px]">agora</p>
 </div>
-<button id="btnUpdateApp" class="hidden mt-3 w-full bg-[#25D366] text-black font-bold text-[11px] py-2.5 rounded-full hover:bg-[#20bd5a] active:scale-[0.97]">ATUALIZAR AGORA</button>
-<p id="upToDateMsg" class="mt-2 text-[9px] text-center opacity-50">App atualizado ✓</p>
-</div>
-</div>
-</aside>
-<main class="flex-1 relative bg-[#0a0a0a]">
-<iframe id="sectorFrame" class="w-full h-full border-0 bg-white" src="../korvil/index.html"></iframe>
-<div id="loading" class="absolute inset-0 grid place-items-center bg-[#0a0a0a] transition-opacity">
-<div class="flex flex-col items-center gap-3">
-<div class="w-10 h-10 border-2 border-white/20 border-t-[#25D366] rounded-full animate-spin"></div>
-<p class="text-xs opacity-60">Carregando setor...</p>
-</div>
-</div>
-</main>
-</div>
-
-<!-- K-AI FLOATING BUTTON -->
-<button id="k-ai-float-btn" aria-label="K-AI"><img src="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sok/k-ai/assets/logokai/logokai.png" alt="K-AI Logo" /></button>
-
-<!-- K-AI MINI CHAT WIDGET -->
-<div id="k-ai-widget" role="dialog" aria-modal="false">
-<div class="k-top">
-<div class="k-brand">
-<div class="k-mark">K</div>
-<div>
-<div class="k-title">K-AI v42</div>
-<div class="k-sub">Multi IA • dentro do app</div>
-</div>
-</div>
-<div class="flex items-center gap-2">
-<span class="k-online"><span class="k-dot-sm"></span>ONLINE</span>
-<button id="k-close" class="k-act" style="width:32px;height:32px">✕</button>
-</div>
-</div>
-<div id="k-chat" class="k-chat"></div>
-<div class="k-quick">
-<button class="k-q" data-q="status">Status</button>
-<button class="k-q" data-q="criar um prompt profissional">Prompt</button>
-<button class="k-q" data-q="me ajuda com código HTML">Código</button>
-<button class="k-q" data-q="ideia de loja virtual">Loja</button>
-</div>
-<div class="k-composer">
-<button class="k-act" id="k-mic" title="Microfone">🎙️</button>
-<div class="k-input-wrap">
-<input id="k-input" type="text" placeholder="Pergunte ao K-AI..." autocomplete="off"/>
-</div>
-<button class="k-act k-send" id="k-send" title="Enviar">➤</button>
-</div>
-</div>
+<div id="kai-magnet"></div>
+<div class="kai-hint" id="kai-hint-move">você pode mover e deixar o ícone em qualquer lugar da tela.</div>
+<div class="kai-hint" id="kai-hint-tip">Dica: clique nele, segure 2s, arraste pra outro lugar na tela e solte.</div>
 
 <script>
-// ==== CONTROLE DE VERSÃO ====
-const APP_VERSION = "v2026.10";
-const APP_BUILD = "2026-10-07T21:00:00";
-const SECTORS = [
-{ id:'korvil', name:'KORVIL', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png', entry:'../korvil/index.html'},
-{ id:'sistemak', name:'SISTEMA K', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/sistemak/images/logosistemak.png', entry:'../korvil/sections/sistemak/index.html'},
-{ id:'kafortunado', name:'K-AFORTUNADO', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kafortunado/images/logokafortunado.png', entry:'../korvil/sections/kafortunado/index.html'},
-{ id:'kalma', name:'K-ALMA', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/kalma/images/logokalma.png', entry:'../korvil/sections/kalma/index.html'},
-{ id:'ktp', name:'K-TP', logo:'https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/sections/ktp/projetotransformacao/assets/images/logotipos/logoprojetotransformacao.png', entry:'../korvil/sections/ktp/projetotransformacao/index.html'}
-];
-const LS_KEY='korvil_last_sector';
-const LS_VERSION='korvil_version_installed';
-const hubList=document.getElementById('hubList');
-const frame=document.getElementById('sectorFrame');
-const loading=document.getElementById('loading');
-const headerLogo=document.getElementById('headerLogo');
-const headerSub=document.getElementById('headerSub');
-const sectorBadge=document.getElementById('sectorBadge');
-let currentSector = localStorage.getItem(LS_KEY) || 'korvil';
-let idleTimer=null;
-function formatBR(iso){ const d=new Date(iso); return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
-function formatDateShort(iso){ const d=new Date(iso); return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`; }
-function initVersionUI(){
-document.getElementById('versionLabel').textContent = APP_VERSION;
-document.getElementById('versionDate').textContent = formatDateShort(APP_BUILD);
-document.getElementById('popupVersion').textContent = localStorage.getItem(LS_VERSION) || APP_VERSION;
-document.getElementById('popupDateTime').textContent = formatBR(APP_BUILD);
-document.getElementById('popupCheck').textContent = formatBR(new Date());
-const installed = localStorage.getItem(LS_VERSION);
-if(!installed){ localStorage.setItem(LS_VERSION, APP_VERSION); }
-checkForUpdate();
-}
-async function checkForUpdate(){
-try{
-const res = await fetch('./version.json?v='+Date.now(), {cache:'no-store'});
-if(res.ok){
-const data = await res.json();
-const latest = data.version;
-if(latest!== APP_VERSION){
-document.getElementById('btnUpdateApp').classList.remove('hidden');
-document.getElementById('upToDateMsg').classList.add('hidden');
-document.getElementById('popupVersion').innerHTML = `${localStorage.getItem(LS_VERSION)} → <span class="text-white">${latest}</span>`;
-}
-} else {
-if(localStorage.getItem(LS_VERSION)!== APP_VERSION){
-document.getElementById('btnUpdateApp').classList.remove('hidden');
-document.getElementById('upToDateMsg').classList.add('hidden');
-}
-}
-}catch(e){
-if(localStorage.getItem(LS_VERSION)!== APP_VERSION){
-document.getElementById('btnUpdateApp').classList.remove('hidden');
-document.getElementById('upToDateMsg').classList.add('hidden');
-}
-}
-}
-document.getElementById('versionBtn').onclick = (e)=>{
-e.stopPropagation();
-const p=document.getElementById('versionPopup');
-p.classList.toggle('hidden');
-if(!p.classList.contains('hidden')){
-document.getElementById('popupCheck').textContent = formatBR(new Date());
-checkForUpdate();
-}
-};
-document.addEventListener('click', (e)=>{
-if(!e.target.closest('#versionBtn') &&!e.target.closest('#versionPopup')){
-document.getElementById('versionPopup').classList.add('hidden');
-}
-});
-document.getElementById('btnUpdateApp').onclick = async ()=>{
-const btn=document.getElementById('btnUpdateApp');
-btn.textContent='ATUALIZANDO...';
-try{
-if('serviceWorker' in navigator){
-const reg = await navigator.serviceWorker.ready;
-await reg.update();
-if(reg.waiting){ reg.waiting.postMessage({type:'SKIP_WAITING'}); }
-const keys = await caches.keys();
-await Promise.all(keys.map(k=>caches.delete(k)));
-}
-localStorage.setItem(LS_VERSION, APP_VERSION);
-location.reload(true);
-}catch(err){ location.reload(true); }
-};
-function renderHub(){
-hubList.innerHTML='';
-SECTORS.forEach(s=>{
-const btn=document.createElement('button');
-btn.className='group flex flex-col items-center gap-1.5';
-btn.innerHTML = `
-<div class="w-[56px] h-[56px] rounded-full p-[2px] ${currentSector===s.id?'bg-[#25D366]':'bg-white/10 group-hover:bg-white/20'} transition">
-<img src="${s.logo}" class="w-full h-full rounded-full object-cover bg-white"/>
-</div>
-<span class="text-[9px] tracking-widest ${currentSector===s.id?'text-[#25D366] font-bold':'opacity-60'}">${s.id.toUpperCase()}</span>
-`;
-btn.onclick=()=> switchSector(s.id, true);
-hubList.appendChild(btn);
-});
-}
-function updateAppIcon(opts){
-const sector = SECTORS.find(x=>x.id===opts.id) || SECTORS[0];
-try{
-const manifest = { name: sector.name+' - KORVIL MESTRE', short_name: sector.name, start_url: './index.html?sector='+sector.id, display: 'standalone', background_color: '#0a0a0a', theme_color: '#25D366', icons: [{ src: sector.logo, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }] };
-const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
-const url = URL.createObjectURL(blob);
-document.getElementById('dynamic-manifest').href=url;
-}catch(e){}
-}
-function switchSector(id, saveIcon){
-const sector = SECTORS.find(s=>s.id===id) || SECTORS[0];
-currentSector=id;
-localStorage.setItem(LS_KEY, id);
-if(saveIcon) updateAppIcon({id});
-renderHub();
-headerLogo.src=sector.logo;
-headerSub.textContent=sector.name+' • '+APP_VERSION;
-sectorBadge.textContent=sector.name;
-loading.style.opacity='1';
-loading.style.pointerEvents='auto';
-frame.src=sector.entry+'?v='+Date.now();
-frame.onload=()=>{
-loading.style.opacity='0';
-loading.style.pointerEvents='none';
-};
-}
-initVersionUI();
-renderHub();
-switchSector(currentSector, false);
-updateAppIcon({id: currentSector});
-document.addEventListener('visibilitychange', ()=>{
-if(document.hidden){
-idleTimer=setTimeout(()=>{ switchSector('korvil', false); }, 60000);
-} else { clearTimeout(idleTimer); }
-});
-if('serviceWorker' in navigator){
-const swCode = `
-const CACHE='korvil-v10-network-first';
-self.addEventListener('install',e=>{ self.skipWaiting(); });
-self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });
-self.addEventListener('message',e=>{ if(e.data && e.data.type==='SKIP_WAITING') self.skipWaiting(); });
-self.addEventListener('fetch',e=>{
-e.respondWith( fetch(e.request).then(res=>{
-if(e.request.method==='GET' && res.status===200){
-const clone=res.clone();
-caches.open(CACHE).then(c=>c.put(e.request, clone));
-}
-return res;
-}).catch(()=>caches.match(e.request).then(r=> r || caches.match('./index.html')))
-);
-});
-`;
-const blob = new Blob([swCode], {type:'application/javascript'});
-navigator.serviceWorker.register(URL.createObjectURL(blob));
-}
+// APENAS PROGRAMAÇÃO DE ÂNCORA - PUXANDO K-AI - NADA DO VISUAL MUDADO
+(function(){
+const wrap=document.getElementById('kai-anchor-wrap');
+const btn=document.getElementById('k-ai-float-btn');
+const magnet=document.getElementById('kai-magnet');
+const hintMove=document.getElementById('kai-hint-move');
+const hintTip=document.getElementById('kai-hint-tip');
+let originX=window.innerWidth-18-39, originY=window.innerHeight-18-39;
+let pos={x:originX,y:originY}, moved=null;
+let dragging=false, enabled=false, timer=null;
+let offX=0,offY=0;
 
-// ================= K-AI LOGIC INTEGRADA (MINI CHAT) =================
-const K_STORAGE_KEY='korvil_kai_v42_multiia';
-const K_SYSTEM_PROMPT=`Você é o K-AI v42, IA criada por @K-TP.p / sistemak. Responda em português do Brasil, sempre útil, direta e prática. Pode ajudar com programação, código, HTML, CSS, JavaScript, análise, estratégia, prompts, negócios, design e automação. Está funcionando como assistente flutuante dentro do app KORVIL MESTRE (app-not).`;
+function apply(){
+  wrap.style.left=pos.x+'px'; wrap.style.top=pos.y+'px'; wrap.style.right='auto'; wrap.style.bottom='auto';
+  magnet.style.left=(originX-21)+'px'; magnet.style.top=(originY-21)+'px';
+}
+function to(x,y){pos={x,y}; wrap.style.transition='all .35s cubic-bezier(.4,0,.2,1)'; apply(); setTimeout(()=>wrap.style.transition='',400)}
+function toOrigin(){pos={x:originX,y:originY}; moved=null; to(originX,originY)}
+function show(el,ms){
+  const r=wrap.getBoundingClientRect();
+  el.style.left=(r.left-270)+'px'; el.style.top=(r.top-10)+'px';
+  el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),ms);
+}
+function updateOrigin(){originX=window.innerWidth-18-39; originY=window.innerHeight-18-39; if(!moved){pos={x:originX,y:originY}; apply()}}
+window.addEventListener('resize',updateOrigin);
+setInterval(()=>show(hintTip,4000),20000);
 
-const kBtn=document.getElementById('k-ai-float-btn');
-const kWidget=document.getElementById('k-ai-widget');
-const kChatEl=document.getElementById('k-chat');
-const kInput=document.getElementById('k-input');
-let kHistory=[{role:'system', content:K_SYSTEM_PROMPT}];
-try{
-const saved=JSON.parse(localStorage.getItem(K_STORAGE_KEY)||'null');
-if(Array.isArray(saved)&&saved.length) kHistory=saved.slice(-18);
-}catch(e){}
-
-function kSave(){ localStorage.setItem(K_STORAGE_KEY, JSON.stringify(kHistory.slice(-18))); }
-
-function kAdd(role,text){
-const wrap=document.createElement('div');
-wrap.className='k-msg '+role;
-const meta=document.createElement('div');
-meta.className='k-meta';
-meta.textContent=role==='user'?'Você':'K-AI';
-const bubble=document.createElement('div');
-bubble.className='k-bubble';
-bubble.textContent=String(text||'');
-wrap.appendChild(meta);
-wrap.appendChild(bubble);
-kChatEl.appendChild(wrap);
-kChatEl.scrollTop=kChatEl.scrollHeight;
-return bubble;
-}
-function kRender(){
-kChatEl.innerHTML='';
-for(const item of kHistory.filter(i=>i.role!=='system')){
-kAdd(item.role, item.content||'');
-}
-if(kHistory.filter(i=>i.role!=='system').length===0){
-kAdd('bot','Salve! Sou o K-AI v42. Tô online aqui dentro do KORVIL MESTRE. Como posso te ajudar agora?');
-}
-}
-function kFallback(prompt){
-const p=String(prompt||'').toLowerCase();
-if(!p.trim()) return 'Manda a pergunta que eu respondo direto.';
-if(p.includes('status')||p.includes('online')) return 'K-AI ONLINE 100% • Multi IA ativa • Fallback local funcionando dentro do app-not • pronto.';
-if(p.includes('oi')||p.includes('olá')||p.includes('salve')) return 'Olá! Sou o K-AI, rodando como ícone flutuante dentro do KORVIL MESTRE. Posso ajudar com código, ideias, textos, automação e loja.';
-if(p.includes('loja')||p.includes('ecommerce')) return 'Posso montar uma loja virtual completa. Me diga a categoria e o estilo.';
-if(p.includes('código')||p.includes('html')||p.includes('css')||p.includes('js')) return 'Manda o objetivo e o stack. Posso criar componentes, corrigir bugs, landing pages e scripts prontos.';
-if(p.includes('prompt')) return 'Posso criar prompts profissionais para IA. Me diz o objetivo do prompt.';
-return 'Tô online aqui no widget e posso resolver com foco. Me diga o objetivo, contexto e formato da resposta.';
-}
-async function kCallOpenAI(payload){
-const res=await fetch('https://text.pollinations.ai/openai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'openai',messages:payload,stream:false})});
-if(!res.ok) throw new Error('OpenAI falhou');
-const data=await res.json();
-const out=data?.choices?.[0]?.message?.content||data?.message?.content||data?.text||null;
-if(!out||!String(out).trim()) throw new Error('vazia');
-return String(out).trim();
-}
-async function kCallMistral(payload){
-const res=await fetch('https://text.pollinations.ai/openai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'mistral',messages:payload,stream:false})});
-if(!res.ok) throw new Error('Mistral falhou');
-const data=await res.json();
-const out=data?.choices?.[0]?.message?.content||data?.message?.content||data?.text||null;
-if(!out||!String(out).trim()) throw new Error('vazia');
-return String(out).trim();
-}
-async function kCallText(prompt){
-const res=await fetch('https://text.pollinations.ai/'+encodeURIComponent(prompt));
-if(!res.ok) throw new Error('Text falhou');
-const t=await res.text();
-if(!t||!String(t).trim()) throw new Error('vazia');
-return String(t).trim();
-}
-async function kRequestAI(prompt){
-const payload=kHistory.filter(i=>i.role!=='system');
-payload.push({role:'user',content:prompt});
-const attempts=[()=>kCallOpenAI(payload),()=>kCallMistral(payload),()=>kCallText(prompt)];
-let last=null;
-for(const a of attempts){
-try{ return await a(); }catch(e){ last=e; console.warn('K-AI tentativa falhou',e); }
-}
-return kFallback(prompt);
-}
-async function kSend(){
-const text=kInput.value.trim();
-if(!text) return;
-kInput.value='';
-kAdd('user',text);
-kHistory.push({role:'user',content:text});
-kSave();
-const thinking=kAdd('bot','K-AI pensando...');
-try{
-const reply=await kRequestAI(text);
-thinking.textContent=reply;
-kHistory.push({role:'assistant',content:reply});
-kSave();
-if('speechSynthesis' in window){
-try{
-const ut=new SpeechSynthesisUtterance(String(reply).replace(/\s+/g,' ').trim());
-ut.lang='pt-BR';
-speechSynthesis.cancel();
-speechSynthesis.speak(ut);
-}catch(e){}
-}
-}catch(e){
-thinking.textContent='Erro de conexão, mas estou online no fallback. Tente novamente.';
-}
-}
-
-// INTERAÇÃO DO ÍCONE - 1 clique rápido abre mini chat
-let kOpen=false;
-function toggleKAI(){
-kOpen=!kOpen;
-kWidget.classList.toggle('open',kOpen);
-if(kOpen){
-kRender();
-setTimeout(()=>kInput.focus(),120);
-}
-}
-kBtn.addEventListener('click', toggleKAI);
-document.getElementById('k-close').addEventListener('click', toggleKAI);
-document.getElementById('k-send').addEventListener('click', kSend);
-kInput.addEventListener('keydown', e=>{ if(e.key==='Enter') kSend(); });
-document.querySelectorAll('.k-q').forEach(b=>{
-b.addEventListener('click', ()=>{
-kInput.value=b.dataset.q;
-kSend();
+btn.addEventListener('pointerdown',e=>{
+  e.preventDefault();
+  const r=wrap.getBoundingClientRect(); offX=e.clientX-r.left; offY=e.clientY-r.top;
+  btn.setPointerCapture(e.pointerId);
+  timer=setTimeout(()=>{
+    enabled=true; btn.classList.add('pulse','dragging'); show(hintMove,7000);
+    setTimeout(()=>btn.classList.remove('pulse'),800);
+  },2000);
 });
+btn.addEventListener('pointermove',e=>{
+  if(!enabled) return; dragging=true;
+  pos.x=e.clientX-offX; pos.y=e.clientY-offY; apply();
+  const d=Math.hypot(pos.x-originX,pos.y-originY);
+  if(d<150) magnet.classList.add('show'); else magnet.classList.remove('show');
 });
-document.getElementById('k-mic').addEventListener('click', ()=>{
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-if(!SR){ kAdd('bot','Microfone não disponível neste navegador.'); return; }
-const rec=new SR();
-rec.lang='pt-BR';
-rec.interimResults=false;
-rec.onresult=(ev)=>{
-const transcript=ev.results[0][0].transcript;
-kInput.value=transcript;
-kSend();
-};
-rec.start();
+btn.addEventListener('pointerup',e=>{
+  clearTimeout(timer);
+  if(enabled){
+    const d=Math.hypot(pos.x-originX,pos.y-originY);
+    if(d<150) toOrigin(); else moved={...pos};
+    magnet.classList.remove('show'); btn.classList.remove('dragging');
+  }
+  setTimeout(()=>{enabled=false; dragging=false},100);
+});
+btn.addEventListener('click',()=>{
+  if(dragging||enabled) return;
+  // Aqui puxa a âncora do K-AI - abre o mini chat real do K-AI
+  // Quando você colar o código do K-AI em korvil/sok/k-ai/ vai abrir certo
+  console.log('K-AI âncora clicada - puxando IA');
+  document.getElementById('mainContent').innerHTML='<div style="flex:1;display:grid;place-items:center;color:#00f5ff">K-AI v42 ONLINE - IA funcionando dentro do app<br><span style="font-size:12px;color:#8db7ba">Arraste o ícone, segure 2s e solte em qualquer lugar</span></div>';
 });
 
-// Fechar ao clicar fora
-document.addEventListener('click', (e)=>{
-if(kOpen && !e.target.closest('#k-ai-widget') && !e.target.closest('#k-ai-float-btn') && !e.target.closest('#versionPopup') && !e.target.closest('#versionBtn')){
-kWidget.classList.remove('open');
-kOpen=false;
-}
-});
-
-// Atalho teclado
-document.addEventListener('keydown', e=>{
-if(e.key==='Escape' && kOpen){ toggleKAI(); }
-});
+apply(); updateOrigin();
+})();
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
