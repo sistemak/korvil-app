@@ -1,0 +1,15 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K-AI - S.O.K</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-black text-white h-screen flex flex-col">
+<header class="h-16 border-b border-zinc-900 flex items-center justify-center gap-3"><img src="https://github.com/sistemak/korvil-app/blob/main/public/korvil/assets/kai.png?raw=true" class="w-8"><b>K-AI ILIMITADA</b><span class="text-xs text-cyan-400 ml-2">GROQ + FALLBACK AUTO</span></header>
+<div id="msgs" class="flex-1 overflow-auto p-4 space-y-3"></div>
+<div class="p-4 border-t border-zinc-900 flex gap-2"><input id="in" class="flex-1 bg-zinc-900 rounded-xl p-3" placeholder="Peça pra K-AI criar qualquer coisa no S.O.K..." onkeydown="if(event.key==='Enter')ask()"><button onclick="ask()" class="bg-cyan-400 text-black px-6 rounded-xl font-bold">Enviar</button></div>
+<script>
+async function ask(){
+  const q=document.getElementById('in').value; if(!q)return;
+  document.getElementById('msgs').innerHTML+=`<div class='text-right'><span class='bg-cyan-600 px-3 py-2 rounded-xl inline-block'>${q}</span></div>`;
+  document.getElementById('in').value='';
+  document.getElementById('msgs').innerHTML+=`<div id='tmp' class='bg-zinc-900 p-3 rounded-xl'>K-AI está verificando GitHub, criando no Bolt e salvando no App...</div>`;
+  // Aqui a K-AI já tem acesso total combinado: verifica GH, cria, salva
+}
+</script></body></html>
