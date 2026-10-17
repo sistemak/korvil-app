@@ -56,7 +56,7 @@ async function autoScan(){
   }catch(e){console.log("auto scan offline, usando local")}
 }
 function loadSection(s){
-  document.getElementById('sok-content').innerHTML=`<iframe src="/korvil/sections/${s}/index.html" class="w-full h-full border-0"></iframe><div class="p-4 text-zinc-500">Carregando ${s} do GitHub automaticamente...</div>`;
+  document.getElementById('sok-content').innerHTML=`<iframe src="https://github.com/sistemak/korvil-app/blob/main/korvil/sections/${s}/index.html" class="w-full h-full border-0"></iframe><div class="p-4 text-zinc-500">Carregando ${s} do GitHub automaticamente...</div>`;
   document.querySelectorAll('.icon-k').forEach(i=>i.classList.remove('active'));
   event.currentTarget.querySelector('.icon-k').classList.add('active');
 }
