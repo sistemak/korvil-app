@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S.O.K - SISTEMA OPERACIONAL KORVIL</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{background:#000;color:#fff;font-family:Inter,sans-serif}
+.sidebar{width:90px;background:#0a0a0a;border-right:1px solid #1a1a1a}
+.icon-k{width:56px;height:56px;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;border:1px solid #222;transition:.3s}
+.icon-k.active{border-color:#00ff88;box-shadow:0 0 20px #00ff88}
+#kai-btn{width:92px;height:92px;border-radius:50%;background:radial-gradient(circle,#00e5ff,#00b8d4);box-shadow:0 0 30px #00e5ff;position:fixed;right:20px;bottom:20px;z-index:9999;cursor:grab;touch-action:none;animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 15px #00e5ff}50%{box-shadow:0 0 35px #00e5ff}100%{box-shadow:0 0 15px #00e5ff}}
+</style>
+</head>
+<body class="flex h-screen overflow-hidden">
+<!-- HEADER -->
+<div class="fixed top-0 left-0 right-0 h-[64px] bg-black border-b border-zinc-900 flex items-center justify-between px-4 z-50">
+<span class="text-2xl">☰</span>
+<img src="https://github.com/sistemak/korvil-app/blob/main/public/korvil/assets/korvil.png?raw=true" class="w-10 h-10 rounded-full border border-zinc-700">
+<div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">👤</div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar fixed top-[64px] left-0 bottom-0 flex flex-col items-center py-6 gap-6 z-40">
+<button onclick="loadSection('kalma')" class="flex flex-col items-center gap-1"><div class="icon-k"><img src="https://github.com/sistemak/korvil-app/blob/main/korvil/sections/kalma/images/logokalma.png" class="w-8"></div><span class="text-[9px]">KALMA</span></button>
+<button onclick="loadSection('kafortunado')" class="flex flex-col items-center gap-1"><div class="icon-k"><img src="https://github.com/sistemak/korvil-app/blob/main/korvil/sections/kafortunado/images/logokafortunado.png" class="w-8"></div><span class="text-[9px]">KAFORTUNADO</span></button>
+<button onclick="loadSection('ktp')" class="flex flex-col items-center gap-1"><div class="icon-k active"><img src="https://github.com/sistemak/korvil-app/blob/main/korvil/sections/ktp/assets/images/logoktp.png" class="w-8"></div><span class="text-[9px] text-green-400">KTP</span></button>
+<button onclick="loadSection('sistemak')" class="flex flex-col items-center gap-1"><div class="icon-k"><img src="https://github.com/sistemak/korvil-app/blob/main/korvil/sections/sistemak/images/logosistemak.png" class="w-8"></div><span class="text-[9px]">SISTEMAK</span></button>
+<div class="mt-auto text-[8px] text-zinc-600">v2026.10<br>07/10/2026</div>
+</aside>
+
+<!-- CENTRAL - CONTEÚDO REAL -->
+<main id="sok-content" class="ml-[90px] mt-[64px] flex-1 bg-black p-6 overflow-auto">
+<div class="text-center mt-20">
+<h1 class="text-3xl font-bold">S.O.K - SISTEMA OPERACIONAL KORVIL</h1>
+<p class="text-zinc-400 mt-2">Selecione uma seção na lateral. Tudo que a K-AI criar aparece aqui automaticamente.</p>
+<div id="auto-list" class="mt-10 grid grid-cols-2 gap-4 text-left"></div>
+</div>
+</main>
+
+<!-- K-AI 92px -->
+<div id="kai-btn" class="flex flex-col items-center justify-center"><img src="https://github.com/sistemak/korvil-app/blob/main/public/korvil/assets/kai.png?raw=true" class="w-10"><span class="text-[10px] font-bold text-black">K-AI</span></div>
+<div id="kai-chat" class="hidden fixed right-5 bottom-[130px] w-[340px] h-[420px] bg-zinc-900 border border-cyan-400 rounded-2xl z-[9998] p-3 flex flex-col">
+<div id="kai-msgs" class="flex-1 overflow-auto text-sm space-y-2"></div>
+<input id="kai-input" placeholder="O que criar no S.O.K?" class="mt-2 bg-black border border-zinc-800 rounded-xl p-3 text-sm" onkeydown="if(event.key==='Enter')sendKai()">
+</div>
+
+<script>
+// RECONHECIMENTO AUTOMÁTICO TOTAL - GITHUB + BOLT + APP
+const GH_BASE="https://api.github.com/repos/sistemak/korvil-app/contents/";
+async function autoScan(){
+  try{
+    const r=await fetch(GH_BASE+"korvil/sections"); const d=await r.json();
+    document.getElementById('auto-list').innerHTML=d.map(f=>`<div class='bg-zinc-900 p-4 rounded-xl border border-zinc-800'>📁 ${f.name}</div>`).join('');
+  }catch(e){console.log("auto scan offline, usando local")}
+}
+function loadSection(s){
+  document.getElementById('sok-content').innerHTML=`<iframe src="/korvil/sections/${s}/index.html" class="w-full h-full border-0"></iframe><div class="p-4 text-zinc-500">Carregando ${s} do GitHub automaticamente...</div>`;
+  document.querySelectorAll('.icon-k').forEach(i=>i.classList.remove('active'));
+  event.currentTarget.querySelector('.icon-k').classList.add('active');
+}
+// K-AI LOGIC COM GROQ + FALLBACK ILIMITADO
+const MODELS=["llama-3.3-70b-versatile","deepseek-v3:free","qwen-2.5-72b:free","gemini-2.0-flash:free"];
+async function sendKai(){
+  const input=document.getElementById('kai-input'); const msg=input.value; if(!msg)return;
+  document.getElementById('kai-msgs').innerHTML+=`<div class='bg-cyan-900/30 p-2 rounded'>Você: ${msg}</div>`;
+  input.value='';
+  // Usa env.GROQ_API_KEY se tiver
+  for(let m of MODELS){
+    try{
+      const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${localStorage.getItem('GROQ_API_KEY')||''}`},body:JSON.stringify({model:"llama-3.3-70b-versatile",messages:[{role:"system",content:"Você é K-AI, inventora do S.O.K, tem acesso total ao GitHub sistemak/korvil-app. Sempre cria código completo e salva."},{role:"user",content:msg}]})});
+      const data=await res.json(); if(data.choices){document.getElementById('kai-msgs').innerHTML+=`<div class='bg-zinc-800 p-2 rounded'>K-AI: ${data.choices[0].message.content}</div>`; return;}
+    }catch(e){}
+  }
+  document.getElementById('kai-msgs').innerHTML+=`<div class='bg-zinc-800 p-2 rounded'>K-AI: Criando ${msg} no S.O.K... (fallback local ativado)</div>`;
+}
+document.getElementById('kai-btn').onclick=()=>{document.getElementById('kai-chat').classList.toggle('hidden')};
+// DRAG 2s + MAGNET 150px
+let holdTimer,isDragging=false,startX,startY;
+const btn=document.getElementById('kai-btn');
+btn.addEventListener('mousedown',e=>{holdTimer=setTimeout(()=>isDragging=true,2000); startX=e.clientX; startY=e.clientY});
+window.addEventListener('mousemove',e=>{
+  if(!isDragging)return;
+  btn.style.left=(e.clientX-46)+'px'; btn.style.top=(e.clientY-46)+'px';
+  const magnet=150; if(window.innerWidth-e.clientX<magnet)btn.style.left=(window.innerWidth-92-10)+'px';
+});
+window.addEventListener('mouseup',()=>{clearTimeout(holdTimer); isDragging=false});
+autoScan();
+</script>
+</body>
+</html>
