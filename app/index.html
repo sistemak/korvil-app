@@ -3,26 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#00d4ff">
+<meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="korvil">
-<link rel="manifest" href="/app/manifest.json">
-<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png">
+<link rel="manifest" href="/app/manifest.json?v=20261019">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/sistemak/korvil-app/main/korvil/assets/images/logokorvil.png?v=20261019">
 <title>korvil app</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:system-ui,sans-serif;overflow:hidden}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#222;border-radius:4px}
-.logo-korvil{width:180px;height:48px;object-fit:contain;display:block}
-@keyframes ktpPulse{0%,100%{box-shadow:0 0 15px #00ff88}50%{box-shadow:0 0 30px #00ff88}}
-@keyframes kaiPulse{0%,100%{box-shadow:0 0 25px #00d4ff,0 0 50px rgba(0,212,255,.3)}50%{box-shadow:0 0 35px #00d4ff,0 0 70px rgba(0,212,255,.4)}}
-#kaiBubble{animation:kaiPulse 2s ease-in-out infinite}
-.card-hover{transition:.2s}.card-hover:hover{border-color:#333;transform:translateY(-2px)}
-.fade-in{animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-</style>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/app/service-worker.js').catch(function(){});
+  });
+}
+</script>
 </head>
 <body>
 
