@@ -1,73 +1,53 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import React from 'react';
+import { Sun, Moon, Menu } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const Header: React.FC = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+type HeaderProps = {
+  toggleTheme: () => void;
+  isDarkMode: boolean;
+};
 
-  const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
-
+const Header: React.FC<HeaderProps> = ({ toggleTheme, isDarkMode }) => {
   return (
-    <header className="bg-gray-900 text-white">
+    <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          <Link to="/" className="text-xl font-bold">
-            KORVIL
-          </Link>
-          <nav className="hidden md:flex space-x-4">
-            <Link to="/about" className="hover:text-gray-300 transition-colors">
-              Sobre
-            </Link>
-            <Link to="/features" className="hover:text-gray-300 transition-colors">
-              Funcionalidades
-            </Link>
-            <Link to="/contact" className="hover:text-gray-300 transition-colors">
-              Contato
-            </Link>
-          </nav>
-          <button
-            type="button"
-            onClick={toggleMenu}
-            aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
-            className="md:hidden p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6 text-white" />
-            ) : (
-              <Menu className="h-6 w-6 text-white" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <nav className="md:hidden bg-gray-800">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              to="/about"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Sobre
-            </Link>
-            <Link
-              to="/features"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Funcionalidades
-            </Link>
-            <Link
-              to="/contact"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Contato
+          <div className="flex-shrink-0">
+            <Link to="/" className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              KORVIL
             </Link>
           </div>
-        </nav>
-      )}
+          <nav className="hidden md:flex space-x-4">
+            <Link
+              to="/"
+              className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
+            >
+              Home
+            </Link>
+            <Link
+              to="/about"
+              className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
+            >
+              About
+            </Link>
+          </nav>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={toggleTheme}
+              aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
+            >
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+            <button
+              className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
+              aria-label="Open menu"
+            >
+              <Menu size={20} />
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
   );
 };
